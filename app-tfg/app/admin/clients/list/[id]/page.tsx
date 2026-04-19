@@ -145,6 +145,12 @@ export default async function AdminClientDetailPage({ params }: PageProps) {
 								<p className="mt-1 text-sm text-slate-800">
 									<strong>Código postal:</strong> {client.postal_code || "-"}
 								</p>
+								<p className="mt-1 text-sm text-slate-800">
+									<strong>Latitud:</strong> {client.lat || "-"}
+								</p>
+								<p className="mt-1 text-sm text-slate-800">
+									<strong>Longitud:</strong> {client.lng || "-"}
+								</p>
 							</div>
 						</div>
 

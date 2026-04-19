@@ -50,6 +50,16 @@ export class Client {
 	)
 	commercialAssignments!: Relation<ClientCommercialAssignment[]>;
 
+	// --------------------------------------------------------------------------
+	// Geodatos básicos para mapas y rutas
+	// --------------------------------------------------------------------------
+	// PostgreSQL suele devolver numeric como string a través de TypeORM.
+	@Column({ type: "numeric", precision: 9, scale: 6, nullable: true })
+	lat!: string | null;
+
+	@Column({ type: "numeric", precision: 9, scale: 6, nullable: true })
+	lng!: string | null;
+
 	@Column({ type: "text", nullable: true })
 	notes!: string | null;
 

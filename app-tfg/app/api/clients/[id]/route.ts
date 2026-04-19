@@ -23,6 +23,8 @@ type UpdateClientBody = {
 	city?: string;
 	postalCode?: string | null;
 	province?: string | null;
+	lat?: number | string | null;
+	lng?: number | string | null;
 	notes?: string | null;
 };
 
@@ -160,6 +162,8 @@ export async function PATCH(request: Request, context: RouteContext) {
 			city: String(body.city ?? existingClient.city),
 			postalCode: body.postalCode ?? existingClient.postal_code,
 			province: body.province ?? existingClient.province,
+			lat: body.lat ?? existingClient.lat,
+			lng: body.lng ?? existingClient.lng,
 			notes: body.notes ?? existingClient.notes,
 		});
 

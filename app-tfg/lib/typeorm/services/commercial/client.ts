@@ -10,6 +10,24 @@ function normalizeText(value: string | null | undefined) {
 	return String(value ?? "").trim();
 }
 
+function normalizeCoordinate(
+	value: number | string | null,
+	min: number,
+	max: number,
+	fieldName: string,
+): string | null {
+	if (value === null || String(value).trim() === "") {
+		return null;
+	}
+
+	const parsed = Number(value);
+
+	if (!Number.isFinite(parsed) || parsed < min || parsed > max) {
+		throw new UpdateClientError(`${fieldName} no es válida`);
+	}
+
+	return parsed.toFixed(6);
+}
 // --------------------------------------------------------------------------
 // Tipos de datos para los inputs de los servicios
 // --------------------------------------------------------------------------
@@ -34,6 +52,8 @@ type UpdateClientInput = {
 	city: string;
 	postalCode?: string | null;
 	province?: string | null;
+	lat?: number | string | null;
+	lng?: number | string | null;
 	notes?: string | null;
 };
 
@@ -50,6 +70,15 @@ export class CreateClientError extends Error {
 	}
 }
 
+export class UpdateClientError extends Error {
+	status: number;
+
+	constructor(message: string, status = 400) {
+		super(message);
+		this.name = "UpdateClientError";
+		this.status = status;
+	}
+}
 // Crear cliente profesional
 export async function createClient(input: CreateClientInput) {
 	const ds = await getDataSource();
@@ -141,7 +170,7 @@ export async function updateClient(input: UpdateClientInput) {
 		});
 
 		if (!client) {
-			throw new Error("Cliente no encontrado");
+			throw new UpdateClientError("Cliente no encontrado");
 		}
 
 		client.name = normalizeText(input.name);
@@ -151,6 +180,15 @@ export async function updateClient(input: UpdateClientInput) {
 		client.city = normalizeText(input.city);
 		client.postal_code = normalizeText(input.postalCode) || null;
 		client.province = normalizeText(input.province) || null;
+
+		if (input.lat !== undefined) {
+			client.lat = normalizeCoordinate(input.lat, -90, 90, "La latitud");
+		}
+
+		if (input.lng !== undefined) {
+			client.lng = normalizeCoordinate(input.lng, -180, 180, "La longitud");
+		}
+
 		client.notes = normalizeText(input.notes) || null;
 		client.updated_at = new Date();
 
