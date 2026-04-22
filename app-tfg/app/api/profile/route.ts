@@ -6,7 +6,7 @@ import { getDataSource } from "@/lib/typeorm/data-source";
 import { User } from "@/lib/typeorm/entities/User";
 import { Client } from "@/lib/typeorm/entities/Client";
 import {
-	applyClientUpdate,
+	applyClientUpdateOrThrow,
 	UpdateClientError,
 } from "@/lib/typeorm/services/commercial/client";
 
@@ -206,7 +206,7 @@ export async function PATCH(request: Request) {
 				});
 
 				if (client) {
-					await applyClientUpdate(client, {
+					await applyClientUpdateOrThrow(client, {
 						name: body.clientProfile.name,
 						contactName: body.clientProfile.contact_name,
 						taxId: body.clientProfile.tax_id,
@@ -249,6 +249,16 @@ export async function PATCH(request: Request) {
 			);
 		}
 
+		if (error instanceof UpdateClientError) {
+			return NextResponse.json(
+				{
+					message: error.message,
+					code: "INVALID_CLIENT_ADDRESS",
+				},
+				{ status: error.status },
+			);
+		}
+		
 		if (error instanceof Error && error.message === "USER_NOT_FOUND") {
 			return NextResponse.json(
 				{

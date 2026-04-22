@@ -8,11 +8,35 @@ import {
 } from "@/lib/geocoding/geocode-address";
 
 // --------------------------------------------------------------------------
+// Flags de depuración
+// --------------------------------------------------------------------------
+
+const CLIENT_DEBUG = process.env.CLIENT_DEBUG === "true";
+
+function clientDebugLog(...args: unknown[]) {
+	if (CLIENT_DEBUG) {
+		console.log("[client-service]", ...args);
+	}
+}
+
+// --------------------------------------------------------------------------
 // Funciones auxiliares para normalización de datos
 // --------------------------------------------------------------------------
 
 function normalizeText(value: string | null | undefined) {
 	return String(value ?? "").trim();
+}
+
+// Normaliza texto para comparaciones lógicas.
+// Así evitamos considerar cambio real algo como:
+// "CAMINO DEL AGUA 42" vs "camino del agua 42"
+function normalizeComparableText(value: string | null | undefined) {
+	return String(value ?? "")
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.trim()
+		.replace(/\s+/g, " ")
+		.toLowerCase();
 }
 
 function normalizeCoordinate(
@@ -38,8 +62,7 @@ function normalizeCoordinate(
 	return parsed.toFixed(6);
 }
 
-function normalizeTimeValue(value: string | null ) {
-
+function normalizeTimeValue(value: string | null | undefined) {
 	const normalized = String(value ?? "").trim();
 
 	if (!normalized) {
@@ -90,7 +113,7 @@ type UpdateClientInput = {
 	notes?: string | null;
 };
 
-type ApplyClientUpdateInput = Omit<UpdateClientInput, "clientId">;
+export type ApplyClientUpdateInput = Omit<UpdateClientInput, "clientId">;
 
 // --------------------------------------------------------------------------
 // SERVICIOS
@@ -117,15 +140,90 @@ export class UpdateClientError extends Error {
 }
 
 // --------------------------------------------------------------------------
+// Helper interno para exigir geocodificación válida
+// --------------------------------------------------------------------------
+// Regla:
+// - si la dirección cambia de verdad, debe devolver lat/lng válidas
+// - si no devuelve coordenadas, se bloquea el guardado
+async function geocodeAddressOrThrow(input: {
+	address: string;
+	city: string;
+	postalCode?: string | null;
+	province?: string | null;
+}) {
+	clientDebugLog("geocodeAddressOrThrow input:", input);
+
+	if (
+		!hasEnoughAddressToGeocode({
+			address: input.address,
+			city: input.city,
+			postalCode: input.postalCode,
+			province: input.province,
+		})
+	) {
+		clientDebugLog("Dirección insuficiente para geocodificar");
+		throw new UpdateClientError(
+			"La dirección no tiene información suficiente para obtener coordenadas válidas",
+			400,
+		);
+	}
+
+	try {
+		const geocoded = await geocodeAddress({
+			address: input.address,
+			city: input.city,
+			postalCode: input.postalCode,
+			province: input.province,
+		});
+
+		clientDebugLog("Resultado geocodeAddress:", geocoded);
+
+		if (!geocoded?.lat || !geocoded?.lng) {
+			throw new UpdateClientError(
+				"No se ha podido validar la dirección indicada. Revisa calle, número, ciudad, código postal y provincia.",
+				400,
+			);
+		}
+
+		return {
+			lat: geocoded.lat,
+			lng: geocoded.lng,
+		};
+	} catch (error) {
+		clientDebugLog("Error en geocodeAddressOrThrow:", error);
+
+		if (error instanceof UpdateClientError) {
+			throw error;
+		}
+
+		throw new UpdateClientError(
+			"No se ha podido validar la dirección indicada. Revisa calle, número, ciudad, código postal y provincia.",
+			400,
+		);
+	}
+}
+
+// --------------------------------------------------------------------------
 // Helper compartido de actualización de cliente
 // --------------------------------------------------------------------------
 // Este helper aplica cambios al registro de cliente y, si cambia la dirección,
-// recalcula automáticamente lat/lng. Así evitamos duplicar la misma lógica
-// en /api/profile, /api/clients/[id] u otros puntos del sistema.
-export async function applyClientUpdate(
+// exige coordenadas válidas antes de permitir el guardado.
+export async function applyClientUpdateOrThrow(
 	client: Client,
 	input: ApplyClientUpdateInput,
 ) {
+	clientDebugLog("applyClientUpdateOrThrow - client actual:", {
+		id: client.id,
+		address: client.address,
+		city: client.city,
+		postal_code: client.postal_code,
+		province: client.province,
+		lat: client.lat,
+		lng: client.lng,
+	});
+
+	clientDebugLog("applyClientUpdateOrThrow - input:", input);
+
 	const nextName =
 		input.name !== undefined ? normalizeText(input.name) : client.name;
 
@@ -192,11 +290,28 @@ export async function applyClientUpdate(
 		);
 	}
 
+	// ----------------------------------------------------------------------
+	// Detección real de cambio de dirección
+	// ----------------------------------------------------------------------
+	// Comparamos versión "lógica" del texto para evitar que diferencias de
+	// mayúsculas, tildes o espacios disparen una geocodificación innecesaria.
 	const addressChanged =
-		client.address !== nextAddress ||
-		client.city !== nextCity ||
-		client.postal_code !== nextPostalCode ||
-		client.province !== nextProvince;
+		normalizeComparableText(client.address) !==
+			normalizeComparableText(nextAddress) ||
+		normalizeComparableText(client.city) !==
+			normalizeComparableText(nextCity) ||
+		normalizeComparableText(client.postal_code) !==
+			normalizeComparableText(nextPostalCode) ||
+		normalizeComparableText(client.province) !==
+			normalizeComparableText(nextProvince);
+
+	clientDebugLog("Dirección recalculada:", {
+		nextAddress,
+		nextCity,
+		nextPostalCode,
+		nextProvince,
+		addressChanged,
+	});
 
 	client.name = nextName;
 	client.contact_name = nextContactName;
@@ -212,9 +327,10 @@ export async function applyClientUpdate(
 
 	// ----------------------------------------------------------------------
 	// Coordenadas manuales: solo se usan si NO cambia la dirección.
-	// Si la dirección cambia, manda la geocodificación automática.
 	// ----------------------------------------------------------------------
 	if (!addressChanged) {
+		clientDebugLog("La dirección NO ha cambiado");
+
 		if (input.lat !== undefined) {
 			client.lat =
 				normalizeCoordinate(input.lat, -90, 90, "La latitud") ?? null;
@@ -227,44 +343,32 @@ export async function applyClientUpdate(
 	}
 
 	// ----------------------------------------------------------------------
-	// Regeocodificación automática cuando cambia la dirección
+	// Si cambia la dirección, se fuerza geocodificación válida
 	// ----------------------------------------------------------------------
 	if (addressChanged) {
-		if (
-			hasEnoughAddressToGeocode({
-				address: nextAddress,
-				city: nextCity,
-				postalCode: nextPostalCode,
-				province: nextProvince,
-			})
-		) {
-			try {
-				const geocoded = await geocodeAddress({
-					address: nextAddress,
-					city: nextCity,
-					postalCode: nextPostalCode,
-					province: nextProvince,
-				});
+		clientDebugLog("La dirección ha cambiado, se fuerza geocodificación");
 
-				client.lat = geocoded?.lat ?? null;
-				client.lng = geocoded?.lng ?? null;
-			} catch (error) {
-				console.warn(
-					"[applyClientUpdate] No se pudo geocodificar la dirección:",
-					error,
-				);
+		const geocoded = await geocodeAddressOrThrow({
+			address: nextAddress,
+			city: nextCity,
+			postalCode: nextPostalCode,
+			province: nextProvince,
+		});
 
-				client.lat = null;
-				client.lng = null;
-			}
-		} else {
-			client.lat = null;
-			client.lng = null;
-		}
+		client.lat = geocoded.lat;
+		client.lng = geocoded.lng;
+
+		clientDebugLog("Lat/Lng finales asignadas:", {
+			lat: client.lat,
+			lng: client.lng,
+		});
 	}
 
 	return client;
 }
+
+// Compatibilidad con imports antiguos
+export const applyClientUpdate = applyClientUpdateOrThrow;
 
 // Crear cliente profesional
 export async function createClient(input: CreateClientInput) {
@@ -290,49 +394,68 @@ export async function createClient(input: CreateClientInput) {
 			throw new CreateClientError("Ya existe cliente para este usuario");
 		}
 
-		// ----------------------------------------------------------------------
-		// Geocodificación automática
-		// ----------------------------------------------------------------------
-		// Si hay dirección suficiente, intentamos resolver lat/lng en backend.
-		// Si falla, NO bloqueamos el alta del cliente: se guarda igualmente.
+		const name = normalizeText(input.name);
+		const address = normalizeText(input.address);
+		const city = normalizeText(input.city);
+		const postalCode = normalizeText(input.postalCode) || null;
+		const province = normalizeText(input.province) || null;
+
+		if (!name) {
+			throw new CreateClientError(
+				"El nombre del establecimiento es obligatorio",
+			);
+		}
+
+		if (!address) {
+			throw new CreateClientError("La dirección es obligatoria");
+		}
+
+		if (!city) {
+			throw new CreateClientError("La ciudad es obligatoria");
+		}
+
 		let lat: string | null = null;
 		let lng: string | null = null;
 
-		if (
-			hasEnoughAddressToGeocode({
-				address: input.address,
-				city: input.city,
-				postalCode: input.postalCode,
-				province: input.province,
-			})
-		) {
-			try {
-				const geocoded = await geocodeAddress({
-					address: input.address,
-					city: input.city,
-					postalCode: input.postalCode,
-					province: input.province,
-				});
+		clientDebugLog("createClient - intentando geocodificar:", {
+			address,
+			city,
+			postalCode,
+			province,
+		});
 
-				lat = geocoded?.lat ?? null;
-				lng = geocoded?.lng ?? null;
-			} catch (error) {
-				console.warn(
-					"[createClient] No se pudo geocodificar la dirección:",
-					error,
-				);
-			}
+		try {
+			const geocoded = await geocodeAddressOrThrow({
+				address,
+				city,
+				postalCode,
+				province,
+			});
+
+			lat = geocoded.lat;
+			lng = geocoded.lng;
+
+			clientDebugLog("createClient - lat/lng obtenidas:", { lat, lng });
+		} catch (error) {
+			clientDebugLog("createClient - error geocodificando:", error);
+
+			throw new CreateClientError(
+				error instanceof Error
+					? error.message
+					: "No se ha podido validar la dirección del cliente",
+				400,
+			);
 		}
 
 		const client = clientRepo.create({
 			id: input.userId,
-			name: normalizeText(input.name),
+			name,
 			contact_name: normalizeText(input.contactName) || null,
 			tax_id: normalizeText(input.taxId) || null,
-			address: normalizeText(input.address),
-			city: normalizeText(input.city),
-			postal_code: normalizeText(input.postalCode) || null,
-			province: normalizeText(input.province) || null,
+			address,
+			city,
+			postal_code: postalCode,
+			province,
 			lat,
 			lng,
 			notes: normalizeText(input.notes) || null,
@@ -396,7 +519,9 @@ export async function updateClient(input: UpdateClientInput) {
 			throw new UpdateClientError("Cliente no encontrado", 404);
 		}
 
-		await applyClientUpdate(client, {
+		clientDebugLog("updateClient - input recibido:", input);
+
+		await applyClientUpdateOrThrow(client, {
 			name: input.name,
 			contactName: input.contactName,
 			taxId: input.taxId,

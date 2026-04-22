@@ -41,6 +41,68 @@ function normalizeText(value: string | null | undefined) {
 	return String(value ?? "").trim();
 }
 
+const GEOCODING_DEBUG = process.env.GEOCODING_DEBUG === "true";
+
+function geocodingDebugLog(...args: unknown[]) {
+	if (GEOCODING_DEBUG) {
+		console.log("[geocode-address]", ...args);
+	}
+}
+
+export class GeocodingError extends Error {
+	status: number;
+	code: string;
+	retryable: boolean;
+
+	constructor(
+		message: string,
+		status = 500,
+		code = "GEOCODING_ERROR",
+		retryable = false,
+	) {
+		super(message);
+		this.name = "GeocodingError";
+		this.status = status;
+		this.code = code;
+		this.retryable = retryable;
+	}
+}
+
+// Quita el tipo de vía al principio para generar variantes más tolerantes.
+// Ejemplo: "Calle del Agua 42" -> "del Agua 42"
+function stripStreetType(address: string) {
+	return address
+		.replace(
+			/^(calle|c\/|avda\.?|avenida|camino|cmno\.?|carretera|ctra\.?)\s+/i,
+			"",
+		)
+		.trim();
+}
+
+// Genera variantes de búsqueda para direcciones ambiguas.
+// Esto ayuda mucho cuando en el dato guardado pone "Calle"
+// pero el callejero real del proveedor encaja mejor como "Camino".
+function buildAddressVariants(address: string) {
+	const normalized = normalizeText(address);
+	const withoutType = stripStreetType(normalized);
+	const withoutNumber = stripTrailingStreetNumber(normalized);
+	const withoutTypeAndNumber = stripStreetType(withoutNumber);
+
+	const variants = new Set<string>([
+		normalized,
+		withoutNumber,
+		withoutType,
+		withoutTypeAndNumber,
+	]);
+
+	// Heurística útil para algunas direcciones de diseminado/rural.
+	if (/^calle\s+/i.test(normalized)) {
+		variants.add(normalized.replace(/^calle\s+/i, "Camino "));
+		variants.add(withoutNumber.replace(/^calle\s+/i, "Camino "));
+	}
+
+	return Array.from(variants).filter(Boolean);
+}
 // Comprueba si hay suficiente información mínima para lanzar una geocodificación.
 // No exigimos todos los campos, pero sí al menos dirección y ciudad.
 export function hasEnoughAddressToGeocode(input: GeocodeAddressInput) {
@@ -63,8 +125,8 @@ export function buildFullAddressLabel(input: GeocodeAddressInput) {
 		.join(", ");
 }
 
-// Quita el número final del portal para poder lanzar una búsqueda algo más laxa.
-// Ejemplo: "Calle del Agua 43" -> "Calle del Agua"
+// Quita el número final del portal.
+// Ejemplo: "Calle del Agua 42" -> "Calle del Agua"
 function stripTrailingStreetNumber(address: string) {
 	return address.replace(/\s+\d+[A-Za-zºª/-]*\s*$/, "").trim();
 }
@@ -137,57 +199,152 @@ function mapFirstNominatimResult(data: NominatimSearchResult[] | null) {
 	} satisfies GeocodeAddressResult;
 }
 
+async function fetchNominatimQuery(
+	url: string,
+	userAgent: string,
+): Promise<GeocodeAddressResult | null> {
+	geocodingDebugLog("Request URL:", url);
+	geocodingDebugLog("User-Agent:", userAgent);
+
+	const response = await fetch(url, {
+		method: "GET",
+		headers: {
+			Accept: "application/json",
+			"User-Agent": userAgent,
+		},
+		cache: "no-store",
+	});
+
+	const rawText = await response.text();
+
+	geocodingDebugLog("HTTP status:", response.status, response.statusText);
+	geocodingDebugLog(
+		"Raw response preview:",
+		rawText.length > 500 ? `${rawText.slice(0, 500)}...` : rawText,
+	);
+
+	if (!response.ok) {
+		if (response.status === 429) {
+			throw new GeocodingError(
+				"El servicio de geocodificación ha bloqueado temporalmente las peticiones por exceso de uso. Inténtalo de nuevo en unos minutos.",
+				429,
+				"GEOCODING_RATE_LIMIT",
+				true,
+			);
+		}
+
+		if (response.status >= 500) {
+			throw new GeocodingError(
+				"El servicio de geocodificación no está disponible temporalmente.",
+				response.status,
+				"GEOCODING_PROVIDER_UNAVAILABLE",
+				true,
+			);
+		}
+
+		throw new GeocodingError(
+			`No se pudo geocodificar la dirección. HTTP ${response.status} ${response.statusText}`,
+			response.status,
+			"GEOCODING_HTTP_ERROR",
+			false,
+		);
+	}
+
+	let data: Array<{
+		lat?: string;
+		lon?: string;
+		display_name?: string;
+	}> = [];
+
+	try {
+		data = JSON.parse(rawText) as Array<{
+			lat?: string;
+			lon?: string;
+			display_name?: string;
+		}>;
+	} catch (error) {
+		geocodingDebugLog("Error parseando JSON:", error);
+		throw new Error("Respuesta inválida del servicio de geocodificación");
+	}
+
+	if (!Array.isArray(data) || data.length === 0) {
+		geocodingDebugLog("Sin resultados");
+		return null;
+	}
+
+	const first = data[0];
+	const lat = normalizeText(first.lat);
+	const lng = normalizeText(first.lon);
+
+	geocodingDebugLog("Primer resultado:", first);
+	geocodingDebugLog("Lat/Lng parseadas:", { lat, lng });
+
+	if (!lat || !lng) {
+		geocodingDebugLog("Resultado sin lat/lng válidas");
+		return null;
+	}
+
+	return {
+		lat,
+		lng,
+		displayName: normalizeText(first.display_name) || null,
+	};
+}
+
 async function tryStructuredSearch(
 	input: GeocodeAddressInput,
-	options?: {
-		addressOverride?: string;
-		includePostalCode?: boolean;
-	},
+	userAgent: string,
+	baseUrl: string,
+	countryCode: string,
+	countryName: string,
+	contactEmail: string,
+	addressVariant: string,
+	includePostalCode: boolean,
 ) {
-	const config = getGeocodingConfig(input);
-
 	const params = new URLSearchParams({
 		format: "jsonv2",
 		limit: "1",
 		addressdetails: "1",
-		street: normalizeText(options?.addressOverride ?? input.address),
+		street: addressVariant,
 		city: normalizeText(input.city),
 		state: normalizeText(input.province),
-		country: config.resolvedCountry || config.countryName,
-		countrycodes: config.countryCode,
+		country: normalizeText(input.country) || countryName,
+		countrycodes: countryCode,
 	});
 
-	if (options?.includePostalCode !== false) {
-		params.set("postalcode", normalizeText(input.postalCode));
+	if (includePostalCode) {
+		const postalCode = normalizeText(input.postalCode);
+		if (postalCode) {
+			params.set("postalcode", postalCode);
+		}
 	}
 
-	if (config.contactEmail) {
-		params.set("email", config.contactEmail);
+	if (contactEmail) {
+		params.set("email", contactEmail);
 	}
 
-	const data = await fetchNominatimSearch(
-		`${config.baseUrl}/search?${params.toString()}`,
-		config.userAgent,
+	return fetchNominatimQuery(
+		`${baseUrl}/search?${params.toString()}`,
+		userAgent,
 	);
-
-	return mapFirstNominatimResult(data);
 }
 
 async function tryFreeTextSearch(
 	input: GeocodeAddressInput,
-	options?: {
-		addressOverride?: string;
-		includePostalCode?: boolean;
-	},
+	userAgent: string,
+	baseUrl: string,
+	countryCode: string,
+	countryName: string,
+	contactEmail: string,
+	addressVariant: string,
+	includePostalCode: boolean,
 ) {
-	const config = getGeocodingConfig(input);
-
 	const q = [
-		normalizeText(options?.addressOverride ?? input.address),
+		addressVariant,
 		normalizeText(input.city),
-		options?.includePostalCode === false ? "" : normalizeText(input.postalCode),
+		includePostalCode ? normalizeText(input.postalCode) : "",
 		normalizeText(input.province),
-		config.resolvedCountry || config.countryName,
+		normalizeText(input.country) || countryName,
 	]
 		.filter(Boolean)
 		.join(", ");
@@ -197,19 +354,17 @@ async function tryFreeTextSearch(
 		limit: "1",
 		addressdetails: "1",
 		q,
-		countrycodes: config.countryCode,
+		countrycodes: countryCode,
 	});
 
-	if (config.contactEmail) {
-		params.set("email", config.contactEmail);
+	if (contactEmail) {
+		params.set("email", contactEmail);
 	}
 
-	const data = await fetchNominatimSearch(
-		`${config.baseUrl}/search?${params.toString()}`,
-		config.userAgent,
+	return fetchNominatimQuery(
+		`${baseUrl}/search?${params.toString()}`,
+		userAgent,
 	);
-
-	return mapFirstNominatimResult(data);
 }
 
 // Geocodifica usando Nominatim público.
@@ -223,41 +378,114 @@ async function tryFreeTextSearch(
 export async function geocodeAddress(
 	input: GeocodeAddressInput,
 ): Promise<GeocodeAddressResult | null> {
+	geocodingDebugLog("Input original:", input);
+
 	if (!hasEnoughAddressToGeocode(input)) {
+		geocodingDebugLog("Dirección insuficiente para geocodificar");
 		return null;
 	}
 
-	const normalizedAddress = normalizeText(input.address);
-	const addressWithoutNumber = stripTrailingStreetNumber(normalizedAddress);
+	const provider = normalizeText(process.env.GEOCODING_PROVIDER).toLowerCase();
 
-	const attempts: Array<() => Promise<GeocodeAddressResult | null>> = [
-		() => tryStructuredSearch(input),
-		() => tryStructuredSearch(input, { includePostalCode: false }),
-		() =>
-			addressWithoutNumber && addressWithoutNumber !== normalizedAddress
-				? tryStructuredSearch(input, {
-						addressOverride: addressWithoutNumber,
-						includePostalCode: false,
-					})
-				: Promise.resolve(null),
-		() => tryFreeTextSearch(input),
-		() => tryFreeTextSearch(input, { includePostalCode: false }),
-		() =>
-			addressWithoutNumber && addressWithoutNumber !== normalizedAddress
-				? tryFreeTextSearch(input, {
-						addressOverride: addressWithoutNumber,
-						includePostalCode: false,
-					})
-				: Promise.resolve(null),
-	];
+	if (provider && provider !== "nominatim") {
+		throw new Error("Proveedor de geocodificación no soportado");
+	}
 
-	for (const attempt of attempts) {
-		const result = await attempt();
+	const baseUrl =
+		normalizeText(process.env.GEOCODING_BASE_URL) ||
+		"https://nominatim.openstreetmap.org";
 
-		if (result) {
-			return result;
+	const countryCode =
+		normalizeText(process.env.GEOCODING_COUNTRY_CODE).toLowerCase() || "es";
+
+	const countryName =
+		normalizeText(process.env.GEOCODING_COUNTRY_NAME) || "España";
+
+	const contactEmail = normalizeText(process.env.GEOCODING_EMAIL) || "";
+
+	const userAgent =
+		normalizeText(process.env.GEOCODING_USER_AGENT) || "KinestilistasTFG/1.0";
+
+	const addressVariants = buildAddressVariants(normalizeText(input.address));
+
+	geocodingDebugLog("Configuración:", {
+		baseUrl,
+		countryCode,
+		countryName,
+		contactEmail,
+		userAgent,
+	});
+
+	geocodingDebugLog("Address variants:", addressVariants);
+
+	for (const addressVariant of addressVariants) {
+		geocodingDebugLog("Probando variante:", addressVariant);
+
+		const structuredWithPostal = await tryStructuredSearch(
+			input,
+			userAgent,
+			baseUrl,
+			countryCode,
+			countryName,
+			contactEmail,
+			addressVariant,
+			true,
+		);
+
+		if (structuredWithPostal) {
+			geocodingDebugLog("OK structuredWithPostal:", structuredWithPostal);
+			return structuredWithPostal;
+		}
+
+		const structuredWithoutPostal = await tryStructuredSearch(
+			input,
+			userAgent,
+			baseUrl,
+			countryCode,
+			countryName,
+			contactEmail,
+			addressVariant,
+			false,
+		);
+
+		if (structuredWithoutPostal) {
+			geocodingDebugLog("OK structuredWithoutPostal:", structuredWithoutPostal);
+			return structuredWithoutPostal;
+		}
+
+		const freeTextWithPostal = await tryFreeTextSearch(
+			input,
+			userAgent,
+			baseUrl,
+			countryCode,
+			countryName,
+			contactEmail,
+			addressVariant,
+			true,
+		);
+
+		if (freeTextWithPostal) {
+			geocodingDebugLog("OK freeTextWithPostal:", freeTextWithPostal);
+			return freeTextWithPostal;
+		}
+
+		const freeTextWithoutPostal = await tryFreeTextSearch(
+			input,
+			userAgent,
+			baseUrl,
+			countryCode,
+			countryName,
+			contactEmail,
+			addressVariant,
+			false,
+		);
+
+		if (freeTextWithoutPostal) {
+			geocodingDebugLog("OK freeTextWithoutPostal:", freeTextWithoutPostal);
+			return freeTextWithoutPostal;
 		}
 	}
 
+	geocodingDebugLog("No se encontró ninguna coincidencia válida");
 	return null;
 }
