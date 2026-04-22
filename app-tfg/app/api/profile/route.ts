@@ -5,6 +5,10 @@ import { getPasswordValidationMessage } from "@/lib/utils/password-utils";
 import { getDataSource } from "@/lib/typeorm/data-source";
 import { User } from "@/lib/typeorm/entities/User";
 import { Client } from "@/lib/typeorm/entities/Client";
+import {
+	applyClientUpdate,
+	UpdateClientError,
+} from "@/lib/typeorm/services/commercial/client";
 
 type UpdateProfileRequestBody = {
 	name?: string;
@@ -27,7 +31,8 @@ type UpdateProfileRequestBody = {
 };
 
 // Helpers
-// Normaliza un texto: si es null o undefined lo convierte a cadena vacía, y recorta espacios al inicio y al final
+// Normaliza un texto: si es null o undefined lo convierte a cadena vacía,
+// y recorta espacios al inicio y al final
 function normalizeText(value: string | null | undefined) {
 	return String(value ?? "").trim();
 }
@@ -44,13 +49,13 @@ function isValidEmail(value: string) {
 	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-// Valida que una URL sea una imagen válida de Cloudinary (o que sea null/undefined)
+// Valida que una URL sea una imagen válida de Cloudinary
+// (o que sea null/undefined)
 function isValidCloudinaryImageUrl(value: string | null) {
 	if (!value) return true;
 
 	try {
 		const url = new URL(value);
-
 		return url.protocol === "https:" && url.hostname === "res.cloudinary.com";
 	} catch {
 		return false;
@@ -193,25 +198,30 @@ export async function PATCH(request: Request) {
 
 			// Si el usuario autenticado es de tipo cliente y el formulario envía
 			// datos de perfil cliente, actualizamos también su registro enlazado.
+			// OJO: aquí ya NO actualizamos el cliente "a mano", sino reutilizando
+			// la lógica compartida que también regeocodifica dirección -> lat/lng.
 			if (user.role.code === "client" && body.clientProfile) {
 				const client = await clientRepo.findOne({
-					where: {
-						id: user.id,
-					},
+					where: { id: user.id },
 				});
 
 				if (client) {
-					client.name = normalizeText(body.clientProfile.name) || client.name;
-					client.contact_name =
-						normalizeText(body.clientProfile.contact_name) || null;
-					client.tax_id = normalizeText(body.clientProfile.tax_id) || null;
-					client.address = normalizeText(body.clientProfile.address) || "";
-					client.city = normalizeText(body.clientProfile.city) || "";
-					client.postal_code =
-						normalizeText(body.clientProfile.postal_code) || null;
-					client.province = normalizeText(body.clientProfile.province) || null;
-					client.notes = normalizeText(body.clientProfile.notes) || null;
-					client.updated_at = new Date();
+					await applyClientUpdate(client, {
+						name: body.clientProfile.name,
+						contactName: body.clientProfile.contact_name,
+						taxId: body.clientProfile.tax_id,
+						address:
+							body.clientProfile.address === null
+								? undefined
+								: body.clientProfile.address,
+						city:
+							body.clientProfile.city === null
+								? undefined
+								: body.clientProfile.city,
+						postalCode: body.clientProfile.postal_code,
+						province: body.clientProfile.province,
+						notes: body.clientProfile.notes,
+					});
 
 					await clientRepo.save(client);
 				}
@@ -228,6 +238,16 @@ export async function PATCH(request: Request) {
 		);
 	} catch (error) {
 		console.error("Error al actualizar el perfil:", error);
+
+		if (error instanceof UpdateClientError) {
+			return NextResponse.json(
+				{
+					message: error.message,
+					code: "CLIENT_PROFILE_UPDATE_ERROR",
+				},
+				{ status: error.status },
+			);
+		}
 
 		if (error instanceof Error && error.message === "USER_NOT_FOUND") {
 			return NextResponse.json(

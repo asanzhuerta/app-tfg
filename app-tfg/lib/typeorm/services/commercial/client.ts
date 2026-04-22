@@ -10,13 +10,58 @@ import {
 // --------------------------------------------------------------------------
 // Funciones auxiliares para normalización de datos
 // --------------------------------------------------------------------------
+
 function normalizeText(value: string | null | undefined) {
 	return String(value ?? "").trim();
+}
+
+function normalizeCoordinate(
+	value: number | string | null | undefined,
+	min: number,
+	max: number,
+	fieldName: string,
+) {
+	if (value === undefined) {
+		return undefined;
+	}
+
+	if (value === null || String(value).trim() === "") {
+		return null;
+	}
+
+	const parsed = Number(value);
+
+	if (!Number.isFinite(parsed) || parsed < min || parsed > max) {
+		throw new UpdateClientError(`${fieldName} no es válida`, 400);
+	}
+
+	return parsed.toFixed(6);
+}
+
+function normalizeTimeValue(value: string | null ) {
+
+	const normalized = String(value ?? "").trim();
+
+	if (!normalized) {
+		return null;
+	}
+
+	const isValid = /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(normalized);
+
+	if (!isValid) {
+		throw new UpdateClientError(
+			"El formato de hora no es válido. Usa HH:mm o HH:mm:ss",
+			400,
+		);
+	}
+
+	return normalized.length === 5 ? `${normalized}:00` : normalized;
 }
 
 // --------------------------------------------------------------------------
 // Tipos de datos para los inputs de los servicios
 // --------------------------------------------------------------------------
+
 type CreateClientInput = {
 	name: string;
 	contactName?: string | null;
@@ -45,9 +90,12 @@ type UpdateClientInput = {
 	notes?: string | null;
 };
 
+type ApplyClientUpdateInput = Omit<UpdateClientInput, "clientId">;
+
 // --------------------------------------------------------------------------
 // SERVICIOS
 // --------------------------------------------------------------------------
+
 export class CreateClientError extends Error {
 	status: number;
 
@@ -66,6 +114,156 @@ export class UpdateClientError extends Error {
 		this.name = "UpdateClientError";
 		this.status = status;
 	}
+}
+
+// --------------------------------------------------------------------------
+// Helper compartido de actualización de cliente
+// --------------------------------------------------------------------------
+// Este helper aplica cambios al registro de cliente y, si cambia la dirección,
+// recalcula automáticamente lat/lng. Así evitamos duplicar la misma lógica
+// en /api/profile, /api/clients/[id] u otros puntos del sistema.
+export async function applyClientUpdate(
+	client: Client,
+	input: ApplyClientUpdateInput,
+) {
+	const nextName =
+		input.name !== undefined ? normalizeText(input.name) : client.name;
+
+	const nextContactName =
+		input.contactName !== undefined
+			? normalizeText(input.contactName) || null
+			: client.contact_name;
+
+	const nextTaxId =
+		input.taxId !== undefined
+			? normalizeText(input.taxId) || null
+			: client.tax_id;
+
+	const nextAddress =
+		input.address !== undefined ? normalizeText(input.address) : client.address;
+
+	const nextCity =
+		input.city !== undefined ? normalizeText(input.city) : client.city;
+
+	const nextPostalCode =
+		input.postalCode !== undefined
+			? normalizeText(input.postalCode) || null
+			: client.postal_code;
+
+	const nextProvince =
+		input.province !== undefined
+			? normalizeText(input.province) || null
+			: client.province;
+
+	const nextNotes =
+		input.notes !== undefined
+			? normalizeText(input.notes) || null
+			: client.notes;
+
+	const nextVisitWindowStartTime =
+		input.visitWindowStartTime !== undefined
+			? normalizeTimeValue(input.visitWindowStartTime)
+			: client.visit_window_start_time;
+
+	const nextVisitWindowEndTime =
+		input.visitWindowEndTime !== undefined
+			? normalizeTimeValue(input.visitWindowEndTime)
+			: client.visit_window_end_time;
+
+	if (!nextName) {
+		throw new UpdateClientError("El nombre del establecimiento es obligatorio");
+	}
+
+	if (!nextAddress) {
+		throw new UpdateClientError("La dirección es obligatoria");
+	}
+
+	if (!nextCity) {
+		throw new UpdateClientError("La ciudad es obligatoria");
+	}
+
+	if (
+		nextVisitWindowStartTime &&
+		nextVisitWindowEndTime &&
+		nextVisitWindowStartTime >= nextVisitWindowEndTime
+	) {
+		throw new UpdateClientError(
+			"La hora de inicio de visitas debe ser anterior a la hora de fin",
+		);
+	}
+
+	const addressChanged =
+		client.address !== nextAddress ||
+		client.city !== nextCity ||
+		client.postal_code !== nextPostalCode ||
+		client.province !== nextProvince;
+
+	client.name = nextName;
+	client.contact_name = nextContactName;
+	client.tax_id = nextTaxId;
+	client.address = nextAddress;
+	client.city = nextCity;
+	client.postal_code = nextPostalCode;
+	client.province = nextProvince;
+	client.visit_window_start_time = nextVisitWindowStartTime;
+	client.visit_window_end_time = nextVisitWindowEndTime;
+	client.notes = nextNotes;
+	client.updated_at = new Date();
+
+	// ----------------------------------------------------------------------
+	// Coordenadas manuales: solo se usan si NO cambia la dirección.
+	// Si la dirección cambia, manda la geocodificación automática.
+	// ----------------------------------------------------------------------
+	if (!addressChanged) {
+		if (input.lat !== undefined) {
+			client.lat =
+				normalizeCoordinate(input.lat, -90, 90, "La latitud") ?? null;
+		}
+
+		if (input.lng !== undefined) {
+			client.lng =
+				normalizeCoordinate(input.lng, -180, 180, "La longitud") ?? null;
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	// Regeocodificación automática cuando cambia la dirección
+	// ----------------------------------------------------------------------
+	if (addressChanged) {
+		if (
+			hasEnoughAddressToGeocode({
+				address: nextAddress,
+				city: nextCity,
+				postalCode: nextPostalCode,
+				province: nextProvince,
+			})
+		) {
+			try {
+				const geocoded = await geocodeAddress({
+					address: nextAddress,
+					city: nextCity,
+					postalCode: nextPostalCode,
+					province: nextProvince,
+				});
+
+				client.lat = geocoded?.lat ?? null;
+				client.lng = geocoded?.lng ?? null;
+			} catch (error) {
+				console.warn(
+					"[applyClientUpdate] No se pudo geocodificar la dirección:",
+					error,
+				);
+
+				client.lat = null;
+				client.lng = null;
+			}
+		} else {
+			client.lat = null;
+			client.lng = null;
+		}
+	}
+
+	return client;
 }
 
 // Crear cliente profesional
@@ -198,64 +396,23 @@ export async function updateClient(input: UpdateClientInput) {
 			throw new UpdateClientError("Cliente no encontrado", 404);
 		}
 
-		const nextAddress = normalizeText(input.address);
-		const nextCity = normalizeText(input.city);
-		const nextPostalCode = normalizeText(input.postalCode) || null;
-		const nextProvince = normalizeText(input.province) || null;
-
-		const addressChanged =
-			client.address !== nextAddress ||
-			client.city !== nextCity ||
-			client.postal_code !== nextPostalCode ||
-			client.province !== nextProvince;
-
-		client.name = normalizeText(input.name);
-		client.contact_name = normalizeText(input.contactName) || null;
-		client.tax_id = normalizeText(input.taxId) || null;
-		client.address = nextAddress;
-		client.city = nextCity;
-		client.postal_code = nextPostalCode;
-		client.province = nextProvince;
-		client.notes = normalizeText(input.notes) || null;
-		client.updated_at = new Date();
-
-		// ----------------------------------------------------------------------
-		// Regeocodificación automática cuando cambia la dirección
-		// ----------------------------------------------------------------------
-		if (addressChanged) {
-			if (
-				hasEnoughAddressToGeocode({
-					address: nextAddress,
-					city: nextCity,
-					postalCode: nextPostalCode,
-					province: nextProvince,
-				})
-			) {
-				try {
-					const geocoded = await geocodeAddress({
-						address: nextAddress,
-						city: nextCity,
-						postalCode: nextPostalCode,
-						province: nextProvince,
-					});
-
-					client.lat = geocoded?.lat ?? null;
-					client.lng = geocoded?.lng ?? null;
-				} catch (error) {
-					console.warn(
-						"[updateClient] No se pudo geocodificar la dirección:",
-						error,
-					);
-					client.lat = null;
-					client.lng = null;
-				}
-			} else {
-				client.lat = null;
-				client.lng = null;
-			}
-		}
+		await applyClientUpdate(client, {
+			name: input.name,
+			contactName: input.contactName,
+			taxId: input.taxId,
+			address: input.address,
+			city: input.city,
+			postalCode: input.postalCode,
+			province: input.province,
+			lat: input.lat,
+			lng: input.lng,
+			visitWindowStartTime: input.visitWindowStartTime,
+			visitWindowEndTime: input.visitWindowEndTime,
+			notes: input.notes,
+		});
 
 		await repo.save(client);
+
 		return client;
 	});
 }
@@ -299,7 +456,8 @@ export async function listClientsByCommercialId(commercialId: string) {
 		.getMany();
 }
 
-// Obtener cliente por ID para comercial (solo si tiene asignación activa con ese comercial)
+// Obtener cliente por ID para comercial
+// (solo si tiene asignación activa con ese comercial)
 export async function getClientByIdForCommercial(
 	clientId: string,
 	commercialId: string,
