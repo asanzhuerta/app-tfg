@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import PageTransition from "@/app/components/animations/PageTransition";
 import UserAvatar from "@/app/components/users/UserAvatar";
 import { formatDate, formatDateShort } from "@/lib/utils/user-utils";
-
+import ClientLocationPickerMap from "@/app/components/maps/ClientLocationPickerMap";
 import CommercialClientInfoItem from "./CommercialClientInfoItem";
 import CommercialClientInfoSection from "./CommercialClientInfoSection";
 import {
@@ -14,6 +14,7 @@ import {
 	getActiveAssignment,
 	getClientLocation,
 } from "./commercial-client-types";
+import { getClientGeolocationLabel } from "./commercial-client-types";
 
 type Props = {
 	clientId: string;
@@ -60,9 +61,7 @@ export default function CommercialClientDetail({ clientId }: Props) {
 			} catch (err) {
 				if (isMounted) {
 					setError(
-						err instanceof Error
-							? err.message
-							: "Error al cargar el cliente",
+						err instanceof Error ? err.message : "Error al cargar el cliente",
 					);
 				}
 			} finally {
@@ -229,6 +228,34 @@ export default function CommercialClientDetail({ clientId }: Props) {
 									title="Datos del cliente profesional"
 									items={clientItems}
 								/>
+
+								<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
+									<h2 className="text-xl font-bold text-slate-900">
+										Estado de ubicación
+									</h2>
+
+									<div className="mt-5">
+										<div className="rounded-2xl border border-slate-200 bg-white p-4">
+											<p className="text-sm font-medium text-slate-700">
+												Estado actual
+											</p>
+											<p className="mt-1 text-sm text-slate-900">
+												{getClientGeolocationLabel(client)}
+											</p>
+
+											{client.geolocation_status === "verified" ? (
+												<p className="mt-2 text-xs text-emerald-700">
+													Lat: {client.lat ?? "-"} · Lng: {client.lng ?? "-"}
+												</p>
+											) : (
+												<p className="mt-2 text-xs text-amber-700">
+													Este cliente no se incluirá en rutas hasta confirmar
+													su ubicación.
+												</p>
+											)}
+										</div>
+									</div>
+								</section>
 
 								<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
 									<h2 className="text-xl font-bold text-slate-900">

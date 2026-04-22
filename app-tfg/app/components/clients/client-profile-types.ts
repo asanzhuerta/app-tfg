@@ -18,6 +18,10 @@ export type ClientProfileData = {
 	city?: string | null;
 	postal_code?: string | null;
 	province?: string | null;
+	lat?: string | null;
+	lng?: string | null;
+	geolocation_status?: string | null;
+	geolocation_verified_at?: string | null;
 	notes?: string | null;
 };
 

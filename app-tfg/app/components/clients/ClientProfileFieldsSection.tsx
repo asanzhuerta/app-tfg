@@ -1,6 +1,7 @@
 "use client";
 
 import { ClientFormDataState } from "./client-profile-types";
+import ClientLocationPickerMap from "@/app/components/maps/ClientLocationPickerMap";
 
 // ----------------------------------------------------------------------------
 // PROPS
@@ -12,16 +13,31 @@ type Props = {
 	formData: ClientFormDataState;
 	onChange: (
 		field: keyof ClientFormDataState,
-	) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+	) => (
+		e: React.ChangeEvent<
+			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+		>,
+	) => void;
 	isEditable: boolean;
 	isAdminEditMode?: boolean;
+	clientId?: string;
+	geolocationStatus?: string | null;
+	geolocationVerifiedAt?: string | null;
+	initialLat?: string | null;
+	initialLng?: string | null;
+	allowLocationEdit?: boolean;
 };
-
 export default function ClientProfileFieldsSection({
 	formData,
 	onChange,
 	isEditable,
 	isAdminEditMode = false,
+	clientId,
+	geolocationStatus = null,
+	geolocationVerifiedAt = null,
+	initialLat = null,
+	initialLng = null,
+	allowLocationEdit = false,
 }: Props) {
 	return (
 		<div className="mt-6">
@@ -181,6 +197,54 @@ export default function ClientProfileFieldsSection({
 					)}
 				</div>
 
+				{/* Mapa de localización */}
+				<div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+					<p className="text-sm font-medium text-slate-700">
+						Estado de ubicación
+					</p>
+
+					{geolocationStatus === "verified" ? (
+						<div className="mt-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+							Ubicación verificada
+							{geolocationVerifiedAt ? (
+								<span className="block text-xs text-emerald-700 mt-1">
+									Confirmada:{" "}
+									{new Date(geolocationVerifiedAt).toLocaleString("es-ES")}
+								</span>
+							) : null}
+						</div>
+					) : (
+						<div className="mt-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+							Dirección guardada, pero ubicación pendiente de confirmar en el
+							mapa.
+						</div>
+					)}
+				</div>
+				{clientId ? (
+					<div className="mt-6 rounded-3xl border border-slate-200 bg-white p-4">
+						<div className="mb-4">
+							<h4 className="text-base font-semibold text-slate-900">
+								Ubicación en mapa
+							</h4>
+							<p className="mt-1 text-sm text-slate-600">
+								Selecciona manualmente la ubicación exacta del establecimiento.
+							</p>
+						</div>
+
+						{allowLocationEdit ? (
+							<ClientLocationPickerMap
+								clientId={clientId}
+								initialLat={initialLat ? Number(initialLat) : null}
+								initialLng={initialLng ? Number(initialLng) : null}
+							/>
+						) : (
+							<div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+								La ubicación solo puede confirmarse desde edición propia del
+								cliente o edición administrativa.
+							</div>
+						)}
+					</div>
+				) : null}
 				{/* Notas: solo visibles en edición administrativa */}
 				{isAdminEditMode ? (
 					<div className="rounded-xl bg-slate-50 p-4 md:col-span-2">

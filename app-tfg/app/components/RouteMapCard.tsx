@@ -180,6 +180,10 @@ export default function RouteMapCard({
 	const hasEnoughPointsForMap =
 		(startPoint ? 1 : 0) + waypoints.length + (endPoint ? 1 : 0) >= 1;
 
+	const pendingLocationClients = preview
+		? Math.max(0, preview.skippedClients)
+		: 0;
+
 	return (
 		<div
 			className={`rounded-3xl border border-slate-200 bg-white p-5 shadow-sm ${className}`}
@@ -197,7 +201,12 @@ export default function RouteMapCard({
 					href={googleMapsUrl}
 					target="_blank"
 					rel="noreferrer"
-					className="inline-flex items-center rounded-2xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+					aria-disabled={waypoints.length === 0}
+					className={`inline-flex items-center rounded-2xl px-4 py-2 text-sm font-medium text-white transition ${
+						waypoints.length === 0
+							? "pointer-events-none bg-slate-400"
+							: "bg-slate-900 hover:bg-slate-800"
+					}`}
 				>
 					Abrir en Google Maps
 				</a>
@@ -241,14 +250,14 @@ export default function RouteMapCard({
 							<span className="font-semibold text-slate-900">
 								{preview.mappedClients}
 							</span>{" "}
-							con coordenadas
+							con ubicación verificada
 						</div>
 
 						<div className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2">
 							<span className="font-semibold text-slate-900">
 								{preview.skippedClients}
 							</span>{" "}
-							sin geolocalizar
+							pendientes de ubicación
 						</div>
 					</div>
 
@@ -274,17 +283,17 @@ export default function RouteMapCard({
 						</div>
 					) : null}
 
-					{!preview.hasConfiguredEndPoint &&
-					!(preview.startPoint && preview.endPoint) ? (
+					{pendingLocationClients > 0 ? (
 						<div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-							Aún no tienes configurado un punto final de ruta en tu perfil.
+							Hay {pendingLocationClients} cliente(s) con visita hoy que no
+							tienen la ubicación confirmada y no se incluirán en la ruta.
 						</div>
 					) : null}
 
 					{waypoints.length === 0 ? (
 						<div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
-							No hay clientes asignados con coordenadas suficientes para pintar
-							la ruta todavía.
+							No hay clientes con ubicación verificada suficiente para pintar la
+							ruta todavía.
 						</div>
 					) : null}
 

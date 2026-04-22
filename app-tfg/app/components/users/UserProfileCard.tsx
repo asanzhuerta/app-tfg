@@ -332,19 +332,18 @@ export default function UserProfileCard({
 				{/* ==================================================================== */}
 				{isClientUser ? (
 					<ClientProfileFieldsSection
-						formData={{
-							client_name: formData.client_name,
-							contact_name: formData.contact_name,
-							tax_id: formData.tax_id,
-							address: formData.address,
-							city: formData.city,
-							postal_code: formData.postal_code,
-							province: formData.province,
-							notes: formData.notes,
-						}}
-						onChange={handleChange as any}
+						formData={formData}
+						onChange={handleChange}
 						isEditable={isEditableMode}
 						isAdminEditMode={isAdminEditMode}
+						clientId={clientProfile?.id ?? user.id}
+						geolocationStatus={clientProfile?.geolocation_status ?? null}
+						geolocationVerifiedAt={
+							clientProfile?.geolocation_verified_at ?? null
+						}
+						initialLat={clientProfile?.lat ?? null}
+						initialLng={clientProfile?.lng ?? null}
+						allowLocationEdit={isSelfEditMode || isAdminEditMode}
 					/>
 				) : null}
 

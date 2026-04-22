@@ -1,5 +1,3 @@
-// app/api/commercial/routes/preview/route.ts
-
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { COMMERCIAL_VISIT_STATUS_IDS } from "@/lib/typeorm/constants/catalog-ids";
@@ -27,6 +25,8 @@ type RoutePreviewVisitClient = {
 	city?: string | null;
 	lat?: unknown;
 	lng?: unknown;
+	geolocation_status?: string | null;
+	geolocation_verified_at?: string | null;
 	user?: {
 		email?: string | null;
 	} | null;
@@ -66,8 +66,6 @@ function getMadridDateParts(date: Date) {
 		day: parts.find((part) => part.type === "day")?.value ?? "01",
 	};
 }
-
-// Obtiene el offset actual de Madrid en formato +HH:MM o -HH:MM.
 
 // Rango del día actual en Europe/Madrid.
 // Esto evita errores si el servidor no está en la misma zona horaria.
@@ -165,6 +163,7 @@ function sortWaypointsByNearestNeighbor(
 // 2. Punto de salida guardado en perfil comercial como fallback
 // 3. Punto final configurable del perfil comercial
 // 4. SOLO clientes con visita planificada HOY
+// 5. SOLO clientes con ubicación verificada
 //
 // No guarda la ruta todavía: solo prepara datos para mapa y navegación.
 export async function GET(request: Request) {
@@ -201,16 +200,16 @@ export async function GET(request: Request) {
 			? {
 					id: "route-start-current",
 					label: "Ubicación actual",
-					lat: currentStartLat!,
-					lng: currentStartLng!,
+					lat: currentStartLat,
+					lng: currentStartLng,
 					description: "Punto de inicio detectado desde el dispositivo",
 				}
 			: usingSavedStartFallback
 				? {
 						id: "route-start-fallback",
 						label: "Punto de salida guardado",
-						lat: savedStartLat!,
-						lng: savedStartLng!,
+						lat: savedStartLat,
+						lng: savedStartLng,
 						description:
 							commercial.route_start_address ||
 							"Fallback configurado en perfil",
@@ -249,12 +248,12 @@ export async function GET(request: Request) {
 
 		const { dateFrom, dateTo } = getTodayRangeInMadrid();
 
-		const visits = await listCommercialVisitsByCommercial({
+		const visits = (await listCommercialVisitsByCommercial({
 			commercialId: commercial.id,
 			statusId: COMMERCIAL_VISIT_STATUS_IDS.PLANNED,
 			dateFrom,
 			dateTo,
-		});
+		})) as RoutePreviewVisit[];
 
 		// ------------------------------------------------------------------
 		// Deduplicado por cliente del día
@@ -282,19 +281,23 @@ export async function GET(request: Request) {
 			const lat = parseCoordinate(client.lat);
 			const lng = parseCoordinate(client.lng);
 
-			const point =
-				lat !== null && lng !== null
-					? {
-							id: client.id,
-							label: client.name,
-							lat,
-							lng,
-							description:
-								client.address && client.city
-									? `${client.address} · ${client.city}`
-									: client.user?.email || "Cliente con visita hoy",
-						}
-					: null;
+			const hasVerifiedLocation =
+				client.geolocation_status === "verified" &&
+				lat !== null &&
+				lng !== null;
+
+			const point = hasVerifiedLocation
+				? {
+						id: client.id,
+						label: client.name,
+						lat,
+						lng,
+						description:
+							client.address && client.city
+								? `${client.address} · ${client.city}`
+								: client.user?.email || "Cliente con visita hoy",
+					}
+				: null;
 
 			clientsOfTheDay.set(client.id, {
 				client,

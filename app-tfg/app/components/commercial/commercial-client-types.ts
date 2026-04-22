@@ -40,6 +40,10 @@ export type CommercialClient = {
 	city: string;
 	postal_code: string | null;
 	province: string | null;
+	lat: string | null;
+	lng: string | null;
+	geolocation_status: string;
+	geolocation_verified_at: string | null;
 	notes: string | null;
 	created_at: string;
 	updated_at: string;
@@ -58,4 +62,10 @@ export function getCommercialDisplayName(client: CommercialClient) {
 
 export function getClientLocation(client: CommercialClient) {
 	return [client.city, client.province].filter(Boolean).join(" · ") || "-";
+}
+
+export function getClientGeolocationLabel(client: CommercialClient) {
+	return client.geolocation_status === "verified"
+		? "Ubicación verificada"
+		: "Ubicación pendiente";
 }
