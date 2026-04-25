@@ -41,68 +41,62 @@ function normalizeText(value: string | null | undefined) {
 	return String(value ?? "").trim();
 }
 
-const GEOCODING_DEBUG = process.env.GEOCODING_DEBUG === "true";
-
-function geocodingDebugLog(...args: unknown[]) {
-	if (GEOCODING_DEBUG) {
-		console.log("[geocode-address]", ...args);
-	}
+function isGeocodingDebugEnabled() {
+	return normalizeText(process.env.GEOCODING_DEBUG).toLowerCase() === "true";
 }
 
-export class GeocodingError extends Error {
-	status: number;
-	code: string;
-	retryable: boolean;
+function redactDebugUrl(url: string) {
+	const parsedUrl = new URL(url);
 
-	constructor(
-		message: string,
-		status = 500,
-		code = "GEOCODING_ERROR",
-		retryable = false,
-	) {
-		super(message);
-		this.name = "GeocodingError";
-		this.status = status;
-		this.code = code;
-		this.retryable = retryable;
+	if (parsedUrl.searchParams.has("email")) {
+		parsedUrl.searchParams.set("email", "[redacted]");
 	}
+
+	return parsedUrl.toString();
 }
 
-// Quita el tipo de vía al principio para generar variantes más tolerantes.
-// Ejemplo: "Calle del Agua 42" -> "del Agua 42"
-function stripStreetType(address: string) {
-	return address
-		.replace(
-			/^(calle|c\/|avda\.?|avenida|camino|cmno\.?|carretera|ctra\.?)\s+/i,
-			"",
-		)
+function logGeocodingDebug(message: string, data?: unknown) {
+	if (!isGeocodingDebugEnabled()) {
+		return;
+	}
+
+	if (data === undefined) {
+		console.log(`[geocoding] ${message}`);
+		return;
+	}
+
+	console.log(`[geocoding] ${message}`, data);
+}
+
+function uniqueValues(values: string[]) {
+	return Array.from(new Set(values.map(normalizeText).filter(Boolean)));
+}
+
+function expandSpanishStreetAbbreviations(query: string) {
+	return query
+		.replace(/\bC\.\s*/gi, "Calle ")
+		.replace(/\bAvda\.\s*/gi, "Avenida ")
+		.replace(/\bAv\.\s*/gi, "Avenida ")
+		.replace(/\bPza\.\s*/gi, "Plaza ");
+}
+
+function buildFreeTextSearchQueries(query: string) {
+	const withoutPostalCode = query
+		.replace(/\b\d{5}\b/g, "")
+		.replace(/\s{2,}/g, " ")
 		.trim();
-}
+	const expandedAbbreviations = expandSpanishStreetAbbreviations(query);
+	const expandedWithoutPostalCode =
+		expandSpanishStreetAbbreviations(withoutPostalCode);
 
-// Genera variantes de búsqueda para direcciones ambiguas.
-// Esto ayuda mucho cuando en el dato guardado pone "Calle"
-// pero el callejero real del proveedor encaja mejor como "Camino".
-function buildAddressVariants(address: string) {
-	const normalized = normalizeText(address);
-	const withoutType = stripStreetType(normalized);
-	const withoutNumber = stripTrailingStreetNumber(normalized);
-	const withoutTypeAndNumber = stripStreetType(withoutNumber);
-
-	const variants = new Set<string>([
-		normalized,
-		withoutNumber,
-		withoutType,
-		withoutTypeAndNumber,
+	return uniqueValues([
+		query,
+		expandedAbbreviations,
+		withoutPostalCode,
+		expandedWithoutPostalCode,
 	]);
-
-	// Heurística útil para algunas direcciones de diseminado/rural.
-	if (/^calle\s+/i.test(normalized)) {
-		variants.add(normalized.replace(/^calle\s+/i, "Camino "));
-		variants.add(withoutNumber.replace(/^calle\s+/i, "Camino "));
-	}
-
-	return Array.from(variants).filter(Boolean);
 }
+
 // Comprueba si hay suficiente información mínima para lanzar una geocodificación.
 // No exigimos todos los campos, pero sí al menos dirección y ciudad.
 export function hasEnoughAddressToGeocode(input: GeocodeAddressInput) {
@@ -157,6 +151,11 @@ async function fetchNominatimSearch(
 	url: string,
 	userAgent: string,
 ): Promise<NominatimSearchResult[] | null> {
+	logGeocodingDebug("request", {
+		url: redactDebugUrl(url),
+		userAgent,
+	});
+
 	const response = await fetch(url, {
 		method: "GET",
 		headers: {
@@ -167,10 +166,20 @@ async function fetchNominatimSearch(
 	});
 
 	if (!response.ok) {
+		logGeocodingDebug("response error", {
+			status: response.status,
+			statusText: response.statusText,
+		});
 		throw new Error("No se pudo geocodificar la dirección");
 	}
 
 	const data = (await response.json()) as NominatimSearchResult[];
+	const resultCount = Array.isArray(data) ? data.length : 0;
+
+	logGeocodingDebug("response", {
+		resultCount,
+		firstResult: resultCount > 0 ? data[0]?.display_name ?? null : null,
+	});
 
 	if (!Array.isArray(data) || data.length === 0) {
 		return null;
@@ -487,5 +496,53 @@ export async function geocodeAddress(
 	}
 
 	geocodingDebugLog("No se encontró ninguna coincidencia válida");
+	return null;
+}
+
+export async function geocodeFreeTextAddress(
+	input: GeocodeFreeTextInput,
+): Promise<GeocodeAddressResult | null> {
+	const query = normalizeText(input.query);
+
+	if (!query) {
+		return null;
+	}
+
+	const config = getGeocodingConfig({ country: input.country });
+	const searches = buildFreeTextSearchQueries(query);
+
+	for (const searchQuery of searches) {
+		logGeocodingDebug("attempt", { query: searchQuery });
+
+		const params = new URLSearchParams({
+			format: "jsonv2",
+			limit: "1",
+			addressdetails: "1",
+			q: searchQuery,
+			countrycodes: config.countryCode,
+		});
+
+		if (config.contactEmail) {
+			params.set("email", config.contactEmail);
+		}
+
+		const data = await fetchNominatimSearch(
+			`${config.baseUrl}/search?${params.toString()}`,
+			config.userAgent,
+		);
+		const result = mapFirstNominatimResult(data);
+
+		if (result) {
+			logGeocodingDebug("matched", {
+				query: searchQuery,
+				displayName: result.displayName,
+				lat: result.lat,
+				lng: result.lng,
+			});
+			return result;
+		}
+	}
+
+	logGeocodingDebug("no match", { query });
 	return null;
 }
