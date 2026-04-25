@@ -2,7 +2,10 @@
 
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { COMMERCIAL_VISIT_STATUS_IDS } from "@/lib/typeorm/constants/catalog-ids";
+import {
+	COMMERCIAL_VISIT_STATUS_IDS,
+	COMMERCIAL_VISIT_TYPE_IDS,
+} from "@/lib/typeorm/constants/catalog-ids";
 import { listCommercialVisitsByCommercial } from "@/lib/typeorm/services/commercial/commercial-visit";
 import {
 	CommercialProfileError,
@@ -10,6 +13,7 @@ import {
 } from "@/lib/typeorm/services/commercial/commercial";
 import type {
 	CommercialRoutePreviewResponse,
+	CommercialRouteTimingSummary,
 	RoutePoint,
 } from "@/app/components/maps/route-map-types";
 
@@ -33,6 +37,7 @@ type RoutePreviewVisitClient = {
 };
 
 type RoutePreviewVisit = {
+	visit_type_id?: number | null;
 	client?: RoutePreviewVisitClient | null;
 };
 
@@ -49,6 +54,101 @@ function parseCoordinate(value: unknown) {
 	const parsed = Number(value);
 
 	return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseTimeToMinutes(value: string | null | undefined) {
+	const normalized = String(value ?? "").trim();
+
+	if (!normalized) {
+		return null;
+	}
+
+	const match = normalized.match(/^(\d{2}):(\d{2})(?::\d{2})?$/);
+
+	if (!match) {
+		return null;
+	}
+
+	const hours = Number(match[1]);
+	const minutes = Number(match[2]);
+
+	if (
+		!Number.isInteger(hours) ||
+		!Number.isInteger(minutes) ||
+		hours < 0 ||
+		hours > 23 ||
+		minutes < 0 ||
+		minutes > 59
+	) {
+		return null;
+	}
+
+	return hours * 60 + minutes;
+}
+
+function buildTimingSummary(
+	commercial: {
+		workday_start_time: string | null;
+		workday_end_time: string | null;
+		delivery_visit_duration_minutes: number;
+		routine_visit_duration_minutes: number;
+	},
+	visits: RoutePreviewVisit[],
+): CommercialRouteTimingSummary {
+	const workdayStartTime = commercial.workday_start_time;
+	const workdayEndTime = commercial.workday_end_time;
+
+	const startMinutes = parseTimeToMinutes(workdayStartTime);
+	const endMinutes = parseTimeToMinutes(workdayEndTime);
+
+	const hasWorkdayConfig = Boolean(workdayStartTime && workdayEndTime);
+	const hasValidWorkdayRange =
+		startMinutes !== null && endMinutes !== null && endMinutes > startMinutes;
+
+	let deliveryVisitsCount = 0;
+	let routineVisitsCount = 0;
+	let totalPlannedVisitMinutes = 0;
+
+	for (const visit of visits) {
+		if (visit.visit_type_id === COMMERCIAL_VISIT_TYPE_IDS.DELIVERY) {
+			deliveryVisitsCount += 1;
+			totalPlannedVisitMinutes += commercial.delivery_visit_duration_minutes;
+			continue;
+		}
+
+		if (visit.visit_type_id === COMMERCIAL_VISIT_TYPE_IDS.ROUTINE) {
+			routineVisitsCount += 1;
+			totalPlannedVisitMinutes += commercial.routine_visit_duration_minutes;
+		}
+	}
+
+	const totalWorkdayMinutes = hasValidWorkdayRange
+		? endMinutes! - startMinutes!
+		: null;
+
+	const remainingWorkdayMinutes =
+		totalWorkdayMinutes === null
+			? null
+			: Math.max(totalWorkdayMinutes - totalPlannedVisitMinutes, 0);
+
+	const overbookedMinutes =
+		totalWorkdayMinutes === null
+			? null
+			: Math.max(totalPlannedVisitMinutes - totalWorkdayMinutes, 0);
+
+	return {
+		hasWorkdayConfig,
+		hasValidWorkdayRange,
+		workdayStartTime,
+		workdayEndTime,
+		totalWorkdayMinutes,
+		plannedVisitsCount: visits.length,
+		deliveryVisitsCount,
+		routineVisitsCount,
+		totalPlannedVisitMinutes,
+		remainingWorkdayMinutes,
+		overbookedMinutes,
+	};
 }
 
 // Devuelve la fecha actual "vista desde Madrid".
@@ -249,12 +349,14 @@ export async function GET(request: Request) {
 
 		const { dateFrom, dateTo } = getTodayRangeInMadrid();
 
-		const visits = await listCommercialVisitsByCommercial({
+		const visits = (await listCommercialVisitsByCommercial({
 			commercialId: commercial.id,
 			statusId: COMMERCIAL_VISIT_STATUS_IDS.PLANNED,
 			dateFrom,
 			dateTo,
-		});
+		})) as RoutePreviewVisit[];
+
+		const timingSummary = buildTimingSummary(commercial, visits);
 
 		// ------------------------------------------------------------------
 		// Deduplicado por cliente del día
@@ -321,6 +423,7 @@ export async function GET(request: Request) {
 			totalAssignedClients: totalClientsToday,
 			mappedClients: totalMappedClients,
 			skippedClients: totalClientsToday - totalMappedClients,
+			timingSummary,
 			usingCurrentLocation,
 			usingSavedStartFallback,
 			hasConfiguredEndPoint: !!configuredEndPoint,

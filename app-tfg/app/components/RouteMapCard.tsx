@@ -6,9 +6,9 @@ import { buildGoogleMapsDirectionsUrl } from "@/app/components/maps/google-maps-
 import type { CommercialRoutePreviewResponse } from "@/app/components/maps/route-map-types";
 
 // --------------------------------------------------------------------------
-// CARGA DINÁMICA DEL MAPA
+// CARGA DINAMICA DEL MAPA
 // --------------------------------------------------------------------------
-// Leaflet depende de window/document, así que no puede renderizarse en SSR.
+// Leaflet depende de window/document, asi que no puede renderizarse en SSR.
 // Lo cargamos solo en cliente para evitar el error "window is not defined".
 const LeafletRouteMap = dynamic(
 	() => import("@/app/components/maps/LeafletRouteMap"),
@@ -47,6 +47,33 @@ type BrowserLocationState =
 			message: string;
 	  };
 
+function formatMinutes(value: number | null | undefined) {
+	if (typeof value !== "number" || Number.isNaN(value)) {
+		return "Sin definir";
+	}
+
+	if (value < 60) {
+		return `${value} min`;
+	}
+
+	const hours = Math.floor(value / 60);
+	const minutes = value % 60;
+
+	if (minutes === 0) {
+		return `${hours} h`;
+	}
+
+	return `${hours} h ${minutes} min`;
+}
+
+function formatTimeLabel(value: string | null | undefined) {
+	if (!value) {
+		return "--:--";
+	}
+
+	return value.slice(0, 5);
+}
+
 export default function RouteMapCard({
 	title = "Ruta diaria",
 	subtitle = "Vista previa de la ruta calculada con tus visitas planificadas para hoy",
@@ -63,10 +90,10 @@ export default function RouteMapCard({
 	});
 
 	// --------------------------------------------------------------------------
-	// OBTENCIÓN DE UBICACIÓN ACTUAL
+	// OBTENCION DE UBICACION ACTUAL
 	// --------------------------------------------------------------------------
-	// Intentamos usar la ubicación real del comercial como inicio de ruta.
-	// Si falla, el backend usará el fallback configurado en perfil si existe.
+	// Intentamos usar la ubicacion real del comercial como inicio de ruta.
+	// Si falla, el backend usara el fallback configurado en perfil si existe.
 	useEffect(() => {
 		if (!("geolocation" in navigator)) {
 			setBrowserLocation({
@@ -102,7 +129,7 @@ export default function RouteMapCard({
 	// --------------------------------------------------------------------------
 	// CARGA DE PREVIEW
 	// --------------------------------------------------------------------------
-	// Esperamos a resolver el intento de geolocalización para pedir la preview.
+	// Esperamos a resolver el intento de geolocalizacion para pedir la preview.
 	useEffect(() => {
 		let ignore = false;
 
@@ -170,15 +197,21 @@ export default function RouteMapCard({
 
 	const startPoint = preview?.startPoint ?? null;
 	const endPoint = preview?.endPoint ?? null;
-	const waypoints = preview?.waypoints ?? [];
+	const previewWaypoints = preview?.waypoints;
+	const waypoints = previewWaypoints ?? [];
+	const timingSummary = preview?.timingSummary ?? null;
 
 	const googleMapsUrl = useMemo(
-		() => buildGoogleMapsDirectionsUrl(startPoint, waypoints, endPoint),
-		[startPoint, waypoints, endPoint],
+		() => buildGoogleMapsDirectionsUrl(startPoint, previewWaypoints ?? [], endPoint),
+		[startPoint, previewWaypoints, endPoint],
 	);
 
 	const hasEnoughPointsForMap =
 		(startPoint ? 1 : 0) + waypoints.length + (endPoint ? 1 : 0) >= 1;
+
+	const hasValidWorkdayRange = Boolean(timingSummary?.hasValidWorkdayRange);
+	const hasWorkdayConfig = Boolean(timingSummary?.hasWorkdayConfig);
+	const overbookedMinutes = timingSummary?.overbookedMinutes ?? null;
 
 	return (
 		<div
@@ -250,7 +283,126 @@ export default function RouteMapCard({
 							</span>{" "}
 							sin geolocalizar
 						</div>
+
+						{timingSummary ? (
+							<div className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2">
+								<span className="font-semibold text-slate-900">
+									{timingSummary.plannedVisitsCount}
+								</span>{" "}
+								visitas planificadas
+							</div>
+						) : null}
 					</div>
+
+					{timingSummary ? (
+						<div className="grid gap-3 md:grid-cols-3">
+							<div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+								<p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+									Jornada base
+								</p>
+								<p className="mt-2 text-lg font-semibold text-slate-900">
+									{hasWorkdayConfig
+										? `${formatTimeLabel(timingSummary.workdayStartTime)} - ${formatTimeLabel(timingSummary.workdayEndTime)}`
+										: "Sin definir"}
+								</p>
+								<p className="mt-1 text-sm text-slate-600">
+									{hasValidWorkdayRange
+										? `${formatMinutes(timingSummary.totalWorkdayMinutes)} disponibles`
+										: hasWorkdayConfig
+											? "El fin de jornada debe ser posterior al inicio."
+											: "Configura tu horario habitual en Ajustes."}
+								</p>
+							</div>
+
+							<div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+								<p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+									Tiempo comprometido
+								</p>
+								<p className="mt-2 text-lg font-semibold text-slate-900">
+									{formatMinutes(timingSummary.totalPlannedVisitMinutes)}
+								</p>
+								<p className="mt-1 text-sm text-slate-600">
+									{timingSummary.deliveryVisitsCount} reparto ·{" "}
+									{timingSummary.routineVisitsCount} rutinarias
+								</p>
+							</div>
+
+							<div
+								className={`rounded-3xl p-4 ${
+									hasValidWorkdayRange && (overbookedMinutes ?? 0) > 0
+										? "border border-red-200 bg-red-50"
+										: "border border-slate-200 bg-slate-50"
+								}`}
+							>
+								<p
+									className={`text-xs font-medium uppercase tracking-wide ${
+										hasValidWorkdayRange && (overbookedMinutes ?? 0) > 0
+											? "text-red-600"
+											: "text-slate-500"
+									}`}
+								>
+									Margen del día
+								</p>
+								<p
+									className={`mt-2 text-lg font-semibold ${
+										hasValidWorkdayRange && (overbookedMinutes ?? 0) > 0
+											? "text-red-700"
+											: "text-slate-900"
+									}`}
+								>
+									{hasValidWorkdayRange
+										? (overbookedMinutes ?? 0) > 0
+											? `${formatMinutes(overbookedMinutes)} de exceso`
+											: formatMinutes(timingSummary.remainingWorkdayMinutes)
+										: "Pendiente"}
+								</p>
+								<p
+									className={`mt-1 text-sm ${
+										hasValidWorkdayRange && (overbookedMinutes ?? 0) > 0
+											? "text-red-700"
+											: "text-slate-600"
+									}`}
+								>
+									{hasValidWorkdayRange
+										? (overbookedMinutes ?? 0) > 0
+											? "La planificación supera la jornada base actual."
+											: "Tiempo restante antes de agotar la jornada base."
+										: "Completa tu horario para calcular el margen real."}
+								</p>
+							</div>
+						</div>
+					) : null}
+
+					{timingSummary && !hasWorkdayConfig ? (
+						<div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+							Aún no has definido tu jornada base. Configúrala en{" "}
+							<a
+								href="/commercials/settings"
+								className="font-semibold underline underline-offset-2"
+							>
+								Ajustes
+							</a>{" "}
+							para que el sistema calcule el tiempo máximo disponible en ruta.
+						</div>
+					) : null}
+
+					{timingSummary && hasWorkdayConfig && !hasValidWorkdayRange ? (
+						<div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+							El horario base no es válido. Revisa en Ajustes que el fin de
+							jornada sea posterior al inicio para poder calcular el margen de
+							ruta.
+						</div>
+					) : null}
+
+					{timingSummary &&
+					hasValidWorkdayRange &&
+					(overbookedMinutes ?? 0) > 0 ? (
+						<div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+							Con la duración actual de visitas, la planificación de hoy excede
+							tu jornada base. La hora exacta seguirá ajustándose después según
+							la disponibilidad diaria de cada peluquería.
+						</div>
+					) : null}
 
 					{preview.usingCurrentLocation ? (
 						<div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">

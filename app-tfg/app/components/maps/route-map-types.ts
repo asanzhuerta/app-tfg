@@ -9,6 +9,20 @@ export type RoutePoint = {
 	description?: string | null;
 };
 
+export type CommercialRouteTimingSummary = {
+	hasWorkdayConfig: boolean;
+	hasValidWorkdayRange: boolean;
+	workdayStartTime: string | null;
+	workdayEndTime: string | null;
+	totalWorkdayMinutes: number | null;
+	plannedVisitsCount: number;
+	deliveryVisitsCount: number;
+	routineVisitsCount: number;
+	totalPlannedVisitMinutes: number;
+	remainingWorkdayMinutes: number | null;
+	overbookedMinutes: number | null;
+};
+
 export type CommercialRoutePreviewResponse = {
 	startPoint: RoutePoint | null;
 	endPoint: RoutePoint | null;
@@ -16,8 +30,9 @@ export type CommercialRoutePreviewResponse = {
 	totalAssignedClients: number;
 	mappedClients: number;
 	skippedClients: number;
+	timingSummary: CommercialRouteTimingSummary;
 
-	// Indica si se ha podido usar la ubicación actual del comercial
+	// Indica si se ha podido usar la ubicacion actual del comercial
 	usingCurrentLocation: boolean;
 
 	// Indica si el punto de salida usado viene del fallback guardado en perfil
