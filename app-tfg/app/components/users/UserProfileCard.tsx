@@ -3,7 +3,14 @@
 import { useMemo, useRef, useState } from "react";
 import SafeForm from "@/app/components/forms/SafeForm";
 import ClientProfileFieldsSection from "@/app/components/clients/ClientProfileFieldsSection";
-import type { ClientFormDataState } from "@/app/components/clients/client-profile-types";
+import { requestJson } from "@/lib/api/client";
+import type { ClientFormDataState } from "@/lib/contracts/client-profile";
+import type {
+	UpdateAdminUserBody,
+	UpdateOwnProfileBody,
+	UpdateProfileResponse,
+	UploadProfileImageResponse,
+} from "@/lib/contracts/user-profile";
 import ProfileIdentitySection from "@/app/components/users/profile/ProfileIdentitySection";
 import ProfileDetailsSection from "@/app/components/users/profile/ProfileDetailsSection";
 import ProfilePasswordSection from "@/app/components/users/profile/ProfilePasswordSection";
@@ -158,16 +165,14 @@ export default function UserProfileCard({
 			const uploadFormData = new FormData();
 			uploadFormData.append("file", file);
 
-			const response = await fetch("/api/profile/upload-image", {
-				method: "POST",
-				body: uploadFormData,
-			});
-
-			const body = await response.json().catch(() => null);
-
-			if (!response.ok) {
-				throw new Error(body?.message ?? "No se pudo subir la imagen");
-			}
+			const body = await requestJson<UploadProfileImageResponse>(
+				"/api/profile/upload-image",
+				{
+					method: "POST",
+					body: uploadFormData,
+					fallbackMessage: "No se pudo subir la imagen",
+				},
+			);
 
 			setFormData((prev) => ({
 				...prev,
@@ -197,7 +202,7 @@ export default function UserProfileCard({
 		fileInputRef.current?.click();
 	};
 
-	const requestPayload = useMemo(() => {
+	const requestPayload = useMemo<UpdateOwnProfileBody | UpdateAdminUserBody | null>(() => {
 		if (isViewMode) {
 			return null;
 		}
@@ -269,19 +274,14 @@ export default function UserProfileCard({
 			setErrorMessage(null);
 			setSuccessMessage(null);
 
-			const response = await fetch(submitUrl, {
+			const body = await requestJson<UpdateProfileResponse>(submitUrl, {
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(requestPayload),
+				fallbackMessage: "No se pudo guardar",
 			});
-
-			const body = await response.json().catch(() => null);
-
-			if (!response.ok) {
-				throw new Error(body?.message ?? "No se pudo guardar");
-			}
 
 			setSuccessMessage(body?.message ?? "Cambios guardados correctamente");
 			setSelectedImageName(null);

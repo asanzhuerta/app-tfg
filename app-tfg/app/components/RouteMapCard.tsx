@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import { useCommercialRoutePreview } from "@/app/hooks/api/useCommercialRoutePreview";
 import { buildGoogleMapsDirectionsUrl } from "@/app/components/maps/google-maps-url";
-import type { CommercialRoutePreviewResponse } from "@/app/components/maps/route-map-types";
+import { formatTimeLabel } from "@/lib/utils/time";
 
 const LeafletRouteMap = dynamic(
 	() => import("@/app/components/maps/LeafletRouteMap"),
@@ -21,11 +22,6 @@ type RouteMapCardProps = {
 	title?: string;
 	subtitle?: string;
 	className?: string;
-};
-
-type ApiError = {
-	error?: string;
-	code?: string;
 };
 
 type BrowserLocationState =
@@ -61,14 +57,6 @@ function formatMinutes(value: number | null | undefined) {
 	return `${hours} h ${minutes} min`;
 }
 
-function formatTimeLabel(value: string | null | undefined) {
-	if (!value) {
-		return "--:--";
-	}
-
-	return value.slice(0, 5);
-}
-
 function buildCommittedTimeDescription(
 	travelMinutes: number,
 	waitingMinutes: number,
@@ -82,16 +70,22 @@ function buildCommittedTimeDescription(
 	return parts.join(" · ");
 }
 
+function getRoutePreviewCoordinates(browserLocation: BrowserLocationState) {
+	if (browserLocation.status !== "granted") {
+		return undefined;
+	}
+
+	return {
+		startLat: browserLocation.lat,
+		startLng: browserLocation.lng,
+	};
+}
+
 export default function RouteMapCard({
 	title = "Ruta diaria",
 	subtitle = "Vista previa de la ruta calculada con tus visitas planificadas para hoy",
 	className = "",
 }: RouteMapCardProps) {
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-	const [preview, setPreview] = useState<CommercialRoutePreviewResponse | null>(
-		null,
-	);
 	const [browserLocation, setBrowserLocation] = useState<BrowserLocationState>({
 		status: "loading",
 	});
@@ -128,70 +122,18 @@ export default function RouteMapCard({
 		);
 	}, []);
 
-	useEffect(() => {
-		let ignore = false;
+	const coordinates = useMemo(
+		() => getRoutePreviewCoordinates(browserLocation),
+		[browserLocation],
+	);
 
-		async function loadPreview() {
-			if (browserLocation.status === "loading") {
-				return;
-			}
-
-			try {
-				setLoading(true);
-				setError("");
-
-				const url = new URL(
-					"/api/commercial/routes/preview",
-					window.location.origin,
-				);
-
-				if (browserLocation.status === "granted") {
-					url.searchParams.set("startLat", String(browserLocation.lat));
-					url.searchParams.set("startLng", String(browserLocation.lng));
-				}
-
-				const response = await fetch(url.toString(), {
-					method: "GET",
-					cache: "no-store",
-				});
-
-				const data = (await response.json().catch(() => null)) as
-					| CommercialRoutePreviewResponse
-					| ApiError
-					| null;
-
-				if (!response.ok) {
-					throw new Error(
-						data && typeof data === "object" && "error" in data && data.error
-							? data.error
-							: "No se pudo cargar la ruta",
-					);
-				}
-
-				if (!ignore) {
-					setPreview(data as CommercialRoutePreviewResponse);
-				}
-			} catch (err) {
-				if (!ignore) {
-					setError(
-						err instanceof Error
-							? err.message
-							: "Error al cargar la ruta del comercial",
-					);
-				}
-			} finally {
-				if (!ignore) {
-					setLoading(false);
-				}
-			}
-		}
-
-		void loadPreview();
-
-		return () => {
-			ignore = true;
-		};
-	}, [browserLocation]);
+	const {
+		data: preview,
+		loading,
+		error,
+	} = useCommercialRoutePreview(coordinates, {
+		enabled: browserLocation.status !== "loading",
+	});
 
 	const startPoint = preview?.startPoint ?? null;
 	const endPoint = preview?.endPoint ?? null;
@@ -209,6 +151,7 @@ export default function RouteMapCard({
 	const hasWorkdayConfig = Boolean(timingSummary?.hasWorkdayConfig);
 	const overbookedMinutes = timingSummary?.overbookedMinutes ?? null;
 	const pastWindowStopsCount = timingSummary?.pastWindowStopsCount ?? 0;
+	const shouldShowLoading = browserLocation.status === "loading" || loading;
 
 	return (
 		<div
@@ -245,19 +188,19 @@ export default function RouteMapCard({
 				</div>
 			) : null}
 
-			{loading ? (
+			{shouldShowLoading ? (
 				<div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
 					Cargando vista previa de la ruta...
 				</div>
 			) : null}
 
-			{!loading && error ? (
+			{!shouldShowLoading && error ? (
 				<div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">
 					{error}
 				</div>
 			) : null}
 
-			{!loading && !error && preview ? (
+			{!shouldShowLoading && !error && preview ? (
 				<div className="space-y-4">
 					<div className="flex flex-wrap gap-3 text-sm text-slate-600">
 						<div className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2">

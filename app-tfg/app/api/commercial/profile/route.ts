@@ -1,72 +1,43 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
 import {
-	CommercialProfileError,
+	jsonFromError,
+	readJsonBody,
+	requireRoleUser,
+	unauthorizedError,
+} from "@/lib/api/server";
+import type { UpdateCommercialProfileBody } from "@/lib/contracts/commercial-profile";
+import {
 	requireCommercialByUserId,
 	upsertCommercialProfile,
 } from "@/lib/typeorm/services/commercial/commercial";
 
-type SessionLike = {
-	user?: {
-		id: string;
-		role: string;
-	};
-} | null;
-
-type UpdateCommercialProfileBody = {
-	workdayStartTime?: string | null;
-	workdayEndTime?: string | null;
-	deliveryVisitDurationMinutes?: number | string | null;
-	routineVisitDurationMinutes?: number | string | null;
-	routeStartAddress?: string | null;
-	routeEndAddress?: string | null;
-	returnToStart?: boolean;
-	routeStartLat?: number | string | null;
-	routeStartLng?: number | string | null;
-	routeEndLat?: number | string | null;
-	routeEndLng?: number | string | null;
-};
-
 export async function GET() {
+	const user = await requireRoleUser("commercial");
+
+	if (!user) {
+		return unauthorizedError();
+	}
+
 	try {
-		const session = (await auth()) as SessionLike;
-
-		if (!session?.user || session.user.role !== "commercial") {
-			return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-		}
-
-		const commercial = await requireCommercialByUserId(session.user.id);
-
+		const commercial = await requireCommercialByUserId(user.id);
 		return NextResponse.json(commercial, { status: 200 });
 	} catch (error) {
 		console.error("[commercial/profile][GET] error:", error);
-
-		if (error instanceof CommercialProfileError) {
-			return NextResponse.json(
-				{ error: error.message, code: error.code },
-				{ status: error.status },
-			);
-		}
-
-		return NextResponse.json(
-			{ error: "Error al obtener la configuración comercial" },
-			{ status: 500 },
-		);
+		return jsonFromError(error, "Error al obtener la configuracion comercial");
 	}
 }
 
 export async function PATCH(request: Request) {
+	const user = await requireRoleUser("commercial");
+
+	if (!user) {
+		return unauthorizedError();
+	}
+
 	try {
-		const session = (await auth()) as SessionLike;
-
-		if (!session?.user || session.user.role !== "commercial") {
-			return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-		}
-
-		const body = (await request.json()) as UpdateCommercialProfileBody;
-
+		const body = await readJsonBody<UpdateCommercialProfileBody>(request);
 		const commercial = await upsertCommercialProfile({
-			userId: session.user.id,
+			userId: user.id,
 			workdayStartTime: body.workdayStartTime,
 			workdayEndTime: body.workdayEndTime,
 			deliveryVisitDurationMinutes: body.deliveryVisitDurationMinutes,
@@ -83,17 +54,6 @@ export async function PATCH(request: Request) {
 		return NextResponse.json(commercial, { status: 200 });
 	} catch (error) {
 		console.error("[commercial/profile][PATCH] error:", error);
-
-		if (error instanceof CommercialProfileError) {
-			return NextResponse.json(
-				{ error: error.message, code: error.code },
-				{ status: error.status },
-			);
-		}
-
-		return NextResponse.json(
-			{ error: "Error al actualizar la configuración comercial" },
-			{ status: 500 },
-		);
+		return jsonFromError(error, "Error al actualizar la configuracion comercial");
 	}
 }

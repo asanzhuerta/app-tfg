@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import {
+	getRequestSearchParams,
+	jsonFromError,
+	requireRoleUser,
+	unauthorizedError,
+} from "@/lib/api/server";
 import { COMMERCIAL_VISIT_STATUS_IDS } from "@/lib/typeorm/constants/catalog-ids";
 import { listCommercialVisitsByCommercial } from "@/lib/typeorm/services/commercial/commercial-visit";
-import {
-	CommercialProfileError,
-	requireCommercialByUserId,
-} from "@/lib/typeorm/services/commercial/commercial";
+import { requireCommercialByUserId } from "@/lib/typeorm/services/commercial/commercial";
 import {
 	buildCommercialDailyRoutePlan,
 	getTodayRangeInMadrid,
@@ -15,14 +17,7 @@ import {
 import type {
 	CommercialRoutePreviewResponse,
 	RoutePoint,
-} from "@/app/components/maps/route-map-types";
-
-type SessionLike = {
-	user?: {
-		id: string;
-		role: string;
-	};
-} | null;
+} from "@/lib/contracts/commercial-route";
 
 function buildStartPoint(input: {
 	currentStartLat: number | null;
@@ -99,15 +94,15 @@ function buildEndPoint(input: {
 }
 
 export async function GET(request: Request) {
+	const user = await requireRoleUser("commercial");
+
+	if (!user) {
+		return unauthorizedError();
+	}
+
 	try {
-		const session = (await auth()) as SessionLike;
-
-		if (!session?.user || session.user.role !== "commercial") {
-			return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-		}
-
-		const commercial = await requireCommercialByUserId(session.user.id);
-		const { searchParams } = new URL(request.url);
+		const commercial = await requireCommercialByUserId(user.id);
+		const searchParams = getRequestSearchParams(request);
 		const currentStartLat = parseCoordinate(searchParams.get("startLat"));
 		const currentStartLng = parseCoordinate(searchParams.get("startLng"));
 		const savedStartLat = parseCoordinate(commercial.route_start_lat);
@@ -162,17 +157,6 @@ export async function GET(request: Request) {
 		return NextResponse.json(response, { status: 200 });
 	} catch (error) {
 		console.error("[commercial/routes/preview][GET] error:", error);
-
-		if (error instanceof CommercialProfileError) {
-			return NextResponse.json(
-				{ error: error.message, code: error.code },
-				{ status: error.status },
-			);
-		}
-
-		return NextResponse.json(
-			{ error: "Error al generar la vista previa de la ruta" },
-			{ status: 500 },
-		);
+		return jsonFromError(error, "Error al generar la vista previa de la ruta");
 	}
 }

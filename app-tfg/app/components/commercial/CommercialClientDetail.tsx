@@ -1,16 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-
+import { useMemo } from "react";
 import PageTransition from "@/app/components/animations/PageTransition";
 import UserAvatar from "@/app/components/users/UserAvatar";
+import { useCommercialClient } from "@/app/hooks/api/useCommercialClient";
 import { formatDate, formatDateShort } from "@/lib/utils/user-utils";
-
 import CommercialClientInfoItem from "./CommercialClientInfoItem";
 import CommercialClientInfoSection from "./CommercialClientInfoSection";
 import {
-	type CommercialClient,
 	getActiveAssignment,
 	getClientLocation,
 } from "./commercial-client-types";
@@ -19,66 +17,8 @@ type Props = {
 	clientId: string;
 };
 
-type ApiErrorResponse = {
-	error?: string;
-	code?: string;
-};
-
 export default function CommercialClientDetail({ clientId }: Props) {
-	const [client, setClient] = useState<CommercialClient | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-
-	useEffect(() => {
-		let isMounted = true;
-
-		async function loadClient() {
-			try {
-				setLoading(true);
-				setError("");
-
-				const response = await fetch(`/api/commercial/clients/${clientId}`, {
-					method: "GET",
-					cache: "no-store",
-				});
-
-				const data = (await response.json()) as
-					| CommercialClient
-					| ApiErrorResponse;
-
-				if (!response.ok) {
-					throw new Error(
-						"error" in data && data.error
-							? data.error
-							: "No se pudo obtener el cliente",
-					);
-				}
-
-				if (isMounted) {
-					setClient(data as CommercialClient);
-				}
-			} catch (err) {
-				if (isMounted) {
-					setError(
-						err instanceof Error
-							? err.message
-							: "Error al cargar el cliente",
-					);
-				}
-			} finally {
-				if (isMounted) {
-					setLoading(false);
-				}
-			}
-		}
-
-		loadClient();
-
-		return () => {
-			isMounted = false;
-		};
-	}, [clientId]);
-
+	const { data: client, loading, error } = useCommercialClient(clientId);
 	const activeAssignment = client ? getActiveAssignment(client) : null;
 
 	const clientItems = useMemo(() => {
@@ -89,15 +29,15 @@ export default function CommercialClientDetail({ clientId }: Props) {
 			{ label: "Persona de contacto", value: client.contact_name },
 			{ label: "Identificador fiscal", value: client.tax_id },
 			{ label: "Correo vinculado", value: client.user?.email },
-			{ label: "Teléfono", value: client.user?.phone },
+			{ label: "Telefono", value: client.user?.phone },
 			{ label: "Empresa", value: client.user?.company },
-			{ label: "Dirección", value: client.address },
+			{ label: "Direccion", value: client.address },
 			{ label: "Ciudad", value: client.city },
-			{ label: "Código postal", value: client.postal_code },
+			{ label: "Codigo postal", value: client.postal_code },
 			{ label: "Provincia", value: client.province },
 			{ label: "Fecha de alta", value: formatDate(client.created_at) },
 			{
-				label: "Última actualización",
+				label: "Ultima actualizacion",
 				value: formatDate(client.updated_at),
 			},
 		];
@@ -114,11 +54,11 @@ export default function CommercialClientDetail({ clientId }: Props) {
 				value: activeAssignment?.commercial?.user?.email ?? "-",
 			},
 			{
-				label: "Teléfono del comercial",
+				label: "Telefono del comercial",
 				value: activeAssignment?.commercial?.user?.phone ?? "-",
 			},
 			{
-				label: "Código interno",
+				label: "Codigo interno",
 				value: activeAssignment?.commercial?.employee_code ?? "-",
 			},
 			{
@@ -137,7 +77,7 @@ export default function CommercialClientDetail({ clientId }: Props) {
 		() => [
 			{ label: "Nombre", value: client?.user?.name },
 			{ label: "Correo", value: client?.user?.email },
-			{ label: "Teléfono", value: client?.user?.phone },
+			{ label: "Telefono", value: client?.user?.phone },
 			{ label: "Empresa", value: client?.user?.company },
 		],
 		[client],
@@ -246,7 +186,7 @@ export default function CommercialClientDetail({ clientId }: Props) {
 
 							<div className="space-y-6">
 								<CommercialClientInfoSection
-									title="Asignación comercial activa"
+									title="Asignacion comercial activa"
 									items={assignmentItems}
 								/>
 

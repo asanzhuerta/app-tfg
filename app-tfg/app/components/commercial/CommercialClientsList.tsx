@@ -1,70 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-
+import { useMemo } from "react";
 import PageTransition from "@/app/components/animations/PageTransition";
 import EntityTable from "@/app/components/entity-table/EntityTable";
-
-import type { CommercialClient } from "./commercial-client-types";
+import { useCommercialClients } from "@/app/hooks/api/useCommercialClients";
 import { mapCommercialClientsToEntityTableItems } from "./commercial-client-table-mappers";
 
-type ApiErrorResponse = {
-	error?: string;
-	code?: string;
-};
-
 export default function CommercialClientsList() {
-	const [clients, setClients] = useState<CommercialClient[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-
-	useEffect(() => {
-		let isMounted = true;
-
-		async function loadClients() {
-			try {
-				setLoading(true);
-				setError("");
-
-				const response = await fetch("/api/commercial/clients", {
-					method: "GET",
-					cache: "no-store",
-				});
-
-				const data = (await response.json()) as
-					| CommercialClient[]
-					| ApiErrorResponse;
-
-				if (!response.ok) {
-					throw new Error(
-						"error" in data && data.error
-							? data.error
-							: "No se pudieron obtener los clientes",
-					);
-				}
-
-				if (isMounted) {
-					setClients(Array.isArray(data) ? data : []);
-				}
-			} catch (err) {
-				if (isMounted) {
-					setError(
-						err instanceof Error ? err.message : "Error al cargar los clientes",
-					);
-				}
-			} finally {
-				if (isMounted) {
-					setLoading(false);
-				}
-			}
-		}
-
-		loadClients();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
+	const {
+		data: clientsData,
+		loading,
+		error,
+	} = useCommercialClients();
+	const clients = clientsData ?? [];
 
 	const tableItems = useMemo(
 		() => mapCommercialClientsToEntityTableItems(clients),
@@ -78,7 +26,7 @@ export default function CommercialClientsList() {
 					<div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
 						<div>
 							<p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-								M2 · Gestión comercial
+								M2 · Gestion comercial
 							</p>
 
 							<h2 className="text-3xl font-bold text-slate-900">
@@ -86,7 +34,7 @@ export default function CommercialClientsList() {
 							</h2>
 
 							<p className="mt-2 max-w-3xl text-sm text-slate-600">
-								Aquí tienes la cartera activa asignada a tu perfil comercial.
+								Aqui tienes la cartera activa asignada a tu perfil comercial.
 								Puedes filtrar, buscar y abrir la ficha de cada cliente
 								profesional.
 							</p>
@@ -127,7 +75,7 @@ export default function CommercialClientsList() {
 						items={tableItems}
 						config={{
 							categoryLabel: "Provincia",
-							statusLabel: "Asignación",
+							statusLabel: "Asignacion",
 							showImageFilter: true,
 							emptyMessage:
 								"No hay clientes que coincidan con los filtros actuales.",

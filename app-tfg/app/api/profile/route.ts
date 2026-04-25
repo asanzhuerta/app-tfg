@@ -1,62 +1,26 @@
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import {
+	getSessionUser,
+	jsonError,
+	readJsonBody,
+	unauthorizedError,
+} from "@/lib/api/server";
+import type { UpdateOwnProfileBody } from "@/lib/contracts/user-profile";
 import { getPasswordValidationMessage } from "@/lib/utils/password-utils";
+import { isValidEmail, normalizeEmail, normalizeText } from "@/lib/utils/text";
 import { getDataSource } from "@/lib/typeorm/data-source";
-import { User } from "@/lib/typeorm/entities/User";
 import { Client } from "@/lib/typeorm/entities/Client";
+import { User } from "@/lib/typeorm/entities/User";
 import {
 	applyClientUpdateOrThrow,
 	UpdateClientError,
 } from "@/lib/typeorm/services/commercial/client";
 
-type UpdateProfileRequestBody = {
-	name?: string;
-	email?: string;
-	company?: string | null;
-	phone?: string | null;
-	profile_image_url?: string | null;
-	password?: string;
-	confirmPassword?: string;
-	clientProfile?: {
-		name?: string;
-		contact_name?: string | null;
-		tax_id?: string | null;
-		address?: string | null;
-		city?: string | null;
-		postal_code?: string | null;
-		province?: string | null;
-		lat?: number | string | null;
-		lng?: number | string | null;
-		visit_window_start_time?: string | null;
-		visit_window_end_time?: string | null;
-		notes?: string | null;
-	} | null;
-};
-
-// Helpers
-// Normaliza un texto: si es null o undefined lo convierte a cadena vacía,
-// y recorta espacios al inicio y al final
-function normalizeText(value: string | null | undefined) {
-	return String(value ?? "").trim();
-}
-
-// Normaliza un correo electrónico para almacenarlo y compararlo correctamente
-function normalizeEmail(value: string | null | undefined) {
-	return String(value ?? "")
-		.trim()
-		.toLowerCase();
-}
-
-// Valida el formato básico de un correo electrónico
-function isValidEmail(value: string) {
-	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-// Valida que una URL sea una imagen válida de Cloudinary
-// (o que sea null/undefined)
 function isValidCloudinaryImageUrl(value: string | null) {
-	if (!value) return true;
+	if (!value) {
+		return true;
+	}
 
 	try {
 		const url = new URL(value);
@@ -66,20 +30,19 @@ function isValidCloudinaryImageUrl(value: string | null) {
 	}
 }
 
-// Endpoint para actualizar el perfil del usuario
 export async function PATCH(request: Request) {
+	const sessionUser = await getSessionUser();
+
+	if (!sessionUser) {
+		return unauthorizedError("No autenticado");
+	}
+
+	if (!sessionUser.id) {
+		return jsonError("Sesion invalida", 401, "INVALID_SESSION");
+	}
+
 	try {
-		const session = await auth();
-
-		if (!session) {
-			return NextResponse.json({ message: "No autenticado" }, { status: 401 });
-		}
-
-		if (!session.user?.id) {
-			return NextResponse.json({ message: "Sesión inválida" }, { status: 401 });
-		}
-
-		const body = (await request.json()) as UpdateProfileRequestBody;
+		const body = await readJsonBody<UpdateOwnProfileBody>(request);
 
 		const name = normalizeText(body.name);
 		const email = normalizeEmail(body.email);
@@ -92,7 +55,7 @@ export async function PATCH(request: Request) {
 		if (!isValidCloudinaryImageUrl(profileImageUrl)) {
 			return NextResponse.json(
 				{
-					message: "La URL de la imagen de perfil no es válida",
+					message: "La URL de la imagen de perfil no es valida",
 					code: "INVALID_PROFILE_IMAGE_URL",
 				},
 				{ status: 400 },
@@ -112,7 +75,7 @@ export async function PATCH(request: Request) {
 		if (!email) {
 			return NextResponse.json(
 				{
-					message: "El correo electrónico es obligatorio",
+					message: "El correo electronico es obligatorio",
 					code: "INVALID_EMAIL",
 				},
 				{ status: 400 },
@@ -122,7 +85,7 @@ export async function PATCH(request: Request) {
 		if (!isValidEmail(email)) {
 			return NextResponse.json(
 				{
-					message: "El correo electrónico no es válido",
+					message: "El correo electronico no es valido",
 					code: "INVALID_EMAIL_FORMAT",
 				},
 				{ status: 400 },
@@ -133,7 +96,7 @@ export async function PATCH(request: Request) {
 			if (password !== confirmPassword) {
 				return NextResponse.json(
 					{
-						message: "Las contraseñas no coinciden",
+						message: "Las contrasenas no coinciden",
 						code: "PASSWORD_MATCH",
 					},
 					{ status: 400 },
@@ -160,7 +123,7 @@ export async function PATCH(request: Request) {
 			const clientRepo = manager.getRepository(Client);
 
 			const user = await userRepo.findOne({
-				where: { id: session.user.id },
+				where: { id: sessionUser.id },
 				relations: {
 					role: true,
 				},
@@ -170,8 +133,6 @@ export async function PATCH(request: Request) {
 				throw new Error("USER_NOT_FOUND");
 			}
 
-			// Si el usuario intenta cambiar su correo, comprobamos que no exista ya
-			// otro usuario con ese mismo email.
 			if (user.email !== email) {
 				const existingUserWithEmail = await userRepo.findOne({
 					where: { email },
@@ -197,13 +158,8 @@ export async function PATCH(request: Request) {
 			}
 
 			user.updated_at = new Date();
-
 			await userRepo.save(user);
 
-			// Si el usuario autenticado es de tipo cliente y el formulario envía
-			// datos de perfil cliente, actualizamos también su registro enlazado.
-			// OJO: aquí ya NO actualizamos el cliente "a mano", sino reutilizando
-			// la lógica compartida que también regeocodifica dirección -> lat/lng.
 			if (user.role.code === "client" && body.clientProfile) {
 				const client = await clientRepo.findOne({
 					where: { id: user.id },
@@ -239,7 +195,7 @@ export async function PATCH(request: Request) {
 		return NextResponse.json(
 			{
 				message: password
-					? "Perfil, correo y contraseña actualizados correctamente"
+					? "Perfil, correo y contrasena actualizados correctamente"
 					: "Perfil y correo actualizados correctamente",
 			},
 			{ status: 200 },
@@ -257,16 +213,6 @@ export async function PATCH(request: Request) {
 			);
 		}
 
-		if (error instanceof UpdateClientError) {
-			return NextResponse.json(
-				{
-					message: error.message,
-					code: "INVALID_CLIENT_ADDRESS",
-				},
-				{ status: error.status },
-			);
-		}
-		
 		if (error instanceof Error && error.message === "USER_NOT_FOUND") {
 			return NextResponse.json(
 				{
@@ -280,7 +226,7 @@ export async function PATCH(request: Request) {
 		if (error instanceof Error && error.message === "EMAIL_ALREADY_IN_USE") {
 			return NextResponse.json(
 				{
-					message: "Ya existe un usuario con ese correo electrónico",
+					message: "Ya existe un usuario con ese correo electronico",
 					code: "EMAIL_ALREADY_IN_USE",
 				},
 				{ status: 409 },

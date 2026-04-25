@@ -1,83 +1,70 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
 import {
-	uploadProfileImage,
+	badRequestError,
+	getSessionUser,
+	notFoundError,
+	unauthorizedError,
+} from "@/lib/api/server";
+import {
 	deleteImageByPublicId,
 	extractPublicIdFromUrl,
+	uploadProfileImage,
 } from "@/lib/cloudinary";
 import { getDataSource } from "@/lib/typeorm/data-source";
 import { User } from "@/lib/typeorm/entities/User";
 
 export async function POST(request: Request) {
+	const sessionUser = await getSessionUser();
+
+	if (!sessionUser?.id) {
+		return unauthorizedError("No autenticado");
+	}
+
 	try {
-		const session = await auth();
-
-		if (!session?.user?.id) {
-			return NextResponse.json(
-				{ message: "No autenticado", code: "UNAUTHORIZED" },
-				{ status: 401 },
-			);
-		}
-
 		const formData = await request.formData();
 		const file = formData.get("file");
 
 		if (!(file instanceof File)) {
-			return NextResponse.json(
-				{ message: "No se ha enviado ningún archivo", code: "FILE_REQUIRED" },
-				{ status: 400 },
-			);
+			return badRequestError("No se ha enviado ningun archivo", "FILE_REQUIRED");
 		}
 
 		if (!file.type.startsWith("image/")) {
-			return NextResponse.json(
-				{
-					message: "El archivo debe ser una imagen",
-					code: "INVALID_FILE_TYPE",
-				},
-				{ status: 400 },
+			return badRequestError(
+				"El archivo debe ser una imagen",
+				"INVALID_FILE_TYPE",
 			);
 		}
 
 		const maxSizeInBytes = 5 * 1024 * 1024;
 
 		if (file.size > maxSizeInBytes) {
-			return NextResponse.json(
-				{ message: "La imagen no puede superar 5 MB", code: "FILE_TOO_LARGE" },
-				{ status: 400 },
+			return badRequestError(
+				"La imagen no puede superar 5 MB",
+				"FILE_TOO_LARGE",
 			);
 		}
 
 		const ds = await getDataSource();
 		const userRepo = ds.getRepository(User);
-
 		const user = await userRepo.findOne({
-			where: { id: session.user.id },
+			where: { id: sessionUser.id },
 		});
 
 		if (!user) {
-			return NextResponse.json(
-				{ message: "Usuario no encontrado", code: "USER_NOT_FOUND" },
-				{ status: 404 },
-			);
+			return notFoundError("Usuario no encontrado", "USER_NOT_FOUND");
 		}
 
 		const previousPublicId = extractPublicIdFromUrl(user.profile_image_url);
-
-		// Convertimos a base64
 		const arrayBuffer = await file.arrayBuffer();
 		const buffer = Buffer.from(arrayBuffer);
 		const base64File = `data:${file.type};base64,${buffer.toString("base64")}`;
-
-		// Subida
 		const uploadResult = await uploadProfileImage(base64File);
 
-		// Borrado anterior (si existe)
 		if (previousPublicId && previousPublicId !== uploadResult.public_id) {
 			try {
 				await deleteImageByPublicId(previousPublicId);
-			} catch (err) {
-				console.error("Error borrando imagen anterior:", err);
+			} catch (error) {
+				console.error("Error borrando imagen anterior:", error);
 			}
 		}
 

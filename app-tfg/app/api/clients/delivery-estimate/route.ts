@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import {
+	jsonFromError,
+	requireRoleUser,
+	unauthorizedError,
+} from "@/lib/api/server";
+import type { DeliveryEstimateResponse } from "@/lib/contracts/delivery-estimate";
 import {
 	buildCommercialDailyRoutePlan,
 	getTodayRangeInMadrid,
@@ -13,38 +18,15 @@ import {
 import { getActiveAssignmentByClientId } from "@/lib/typeorm/services/commercial/client-commercial-assignment";
 import { listCommercialVisitsByCommercial } from "@/lib/typeorm/services/commercial/commercial-visit";
 
-type SessionLike = {
-	user?: {
-		id: string;
-		role: string;
-	};
-} | null;
-
-type DeliveryEstimateResponse = {
-	status:
-		| "scheduled"
-		| "outside_visit_window"
-		| "scheduled_without_eta"
-		| "no_delivery_today"
-		| "no_active_commercial";
-	date: string;
-	message: string;
-	estimatedArrivalTime: string | null;
-	sequence: number | null;
-	windowStartTime: string | null;
-	windowEndTime: string | null;
-	commercialName: string | null;
-};
-
 export async function GET() {
+	const user = await requireRoleUser("client");
+
+	if (!user) {
+		return unauthorizedError();
+	}
+
 	try {
-		const session = (await auth()) as SessionLike;
-
-		if (!session?.user || session.user.role !== "client") {
-			return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-		}
-
-		const userId = session.user.id;
+		const userId = user.id;
 
 		const activeAssignment = await getActiveAssignmentByClientId(userId);
 		const { dateFrom, dateTo } = getTodayRangeInMadrid();
@@ -178,10 +160,6 @@ export async function GET() {
 		return NextResponse.json(response, { status: 200 });
 	} catch (error) {
 		console.error("[clients/delivery-estimate][GET] error:", error);
-
-		return NextResponse.json(
-			{ error: "Error al calcular la hora aproximada de reparto" },
-			{ status: 500 },
-		);
+		return jsonFromError(error, "Error al calcular la hora aproximada de reparto");
 	}
 }

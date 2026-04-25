@@ -1,36 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useClientDeliveryEstimate } from "@/app/hooks/api/useClientDeliveryEstimate";
+import type { DeliveryEstimateStatus } from "@/lib/contracts/delivery-estimate";
+import { formatTimeLabel } from "@/lib/utils/time";
 
-type DeliveryEstimateResponse = {
-	status:
-		| "scheduled"
-		| "outside_visit_window"
-		| "scheduled_without_eta"
-		| "no_delivery_today"
-		| "no_active_commercial";
-	date: string;
-	message: string;
-	estimatedArrivalTime: string | null;
-	sequence: number | null;
-	windowStartTime: string | null;
-	windowEndTime: string | null;
-	commercialName: string | null;
-};
-
-type ApiError = {
-	error?: string;
-};
-
-function formatTimeLabel(value: string | null | undefined) {
-	if (!value) {
-		return "--:--";
-	}
-
-	return value.slice(0, 5);
-}
-
-function getToneClasses(status: DeliveryEstimateResponse["status"]) {
+function getToneClasses(status: DeliveryEstimateStatus) {
 	if (status === "outside_visit_window") {
 		return "border-rose-200 bg-rose-50 text-rose-800";
 	}
@@ -43,60 +17,7 @@ function getToneClasses(status: DeliveryEstimateResponse["status"]) {
 }
 
 export default function ClientDeliveryEstimateCard() {
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-	const [estimate, setEstimate] = useState<DeliveryEstimateResponse | null>(null);
-
-	useEffect(() => {
-		let ignore = false;
-
-		async function loadEstimate() {
-			try {
-				setLoading(true);
-				setError("");
-
-				const response = await fetch("/api/clients/delivery-estimate", {
-					method: "GET",
-					cache: "no-store",
-				});
-
-				const data = (await response.json().catch(() => null)) as
-					| DeliveryEstimateResponse
-					| ApiError
-					| null;
-
-				if (!response.ok) {
-					throw new Error(
-						data && typeof data === "object" && "error" in data && data.error
-							? data.error
-							: "No se pudo cargar la hora aproximada de reparto",
-					);
-				}
-
-				if (!ignore) {
-					setEstimate(data as DeliveryEstimateResponse);
-				}
-			} catch (err) {
-				if (!ignore) {
-					setError(
-						err instanceof Error
-							? err.message
-							: "Error al cargar la hora aproximada de reparto",
-					);
-				}
-			} finally {
-				if (!ignore) {
-					setLoading(false);
-				}
-			}
-		}
-
-		void loadEstimate();
-
-		return () => {
-			ignore = true;
-		};
-	}, []);
+	const { data: estimate, loading, error } = useClientDeliveryEstimate();
 
 	if (loading) {
 		return (

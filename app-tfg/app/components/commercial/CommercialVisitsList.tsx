@@ -6,7 +6,9 @@ import PageTransition from "@/app/components/animations/PageTransition";
 import EntityTableView from "@/app/components/entity-table/EntityTableView";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
-import type { CommercialRoutePreviewResponse } from "@/app/components/maps/route-map-types";
+import { requestJson } from "@/lib/api/client";
+import type { CommercialRoutePreviewResponse } from "@/lib/contracts/commercial-route";
+import { getTodayDateInMadrid } from "@/lib/utils/time";
 import type { CommercialClient } from "./commercial-client-types";
 import type { CommercialVisit } from "./commercial-visit-types";
 import {
@@ -17,26 +19,6 @@ import {
 	mapCommercialVisitsToEntityTableItems,
 	type VisitRouteMetadata,
 } from "./commercial-visit-table-mappers";
-
-type ApiErrorResponse = {
-	error?: string;
-	code?: string;
-};
-
-function getTodayDateInMadrid() {
-	const parts = new Intl.DateTimeFormat("en-CA", {
-		timeZone: "Europe/Madrid",
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-	}).formatToParts(new Date());
-
-	const year = parts.find((part) => part.type === "year")?.value ?? "1970";
-	const month = parts.find((part) => part.type === "month")?.value ?? "01";
-	const day = parts.find((part) => part.type === "day")?.value ?? "01";
-
-	return `${year}-${month}-${day}`;
-}
 
 function buildVisitsQuery(params: {
 	clientId?: string;
@@ -186,22 +168,11 @@ export default function CommercialVisitsList() {
 	}, [visits]);
 
 	const loadClients = useCallback(async () => {
-		const response = await fetch("/api/commercial/clients", {
+		const data = await requestJson<CommercialClient[]>("/api/commercial/clients", {
 			method: "GET",
 			cache: "no-store",
+			fallbackMessage: "No se pudieron obtener los clientes",
 		});
-
-		const data = (await response.json()) as
-			| CommercialClient[]
-			| ApiErrorResponse;
-
-		if (!response.ok) {
-			throw new Error(
-				"error" in data && data.error
-					? data.error
-					: "No se pudieron obtener los clientes",
-			);
-		}
 
 		return Array.isArray(data) ? data : [];
 	}, []);
@@ -213,7 +184,7 @@ export default function CommercialVisitsList() {
 		dateFrom?: string;
 		dateTo?: string;
 	}) => {
-		const response = await fetch(
+		const data = await requestJson<CommercialVisit[]>(
 			buildVisitsQuery({
 				clientId: filters?.clientId ?? filterClientId,
 				statusId: filters?.statusId ?? filterStatusId,
@@ -224,20 +195,9 @@ export default function CommercialVisitsList() {
 			{
 				method: "GET",
 				cache: "no-store",
+				fallbackMessage: "No se pudieron obtener las visitas",
 			},
 		);
-
-		const data = (await response.json()) as
-			| CommercialVisit[]
-			| ApiErrorResponse;
-
-		if (!response.ok) {
-			throw new Error(
-				"error" in data && data.error
-					? data.error
-					: "No se pudieron obtener las visitas",
-			);
-		}
 
 		return Array.isArray(data) ? data : [];
 	}, [
@@ -249,25 +209,14 @@ export default function CommercialVisitsList() {
 	]);
 
 	const loadRoutePreview = useCallback(async () => {
-		const response = await fetch("/api/commercial/routes/preview", {
-			method: "GET",
-			cache: "no-store",
-		});
-
-		const data = (await response.json().catch(() => null)) as
-			| CommercialRoutePreviewResponse
-			| ApiErrorResponse
-			| null;
-
-		if (!response.ok) {
-			throw new Error(
-				data && typeof data === "object" && "error" in data && data.error
-					? data.error
-					: "No se pudo cargar el orden previsto de ruta",
-			);
-		}
-
-		return data as CommercialRoutePreviewResponse;
+		return requestJson<CommercialRoutePreviewResponse>(
+			"/api/commercial/routes/preview",
+			{
+				method: "GET",
+				cache: "no-store",
+				fallbackMessage: "No se pudo cargar el orden previsto de ruta",
+			},
+		);
 	}, []);
 
 	useEffect(() => {
@@ -359,7 +308,7 @@ export default function CommercialVisitsList() {
 			setFormError("");
 			setFormSuccess("");
 
-			const response = await fetch("/api/commercial/visits", {
+			await requestJson<CommercialVisit>("/api/commercial/visits", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -370,19 +319,8 @@ export default function CommercialVisitsList() {
 					visitTypeId: Number(visitTypeId),
 					notes,
 				}),
+				fallbackMessage: "No se pudo crear la visita",
 			});
-
-			const data = (await response.json()) as
-				| ApiErrorResponse
-				| CommercialVisit;
-
-			if (!response.ok) {
-				throw new Error(
-					"error" in data && data.error
-						? data.error
-						: "No se pudo crear la visita",
-				);
-			}
 
 			setClientId("");
 			setScheduledForDate(todayDate);

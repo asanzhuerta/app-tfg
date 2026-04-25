@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import DataTable from "@/app/components/DataTable";
 import H1Title from "@/app/components/H1Title";
 import PageTransition from "@/app/components/animations/PageTransition";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
+import { useCommercialVisit } from "@/app/hooks/api/useCommercialVisit";
+import { formatTimeLabel } from "@/lib/utils/time";
 import {
 	type CommercialVisit,
 	COMMERCIAL_VISIT_STATUS_OPTIONS,
@@ -19,11 +21,6 @@ import {
 
 type Props = {
 	visitId: string;
-};
-
-type ApiErrorResponse = {
-	error?: string;
-	code?: string;
 };
 
 type InfoRow = {
@@ -54,10 +51,13 @@ const infoColumns: InfoColumn[] = [
 ];
 
 export default function CommercialVisitDetail({ visitId }: Props) {
-	const [visit, setVisit] = useState<CommercialVisit | null>(null);
-	const [loading, setLoading] = useState(true);
+	const {
+		data: visit,
+		loading,
+		error,
+		save,
+	} = useCommercialVisit(visitId);
 	const [saving, setSaving] = useState(false);
-	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
 
 	const [scheduledForDate, setScheduledForDate] = useState("");
@@ -66,48 +66,17 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 	const [notes, setNotes] = useState("");
 	const [result, setResult] = useState("");
 
-	const loadVisit = useCallback(async () => {
-		try {
-			setLoading(true);
-			setError("");
-
-			const response = await fetch(`/api/commercial/visits/${visitId}`, {
-				method: "GET",
-				cache: "no-store",
-			});
-
-			const data = (await response.json()) as
-				| CommercialVisit
-				| ApiErrorResponse;
-
-			if (!response.ok) {
-				throw new Error(
-					"error" in data && data.error
-						? data.error
-						: "No se pudo obtener la visita",
-				);
-			}
-
-			const visitData = data as CommercialVisit;
-
-			setVisit(visitData);
-			setScheduledForDate(visitData.scheduled_for_date);
-			setVisitTypeId(String(visitData.visit_type_id));
-			setStatusId(String(visitData.status_id));
-			setNotes(visitData.notes ?? "");
-			setResult(visitData.result ?? "");
-		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Error al cargar la visita",
-			);
-		} finally {
-			setLoading(false);
-		}
-	}, [visitId]);
-
 	useEffect(() => {
-		void loadVisit();
-	}, [loadVisit]);
+		if (!visit) {
+			return;
+		}
+
+		setScheduledForDate(visit.scheduled_for_date);
+		setVisitTypeId(String(visit.visit_type_id));
+		setStatusId(String(visit.status_id));
+		setNotes(visit.notes ?? "");
+		setResult(visit.result ?? "");
+	}, [visit]);
 
 	const canEditPlanning = useMemo(
 		() => visit?.status_id === 1 || visit?.status_id === 4,
@@ -183,7 +152,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 				value:
 					visit.client?.visit_window_start_time &&
 					visit.client?.visit_window_end_time
-						? `${visit.client.visit_window_start_time.slice(0, 5)} - ${visit.client.visit_window_end_time.slice(0, 5)}`
+						? `${formatTimeLabel(visit.client.visit_window_start_time)} - ${formatTimeLabel(visit.client.visit_window_end_time)}`
 						: "-",
 			},
 		];
@@ -224,47 +193,20 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 		try {
 			setSaving(true);
 			setSuccess("");
-			setError("");
 
-			const response = await fetch(`/api/commercial/visits/${visitId}`, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					scheduledForDate,
-					visitTypeId: Number(visitTypeId),
-					statusId: Number(statusId),
-					notes,
-					result,
-				}),
+			const visitData = await save({
+				scheduledForDate,
+				visitTypeId: Number(visitTypeId),
+				statusId: Number(statusId),
+				notes,
+				result,
 			});
 
-			const data = (await response.json()) as
-				| CommercialVisit
-				| ApiErrorResponse;
-
-			if (!response.ok) {
-				throw new Error(
-					"error" in data && data.error
-						? data.error
-						: "No se pudo actualizar la visita",
-				);
+			if (visitData) {
+				setSuccess("Visita actualizada correctamente.");
 			}
-
-			const visitData = data as CommercialVisit;
-
-			setVisit(visitData);
-			setScheduledForDate(visitData.scheduled_for_date);
-			setVisitTypeId(String(visitData.visit_type_id));
-			setStatusId(String(visitData.status_id));
-			setNotes(visitData.notes ?? "");
-			setResult(visitData.result ?? "");
-			setSuccess("Visita actualizada correctamente.");
 		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Error al actualizar la visita",
-			);
+			console.error("[CommercialVisitDetail][PATCH] error:", err);
 		} finally {
 			setSaving(false);
 		}

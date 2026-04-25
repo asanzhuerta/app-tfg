@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
+import type { RouteContext, SessionLike } from "@/lib/contracts/api";
 import {
 	getClientById,
 	updateClient,
@@ -8,12 +9,6 @@ import {
 // --------------------------------------------------------------------------
 // Tipos
 // --------------------------------------------------------------------------
-
-type RouteContext = {
-	params: Promise<{
-		id: string;
-	}>;
-};
 
 type UpdateClientBody = {
 	name?: string;
@@ -29,13 +24,6 @@ type UpdateClientBody = {
 	visitWindowEndTime?: string | null;
 	notes?: string | null;
 };
-
-type SessionLike = {
-	user?: {
-		id: string;
-		role: string;
-	};
-} | null;
 
 type ClientAccessTarget = {
 	user?: {

@@ -1,43 +1,26 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
-import { listClientsByCommercialId } from "@/lib/typeorm/services/commercial/client";
 import {
-	CommercialProfileError,
-	requireCommercialByUserId,
-} from "@/lib/typeorm/services/commercial/commercial";
-
-type SessionLike = {
-	user?: {
-		id: string;
-		role: string;
-	};
-} | null;
+	jsonFromError,
+	requireRoleUser,
+	unauthorizedError,
+} from "@/lib/api/server";
+import { listClientsByCommercialId } from "@/lib/typeorm/services/commercial/client";
+import { requireCommercialByUserId } from "@/lib/typeorm/services/commercial/commercial";
 
 export async function GET() {
+	const user = await requireRoleUser("commercial");
+
+	if (!user) {
+		return unauthorizedError();
+	}
+
 	try {
-		const session = (await auth()) as SessionLike;
-
-		if (!session?.user || session.user.role !== "commercial") {
-			return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-		}
-
-		const commercial = await requireCommercialByUserId(session.user.id);
+		const commercial = await requireCommercialByUserId(user.id);
 		const clients = await listClientsByCommercialId(commercial.id);
 
 		return NextResponse.json(clients, { status: 200 });
 	} catch (error) {
 		console.error("[commercial/clients][GET] error:", error);
-
-		if (error instanceof CommercialProfileError) {
-			return NextResponse.json(
-				{ error: error.message, code: error.code },
-				{ status: error.status },
-			);
-		}
-
-		return NextResponse.json(
-			{ error: "Error al obtener los clientes del comercial" },
-			{ status: 500 },
-		);
+		return jsonFromError(error, "Error al obtener los clientes del comercial");
 	}
 }
