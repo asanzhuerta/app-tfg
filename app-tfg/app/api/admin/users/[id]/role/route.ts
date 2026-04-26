@@ -2,36 +2,31 @@ import { NextResponse } from "next/server";
 import type { RouteContext } from "@/lib/contracts/api";
 import {
 	badRequestError,
-	forbiddenError,
-	getSessionUser,
 	jsonFromError,
 	readJsonBody,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import {
+	resolveNextAdminRoleId,
+	type UpdateAdminUserRoleBody,
+} from "@/lib/contracts/admin-user";
 import { updateUserRole } from "@/lib/typeorm/services/users/role";
 
-type UpdateUserRoleBody = {
-	roleId?: number | string;
-	newRoleId?: number | string;
-	reason?: string | null;
-	notes?: string | null;
-};
-
+// PATCH /api/admin/users/[id]/role
+// PATCH /api/admin/users/[id]/role
+// Cambia el rol de un usuario desde administracion y registra la auditoria correspondiente.
 export async function PATCH(request: Request, context: RouteContext) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
 	if (!user) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (user.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {
 		const { id } = await context.params;
-		const body = await readJsonBody<UpdateUserRoleBody>(request);
-		const nextRoleId = Number(body.roleId ?? body.newRoleId);
+		const body = await readJsonBody<UpdateAdminUserRoleBody>(request);
+		const nextRoleId = resolveNextAdminRoleId(body);
 
 		if (!Number.isInteger(nextRoleId) || nextRoleId <= 0) {
 			return badRequestError("El nuevo rol es obligatorio");

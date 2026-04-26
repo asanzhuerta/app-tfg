@@ -6,6 +6,7 @@ import {
 	readJsonBody,
 	unauthorizedError,
 } from "@/lib/api/server";
+import { isValidCloudinaryImageUrl } from "@/lib/cloudinary";
 import type { UpdateOwnProfileBody } from "@/lib/contracts/user-profile";
 import { getPasswordValidationMessage } from "@/lib/utils/password-utils";
 import { isValidEmail, normalizeEmail, normalizeText } from "@/lib/utils/text";
@@ -17,19 +18,8 @@ import {
 	UpdateClientError,
 } from "@/lib/typeorm/services/commercial/client";
 
-function isValidCloudinaryImageUrl(value: string | null) {
-	if (!value) {
-		return true;
-	}
-
-	try {
-		const url = new URL(value);
-		return url.protocol === "https:" && url.hostname === "res.cloudinary.com";
-	} catch {
-		return false;
-	}
-}
-
+// PATCH /api/profile
+// Actualiza los datos del perfil del usuario autenticado y, si es cliente, su ficha asociada.
 export async function PATCH(request: Request) {
 	const sessionUser = await getSessionUser();
 

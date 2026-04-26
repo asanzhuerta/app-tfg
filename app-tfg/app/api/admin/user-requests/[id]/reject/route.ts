@@ -2,47 +2,33 @@ import { NextResponse } from "next/server";
 import type { RouteContext } from "@/lib/contracts/api";
 import {
 	badRequestError,
-	getSessionUser,
 	jsonFromError,
+	readOptionalStringField,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import type { RejectUserRequestBody } from "@/lib/contracts/user-request";
 import { rejectUserRequest } from "@/lib/typeorm/services/users/request";
 
-async function getReasonFromRequest(request: Request) {
-	const contentType = request.headers.get("content-type") ?? "";
-
-	if (contentType.includes("application/json")) {
-		const body = await request.json().catch(() => ({}));
-		return String(body?.reason ?? "").trim();
-	}
-
-	if (
-		contentType.includes("application/x-www-form-urlencoded") ||
-		contentType.includes("multipart/form-data")
-	) {
-		const formData = await request.formData();
-		return String(formData.get("reason") ?? "").trim();
-	}
-
-	return "";
-}
-
+// POST /api/admin/user-requests/[id]/reject
+// Rechaza una solicitud de registro guardando el motivo indicado por administracion.
 export async function POST(request: Request, { params }: RouteContext) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
-	if (!user || user.role !== "admin") {
+	if (!user) {
 		return unauthorizedError();
 	}
 
 	try {
 		const { id } = await params;
-		const reason = await getReasonFromRequest(request);
+		const reason = await readOptionalStringField(request, "reason");
+		const normalizedBody: RejectUserRequestBody = { reason };
 
-		if (!reason) {
+		if (!normalizedBody.reason) {
 			return badRequestError("Debes indicar un motivo de rechazo");
 		}
 
-		await rejectUserRequest(id, user.id, reason);
+		await rejectUserRequest(id, user.id, normalizedBody.reason);
 		return NextResponse.json({ ok: true }, { status: 200 });
 	} catch (error) {
 		console.error("Error rejecting user request:", error);

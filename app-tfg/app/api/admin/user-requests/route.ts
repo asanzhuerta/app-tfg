@@ -1,21 +1,18 @@
 import { NextResponse } from "next/server";
 import {
-	forbiddenError,
-	getSessionUser,
 	jsonFromError,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
 import { listUserRequests } from "@/lib/typeorm/services/users/request";
 
+// GET /api/admin/user-requests
+// Lista las solicitudes de registro pendientes o historicas para su revision administrativa.
 export async function GET() {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
 	if (!user) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (user.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {

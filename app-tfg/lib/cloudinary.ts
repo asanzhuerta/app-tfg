@@ -76,3 +76,17 @@ export function extractPublicIdFromUrl(url: string | null | undefined) {
 		return null;
 	}
 }
+
+// Valida que la URL de perfil use el host seguro de Cloudinary.
+export function isValidCloudinaryImageUrl(value: string | null) {
+	if (!value) {
+		return true;
+	}
+
+	try {
+		const url = new URL(value);
+		return url.protocol === "https:" && url.hostname === "res.cloudinary.com";
+	} catch {
+		return false;
+	}
+}

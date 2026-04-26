@@ -6,6 +6,24 @@ export type CommercialProfileResponse = {
 	routine_visit_duration_minutes: number;
 };
 
+export type AdminUpsertCommercialProfileBody = {
+	userId?: string;
+	employeeCode?: string | null;
+	territory?: string | null;
+	notes?: string | null;
+	workdayStartTime?: string | null;
+	workdayEndTime?: string | null;
+	deliveryVisitDurationMinutes?: number | string | null;
+	routineVisitDurationMinutes?: number | string | null;
+	routeStartAddress?: string | null;
+	routeEndAddress?: string | null;
+	returnToStart?: boolean;
+	routeStartLat?: number | string | null;
+	routeStartLng?: number | string | null;
+	routeEndLat?: number | string | null;
+	routeEndLng?: number | string | null;
+};
+
 export type UpdateCommercialProfileBody = {
 	workdayStartTime?: string | null;
 	workdayEndTime?: string | null;
@@ -19,3 +37,25 @@ export type UpdateCommercialProfileBody = {
 	routeEndLat?: number | string | null;
 	routeEndLng?: number | string | null;
 };
+
+export function buildAdminUpsertCommercialProfileInput(
+	body: AdminUpsertCommercialProfileBody,
+) {
+	return {
+		userId: String(body.userId ?? ""),
+		employeeCode: body.employeeCode,
+		territory: body.territory,
+		notes: body.notes,
+		workdayStartTime: body.workdayStartTime,
+		workdayEndTime: body.workdayEndTime,
+		deliveryVisitDurationMinutes: body.deliveryVisitDurationMinutes,
+		routineVisitDurationMinutes: body.routineVisitDurationMinutes,
+		routeStartAddress: body.routeStartAddress,
+		routeEndAddress: body.routeEndAddress,
+		returnToStart: body.returnToStart,
+		routeStartLat: body.routeStartLat,
+		routeStartLng: body.routeStartLng,
+		routeEndLat: body.routeEndLat,
+		routeEndLng: body.routeEndLng,
+	};
+}

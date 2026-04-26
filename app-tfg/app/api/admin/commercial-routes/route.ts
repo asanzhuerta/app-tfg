@@ -6,14 +6,14 @@ import {
 	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import {
+	buildCreateCommercialRouteInput,
+	type CreateCommercialRouteBody,
+} from "@/lib/contracts/commercial-route";
 import { createCommercialRoute } from "@/lib/typeorm/services/commercial/commercial-route";
 
-type CreateCommercialRouteBody = {
-	commercialId?: string;
-	date?: string;
-	name?: string;
-};
-
+// POST /api/admin/commercial-routes
+// Crea una nueva ruta comercial persistida para un comercial y una fecha concretos.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 
@@ -28,11 +28,9 @@ export async function POST(request: Request) {
 			return badRequestError("commercialId, date y name son obligatorios");
 		}
 
-		const createdRoute = await createCommercialRoute({
-			commercialId: String(body.commercialId),
-			date: String(body.date),
-			name: String(body.name),
-		});
+		const createdRoute = await createCommercialRoute(
+			buildCreateCommercialRouteInput(body),
+		);
 
 		return NextResponse.json(
 			{

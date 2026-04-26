@@ -6,22 +6,15 @@ import {
 	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
-import type { RegisterAdminUserBody } from "@/lib/contracts/admin-user";
+import {
+	resolveAdminUserRoleId,
+	type RegisterAdminUserBody,
+} from "@/lib/contracts/admin-user";
 import { ROLE_IDS } from "@/lib/typeorm/constants/catalog-ids";
 import { registerUserByAdmin } from "@/lib/typeorm/services/users/user";
 
-function resolveRoleIdFromType(type: string | undefined) {
-	if (type === "comercial") {
-		return ROLE_IDS.COMMERCIAL;
-	}
-
-	if (type === "cliente") {
-		return ROLE_IDS.CLIENT;
-	}
-
-	return 0;
-}
-
+// POST /api/admin/register-user
+// Registra manualmente un nuevo usuario desde administracion con el rol indicado.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 
@@ -31,7 +24,7 @@ export async function POST(request: Request) {
 
 	try {
 		const body = await readJsonBody<RegisterAdminUserBody>(request);
-		const roleId = resolveRoleIdFromType(body.type);
+		const roleId = resolveAdminUserRoleId(body.type);
 
 		if (roleId === ROLE_IDS.CLIENT && !String(body.commercialId ?? "").trim()) {
 			return badRequestError(

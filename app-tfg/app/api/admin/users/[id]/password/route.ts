@@ -2,34 +2,27 @@ import { NextResponse } from "next/server";
 import type { RouteContext } from "@/lib/contracts/api";
 import {
 	badRequestError,
-	forbiddenError,
-	getSessionUser,
 	jsonFromError,
 	readJsonBody,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import type { ChangeAdminUserPasswordBody } from "@/lib/contracts/admin-user";
 import { changeUserPassword } from "@/lib/typeorm/services/users/password";
 
-type ChangeUserPasswordBody = {
-	newPassword?: string;
-	reason?: string | null;
-	notes?: string | null;
-};
-
+// PATCH /api/admin/users/[id]/password
+// PATCH /api/admin/users/[id]/password
+// Cambia la contrasena de un usuario desde administracion y registra la accion.
 export async function PATCH(request: Request, context: RouteContext) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
 	if (!user) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (user.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {
 		const { id } = await context.params;
-		const body = await readJsonBody<ChangeUserPasswordBody>(request);
+		const body = await readJsonBody<ChangeAdminUserPasswordBody>(request);
 
 		if (!body.newPassword || typeof body.newPassword !== "string") {
 			return badRequestError("La nueva contrasena es obligatoria");

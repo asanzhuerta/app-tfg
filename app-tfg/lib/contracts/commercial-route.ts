@@ -19,6 +19,18 @@ export type RoutePoint = {
 	isPastVisitWindow?: boolean;
 };
 
+export type CreateCommercialRouteBody = {
+	commercialId?: string;
+	date?: string;
+	name?: string;
+};
+
+export type AddVisitToCommercialRouteBody = {
+	routeId?: string;
+	visitId?: string;
+	order?: number;
+};
+
 export type CommercialRouteTimingSummary = {
 	hasWorkdayConfig: boolean;
 	hasValidWorkdayRange: boolean;
@@ -52,3 +64,23 @@ export type CommercialRoutePreviewResponse = {
 	usingSavedStartFallback: boolean;
 	hasConfiguredEndPoint: boolean;
 };
+
+export function buildCreateCommercialRouteInput(
+	body: CreateCommercialRouteBody,
+) {
+	return {
+		commercialId: String(body.commercialId ?? ""),
+		date: String(body.date ?? ""),
+		name: String(body.name ?? ""),
+	};
+}
+
+export function buildAddVisitToCommercialRouteInput(
+	body: AddVisitToCommercialRouteBody,
+) {
+	return {
+		routeId: String(body.routeId ?? ""),
+		visitId: String(body.visitId ?? ""),
+		order: Number(body.order),
+	};
+}

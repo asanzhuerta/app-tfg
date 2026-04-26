@@ -6,14 +6,14 @@ import {
 	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import {
+	buildAddVisitToCommercialRouteInput,
+	type AddVisitToCommercialRouteBody,
+} from "@/lib/contracts/commercial-route";
 import { addVisitToRoute } from "@/lib/typeorm/services/commercial/commercial-route";
 
-type AddVisitToRouteBody = {
-	routeId?: string;
-	visitId?: string;
-	order?: number;
-};
-
+// POST /api/admin/commercial-routes/add-visit
+// Anade una visita existente a una ruta comercial persistida en la posicion indicada.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 
@@ -22,17 +22,15 @@ export async function POST(request: Request) {
 	}
 
 	try {
-		const body = await readJsonBody<AddVisitToRouteBody>(request);
+		const body = await readJsonBody<AddVisitToCommercialRouteBody>(request);
 
 		if (!body.routeId || !body.visitId || body.order === undefined) {
 			return badRequestError("routeId, visitId y order son obligatorios");
 		}
 
-		const createdRouteVisit = await addVisitToRoute({
-			routeId: String(body.routeId),
-			visitId: String(body.visitId),
-			order: Number(body.order),
-		});
+		const createdRouteVisit = await addVisitToRoute(
+			buildAddVisitToCommercialRouteInput(body),
+		);
 
 		return NextResponse.json(
 			{

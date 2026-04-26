@@ -7,28 +7,16 @@ import {
 	unauthorizedError,
 } from "@/lib/api/server";
 import {
+	buildAdminUpsertCommercialProfileInput,
+	type AdminUpsertCommercialProfileBody,
+} from "@/lib/contracts/commercial-profile";
+import {
 	listCommercials,
 	upsertCommercialProfile,
 } from "@/lib/typeorm/services/commercial/commercial";
 
-type UpsertCommercialBody = {
-	userId?: string;
-	employeeCode?: string | null;
-	territory?: string | null;
-	notes?: string | null;
-	workdayStartTime?: string | null;
-	workdayEndTime?: string | null;
-	deliveryVisitDurationMinutes?: number | string | null;
-	routineVisitDurationMinutes?: number | string | null;
-	routeStartAddress?: string | null;
-	routeEndAddress?: string | null;
-	returnToStart?: boolean;
-	routeStartLat?: number | string | null;
-	routeStartLng?: number | string | null;
-	routeEndLat?: number | string | null;
-	routeEndLng?: number | string | null;
-};
-
+// GET /api/admin/commercials
+// Lista los perfiles comerciales disponibles para gestion y asignaciones administrativas.
 export async function GET() {
 	const user = await requireRoleUser("admin");
 
@@ -45,6 +33,8 @@ export async function GET() {
 	}
 }
 
+// POST /api/admin/commercials
+// Crea o actualiza el perfil operativo de un comercial desde administracion.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 
@@ -53,29 +43,15 @@ export async function POST(request: Request) {
 	}
 
 	try {
-		const body = await readJsonBody<UpsertCommercialBody>(request);
+		const body = await readJsonBody<AdminUpsertCommercialProfileBody>(request);
 
 		if (!body.userId) {
 			return badRequestError("userId es obligatorio");
 		}
 
-		const commercial = await upsertCommercialProfile({
-			userId: String(body.userId ?? ""),
-			employeeCode: body.employeeCode,
-			territory: body.territory,
-			notes: body.notes,
-			workdayStartTime: body.workdayStartTime,
-			workdayEndTime: body.workdayEndTime,
-			deliveryVisitDurationMinutes: body.deliveryVisitDurationMinutes,
-			routineVisitDurationMinutes: body.routineVisitDurationMinutes,
-			routeStartAddress: body.routeStartAddress,
-			routeEndAddress: body.routeEndAddress,
-			returnToStart: body.returnToStart,
-			routeStartLat: body.routeStartLat,
-			routeStartLng: body.routeStartLng,
-			routeEndLat: body.routeEndLat,
-			routeEndLng: body.routeEndLng,
-		});
+		const commercial = await upsertCommercialProfile(
+			buildAdminUpsertCommercialProfileInput(body),
+		);
 
 		return NextResponse.json(commercial, { status: 200 });
 	} catch (error) {

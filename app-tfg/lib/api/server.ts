@@ -80,6 +80,28 @@ export async function readJsonBody<T>(request: Request) {
 	return (await request.json()) as T;
 }
 
+export async function readOptionalStringField(
+	request: Request,
+	field: string,
+) {
+	const contentType = request.headers.get("content-type") ?? "";
+
+	if (contentType.includes("application/json")) {
+		const body = await request.json().catch(() => ({}));
+		return String(body?.[field] ?? "").trim();
+	}
+
+	if (
+		contentType.includes("application/x-www-form-urlencoded") ||
+		contentType.includes("multipart/form-data")
+	) {
+		const formData = await request.formData();
+		return String(formData.get(field) ?? "").trim();
+	}
+
+	return "";
+}
+
 export function isApiErrorLike(error: unknown): error is ApiErrorLike {
 	return (
 		typeof error === "object" &&

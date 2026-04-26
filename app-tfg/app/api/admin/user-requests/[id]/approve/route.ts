@@ -1,27 +1,21 @@
 import { NextResponse } from "next/server";
 import type { RouteContext } from "@/lib/contracts/api";
 import {
-	forbiddenError,
-	getSessionUser,
 	jsonFromError,
 	readJsonBody,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import type { ApproveUserRequestBody } from "@/lib/contracts/user-request";
 import { approveUserRequest } from "@/lib/typeorm/services/users/request";
 
-type ApproveUserRequestBody = {
-	commercialId?: string | null;
-};
-
+// POST /api/admin/user-requests/[id]/approve
+// Aprueba una solicitud de registro y crea el usuario definitivo, con comercial opcional para clientes.
 export async function POST(request: Request, context: RouteContext) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
 	if (!user) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (user.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {

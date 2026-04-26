@@ -1,23 +1,20 @@
 import { NextResponse } from "next/server";
 import type { RouteContext } from "@/lib/contracts/api";
 import {
-	forbiddenError,
-	getSessionUser,
 	jsonFromError,
 	notFoundError,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
 import { getUserRequestById } from "@/lib/typeorm/services/users/request";
 
+// GET /api/admin/user-requests/[id]
+// Obtiene el detalle completo de una solicitud de registro concreta.
 export async function GET(_: Request, context: RouteContext) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
 	if (!user) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (user.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {

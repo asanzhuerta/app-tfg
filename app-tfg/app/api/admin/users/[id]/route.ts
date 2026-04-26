@@ -1,58 +1,33 @@
 import { NextResponse } from "next/server";
 import type { RouteContext } from "@/lib/contracts/api";
-import type { UpdateAdminUserBody } from "@/lib/contracts/user-profile";
 import {
-	forbiddenError,
-	getSessionUser,
 	jsonFromError,
 	notFoundError,
 	readJsonBody,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import {
+	buildAdminUserClientProfileUpdate,
+	type UpdateAdminUserBody,
+} from "@/lib/contracts/user-profile";
 import { getDataSource } from "@/lib/typeorm/data-source";
 import { User } from "@/lib/typeorm/entities/User";
 import { updateUser } from "@/lib/typeorm/services/users/user";
 
+// PATCH /api/admin/users/[id]
+// Actualiza los datos generales de un usuario y, si aplica, su perfil de cliente asociado.
 export async function PATCH(request: Request, { params }: RouteContext) {
-	const sessionUser = await getSessionUser();
+	const sessionUser = await requireRoleUser("admin");
 
 	if (!sessionUser) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (sessionUser.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {
 		const { id } = await params;
 		const body = await readJsonBody<UpdateAdminUserBody>(request);
-		const clientProfile = body.clientProfile
-			? {
-					name:
-						body.clientProfile.name === null
-							? undefined
-							: body.clientProfile.name,
-					contact_name: body.clientProfile.contact_name,
-					tax_id: body.clientProfile.tax_id,
-					address:
-						body.clientProfile.address === null
-							? undefined
-							: body.clientProfile.address,
-					city:
-						body.clientProfile.city === null
-							? undefined
-							: body.clientProfile.city,
-					postal_code: body.clientProfile.postal_code,
-					province: body.clientProfile.province,
-					lat: body.clientProfile.lat,
-					lng: body.clientProfile.lng,
-					visit_window_start_time:
-						body.clientProfile.visit_window_start_time,
-					visit_window_end_time: body.clientProfile.visit_window_end_time,
-					notes: body.clientProfile.notes,
-				}
-			: null;
+		const clientProfile = buildAdminUserClientProfileUpdate(body.clientProfile);
 
 		let safeRoleId = Number(body.roleId);
 

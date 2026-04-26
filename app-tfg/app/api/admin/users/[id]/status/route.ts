@@ -1,34 +1,27 @@
 import { NextResponse } from "next/server";
 import type { RouteContext } from "@/lib/contracts/api";
 import {
-	forbiddenError,
-	getSessionUser,
 	jsonFromError,
 	readJsonBody,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import type { UpdateAdminUserStatusBody } from "@/lib/contracts/admin-user";
 import { updateUserStatus } from "@/lib/typeorm/services/users/status";
 
-type UpdateUserStatusBody = {
-	statusId?: number | string;
-	reason?: string | null;
-	notes?: string | null;
-};
-
+// PATCH /api/admin/users/[id]/status
+// PATCH /api/admin/users/[id]/status
+// Cambia el estado de un usuario desde administracion y registra la auditoria correspondiente.
 export async function PATCH(request: Request, context: RouteContext) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
 	if (!user) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (user.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {
 		const { id } = await context.params;
-		const body = await readJsonBody<UpdateUserStatusBody>(request);
+		const body = await readJsonBody<UpdateAdminUserStatusBody>(request);
 
 		const updatedUser = await updateUserStatus({
 			userId: id,

@@ -1,37 +1,26 @@
 import { NextResponse } from "next/server";
 import {
-	forbiddenError,
 	getRequestSearchParams,
-	getSessionUser,
 	jsonFromError,
 	parsePositiveInteger,
 	readJsonBody,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
+import type { CreateAdminUserBody } from "@/lib/contracts/admin-user";
 import {
 	listUsers,
 	listUsersPaginated,
 	registerUserByAdmin,
 } from "@/lib/typeorm/services/users/user";
 
-type CreateUserBody = {
-	name?: string;
-	email?: string;
-	password?: string;
-	company?: string | null;
-	phone?: string | null;
-	roleId?: number | string;
-};
-
+// GET /api/admin/users
+// Lista usuarios del sistema, con soporte opcional de paginacion y busqueda.
 export async function GET(request: Request) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
 	if (!user) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (user.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {
@@ -61,19 +50,17 @@ export async function GET(request: Request) {
 	}
 }
 
+// POST /api/admin/users
+// Crea un nuevo usuario directamente desde administracion usando un roleId explicito.
 export async function POST(request: Request) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
 	if (!user) {
-		return unauthorizedError("No autenticado");
-	}
-
-	if (user.role !== "admin") {
-		return forbiddenError();
+		return unauthorizedError();
 	}
 
 	try {
-		const body = await readJsonBody<CreateUserBody>(request);
+		const body = await readJsonBody<CreateAdminUserBody>(request);
 
 		const createdUser = await registerUserByAdmin({
 			name: body.name ?? "",

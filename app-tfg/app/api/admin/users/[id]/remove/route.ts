@@ -1,15 +1,18 @@
 import { NextResponse } from "next/server";
 import type { RouteContext } from "@/lib/contracts/api";
 import {
-	getSessionUser,
+	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
 import { deactivateUser } from "@/lib/typeorm/services/users/user";
 
+// POST /api/admin/users/[id]/remove
+// POST /api/admin/users/[id]/remove
+// Desactiva un usuario desde administracion aplicando las validaciones de seguridad del sistema.
 export async function POST(request: Request, { params }: RouteContext) {
-	const user = await getSessionUser();
+	const user = await requireRoleUser("admin");
 
-	if (!user || user.role !== "admin") {
+	if (!user) {
 		return unauthorizedError();
 	}
 

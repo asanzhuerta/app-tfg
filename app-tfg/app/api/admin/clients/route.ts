@@ -6,22 +6,16 @@ import {
 	unauthorizedError,
 } from "@/lib/api/server";
 import {
+	buildCreateClientInput,
+	type CreateClientRequestBody,
+} from "@/lib/contracts/client-write";
+import {
 	createClient,
 	listClients,
 } from "@/lib/typeorm/services/commercial/client";
 
-type CreateClientBody = {
-	name?: string;
-	contactName?: string | null;
-	taxId?: string | null;
-	address?: string;
-	city?: string;
-	postalCode?: string | null;
-	province?: string | null;
-	userId?: string;
-	notes?: string | null;
-};
-
+// GET /api/admin/clients
+// Lista todos los clientes del sistema para las pantallas de administracion.
 export async function GET() {
 	const user = await requireRoleUser("admin");
 
@@ -38,6 +32,8 @@ export async function GET() {
 	}
 }
 
+// POST /api/admin/clients
+// Crea un nuevo cliente desde administracion y devuelve la ficha creada.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 
@@ -46,19 +42,8 @@ export async function POST(request: Request) {
 	}
 
 	try {
-		const body = await readJsonBody<CreateClientBody>(request);
-
-		const createdClient = await createClient({
-			name: String(body.name ?? ""),
-			contactName: body.contactName ?? null,
-			taxId: body.taxId ?? null,
-			address: String(body.address ?? ""),
-			city: String(body.city ?? ""),
-			postalCode: body.postalCode ?? null,
-			province: body.province ?? null,
-			userId: String(body.userId ?? ""),
-			notes: body.notes ?? null,
-		});
+		const body = await readJsonBody<CreateClientRequestBody>(request);
+		const createdClient = await createClient(buildCreateClientInput(body));
 
 		return NextResponse.json(
 			{
