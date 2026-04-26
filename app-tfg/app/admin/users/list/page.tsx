@@ -11,8 +11,6 @@ import { requireAdminSession } from "@/lib/auth/require-session";
 // dentro del panel de administración.
 export default async function UsuariosPage() {
 	// CONTROL DE ACCESO
-	// Restringe el acceso a usuarios autenticados con rol administrador.
-	// CONTROL DE ACCESO
 	// Se asegura de que el usuario esté autenticado y tenga rol de administrador.
 	const session = await requireAdminSession();
 

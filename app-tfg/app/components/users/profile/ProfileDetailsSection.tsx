@@ -1,5 +1,3 @@
-"use client";
-
 import { formatDate } from "@/lib/utils/user-utils";
 import {
 	FormDataState,

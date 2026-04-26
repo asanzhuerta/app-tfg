@@ -1,5 +1,3 @@
-"use client";
-
 import UserAvatar from "@/app/components/users/UserAvatar";
 import ProfileImageUploadField from "@/app/components/users/profile/ProfileImageUploadField";
 import {

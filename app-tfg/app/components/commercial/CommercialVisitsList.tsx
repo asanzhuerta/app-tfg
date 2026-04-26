@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import H1Title from "@/app/components/H1Title";
 import PageTransition from "@/app/components/animations/PageTransition";
 import EntityTableView from "@/app/components/entity-table/EntityTableView";
@@ -104,6 +105,7 @@ export default function CommercialVisitsList() {
 	const [formError, setFormError] = useState("");
 	const [formSuccess, setFormSuccess] = useState("");
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+	const [isMounted, setIsMounted] = useState(false);
 
 	const [clientId, setClientId] = useState("");
 	const [scheduledForDate, setScheduledForDate] = useState(todayDate);
@@ -217,6 +219,14 @@ export default function CommercialVisitsList() {
 				fallbackMessage: "No se pudo cargar el orden previsto de ruta",
 			},
 		);
+	}, []);
+
+	useEffect(() => {
+		setIsMounted(true);
+
+		return () => {
+			setIsMounted(false);
+		};
 	}, []);
 
 	useEffect(() => {
@@ -377,8 +387,9 @@ export default function CommercialVisitsList() {
 	}
 
 	return (
-		<PageTransition>
-			<div className="space-y-6">
+		<>
+			<PageTransition>
+				<div className="space-y-6">
 				<H1Title
 					title="Visitas comerciales"
 					subtitle="Planifica las visitas del dia y consultalas ya ordenadas segun la ruta prevista."
@@ -565,128 +576,132 @@ export default function CommercialVisitsList() {
 					</div>
 				) : null}
 
-				{!loading && !error ? (
-					<EntityTableView
-						items={tableItems}
-						emptyMessage="No hay visitas que coincidan con los filtros actuales."
-					/>
-				) : null}
+					{!loading && !error ? (
+						<EntityTableView
+							items={tableItems}
+							emptyMessage="No hay visitas que coincidan con los filtros actuales."
+						/>
+					) : null}
+				</div>
+			</PageTransition>
 
-				{isCreateModalOpen ? (
-					<div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4">
-						<div className="w-full max-w-2xl rounded-[28px] border border-white/30 bg-white p-6 shadow-2xl">
-							<div className="mb-5 flex items-start justify-between gap-4">
-								<div>
-									<h2 className="text-xl font-semibold text-slate-900">
-										Crear visita
-									</h2>
-									<p className="mt-1 text-sm text-slate-600">
-										La hora aproximada se recalculara despues con la ruta del
-										dia.
-									</p>
-								</div>
-
-								<button
-									type="button"
-									onClick={closeCreateModal}
-									className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-gray-50"
-								>
-									Cerrar
-								</button>
-							</div>
-
-							<SafeForm
-								onSubmit={handleCreateVisit}
-								className="grid gap-4 md:grid-cols-2"
-							>
-								<div>
-									<label className="mb-2 block text-sm font-medium text-slate-700">
-										Cliente
-									</label>
-									<select
-										value={clientId}
-										onChange={(event) => setClientId(event.target.value)}
-										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
-										required
-									>
-										<option value="">Selecciona un cliente</option>
-										{clients.map((client) => (
-											<option key={client.id} value={client.id}>
-												{client.name}
-											</option>
-										))}
-									</select>
-								</div>
-
-								<div>
-									<label className="mb-2 block text-sm font-medium text-slate-700">
-										Tipo de visita
-									</label>
-									<select
-										value={visitTypeId}
-										onChange={(event) => setVisitTypeId(event.target.value)}
-										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
-										required
-									>
-										{COMMERCIAL_VISIT_TYPE_OPTIONS.map((visitType) => (
-											<option
-												key={visitType.id}
-												value={String(visitType.id)}
-											>
-												{visitType.label}
-											</option>
-										))}
-									</select>
-								</div>
-
-								<div>
-									<label className="mb-2 block text-sm font-medium text-slate-700">
-										Dia de la visita
-									</label>
-									<input
-										type="date"
-										value={scheduledForDate}
-										onChange={(event) =>
-											setScheduledForDate(event.target.value)
-										}
-										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
-										required
-									/>
-								</div>
-
-								<div className="md:col-span-2">
-									<label className="mb-2 block text-sm font-medium text-slate-700">
-										Notas
-									</label>
-									<textarea
-										value={notes}
-										onChange={(event) => setNotes(event.target.value)}
-										rows={4}
-										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
-										placeholder="Objetivo de la visita, observaciones previas o puntos a revisar..."
-									/>
-								</div>
-
-								<div className="md:col-span-2 flex flex-wrap items-center gap-3">
-									<SubmitButton
-										isSubmitting={saving}
-										submittingText="Guardando..."
-										className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
-									>
-										Crear visita
-									</SubmitButton>
-
-									{formError ? (
-										<p className="text-sm font-medium text-red-600">
-											{formError}
+			{isMounted && isCreateModalOpen
+				? createPortal(
+						<div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/45 p-4">
+							<div className="w-full max-w-2xl rounded-[28px] border border-white/30 bg-white p-6 shadow-2xl">
+								<div className="mb-5 flex items-start justify-between gap-4">
+									<div>
+										<h2 className="text-xl font-semibold text-slate-900">
+											Crear visita
+										</h2>
+										<p className="mt-1 text-sm text-slate-600">
+											La hora aproximada se recalculara despues con la ruta del
+											dia.
 										</p>
-									) : null}
+									</div>
+
+									<button
+										type="button"
+										onClick={closeCreateModal}
+										className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-gray-50"
+									>
+										Cerrar
+									</button>
 								</div>
-							</SafeForm>
-						</div>
-					</div>
-				) : null}
-			</div>
-		</PageTransition>
+
+								<SafeForm
+									onSubmit={handleCreateVisit}
+									className="grid gap-4 md:grid-cols-2"
+								>
+									<div>
+										<label className="mb-2 block text-sm font-medium text-slate-700">
+											Cliente
+										</label>
+										<select
+											value={clientId}
+											onChange={(event) => setClientId(event.target.value)}
+											className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+											required
+										>
+											<option value="">Selecciona un cliente</option>
+											{clients.map((client) => (
+												<option key={client.id} value={client.id}>
+													{client.name}
+												</option>
+											))}
+										</select>
+									</div>
+
+									<div>
+										<label className="mb-2 block text-sm font-medium text-slate-700">
+											Tipo de visita
+										</label>
+										<select
+											value={visitTypeId}
+											onChange={(event) => setVisitTypeId(event.target.value)}
+											className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+											required
+										>
+											{COMMERCIAL_VISIT_TYPE_OPTIONS.map((visitType) => (
+												<option
+													key={visitType.id}
+													value={String(visitType.id)}
+												>
+													{visitType.label}
+												</option>
+											))}
+										</select>
+									</div>
+
+									<div>
+										<label className="mb-2 block text-sm font-medium text-slate-700">
+											Dia de la visita
+										</label>
+										<input
+											type="date"
+											value={scheduledForDate}
+											onChange={(event) =>
+												setScheduledForDate(event.target.value)
+											}
+											className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+											required
+										/>
+									</div>
+
+									<div className="md:col-span-2">
+										<label className="mb-2 block text-sm font-medium text-slate-700">
+											Notas
+										</label>
+										<textarea
+											value={notes}
+											onChange={(event) => setNotes(event.target.value)}
+											rows={4}
+											className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+											placeholder="Objetivo de la visita, observaciones previas o puntos a revisar..."
+										/>
+									</div>
+
+									<div className="md:col-span-2 flex flex-wrap items-center gap-3">
+										<SubmitButton
+											isSubmitting={saving}
+											submittingText="Guardando..."
+											className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+										>
+											Crear visita
+										</SubmitButton>
+
+										{formError ? (
+											<p className="text-sm font-medium text-red-600">
+												{formError}
+											</p>
+										) : null}
+									</div>
+								</SafeForm>
+							</div>
+						</div>,
+						document.body,
+					)
+				: null}
+		</>
 	);
 }

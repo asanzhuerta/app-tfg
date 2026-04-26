@@ -1,5 +1,3 @@
-"use client";
-
 type Props = {
 	displayedProfileImage?: string | null;
 	isUploadingImage: boolean;

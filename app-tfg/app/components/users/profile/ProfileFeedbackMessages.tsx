@@ -1,5 +1,3 @@
-"use client";
-
 type Props = {
 	errorMessage: string | null;
 	successMessage: string | null;

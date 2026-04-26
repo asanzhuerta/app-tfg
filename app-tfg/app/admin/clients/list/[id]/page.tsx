@@ -4,27 +4,13 @@ import PageTransition from "@/app/components/animations/PageTransition";
 import UserAvatar from "@/app/components/users/UserAvatar";
 import { requireAdminSession } from "@/lib/auth/require-session";
 import { getClientById } from "@/lib/typeorm/services/commercial/client";
+import { formatDate } from "@/lib/utils/user-utils";
 
 type PageProps = {
 	params: Promise<{
 		id: string;
 	}>;
 };
-
-function formatDate(value?: Date | string | null) {
-	if (!value) return "-";
-
-	const date = value instanceof Date ? value : new Date(value);
-
-	if (Number.isNaN(date.getTime())) {
-		return "-";
-	}
-
-	return date.toLocaleString("es-ES", {
-		dateStyle: "medium",
-		timeStyle: "short",
-	});
-}
 
 export default async function AdminClientDetailPage({ params }: PageProps) {
 	await requireAdminSession();

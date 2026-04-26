@@ -1,5 +1,3 @@
-"use client";
-
 type SubmitButtonProps = {
 	children: React.ReactNode;
 	isSubmitting?: boolean;

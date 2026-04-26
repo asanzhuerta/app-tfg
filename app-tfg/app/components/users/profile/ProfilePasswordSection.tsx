@@ -1,5 +1,3 @@
-"use client";
-
 import PasswordFieldWithStrength from "@/app/components/users/PasswordFieldWithStrength";
 
 type Props = {

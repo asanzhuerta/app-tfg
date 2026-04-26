@@ -1,8 +1,3 @@
-"use client";
-
-import { useState } from "react";
-import HeaderTitle from "../../components/basics/HeaderTitle";
-import AssistantCard from "../../components/AssistantCard";
 import NavCard from "../../components/NavCard";
 import PageTransition from "../../components/animations/PageTransition";
 import { RegisterRequestsIcon, ClientsIcon } from "../../components/IconsSVGs";
@@ -28,8 +23,6 @@ const navItems = [
 
 // Página de inicio para el admin panel.
 export default function AdminHome() {
-	const [leaving, setLeaving] = useState(false);
-
 	return (
 		<PageTransition>
 			<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">

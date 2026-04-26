@@ -1,5 +1,3 @@
-"use client";
-
 import NavCard from "../components/NavCard";
 import PageTransition from "../components/animations/PageTransition";
 import RouteMapCard from "../components/RouteMapCard";

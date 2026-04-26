@@ -1,5 +1,3 @@
-"use client";
-
 import AssistantCard from "../components/AssistantCard";
 import NavCard from "../components/NavCard";
 import HeaderTitle from "../components/basics/HeaderTitle";

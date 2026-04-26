@@ -14,24 +14,9 @@ import type {
 	ClientCommercialAssignment,
 	UpsertClientCommercialAssignmentBody,
 } from "@/lib/contracts/client-commercial-assignment";
+import { formatDateTime } from "@/lib/utils/user-utils";
 
-function formatDateTime(value?: string | null) {
-	if (!value) {
-		return "--";
-	}
-
-	const date = new Date(value);
-
-	if (Number.isNaN(date.getTime())) {
-		return value;
-	}
-
-	return date.toLocaleString("es-ES", {
-		dateStyle: "medium",
-		timeStyle: "short",
-	});
-}
-
+// Construye una etiqueta descriptiva para un cliente comercial, incluyendo su nombre, ciudad y provincia si están disponibles.
 function getClientLabel(client: CommercialClient) {
 	const parts = [client.name];
 
@@ -46,6 +31,7 @@ function getClientLabel(client: CommercialClient) {
 	return parts.join(" · ");
 }
 
+// Página de administración para asignar comerciales a clientes. Permite seleccionar un cliente, ver su comercial asignado actualmente (si existe), buscar y seleccionar un nuevo comercial, agregar notas a la asignación, y guardar o eliminar la asignación.
 export default function AdminClientCommercialAssignmentsPage() {
 	const searchParams = useSearchParams();
 	const [clients, setClients] = useState<CommercialClient[]>([]);

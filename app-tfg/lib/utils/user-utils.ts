@@ -38,11 +38,28 @@ export const sortableFields: { key: SortField; label: string }[] = [
 	{ key: "last_login_at", label: "Último login" },
 ];
 
-// Formatea una fecha en formato largo.
-export function formatDate(value: string | null) {
-	if (!value) return "-";
+type DateLike = Date | string | null | undefined;
 
-	return new Date(value).toLocaleString("es-ES", {
+function parseDate(value: DateLike) {
+	if (!value) return null;
+
+	const date = value instanceof Date ? value : new Date(value);
+
+	if (Number.isNaN(date.getTime())) {
+		return null;
+	}
+
+	return date;
+}
+
+// Formatea una fecha y hora en formato numérico.
+// Ejemplo: 26/04/2026, 11:30
+export function formatDate(value: DateLike) {
+	const date = parseDate(value);
+
+	if (!date) return "-";
+
+	return date.toLocaleString("es-ES", {
 		day: "2-digit",
 		month: "2-digit",
 		year: "numeric",
@@ -51,14 +68,33 @@ export function formatDate(value: string | null) {
 	});
 }
 
-// Formatea una fecha en formato corto.
-export function formatDateShort(value: string | null) {
-	if (!value) return "-";
+// Formatea solo la fecha en formato corto.
+// Ejemplo: 26/04/26
+export function formatDateShort(value: DateLike) {
+	const date = parseDate(value);
 
-	return new Date(value).toLocaleDateString("es-ES", {
+	if (!date) return "-";
+
+	return date.toLocaleDateString("es-ES", {
 		day: "2-digit",
 		month: "2-digit",
 		year: "2-digit",
+	});
+}
+
+// Formatea una fecha y hora en formato más legible.
+// Si no es una fecha válida, devuelve el valor original.
+// Ejemplo: 26 abr 2026, 11:30
+export function formatDateTime(value: DateLike) {
+	const date = parseDate(value);
+
+	if (!date) {
+		return typeof value === "string" && value ? value : "--";
+	}
+
+	return date.toLocaleString("es-ES", {
+		dateStyle: "medium",
+		timeStyle: "short",
 	});
 }
 
