@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { PASSWORD_MIN_LENGTH, validatePassword } from "@/lib/utils/password-utils";
 
 type Props = {
@@ -34,10 +34,12 @@ export default function PasswordFieldWithStrength({
 	confirmValue,
 	onConfirmChange,
 }: Props) {
-	const [internalPassword, setInternalPassword] = useState(defaultValue);
+	const passwordInputId = useId();
+	const confirmPasswordInputId = useId();
+	const [internalPassword, setInternalPassword] = useState<string | null>(null);
 	const [internalConfirmPassword, setInternalConfirmPassword] = useState("");
 
-	const password = value ?? internalPassword;
+	const password = value ?? internalPassword ?? defaultValue;
 	const resolvedConfirmPassword = confirmValue ?? internalConfirmPassword;
 
 	const setPassword = (nextValue: string) => {
@@ -77,10 +79,14 @@ export default function PasswordFieldWithStrength({
 	return (
 		<div className="space-y-3">
 			<div>
-				<label className="mb-1 hidden text-sm font-medium text-slate-700">
+				<label
+					htmlFor={passwordInputId}
+					className="mb-1 hidden text-sm font-medium text-slate-700"
+				>
 					{label}
 				</label>
 				<input
+					id={passwordInputId}
 					name={name}
 					type="password"
 					value={password}
@@ -116,10 +122,14 @@ export default function PasswordFieldWithStrength({
 
 			{showConfirm ? (
 				<div>
-					<label className="mb-1 hidden text-sm font-medium text-slate-700">
+					<label
+						htmlFor={confirmPasswordInputId}
+						className="mb-1 hidden text-sm font-medium text-slate-700"
+					>
 						{confirmLabel}
 					</label>
 					<input
+						id={confirmPasswordInputId}
 						name={confirmName}
 						type="password"
 						value={resolvedConfirmPassword}

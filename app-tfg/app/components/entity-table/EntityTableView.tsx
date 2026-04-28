@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+	AnimatePresence,
+	LazyMotion,
+	domAnimation,
+	m,
+	useReducedMotion,
+} from "framer-motion";
 import UserAvatar from "@/app/components/users/UserAvatar";
 import type { EntityTableItem } from "./entity-table-types";
 
@@ -10,7 +16,7 @@ type Props = {
 	emptyMessage?: string;
 };
 
-// Devuelve las clases visuales del botón según el tipo de acción.
+// Devuelve las clases visuales del boton segun el tipo de accion.
 function getActionClasses(variant?: "primary" | "secondary" | "warning") {
 	if (variant === "warning") {
 		return "bg-amber-100 text-amber-700 hover:bg-amber-200";
@@ -23,18 +29,34 @@ function getActionClasses(variant?: "primary" | "secondary" | "warning") {
 	return "bg-sky-600 text-white hover:bg-sky-700";
 }
 
-// Tarjeta reutilizable que representa un único elemento del listado.
-function EntityCard({ item }: { item: EntityTableItem }) {
+// Tarjeta reutilizable que representa un unico elemento del listado.
+function EntityCard({
+	item,
+	shouldReduceMotion,
+}: {
+	item: EntityTableItem;
+	shouldReduceMotion: boolean;
+}) {
+	const motionProps = shouldReduceMotion
+		? {
+				initial: false,
+				animate: { opacity: 1, y: 0, scale: 1 },
+				exit: { opacity: 1, y: 0, scale: 1 },
+				transition: { duration: 0 },
+			}
+		: {
+				initial: { opacity: 0, y: 12, scale: 0.98 },
+				animate: { opacity: 1, y: 0, scale: 0.98 },
+				exit: { opacity: 0, y: -12, scale: 0.98 },
+				transition: { duration: 0.28, ease: "easeInOut" as const },
+			};
+
 	return (
-		<motion.div
+		<m.div
 			layout
-			initial={{ opacity: 0, y: 12, scale: 0.98 }}
-			animate={{ opacity: 1, y: 0, scale: 0.98 }}
-			exit={{ opacity: 0, y: -12, scale: 0.98 }}
-			transition={{ duration: 0.28, ease: "easeInOut" }}
+			{...motionProps}
 			className="rounded-xl border border-gray-200 bg-white p-3.5 shadow-sm transition hover:shadow-md"
 		>
-			{/* CABECERA */}
 			<div className="flex items-start gap-3">
 				<UserAvatar
 					name={item.title}
@@ -62,7 +84,6 @@ function EntityCard({ item }: { item: EntityTableItem }) {
 				</div>
 			</div>
 
-			{/* CAMPOS INFORMATIVOS */}
 			<div className="mt-2.5 grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-slate-600">
 				{item.fields.map((field) => (
 					<div key={`${item.id}-${field.label}`}>
@@ -72,7 +93,6 @@ function EntityCard({ item }: { item: EntityTableItem }) {
 				))}
 			</div>
 
-			{/* ACCIONES */}
 			{item.actions?.length ? (
 				<div className="mt-3 flex flex-wrap gap-2">
 					{item.actions.map((action) => (
@@ -88,16 +108,18 @@ function EntityCard({ item }: { item: EntityTableItem }) {
 					))}
 				</div>
 			) : null}
-		</motion.div>
+		</m.div>
 	);
 }
 
 // Vista principal del listado reutilizable.
-// Muestra una rejilla de tarjetas o un mensaje vacío si no hay resultados.
+// Muestra una rejilla de tarjetas o un mensaje vacio si no hay resultados.
 export default function EntityTableView({
 	items,
 	emptyMessage = "No hay elementos que coincidan con los filtros.",
 }: Props) {
+	const shouldReduceMotion = useReducedMotion() ?? false;
+
 	return (
 		<div className="rounded-2xl border border-gray-200 bg-white shadow-md">
 			{items.length === 0 ? (
@@ -105,16 +127,22 @@ export default function EntityTableView({
 					{emptyMessage}
 				</div>
 			) : (
-				<motion.div
-					layout
-					className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-2 xl:grid-cols-3"
-				>
-					<AnimatePresence mode="popLayout">
-						{items.map((item) => (
-							<EntityCard key={item.id} item={item} />
-						))}
-					</AnimatePresence>
-				</motion.div>
+				<LazyMotion features={domAnimation}>
+					<m.div
+						layout
+						className="grid grid-cols-1 gap-3 p-3 sm:grid-cols-2 xl:grid-cols-3"
+					>
+						<AnimatePresence initial={false} mode="popLayout">
+							{items.map((item) => (
+								<EntityCard
+									key={item.id}
+									item={item}
+									shouldReduceMotion={shouldReduceMotion}
+								/>
+							))}
+						</AnimatePresence>
+					</m.div>
+				</LazyMotion>
 			)}
 		</div>
 	);

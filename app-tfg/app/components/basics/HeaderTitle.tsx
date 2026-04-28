@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type HeaderTitleProps = {
 	title: string;
 	subtitle?: string;
@@ -6,12 +8,12 @@ type HeaderTitleProps = {
 
 export default function HeaderTitle({
 	title,
-	subtitle = "Alta Peluquería & Estética",
+	subtitle = "Alta Peluqueria & Estetica",
 	noGlass = false,
 }: HeaderTitleProps) {
 	return (
 		<header
-			className={`mb-4 rounded-2xl px-6 py-4 text-center ${
+			className={`relative mb-4 rounded-2xl px-6 py-4 text-center ${
 				noGlass ? "bg-white/80" : "glass-header"
 			}`}
 		>
@@ -21,15 +23,17 @@ export default function HeaderTitle({
 			<p className="mt-1 text-center text-[10px] uppercase tracking-[0.2em] text-black/80 sm:text-[15px]">
 				{subtitle}
 			</p>
-			{noGlass && (
+			{noGlass ? (
 				<div className="absolute right-6 top-4">
-					<img
+					<Image
 						src="/profile-image.png"
 						alt="Profile"
+						width={40}
+						height={40}
 						className="h-10 w-10 rounded-full"
 					/>
 				</div>
-			)}
+			) : null}
 		</header>
 	);
 }
