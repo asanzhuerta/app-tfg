@@ -49,6 +49,7 @@ export default function ClientProfileFieldsSection({
 	]
 		.filter(Boolean)
 		.join(", ");
+	const mapResetKey = clientId ? `${clientId}:${formData.lat}:${formData.lng}` : "";
 
 	return (
 		<div className="mt-6">
@@ -63,12 +64,16 @@ export default function ClientProfileFieldsSection({
 
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-name"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Nombre del establecimiento
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-name"
 							type="text"
 							value={formData.client_name}
 							onChange={onChange("client_name")}
@@ -82,12 +87,16 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-contact-name"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Persona de contacto
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-contact-name"
 							type="text"
 							value={formData.contact_name}
 							onChange={onChange("contact_name")}
@@ -101,12 +110,16 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-tax-id"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Identificador fiscal
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-tax-id"
 							type="text"
 							value={formData.tax_id}
 							onChange={onChange("tax_id")}
@@ -118,12 +131,16 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-address"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Dirección
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-address"
 							type="text"
 							value={formData.address}
 							onChange={onChange("address")}
@@ -135,12 +152,16 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-city"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Ciudad
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-city"
 							type="text"
 							value={formData.city}
 							onChange={onChange("city")}
@@ -152,12 +173,16 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-postal-code"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Código postal
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-postal-code"
 							type="text"
 							value={formData.postal_code}
 							onChange={onChange("postal_code")}
@@ -171,12 +196,16 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-province"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Provincia / zona
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-province"
 							type="text"
 							value={formData.province}
 							onChange={onChange("province")}
@@ -190,12 +219,16 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-visit-window-start"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Inicio de visitas
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-visit-window-start"
 							type="time"
 							value={formData.visit_window_start_time}
 							onChange={onChange("visit_window_start_time")}
@@ -209,12 +242,16 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<label
+						htmlFor="client-visit-window-end"
+						className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+					>
 						Fin de visitas
 					</label>
 
 					{isEditable ? (
 						<input
+							id="client-visit-window-end"
 							type="time"
 							value={formData.visit_window_end_time}
 							onChange={onChange("visit_window_end_time")}
@@ -228,9 +265,9 @@ export default function ClientProfileFieldsSection({
 				</div>
 
 				<div className="rounded-xl bg-slate-50 p-4 md:col-span-2">
-					<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+					<p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
 						Estado de geolocalización
-					</label>
+					</p>
 
 					<div
 						className={`mt-2 rounded-2xl px-4 py-3 text-sm ${
@@ -270,6 +307,7 @@ export default function ClientProfileFieldsSection({
 
 						{allowLocationEdit ? (
 							<ClientLocationPickerMap
+								key={mapResetKey}
 								clientId={clientId}
 								confirmedLat={formData.lat ? Number(formData.lat) : null}
 								confirmedLng={formData.lng ? Number(formData.lng) : null}
@@ -287,12 +325,16 @@ export default function ClientProfileFieldsSection({
 
 				{isAdminEditMode ? (
 					<div className="rounded-xl bg-slate-50 p-4 md:col-span-2">
-						<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+						<label
+							htmlFor="client-notes"
+							className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+						>
 							Notas
 						</label>
 
 						{isEditable ? (
 							<textarea
+								id="client-notes"
 								value={formData.notes}
 								onChange={onChange("notes")}
 								rows={4}

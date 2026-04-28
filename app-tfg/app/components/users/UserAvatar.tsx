@@ -50,33 +50,35 @@ export default function UserAvatar({
 	const userInitial = getUserInitial(name);
 
 	// Estado que indica si la imagen actual ha sido validada correctamente.
-	const [isImageValid, setIsImageValid] = useState(false);
-
-	// Estado que indica si la comprobación de la imagen actual ya terminó.
-	const [hasCheckedImage, setHasCheckedImage] = useState(false);
+	const [imageCheck, setImageCheck] = useState<{
+		checkedUrl: string | null;
+		isValid: boolean;
+	}>({
+		checkedUrl: null,
+		isValid: false,
+	});
 
 	// Cada vez que cambia la URL, se comprueba en cliente si la imagen existe
 	// y puede cargarse correctamente antes de renderizarla.
 	useEffect(() => {
 		if (!imageUrl) {
-			setIsImageValid(false);
-			setHasCheckedImage(true);
 			return;
 		}
-
-		setIsImageValid(false);
-		setHasCheckedImage(false);
 
 		const testImage = new window.Image();
 
 		testImage.onload = () => {
-			setIsImageValid(true);
-			setHasCheckedImage(true);
+			setImageCheck({
+				checkedUrl: imageUrl,
+				isValid: true,
+			});
 		};
 
 		testImage.onerror = () => {
-			setIsImageValid(false);
-			setHasCheckedImage(true);
+			setImageCheck({
+				checkedUrl: imageUrl,
+				isValid: false,
+			});
 		};
 
 		testImage.src = imageUrl;
@@ -88,7 +90,10 @@ export default function UserAvatar({
 	}, [imageUrl]);
 
 	// Solo se muestra la imagen si existe una URL y la comprobación previa fue correcta.
-	const shouldShowImage = Boolean(imageUrl) && hasCheckedImage && isImageValid;
+	const shouldShowImage =
+		Boolean(imageUrl) &&
+		imageCheck.checkedUrl === imageUrl &&
+		imageCheck.isValid;
 	const avatarSize = sizeClasses[size];
 
 	return (

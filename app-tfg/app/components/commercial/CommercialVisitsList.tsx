@@ -466,10 +466,14 @@ export default function CommercialVisitsList() {
 
 					<div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
 						<div>
-							<label className="mb-1 block text-sm font-semibold text-slate-700">
+							<label
+								htmlFor="visits-filter-client"
+								className="mb-1 block text-sm font-semibold text-slate-700"
+							>
 								Cliente
 							</label>
 							<select
+								id="visits-filter-client"
 								value={filterClientId}
 								onChange={(event) => setFilterClientId(event.target.value)}
 								className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-slate-800 outline-none transition focus:border-slate-500"
@@ -484,10 +488,14 @@ export default function CommercialVisitsList() {
 						</div>
 
 						<div>
-							<label className="mb-1 block text-sm font-semibold text-slate-700">
+							<label
+								htmlFor="visits-filter-status"
+								className="mb-1 block text-sm font-semibold text-slate-700"
+							>
 								Estado
 							</label>
 							<select
+								id="visits-filter-status"
 								value={filterStatusId}
 								onChange={(event) => setFilterStatusId(event.target.value)}
 								className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-slate-800 outline-none transition focus:border-slate-500"
@@ -502,10 +510,14 @@ export default function CommercialVisitsList() {
 						</div>
 
 						<div>
-							<label className="mb-1 block text-sm font-semibold text-slate-700">
+							<label
+								htmlFor="visits-filter-type"
+								className="mb-1 block text-sm font-semibold text-slate-700"
+							>
 								Tipo
 							</label>
 							<select
+								id="visits-filter-type"
 								value={filterVisitTypeId}
 								onChange={(event) => setFilterVisitTypeId(event.target.value)}
 								className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-slate-800 outline-none transition focus:border-slate-500"
@@ -520,10 +532,14 @@ export default function CommercialVisitsList() {
 						</div>
 
 						<div>
-							<label className="mb-1 block text-sm font-semibold text-slate-700">
+							<label
+								htmlFor="visits-filter-date-from"
+								className="mb-1 block text-sm font-semibold text-slate-700"
+							>
 								Desde
 							</label>
 							<input
+								id="visits-filter-date-from"
 								type="date"
 								value={filterDateFrom}
 								onChange={(event) => setFilterDateFrom(event.target.value)}
@@ -532,10 +548,14 @@ export default function CommercialVisitsList() {
 						</div>
 
 						<div>
-							<label className="mb-1 block text-sm font-semibold text-slate-700">
+							<label
+								htmlFor="visits-filter-date-to"
+								className="mb-1 block text-sm font-semibold text-slate-700"
+							>
 								Hasta
 							</label>
 							<input
+								id="visits-filter-date-to"
 								type="date"
 								value={filterDateTo}
 								onChange={(event) => setFilterDateTo(event.target.value)}
@@ -614,10 +634,14 @@ export default function CommercialVisitsList() {
 									className="grid gap-4 md:grid-cols-2"
 								>
 									<div>
-										<label className="mb-2 block text-sm font-medium text-slate-700">
+										<label
+											htmlFor="create-visit-client"
+											className="mb-2 block text-sm font-medium text-slate-700"
+										>
 											Cliente
 										</label>
 										<select
+											id="create-visit-client"
 											value={clientId}
 											onChange={(event) => setClientId(event.target.value)}
 											className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
@@ -633,10 +657,14 @@ export default function CommercialVisitsList() {
 									</div>
 
 									<div>
-										<label className="mb-2 block text-sm font-medium text-slate-700">
+										<label
+											htmlFor="create-visit-type"
+											className="mb-2 block text-sm font-medium text-slate-700"
+										>
 											Tipo de visita
 										</label>
 										<select
+											id="create-visit-type"
 											value={visitTypeId}
 											onChange={(event) => setVisitTypeId(event.target.value)}
 											className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
@@ -654,10 +682,14 @@ export default function CommercialVisitsList() {
 									</div>
 
 									<div>
-										<label className="mb-2 block text-sm font-medium text-slate-700">
+										<label
+											htmlFor="create-visit-date"
+											className="mb-2 block text-sm font-medium text-slate-700"
+										>
 											Dia de la visita
 										</label>
 										<input
+											id="create-visit-date"
 											type="date"
 											value={scheduledForDate}
 											onChange={(event) =>
@@ -669,10 +701,14 @@ export default function CommercialVisitsList() {
 									</div>
 
 									<div className="md:col-span-2">
-										<label className="mb-2 block text-sm font-medium text-slate-700">
+										<label
+											htmlFor="create-visit-notes"
+											className="mb-2 block text-sm font-medium text-slate-700"
+										>
 											Notas
 										</label>
 										<textarea
+											id="create-visit-notes"
 											value={notes}
 											onChange={(event) => setNotes(event.target.value)}
 											rows={4}

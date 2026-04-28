@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
 	fetchAdminCommercialOptions,
@@ -31,8 +31,18 @@ function getClientLabel(client: CommercialClient) {
 	return parts.join(" · ");
 }
 
+function AdminClientCommercialAssignmentsFallback() {
+	return (
+		<PageTransition>
+			<div className="rounded-2xl border border-slate-200 bg-white px-4 py-4 text-sm text-slate-600 shadow-sm">
+				Cargando asignaciones comerciales...
+			</div>
+		</PageTransition>
+	);
+}
+
 // Página de administración para asignar comerciales a clientes. Permite seleccionar un cliente, ver su comercial asignado actualmente (si existe), buscar y seleccionar un nuevo comercial, agregar notas a la asignación, y guardar o eliminar la asignación.
-export default function AdminClientCommercialAssignmentsPage() {
+function AdminClientCommercialAssignmentsPageContent() {
 	const searchParams = useSearchParams();
 	const [clients, setClients] = useState<CommercialClient[]>([]);
 	const [commercials, setCommercials] = useState<AdminCommercialOption[]>([]);
@@ -530,11 +540,15 @@ export default function AdminClientCommercialAssignmentsPage() {
 							</div>
 
 							<div>
-								<label className="mb-2 block text-sm font-medium text-slate-900">
+								<label
+									htmlFor="assignment-commercial-search"
+									className="mb-2 block text-sm font-medium text-slate-900"
+								>
 									Buscar comercial
 								</label>
 
 								<input
+									id="assignment-commercial-search"
 									type="text"
 									value={commercialSearch}
 									onChange={(event) => setCommercialSearch(event.target.value)}
@@ -588,10 +602,14 @@ export default function AdminClientCommercialAssignmentsPage() {
 							</div>
 
 							<div>
-								<label className="mb-2 block text-sm font-medium text-slate-900">
+								<label
+									htmlFor="assignment-notes"
+									className="mb-2 block text-sm font-medium text-slate-900"
+								>
 									Notas de la asignacion
 								</label>
 								<textarea
+									id="assignment-notes"
 									value={notes}
 									onChange={(event) => setNotes(event.target.value)}
 									rows={4}
@@ -638,5 +656,13 @@ export default function AdminClientCommercialAssignmentsPage() {
 				</div>
 			</div>
 		</PageTransition>
+	);
+}
+
+export default function AdminClientCommercialAssignmentsPage() {
+	return (
+		<Suspense fallback={<AdminClientCommercialAssignmentsFallback />}>
+			<AdminClientCommercialAssignmentsPageContent />
+		</Suspense>
 	);
 }

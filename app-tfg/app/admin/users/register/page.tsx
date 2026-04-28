@@ -128,11 +128,15 @@ export default function AdminRegisterUserPage() {
 
 					{userType === "cliente" ? (
 						<div className="flex flex-col gap-2">
-							<label className="text-sm font-medium text-gray-700">
+							<label
+								htmlFor="admin-register-commercial-id"
+								className="text-sm font-medium text-gray-700"
+							>
 								Comercial asignado
 							</label>
 
 							<select
+								id="admin-register-commercial-id"
 								name="commercialId"
 								value={selectedCommercialId}
 								onChange={(event) => setSelectedCommercialId(event.target.value)}
@@ -204,7 +208,7 @@ export default function AdminRegisterUserPage() {
 					<SubmitButton
 						isSubmitting={loading}
 						submittingText="Registrando..."
-						className="mt-2 rounded-lg bg-black font-medium text-white hover:opacity-90"
+						className="mt-2 rounded-lg bg-slate-950 font-medium text-white hover:bg-slate-900"
 					>
 						Registrar usuario
 					</SubmitButton>

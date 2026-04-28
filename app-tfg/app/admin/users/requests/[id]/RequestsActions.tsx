@@ -121,11 +121,15 @@ export default function RequestsActions({
 
 				{requiresCommercialAssignment ? (
 					<div className="mt-4 space-y-2">
-						<label className="block text-sm font-medium text-emerald-900">
+						<label
+							htmlFor="request-commercial-id"
+							className="block text-sm font-medium text-emerald-900"
+						>
 							Comercial asignado
 						</label>
 
 						<select
+							id="request-commercial-id"
 							value={selectedCommercialId}
 							onChange={(event) =>
 								setSelectedCommercialId(event.target.value)
@@ -180,11 +184,15 @@ export default function RequestsActions({
 				</p>
 
 				<div className="mt-4">
-					<label className="mb-2 block text-sm font-medium text-red-900">
+					<label
+						htmlFor="request-rejection-reason"
+						className="mb-2 block text-sm font-medium text-red-900"
+					>
 						Motivo del rechazo
 					</label>
 
 					<textarea
+						id="request-rejection-reason"
 						value={rejectionReason}
 						onChange={(event) => setRejectionReason(event.target.value)}
 						rows={4}

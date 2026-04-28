@@ -16,13 +16,9 @@ type Props = {
 // Muestra los datos aportados por el solicitante y permite aprobar
 // o rechazar la solicitud desde el panel de administración.
 export default async function ReviewSolicitudPage({ params }: Props) {
-	// CONTROL DE ACCESO
-	// Se asegura de que el usuario esté autenticado y tenga rol de administrador.
-	const session = await requireAdminSession();
-
-	// PARÁMETROS Y CARGA DE DATOS
-	// Obtiene el ID de la solicitud desde la URL y recupera su contenido.
-	const { id } = await params;
+	// CONTROL DE ACCESO Y PARÁMETROS
+	// Resolvemos la sesión administrativa y el parámetro dinámico en paralelo.
+	const [{ id }] = await Promise.all([params, requireAdminSession()]);
 	const solicitud = await getUserRequestById(id);
 
 	// Si la solicitud no existe, se muestra la página de "No encontrado".

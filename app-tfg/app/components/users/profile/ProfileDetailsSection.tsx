@@ -74,10 +74,14 @@ export default function ProfileDetailsSection({
 			{isAdminEditMode ? (
 				<>
 					<div className="rounded-xl bg-slate-50 p-4">
-						<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+						<label
+							htmlFor="profile-role"
+							className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+						>
 							Rol
 						</label>
 						<select
+							id="profile-role"
 							value={String(formData.roleId)}
 							onChange={onChange("roleId")}
 							className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-slate-400"
@@ -93,10 +97,14 @@ export default function ProfileDetailsSection({
 					</div>
 
 					<div className="rounded-xl bg-slate-50 p-4">
-						<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+						<label
+							htmlFor="profile-status"
+							className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+						>
 							Estado
 						</label>
 						<select
+							id="profile-status"
 							value={String(formData.statusId)}
 							onChange={onChange("statusId")}
 							className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-slate-400"

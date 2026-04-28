@@ -17,12 +17,16 @@ export default function ProfileImageUploadField({
 }: Props) {
 	return (
 		<div>
-			<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+			<label
+				htmlFor="profile-image-upload"
+				className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+			>
 				Foto de perfil
 			</label>
 
 			<div className="mt-2 flex flex-col gap-3">
 				<input
+					id="profile-image-upload"
 					ref={fileInputRef}
 					type="file"
 					accept="image/*"

@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useCommercialRoutePreview } from "@/app/hooks/api/useCommercialRoutePreview";
 import { buildGoogleMapsDirectionsUrl } from "@/app/components/maps/google-maps-url";
+import type { RoutePoint } from "@/lib/contracts/commercial-route";
 import { formatTimeLabel } from "@/lib/utils/time";
 
 const LeafletRouteMap = dynamic(
@@ -37,6 +39,8 @@ type BrowserLocationState =
 			status: "unavailable";
 			message: string;
 	  };
+
+const EMPTY_ROUTE_POINTS: RoutePoint[] = [];
 
 function formatMinutes(value: number | null | undefined) {
 	if (typeof value !== "number" || Number.isNaN(value)) {
@@ -92,11 +96,14 @@ export default function RouteMapCard({
 
 	useEffect(() => {
 		if (!("geolocation" in navigator)) {
-			setBrowserLocation({
-				status: "unavailable",
-				message: "Tu navegador no soporta geolocalizacion.",
-			});
-			return;
+			const unavailableTimer = window.setTimeout(() => {
+				setBrowserLocation({
+					status: "unavailable",
+					message: "Tu navegador no soporta geolocalizacion.",
+				});
+			}, 0);
+
+			return () => window.clearTimeout(unavailableTimer);
 		}
 
 		navigator.geolocation.getCurrentPosition(
@@ -137,7 +144,7 @@ export default function RouteMapCard({
 
 	const startPoint = preview?.startPoint ?? null;
 	const endPoint = preview?.endPoint ?? null;
-	const waypoints = useMemo(() => preview?.waypoints ?? [], [preview?.waypoints]);
+	const waypoints = preview?.waypoints ?? EMPTY_ROUTE_POINTS;
 	const timingSummary = preview?.timingSummary ?? null;
 
 	const googleMapsUrl = useMemo(
@@ -324,12 +331,12 @@ export default function RouteMapCard({
 					{timingSummary && !hasWorkdayConfig ? (
 						<div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
 							Aun no has definido tu jornada base. Configurala en{" "}
-							<a
+							<Link
 								href="/commercials/settings"
 								className="font-semibold underline underline-offset-2"
 							>
 								Ajustes
-							</a>{" "}
+							</Link>{" "}
 							para que el sistema calcule el tiempo maximo disponible en ruta.
 						</div>
 					) : null}

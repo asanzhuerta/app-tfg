@@ -36,6 +36,14 @@ type InfoColumn = {
 	render: (item: InfoRow) => ReactNode;
 };
 
+type VisitFormState = {
+	scheduledForDate: string;
+	visitTypeId: string;
+	statusId: string;
+	notes: string;
+	result: string;
+};
+
 const infoColumns: InfoColumn[] = [
 	{
 		key: "label",
@@ -50,6 +58,14 @@ const infoColumns: InfoColumn[] = [
 	},
 ];
 
+const DEFAULT_VISIT_FORM_STATE: VisitFormState = {
+	scheduledForDate: "",
+	visitTypeId: "",
+	statusId: "",
+	notes: "",
+	result: "",
+};
+
 export default function CommercialVisitDetail({ visitId }: Props) {
 	const {
 		data: visit,
@@ -59,23 +75,22 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 	} = useCommercialVisit(visitId);
 	const [saving, setSaving] = useState(false);
 	const [success, setSuccess] = useState("");
-
-	const [scheduledForDate, setScheduledForDate] = useState("");
-	const [visitTypeId, setVisitTypeId] = useState("");
-	const [statusId, setStatusId] = useState("");
-	const [notes, setNotes] = useState("");
-	const [result, setResult] = useState("");
+	const [formState, setFormState] = useState<VisitFormState>(
+		DEFAULT_VISIT_FORM_STATE,
+	);
 
 	useEffect(() => {
 		if (!visit) {
 			return;
 		}
 
-		setScheduledForDate(visit.scheduled_for_date);
-		setVisitTypeId(String(visit.visit_type_id));
-		setStatusId(String(visit.status_id));
-		setNotes(visit.notes ?? "");
-		setResult(visit.result ?? "");
+		setFormState({
+			scheduledForDate: visit.scheduled_for_date,
+			visitTypeId: String(visit.visit_type_id),
+			statusId: String(visit.status_id),
+			notes: visit.notes ?? "",
+			result: visit.result ?? "",
+		});
 	}, [visit]);
 
 	const canEditPlanning = useMemo(
@@ -195,11 +210,11 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 			setSuccess("");
 
 			const visitData = await save({
-				scheduledForDate,
-				visitTypeId: Number(visitTypeId),
-				statusId: Number(statusId),
-				notes,
-				result,
+				scheduledForDate: formState.scheduledForDate,
+				visitTypeId: Number(formState.visitTypeId),
+				statusId: Number(formState.statusId),
+				notes: formState.notes,
+				result: formState.result,
 			});
 
 			if (visitData) {
@@ -313,25 +328,43 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 								className="mt-5 grid gap-4 md:grid-cols-2"
 							>
 								<div>
-									<label className="mb-2 block text-sm font-medium text-slate-700">
+									<label
+										htmlFor="visit-scheduled-for-date"
+										className="mb-2 block text-sm font-medium text-slate-700"
+									>
 										Día de la visita
 									</label>
 									<input
+										id="visit-scheduled-for-date"
 										type="date"
-										value={scheduledForDate}
-										onChange={(e) => setScheduledForDate(e.target.value)}
+										value={formState.scheduledForDate}
+										onChange={(event) =>
+											setFormState((currentState) => ({
+												...currentState,
+												scheduledForDate: event.target.value,
+											}))
+										}
 										disabled={!canEditPlanning}
 										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-100"
 									/>
 								</div>
 
 								<div>
-									<label className="mb-2 block text-sm font-medium text-slate-700">
+									<label
+										htmlFor="visit-type-id"
+										className="mb-2 block text-sm font-medium text-slate-700"
+									>
 										Tipo de visita
 									</label>
 									<select
-										value={visitTypeId}
-										onChange={(e) => setVisitTypeId(e.target.value)}
+										id="visit-type-id"
+										value={formState.visitTypeId}
+										onChange={(event) =>
+											setFormState((currentState) => ({
+												...currentState,
+												visitTypeId: event.target.value,
+											}))
+										}
 										disabled={!canEditPlanning}
 										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-100"
 									>
@@ -344,12 +377,21 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 								</div>
 
 								<div>
-									<label className="mb-2 block text-sm font-medium text-slate-700">
+									<label
+										htmlFor="visit-status-id"
+										className="mb-2 block text-sm font-medium text-slate-700"
+									>
 										Estado
 									</label>
 									<select
-										value={statusId}
-										onChange={(e) => setStatusId(e.target.value)}
+										id="visit-status-id"
+										value={formState.statusId}
+										onChange={(event) =>
+											setFormState((currentState) => ({
+												...currentState,
+												statusId: event.target.value,
+											}))
+										}
 										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
 									>
 										{COMMERCIAL_VISIT_STATUS_OPTIONS.map((status) => (
@@ -361,24 +403,42 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 								</div>
 
 								<div>
-									<label className="mb-2 block text-sm font-medium text-slate-700">
+									<label
+										htmlFor="visit-notes"
+										className="mb-2 block text-sm font-medium text-slate-700"
+									>
 										Notas
 									</label>
 									<textarea
-										value={notes}
-										onChange={(e) => setNotes(e.target.value)}
+										id="visit-notes"
+										value={formState.notes}
+										onChange={(event) =>
+											setFormState((currentState) => ({
+												...currentState,
+												notes: event.target.value,
+											}))
+										}
 										rows={4}
 										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
 									/>
 								</div>
 
 								<div className="md:col-span-2">
-									<label className="mb-2 block text-sm font-medium text-slate-700">
+									<label
+										htmlFor="visit-result"
+										className="mb-2 block text-sm font-medium text-slate-700"
+									>
 										Resultado
 									</label>
 									<textarea
-										value={result}
-										onChange={(e) => setResult(e.target.value)}
+										id="visit-result"
+										value={formState.result}
+										onChange={(event) =>
+											setFormState((currentState) => ({
+												...currentState,
+												result: event.target.value,
+											}))
+										}
 										rows={4}
 										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
 										placeholder="Conclusiones de la visita, acuerdos alcanzados, próximos pasos..."

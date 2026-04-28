@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import {
 	MapContainer,
 	Marker,
@@ -10,6 +10,8 @@ import {
 	useMap,
 } from "react-leaflet";
 import L, { LatLngExpression } from "leaflet";
+import { useApiRequest } from "@/app/hooks/api/useApiRequest";
+import { requestJson } from "@/lib/api/client";
 import { formatTimeLabel } from "@/lib/utils/time";
 import { ensureLeafletDefaultIcon } from "./leaflet-default-icon";
 import type { RoutePoint } from "@/lib/contracts/commercial-route";
@@ -20,6 +22,19 @@ type LeafletRouteMapProps = {
 	waypoints?: RoutePoint[];
 	heightClassName?: string;
 };
+
+type OsrmRouteResponse = {
+	routes?: Array<{
+		geometry?: {
+			coordinates?: [number, number][];
+		};
+	}>;
+};
+
+const EMPTY_ROUTE_POINTS: RoutePoint[] = [];
+const EMPTY_ROUTE_POSITIONS: LatLngExpression[] = [];
+const ROUTE_FALLBACK_MESSAGE =
+	"No se pudo calcular la ruta real. Se muestra una union aproximada entre puntos.";
 
 function FitBounds({ points }: { points: RoutePoint[] }) {
 	const map = useMap();
@@ -119,14 +134,41 @@ function getEndIcon() {
 	});
 }
 
+function buildRoutePolylineUrl(points: RoutePoint[]) {
+	const coordinates = points.map((point) => `${point.lng},${point.lat}`).join(";");
+	const osrmBaseUrl =
+		process.env.NEXT_PUBLIC_OSRM_BASE_URL || "https://router.project-osrm.org";
+
+	return `${osrmBaseUrl}/route/v1/driving/${coordinates}?overview=full&geometries=geojson&steps=false`;
+}
+
+async function loadRoutePolyline(points: RoutePoint[]) {
+	const data = await requestJson<OsrmRouteResponse>(buildRoutePolylineUrl(points), {
+		cache: "no-store",
+		fallbackMessage: ROUTE_FALLBACK_MESSAGE,
+	});
+	const coordinates = data?.routes?.[0]?.geometry?.coordinates;
+
+	if (!coordinates?.length) {
+		throw new Error(ROUTE_FALLBACK_MESSAGE);
+	}
+
+	return coordinates.map(([lng, lat]) => [lat, lng] as LatLngExpression);
+}
+
 export default function LeafletRouteMap({
 	startPoint = null,
 	endPoint = null,
-	waypoints = [],
+	waypoints = EMPTY_ROUTE_POINTS,
 	heightClassName = "h-[24rem]",
 }: LeafletRouteMapProps) {
-	const [routePositions, setRoutePositions] = useState<LatLngExpression[]>([]);
-	const [routeError, setRouteError] = useState("");
+	const {
+		data: routeGeometry,
+		error: routeError,
+		run,
+		setData: setRouteGeometry,
+		setError: setRouteError,
+	} = useApiRequest<LatLngExpression[]>(EMPTY_ROUTE_POSITIONS);
 
 	useEffect(() => {
 		ensureLeafletDefaultIcon();
@@ -148,61 +190,23 @@ export default function LeafletRouteMap({
 		return result;
 	}, [startPoint, endPoint, waypoints]);
 
+	const pointPositions = useMemo(
+		() => points.map((point) => [point.lat, point.lng] as LatLngExpression),
+		[points],
+	);
+
 	useEffect(() => {
-		let ignore = false;
-
-		async function loadRoute() {
-			if (points.length < 2) {
-				setRoutePositions([]);
-				setRouteError("");
-				return;
-			}
-
-			try {
-				setRouteError("");
-
-				const coordinates = points
-					.map((point) => `${point.lng},${point.lat}`)
-					.join(";");
-				const osrmBaseUrl =
-					process.env.NEXT_PUBLIC_OSRM_BASE_URL ||
-					"https://router.project-osrm.org";
-				const response = await fetch(
-					`${osrmBaseUrl}/route/v1/driving/${coordinates}?overview=full&geometries=geojson&steps=false`,
-					{ cache: "no-store" },
-				);
-				const data = await response.json().catch(() => null);
-
-				if (!response.ok || !data?.routes?.[0]?.geometry?.coordinates) {
-					throw new Error("No se pudo calcular la ruta");
-				}
-
-				const coordinatesList = data.routes[0].geometry.coordinates as [
-					number,
-					number,
-				][];
-
-				if (!ignore) {
-					setRoutePositions(
-						coordinatesList.map(([lng, lat]) => [lat, lng] as LatLngExpression),
-					);
-				}
-			} catch {
-				if (!ignore) {
-					setRoutePositions(points.map((point) => [point.lat, point.lng]));
-					setRouteError(
-						"No se pudo calcular la ruta real. Se muestra una union aproximada entre puntos.",
-					);
-				}
-			}
+		if (points.length < 2) {
+			setRouteGeometry([]);
+			setRouteError("");
+			return;
 		}
 
-		void loadRoute();
+		void run(() => loadRoutePolyline(points));
+	}, [points, run, setRouteError, setRouteGeometry]);
 
-		return () => {
-			ignore = true;
-		};
-	}, [points]);
+	const routePositions =
+		routeGeometry && routeGeometry.length >= 2 ? routeGeometry : pointPositions;
 
 	const fallbackCenter: LatLngExpression = [36.5297, -6.2926];
 

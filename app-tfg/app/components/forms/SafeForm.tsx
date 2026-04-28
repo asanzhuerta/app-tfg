@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 type SafeFormProps = Omit<
 	React.FormHTMLAttributes<HTMLFormElement>,
@@ -28,11 +28,11 @@ export default function SafeForm({
 	disableUntilHydrated = true,
 	...props
 }: SafeFormProps) {
-	const [isHydrated, setIsHydrated] = useState(false);
-
-	useEffect(() => {
-		setIsHydrated(true);
-	}, []);
+	const isHydrated = useSyncExternalStore(
+		() => () => {},
+		() => true,
+		() => false,
+	);
 
 	return (
 		<form

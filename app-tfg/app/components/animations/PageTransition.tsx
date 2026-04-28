@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 type PageTransitionProps = {
 	children: React.ReactNode;
@@ -32,14 +32,15 @@ export default function PageTransition({
 	onExited,
 }: PageTransitionProps) {
 	const [phase, setPhase] = useState<TransitionPhase>("entering");
-	const [isIOS, setIsIOS] = useState(false);
+	const isIOS = useSyncExternalStore(
+		() => () => {},
+		() => isIOSDevice(),
+		() => false,
+	);
 	const exitCallbackCalledRef = useRef(false);
 
 	// Detecta iOS y lanza la animación de entrada al montar
 	useEffect(() => {
-		const ios = isIOSDevice();
-		setIsIOS(ios);
-
 		const enterTimer = window.setTimeout(() => {
 			setPhase("entered");
 		}, 30);
@@ -64,7 +65,9 @@ export default function PageTransition({
 			return;
 		}
 
-		setPhase("leaving");
+		const leaveTimer = window.setTimeout(() => {
+			setPhase("leaving");
+		}, 0);
 
 		const exitTimer = window.setTimeout(() => {
 			if (!exitCallbackCalledRef.current) {
@@ -73,7 +76,10 @@ export default function PageTransition({
 			}
 		}, durationMs);
 
-		return () => window.clearTimeout(exitTimer);
+		return () => {
+			window.clearTimeout(leaveTimer);
+			window.clearTimeout(exitTimer);
+		};
 	}, [isLeaving, durationMs, onExited]);
 
 	const baseTransition = isIOS

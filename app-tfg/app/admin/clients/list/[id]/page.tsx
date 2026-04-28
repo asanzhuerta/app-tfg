@@ -13,9 +13,7 @@ type PageProps = {
 };
 
 export default async function AdminClientDetailPage({ params }: PageProps) {
-	await requireAdminSession();
-
-	const { id } = await params;
+	const [{ id }] = await Promise.all([params, requireAdminSession()]);
 	const client = await getClientById(id);
 
 	if (!client) {

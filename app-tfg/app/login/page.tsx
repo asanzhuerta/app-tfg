@@ -101,7 +101,7 @@ export default function LoginPage() {
 						<SubmitButton
 							isSubmitting={loading}
 							submittingText="Entrando..."
-							className="mt-2 rounded-lg bg-black font-medium text-white hover:opacity-90"
+							className="mt-2 rounded-lg bg-slate-950 font-medium text-white hover:bg-slate-900"
 						>
 							Entrar
 						</SubmitButton>

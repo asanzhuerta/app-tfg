@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
 	MapContainer,
 	Marker,
@@ -66,16 +66,12 @@ export default function ClientLocationPickerMap({
 	initialSearchQuery = "",
 	onConfirmLocation,
 }: ClientLocationPickerMapProps) {
-	const initialPosition = useMemo<LatLng>(
-		() =>
-			confirmedLat !== null && confirmedLng !== null
-				? { lat: confirmedLat, lng: confirmedLng }
-				: DEFAULT_CENTER,
-		[confirmedLat, confirmedLng],
-	);
-
+	const initialPosition =
+		confirmedLat !== null && confirmedLng !== null
+			? { lat: confirmedLat, lng: confirmedLng }
+			: DEFAULT_CENTER;
+	const searchInputRef = useRef<HTMLInputElement | null>(null);
 	const [position, setPosition] = useState<LatLng>(initialPosition);
-	const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
 	const [searching, setSearching] = useState(false);
 	const [error, setError] = useState("");
 	const [feedback, setFeedback] = useState("");
@@ -85,16 +81,8 @@ export default function ClientLocationPickerMap({
 		ensureLeafletDefaultIcon();
 	}, []);
 
-	useEffect(() => {
-		setSearchQuery(initialSearchQuery);
-	}, [initialSearchQuery]);
-
-	useEffect(() => {
-		setPosition(initialPosition);
-	}, [initialPosition]);
-
 	async function handleSearchAddress() {
-		const query = searchQuery.trim();
+		const query = searchInputRef.current?.value.trim() ?? "";
 
 		if (!query) {
 			setError("Introduce una dirección para buscar.");
@@ -165,15 +153,20 @@ export default function ClientLocationPickerMap({
 	return (
 		<div className="space-y-4">
 			<div className="rounded-3xl border border-slate-200 bg-white p-4">
-				<label className="text-sm font-medium text-slate-700">
+				<label
+					htmlFor="client-location-search"
+					className="text-sm font-medium text-slate-700"
+				>
 					Buscar dirección
 				</label>
 
 				<div className="mt-2 flex flex-col gap-3 sm:flex-row">
 					<input
+						key={initialSearchQuery || "client-location-search-empty"}
+						id="client-location-search"
+						ref={searchInputRef}
 						type="search"
-						value={searchQuery}
-						onChange={(event) => setSearchQuery(event.target.value)}
+						defaultValue={initialSearchQuery}
 						onKeyDown={handleSearchKeyDown}
 						placeholder="Calle, número, ciudad..."
 						className="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-200"

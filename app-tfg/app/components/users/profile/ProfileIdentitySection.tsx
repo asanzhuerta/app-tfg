@@ -69,10 +69,14 @@ export default function ProfileIdentitySection({
 				{isSelfEditMode ? (
 					<div className="grid grid-cols-1 gap-4">
 						<div>
-							<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+							<label
+								htmlFor="profile-name"
+								className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+							>
 								Nombre
 							</label>
 							<input
+								id="profile-name"
 								type="text"
 								value={formData.name}
 								onChange={onChange("name")}
@@ -82,10 +86,14 @@ export default function ProfileIdentitySection({
 						</div>
 
 						<div>
-							<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+							<label
+								htmlFor="profile-email"
+								className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+							>
 								Correo electrónico
 							</label>
 							<input
+								id="profile-email"
 								type="email"
 								value={formData.email}
 								onChange={onChange("email")}
@@ -111,10 +119,14 @@ export default function ProfileIdentitySection({
 				{isAdminEditMode ? (
 					<div className="grid grid-cols-1 gap-4">
 						<div>
-							<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+							<label
+								htmlFor="profile-name"
+								className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+							>
 								Nombre
 							</label>
 							<input
+								id="profile-name"
 								type="text"
 								value={formData.name}
 								onChange={onChange("name")}
@@ -124,10 +136,14 @@ export default function ProfileIdentitySection({
 						</div>
 
 						<div>
-							<label className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+							<label
+								htmlFor="profile-email"
+								className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+							>
 								Correo electrónico
 							</label>
 							<input
+								id="profile-email"
 								type="email"
 								value={formData.email}
 								onChange={onChange("email")}

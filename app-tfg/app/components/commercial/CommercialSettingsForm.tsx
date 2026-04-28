@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import H1Title from "@/app/components/H1Title";
 import PageTransition from "@/app/components/animations/PageTransition";
 import SafeForm from "@/app/components/forms/SafeForm";
@@ -8,32 +8,45 @@ import SubmitButton from "@/app/components/forms/SubmitButton";
 import { useCommercialProfile } from "@/app/hooks/api/useCommercialProfile";
 import { normalizeTimeForInput } from "@/lib/utils/time";
 
+type SettingsFormState = {
+	workdayStartTime: string;
+	workdayEndTime: string;
+	deliveryVisitDurationMinutes: string;
+	routineVisitDurationMinutes: string;
+};
+
+const DEFAULT_SETTINGS_FORM_STATE: SettingsFormState = {
+	workdayStartTime: "",
+	workdayEndTime: "",
+	deliveryVisitDurationMinutes: "10",
+	routineVisitDurationMinutes: "35",
+};
+
 export default function CommercialSettingsForm() {
 	const { data, loading, error, save } = useCommercialProfile();
 	const [saving, setSaving] = useState(false);
 	const [success, setSuccess] = useState("");
+	const [draftFormState, setDraftFormState] =
+		useState<SettingsFormState | null>(null);
 
-	const [workdayStartTime, setWorkdayStartTime] = useState("");
-	const [workdayEndTime, setWorkdayEndTime] = useState("");
-	const [deliveryVisitDurationMinutes, setDeliveryVisitDurationMinutes] =
-		useState("10");
-	const [routineVisitDurationMinutes, setRoutineVisitDurationMinutes] =
-		useState("35");
-
-	useEffect(() => {
+	const persistedFormState = useMemo<SettingsFormState>(() => {
 		if (!data) {
-			return;
+			return DEFAULT_SETTINGS_FORM_STATE;
 		}
 
-		setWorkdayStartTime(normalizeTimeForInput(data.workday_start_time));
-		setWorkdayEndTime(normalizeTimeForInput(data.workday_end_time));
-		setDeliveryVisitDurationMinutes(
-			String(data.delivery_visit_duration_minutes ?? 10),
-		);
-		setRoutineVisitDurationMinutes(
-			String(data.routine_visit_duration_minutes ?? 35),
-		);
+		return {
+			workdayStartTime: normalizeTimeForInput(data.workday_start_time),
+			workdayEndTime: normalizeTimeForInput(data.workday_end_time),
+			deliveryVisitDurationMinutes: String(
+				data.delivery_visit_duration_minutes ?? 10,
+			),
+			routineVisitDurationMinutes: String(
+				data.routine_visit_duration_minutes ?? 35,
+			),
+		};
 	}, [data]);
+
+	const formState = draftFormState ?? persistedFormState;
 
 	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -41,14 +54,17 @@ export default function CommercialSettingsForm() {
 		setSuccess("");
 
 		const savedProfile = await save({
-			workdayStartTime: workdayStartTime || null,
-			workdayEndTime: workdayEndTime || null,
-			deliveryVisitDurationMinutes: Number(deliveryVisitDurationMinutes),
-			routineVisitDurationMinutes: Number(routineVisitDurationMinutes),
+			workdayStartTime: formState.workdayStartTime || null,
+			workdayEndTime: formState.workdayEndTime || null,
+			deliveryVisitDurationMinutes: Number(
+				formState.deliveryVisitDurationMinutes,
+			),
+			routineVisitDurationMinutes: Number(formState.routineVisitDurationMinutes),
 		});
 
 		if (savedProfile) {
 			setSuccess("Configuracion guardada correctamente.");
+			setDraftFormState(null);
 		}
 
 		setSaving(false);
@@ -89,40 +105,65 @@ export default function CommercialSettingsForm() {
 							className="grid gap-4 md:grid-cols-2"
 						>
 							<div>
-								<label className="mb-2 block text-sm font-medium text-slate-700">
+								<label
+									htmlFor="commercial-workday-start"
+									className="mb-2 block text-sm font-medium text-slate-700"
+								>
 									Inicio de jornada
 								</label>
 								<input
+									id="commercial-workday-start"
 									type="time"
-									value={workdayStartTime}
-									onChange={(event) => setWorkdayStartTime(event.target.value)}
+									value={formState.workdayStartTime}
+									onChange={(event) =>
+										setDraftFormState((currentState) => ({
+											...(currentState ?? formState),
+											workdayStartTime: event.target.value,
+										}))
+									}
 									className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
 								/>
 							</div>
 
 							<div>
-								<label className="mb-2 block text-sm font-medium text-slate-700">
+								<label
+									htmlFor="commercial-workday-end"
+									className="mb-2 block text-sm font-medium text-slate-700"
+								>
 									Fin de jornada
 								</label>
 								<input
+									id="commercial-workday-end"
 									type="time"
-									value={workdayEndTime}
-									onChange={(event) => setWorkdayEndTime(event.target.value)}
+									value={formState.workdayEndTime}
+									onChange={(event) =>
+										setDraftFormState((currentState) => ({
+											...(currentState ?? formState),
+											workdayEndTime: event.target.value,
+										}))
+									}
 									className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
 								/>
 							</div>
 
 							<div>
-								<label className="mb-2 block text-sm font-medium text-slate-700">
+								<label
+									htmlFor="commercial-delivery-visit-duration"
+									className="mb-2 block text-sm font-medium text-slate-700"
+								>
 									Duracion visita de reparto (min)
 								</label>
 								<input
+									id="commercial-delivery-visit-duration"
 									type="number"
 									min="1"
 									step="1"
-									value={deliveryVisitDurationMinutes}
+									value={formState.deliveryVisitDurationMinutes}
 									onChange={(event) =>
-										setDeliveryVisitDurationMinutes(event.target.value)
+										setDraftFormState((currentState) => ({
+											...(currentState ?? formState),
+											deliveryVisitDurationMinutes: event.target.value,
+										}))
 									}
 									className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
 									required
@@ -130,16 +171,23 @@ export default function CommercialSettingsForm() {
 							</div>
 
 							<div>
-								<label className="mb-2 block text-sm font-medium text-slate-700">
+								<label
+									htmlFor="commercial-routine-visit-duration"
+									className="mb-2 block text-sm font-medium text-slate-700"
+								>
 									Duracion visita rutinaria (min)
 								</label>
 								<input
+									id="commercial-routine-visit-duration"
 									type="number"
 									min="1"
 									step="1"
-									value={routineVisitDurationMinutes}
+									value={formState.routineVisitDurationMinutes}
 									onChange={(event) =>
-										setRoutineVisitDurationMinutes(event.target.value)
+										setDraftFormState((currentState) => ({
+											...(currentState ?? formState),
+											routineVisitDurationMinutes: event.target.value,
+										}))
 									}
 									className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
 									required

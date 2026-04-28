@@ -18,6 +18,7 @@ import ProfileFeedbackMessages from "@/app/components/users/profile/ProfileFeedb
 import ProfileActionsSection from "@/app/components/users/profile/ProfileActionsSection";
 import {
 	type FormDataState,
+	type CatalogOption,
 	type UserProfileCardProps,
 } from "@/app/components/users/profile/user-profile-card-types";
 import {
@@ -32,14 +33,16 @@ const CLIENT_ADDRESS_FIELDS: Array<keyof ClientFormDataState> = [
 	"province",
 ];
 
+const EMPTY_CATALOG_OPTIONS: CatalogOption[] = [];
+
 export default function UserProfileCard({
 	user,
 	clientProfile = null,
 	mode = "view",
 	title,
 	subtitle,
-	roles = [],
-	statuses = [],
+	roles = EMPTY_CATALOG_OPTIONS,
+	statuses = EMPTY_CATALOG_OPTIONS,
 	backHref,
 	submitLabel,
 	submitUrl,
@@ -57,7 +60,7 @@ export default function UserProfileCard({
 	const [isSaving, setIsSaving] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
-	const [formData, setFormData] = useState<FormDataState>(
+	const [formData, setFormData] = useState<FormDataState>(() =>
 		buildInitialFormData(user, clientProfile),
 	);
 	const [isUploadingImage, setIsUploadingImage] = useState(false);

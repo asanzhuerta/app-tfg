@@ -1,9 +1,36 @@
 import { formatDate } from "@/lib/utils/user-utils";
 import type { EntityTableItem } from "@/app/components/entity-table/entity-table-types";
 
+type AdminClientTableUser = {
+	name?: string | null;
+	email?: string | null;
+	phone?: string | null;
+	profile_image_url?: string | null;
+};
+
+type AdminClientTableCommercial = {
+	user?: AdminClientTableUser | null;
+};
+
+type AdminClientTableAssignment = {
+	assigned_at?: Date | string | null;
+	commercial?: AdminClientTableCommercial | null;
+};
+
+type AdminClientTableSource = {
+	id: string;
+	name: string;
+	contact_name?: string | null;
+	city?: string | null;
+	province?: string | null;
+	created_at?: Date | string | null;
+	user?: AdminClientTableUser | null;
+	commercialAssignments?: AdminClientTableAssignment[] | null;
+};
+
 // Adapta una entidad Cliente al formato visual reutilizable EntityTableItem.
 export function mapClientsToEntityTableItems(
-	clients: any[],
+	clients: AdminClientTableSource[],
 ): EntityTableItem[] {
 	return clients.map((client) => {
 		const activeAssignment = Array.isArray(client.commercialAssignments)
