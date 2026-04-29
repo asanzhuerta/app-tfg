@@ -77,3 +77,18 @@ export const COMMERCIAL_ROUTE_STATUS_IDS = {
 	COMPLETED: 3,
 	CANCELLED: 4,
 } as const;
+
+// -----------------------------------------------------------------------------
+// M3. Catalogo, productos y coloracion
+// -----------------------------------------------------------------------------
+
+export const PRODUCT_STATUS_IDS = {
+	ACTIVE: 1,
+	INACTIVE: 2,
+} as const;
+
+export const SUPPORT_RESOURCE_TYPE_IDS = {
+	TECHNICAL_SHEET: 1,
+	COMMERCIAL_CATALOG: 2,
+	TRAINING_MATERIAL: 3,
+} as const;
