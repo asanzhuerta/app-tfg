@@ -1,11 +1,10 @@
 import NavCard from "../components/NavCard";
 import PageTransition from "../components/animations/PageTransition";
-import { ClientsIcon } from "../components/IconsSVGs";
+import { ClientsIcon, ReportsIcon } from "../components/IconsSVGs";
 
-// Opciones de navegación para administradores
 const navItems = [
 	{
-		title: "Gestión de usuarios",
+		title: "Gestion de usuarios",
 		icon: <ClientsIcon className="h-6 w-6" />,
 		href: "/admin/users",
 	},
@@ -14,9 +13,13 @@ const navItems = [
 		icon: <ClientsIcon className="h-6 w-6" />,
 		href: "/admin/clients",
 	},
+	{
+		title: "Auditoria",
+		icon: <ReportsIcon className="h-6 w-6" />,
+		href: "/admin/audit",
+	},
 ];
 
-// Página de inicio para el admin panel.
 export default function AdminHome() {
 	return (
 		<PageTransition>
