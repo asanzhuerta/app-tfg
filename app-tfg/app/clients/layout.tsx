@@ -1,12 +1,15 @@
 import BottomNav from "@/app/components/basics/BottomNav";
+import { requireClientSession } from "@/lib/auth/require-session";
 import PageTransition from "../components/animations/PageTransition";
 
 // Layout específico para la sección de clientes
-export default function ClientLayout({
+export default async function ClientLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	await requireClientSession();
+
 	return (
 		<main className="app-bg flex min-h-screen w-full flex-col text-slate-800">
 			<div className="bg-overlay fixed inset-0 -z-10" />

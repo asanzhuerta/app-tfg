@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
+import { isPersistedAccessSessionActive } from "@/lib/typeorm/services/auth/access-session";
 import { findUserForLogin } from "@/lib/typeorm/services/auth/find-user-for-login";
 import { logAccessEvent } from "@/lib/typeorm/services/auth/log-access-event";
 import { registerSuccessfulLogin } from "@/lib/typeorm/services/auth/register-successful-login";
@@ -394,6 +395,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 		// Aquí copiamos al JWT los campos personalizados que devuelve authorize().
 		async jwt({ token, user }) {
 			if (user) {
+				if ("id" in user && typeof user.id === "string") {
+					token.sub = user.id;
+				}
 				if ("role" in user) token.role = user.role as string;
 				if ("phone" in user) token.phone = user.phone as string | null;
 				if ("name" in user) token.name = user.name as string | null;
@@ -403,6 +407,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 				}
 			}
 
+			const accessSessionId =
+				typeof token.accessSessionId === "string"
+					? token.accessSessionId
+					: null;
+			const userId = typeof token.sub === "string" ? token.sub : null;
+
+			if (!accessSessionId || !userId) {
+				return token;
+			}
+
+			const isActiveSession = await isPersistedAccessSessionActive({
+				sessionToken: accessSessionId,
+				userId,
+			});
+
+			if (!isActiveSession) {
+				return {} as typeof token;
+			}
+
 			return token;
 		},
 
@@ -410,19 +433,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 		// Aquí exponemos en session.user los datos que luego necesita el frontend
 		// y también el accessSessionId para comprobaciones adicionales si hace falta.
 		async session({ session, token }) {
-			if (session.user) {
-				session.user.id = token.sub ?? "";
-				session.user.role = typeof token.role === "string" ? token.role : "";
-				session.user.phone =
-					typeof token.phone === "string" ? token.phone : null;
-				session.user.name = typeof token.name === "string" ? token.name : null;
-				session.user.image =
-					typeof token.image === "string" ? token.image : null;
-				session.accessSessionId =
-					typeof token.accessSessionId === "string"
-						? token.accessSessionId
-						: undefined;
+			const accessSessionId =
+				typeof token.accessSessionId === "string"
+					? token.accessSessionId
+					: null;
+			const role = typeof token.role === "string" ? token.role : "";
+
+			if (!session.user || !token.sub || !role || !accessSessionId) {
+				return {} as typeof session;
 			}
+
+			session.user.id = token.sub;
+			session.user.role = role;
+			session.user.phone =
+				typeof token.phone === "string" ? token.phone : null;
+			session.user.name = typeof token.name === "string" ? token.name : null;
+			session.user.image =
+				typeof token.image === "string" ? token.image : null;
+			session.accessSessionId = accessSessionId;
 
 			return session;
 		},

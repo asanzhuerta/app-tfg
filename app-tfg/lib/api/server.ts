@@ -12,7 +12,7 @@ type ApiErrorLike = {
 
 export async function getSessionUser() {
 	const session = (await auth()) as SessionLike;
-	return session?.user ?? null;
+	return session?.user?.id ? session.user : null;
 }
 
 export async function requireRoleUser(role: string) {

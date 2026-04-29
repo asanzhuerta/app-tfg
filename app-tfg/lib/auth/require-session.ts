@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export async function requireAdminSession() {
 	const session = await auth();
 
-	if (!session) {
+	if (!session?.user?.id) {
 		redirect("/login");
 	}
 
@@ -20,7 +20,7 @@ export async function requireAdminSession() {
 export async function requireUserSession() {
 	const session = await auth();
 
-	if (!session) {
+	if (!session?.user?.id) {
 		redirect("/login");
 	}
 
@@ -31,11 +31,26 @@ export async function requireUserSession() {
 export async function requireCommercialSession() {
 	const session = await auth();
 
-	if (!session) {
+	if (!session?.user?.id) {
 		redirect("/login");
 	}
 
 	if (session.user?.role !== "commercial") {
+		redirect("/");
+	}
+
+	return session;
+}
+
+// Función de utilidad para proteger rutas exclusivas del área cliente.
+export async function requireClientSession() {
+	const session = await auth();
+
+	if (!session?.user?.id) {
+		redirect("/login");
+	}
+
+	if (session.user?.role !== "client") {
 		redirect("/");
 	}
 
