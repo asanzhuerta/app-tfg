@@ -6,6 +6,7 @@ import {
 	requireProduct,
 	requireProductCategory,
 	requireProductLineForCategory,
+	requireProductSubcategoryForLine,
 	requireProductStatus,
 	rethrowCatalogPersistenceError,
 } from "./catalog-internal";
@@ -14,6 +15,7 @@ type ListProductsInput = {
 	search?: string | null;
 	productCategoryId?: string | null;
 	productLineId?: string | null;
+	productSubcategoryId?: string | null;
 	statusId?: number | null;
 };
 
@@ -24,12 +26,14 @@ export async function listProducts(input: ListProductsInput = {}) {
 		.createQueryBuilder("product")
 		.leftJoinAndSelect("product.productCategory", "productCategory")
 		.leftJoinAndSelect("product.productLine", "productLine")
+		.leftJoinAndSelect("product.productSubcategory", "productSubcategory")
 		.leftJoinAndSelect("product.status", "status")
 		.orderBy("product.created_at", "DESC");
 
 	const search = String(input.search ?? "").trim();
 	const productCategoryId = String(input.productCategoryId ?? "").trim();
 	const productLineId = String(input.productLineId ?? "").trim();
+	const productSubcategoryId = String(input.productSubcategoryId ?? "").trim();
 	const statusId =
 		typeof input.statusId === "number" && Number.isInteger(input.statusId)
 			? input.statusId
@@ -47,6 +51,12 @@ export async function listProducts(input: ListProductsInput = {}) {
 		});
 	}
 
+	if (productSubcategoryId) {
+		query.andWhere("product.product_subcategory_id = :productSubcategoryId", {
+			productSubcategoryId,
+		});
+	}
+
 	if (statusId) {
 		query.andWhere("product.status_id = :statusId", {
 			statusId,
@@ -59,7 +69,7 @@ export async function listProducts(input: ListProductsInput = {}) {
 				product.name ILIKE :search
 				OR product.reference ILIKE :search
 				OR COALESCE(product.description, '') ILIKE :search
-				OR COALESCE(product.subcategory, '') ILIKE :search
+				OR COALESCE(productSubcategory.name, '') ILIKE :search
 				OR COALESCE(product.format, '') ILIKE :search
 				OR COALESCE(product.packing::text, '') ILIKE :search
 				OR COALESCE(product.supplier, '') ILIKE :search
@@ -79,6 +89,7 @@ export async function getProductById(id: string) {
 		.createQueryBuilder("product")
 		.leftJoinAndSelect("product.productCategory", "productCategory")
 		.leftJoinAndSelect("product.productLine", "productLine")
+		.leftJoinAndSelect("product.productSubcategory", "productSubcategory")
 		.leftJoinAndSelect("product.status", "status")
 		.leftJoinAndSelect("product.supportResources", "supportResources")
 		.leftJoinAndSelect("supportResources.resourceType", "resourceType")
@@ -104,6 +115,15 @@ export async function createProduct(input: AdminUpsertProductBody) {
 				String(normalized.productLineId),
 				String(normalized.productCategoryId),
 			);
+
+			if (normalized.productSubcategoryId) {
+				await requireProductSubcategoryForLine(
+					manager,
+					normalized.productSubcategoryId,
+					String(normalized.productLineId),
+				);
+			}
+
 			await requireProductStatus(manager, Number(normalized.statusId));
 
 			const repo = manager.getRepository(Product);
@@ -111,9 +131,9 @@ export async function createProduct(input: AdminUpsertProductBody) {
 				name: normalized.name,
 				reference: normalized.reference,
 				description: normalized.description ?? null,
-				subcategory: normalized.subcategory ?? null,
 				product_category_id: String(normalized.productCategoryId),
 				product_line_id: String(normalized.productLineId),
+				product_subcategory_id: normalized.productSubcategoryId ?? null,
 				image_url: normalized.imageUrl ?? null,
 				format: normalized.format ?? null,
 				packing: normalized.packing ?? null,
@@ -149,6 +169,10 @@ export async function updateProduct(input: { productId: string } & AdminUpsertPr
 				normalized.productCategoryId ?? product.product_category_id;
 			const nextProductLineId =
 				normalized.productLineId ?? product.product_line_id;
+			const nextProductSubcategoryId =
+				normalized.productSubcategoryId !== undefined
+					? normalized.productSubcategoryId
+					: product.product_subcategory_id;
 			const nextStatusId = normalized.statusId ?? product.status_id;
 
 			await requireProductCategory(manager, nextProductCategoryId);
@@ -157,6 +181,15 @@ export async function updateProduct(input: { productId: string } & AdminUpsertPr
 				nextProductLineId,
 				nextProductCategoryId,
 			);
+
+			if (nextProductSubcategoryId) {
+				await requireProductSubcategoryForLine(
+					manager,
+					nextProductSubcategoryId,
+					nextProductLineId,
+				);
+			}
+
 			await requireProductStatus(manager, nextStatusId);
 
 			if (normalized.name !== undefined) {
@@ -171,16 +204,16 @@ export async function updateProduct(input: { productId: string } & AdminUpsertPr
 				product.description = normalized.description;
 			}
 
-			if (normalized.subcategory !== undefined) {
-				product.subcategory = normalized.subcategory;
-			}
-
 			if (normalized.productCategoryId !== undefined) {
 				product.product_category_id = normalized.productCategoryId;
 			}
 
 			if (normalized.productLineId !== undefined) {
 				product.product_line_id = normalized.productLineId;
+			}
+
+			if (normalized.productSubcategoryId !== undefined) {
+				product.product_subcategory_id = normalized.productSubcategoryId;
 			}
 
 			if (normalized.imageUrl !== undefined) {

@@ -27,6 +27,7 @@ export async function GET(request: Request) {
 			search: searchParams.get("search"),
 			productCategoryId: searchParams.get("productCategoryId"),
 			productLineId: searchParams.get("productLineId"),
+			productSubcategoryId: searchParams.get("productSubcategoryId"),
 			statusId: getOptionalNumberParam(searchParams, "statusId"),
 		});
 

@@ -34,6 +34,18 @@ export type ProductLine = {
 	productCategory?: ProductCategory | null;
 };
 
+export type ProductSubcategory = {
+	id: string;
+	name: string;
+	description: string | null;
+	product_line_id: string;
+	image_url: string | null;
+	display_order: number;
+	created_at: string;
+	updated_at: string;
+	productLine?: ProductLine | null;
+};
+
 export type SupportResource = {
 	id: string;
 	title: string;
@@ -73,9 +85,9 @@ export type Product = {
 	name: string;
 	reference: string;
 	description: string | null;
-	subcategory: string | null;
 	product_category_id: string;
 	product_line_id: string;
+	product_subcategory_id: string | null;
 	image_url: string | null;
 	format: string | null;
 	packing: number | null;
@@ -87,6 +99,7 @@ export type Product = {
 	updated_at: string;
 	productCategory?: ProductCategory | null;
 	productLine?: ProductLine | null;
+	productSubcategory?: ProductSubcategory | null;
 	status?: ProductStatus | null;
 	supportResources?: SupportResource[] | null;
 };
@@ -105,13 +118,21 @@ export type AdminUpsertProductLineBody = {
 	displayOrder?: number | string | null;
 };
 
+export type AdminUpsertProductSubcategoryBody = {
+	name?: string;
+	description?: string | null;
+	productLineId?: string;
+	imageUrl?: string | null;
+	displayOrder?: number | string | null;
+};
+
 export type AdminUpsertProductBody = {
 	name?: string;
 	reference?: string;
 	description?: string | null;
-	subcategory?: string | null;
 	productCategoryId?: string;
 	productLineId?: string;
+	productSubcategoryId?: string | null;
 	imageUrl?: string | null;
 	format?: string | null;
 	packing?: number | string | null;
@@ -173,9 +194,9 @@ export function buildAdminUpsertProductInput(body: AdminUpsertProductBody) {
 		name: body.name,
 		reference: body.reference,
 		description: body.description,
-		subcategory: body.subcategory,
 		productCategoryId: body.productCategoryId,
 		productLineId: body.productLineId,
+		productSubcategoryId: body.productSubcategoryId,
 		imageUrl: body.imageUrl,
 		format: body.format,
 		packing: body.packing,
@@ -183,6 +204,18 @@ export function buildAdminUpsertProductInput(body: AdminUpsertProductBody) {
 		statusId: body.statusId,
 		basePrice: body.basePrice,
 		supplier: body.supplier,
+	};
+}
+
+export function buildAdminUpsertProductSubcategoryInput(
+	body: AdminUpsertProductSubcategoryBody,
+) {
+	return {
+		name: body.name,
+		description: body.description,
+		productLineId: body.productLineId,
+		imageUrl: body.imageUrl,
+		displayOrder: body.displayOrder,
 	};
 }
 

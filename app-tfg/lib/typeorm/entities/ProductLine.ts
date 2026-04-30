@@ -10,6 +10,7 @@ import {
 import type { Relation } from "typeorm";
 import { ProductCategory } from "./ProductCategory";
 import { Product } from "./Product";
+import { ProductSubcategory } from "./ProductSubcategory";
 import { SupportResource } from "./SupportResource";
 import { ColorChart } from "./ColorChart";
 
@@ -47,6 +48,12 @@ export class ProductLine {
 
 	@OneToMany(() => Product, (product) => product.productLine)
 	products!: Relation<Product[]>;
+
+	@OneToMany(
+		() => ProductSubcategory,
+		(productSubcategory) => productSubcategory.productLine,
+	)
+	productSubcategories!: Relation<ProductSubcategory[]>;
 
 	@OneToMany(
 		() => SupportResource,

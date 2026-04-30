@@ -4,6 +4,7 @@ import type {
 	AdminUpsertProductBody,
 	AdminUpsertProductCategoryBody,
 	AdminUpsertProductLineBody,
+	AdminUpsertProductSubcategoryBody,
 	AdminUpsertSupportResourceBody,
 } from "@/lib/contracts/product-catalog";
 import { isValidCloudinaryImageUrl } from "@/lib/cloudinary";
@@ -34,13 +35,21 @@ export type NormalizedProductLineWriteInput = {
 	displayOrder?: number;
 };
 
+export type NormalizedProductSubcategoryWriteInput = {
+	name?: string;
+	description?: string | null;
+	productLineId?: string;
+	imageUrl?: string | null;
+	displayOrder?: number;
+};
+
 export type NormalizedProductWriteInput = {
 	name?: string;
 	reference?: string;
 	description?: string | null;
-	subcategory?: string | null;
 	productCategoryId?: string;
 	productLineId?: string;
+	productSubcategoryId?: string | null;
 	imageUrl?: string | null;
 	format?: string | null;
 	packing?: number | null;
@@ -367,6 +376,39 @@ export function normalizeProductLineWriteInput(
 	};
 }
 
+export function normalizeProductSubcategoryWriteInput(
+	input: AdminUpsertProductSubcategoryBody,
+	options: NormalizeOptions = {},
+): NormalizedProductSubcategoryWriteInput {
+	return {
+		name:
+			input.name !== undefined || options.required
+				? normalizeRequiredTextField(
+						input.name,
+						"El nombre de la subcategoria",
+						"PRODUCT_SUBCATEGORY_NAME_REQUIRED",
+				  )
+				: undefined,
+		description: normalizeOptionalTextField(input.description),
+		productLineId: normalizeUuidField(
+			input.productLineId,
+			"La linea comercial de la subcategoria",
+			"INVALID_PRODUCT_SUBCATEGORY_PRODUCT_LINE_ID",
+			options,
+		),
+		imageUrl: normalizeOptionalCloudinaryImageField(
+			input.imageUrl,
+			"La imagen de la subcategoria",
+			"INVALID_PRODUCT_SUBCATEGORY_IMAGE_URL",
+		),
+		displayOrder: normalizeNonNegativeIntegerField(
+			input.displayOrder,
+			"El orden de visualizacion de la subcategoria",
+			"INVALID_PRODUCT_SUBCATEGORY_DISPLAY_ORDER",
+		),
+	};
+}
+
 export function normalizeProductWriteInput(
 	input: AdminUpsertProductBody,
 	options: NormalizeOptions = {},
@@ -389,7 +431,6 @@ export function normalizeProductWriteInput(
 				  )
 				: undefined,
 		description: normalizeOptionalTextField(input.description),
-		subcategory: normalizeOptionalTextField(input.subcategory),
 		productCategoryId: normalizeUuidField(
 			input.productCategoryId,
 			"La categoria del producto",
@@ -401,6 +442,11 @@ export function normalizeProductWriteInput(
 			"La linea comercial del producto",
 			"INVALID_PRODUCT_LINE_ID",
 			options,
+		),
+		productSubcategoryId: normalizeNullableUuidField(
+			input.productSubcategoryId,
+			"La subcategoria del producto",
+			"INVALID_PRODUCT_SUBCATEGORY_ID",
 		),
 		imageUrl: normalizeOptionalCloudinaryImageField(
 			input.imageUrl,

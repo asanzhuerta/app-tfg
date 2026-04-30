@@ -27,6 +27,7 @@ import { ProductStatus } from "./entities/ProductStatus";
 import { SupportResourceType } from "./entities/SupportResourceType";
 import { ProductCategory } from "./entities/ProductCategory";
 import { ProductLine } from "./entities/ProductLine";
+import { ProductSubcategory } from "./entities/ProductSubcategory";
 import { Product } from "./entities/Product";
 import { SupportResource } from "./entities/SupportResource";
 import { ColorChart } from "./entities/ColorChart";
@@ -62,6 +63,7 @@ const CliDataSource = new DataSource({
 		SupportResourceType,
 		ProductCategory,
 		ProductLine,
+		ProductSubcategory,
 		Product,
 		SupportResource,
 		ColorChart,

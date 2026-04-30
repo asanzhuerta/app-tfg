@@ -12,6 +12,7 @@ import {
 import type { Relation } from "typeorm";
 import { ProductCategory } from "./ProductCategory";
 import { ProductLine } from "./ProductLine";
+import { ProductSubcategory } from "./ProductSubcategory";
 import { ProductStatus } from "./ProductStatus";
 import { SupportResource } from "./SupportResource";
 
@@ -19,6 +20,7 @@ import { SupportResource } from "./SupportResource";
 @Index("products_name_index", ["name"])
 @Index("products_product_category_id_index", ["product_category_id"])
 @Index("products_product_line_id_index", ["product_line_id"])
+@Index("products_product_subcategory_id_index", ["product_subcategory_id"])
 @Index("products_status_id_index", ["status_id"])
 export class Product {
 	@PrimaryGeneratedColumn("uuid")
@@ -33,14 +35,14 @@ export class Product {
 	@Column({ type: "text", nullable: true })
 	description!: string | null;
 
-	@Column({ type: "text", nullable: true })
-	subcategory!: string | null;
-
 	@Column({ type: "uuid" })
 	product_category_id!: string;
 
 	@Column({ type: "uuid" })
 	product_line_id!: string;
+
+	@Column({ type: "uuid", nullable: true })
+	product_subcategory_id!: string | null;
 
 	@Column({ type: "text", nullable: true })
 	image_url!: string | null;
@@ -82,6 +84,23 @@ export class Product {
 		},
 	])
 	productLine!: Relation<ProductLine>;
+
+	@ManyToOne(() => ProductSubcategory, {
+		onDelete: "SET NULL",
+		onUpdate: "CASCADE",
+		nullable: true,
+	})
+	@JoinColumn([
+		{
+			name: "product_subcategory_id",
+			referencedColumnName: "id",
+		},
+		{
+			name: "product_line_id",
+			referencedColumnName: "product_line_id",
+		},
+	])
+	productSubcategory!: Relation<ProductSubcategory | null>;
 
 	@ManyToOne(() => ProductStatus, {
 		onDelete: "RESTRICT",

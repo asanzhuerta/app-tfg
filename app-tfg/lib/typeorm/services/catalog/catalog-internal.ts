@@ -1,7 +1,12 @@
 import { QueryFailedError } from "typeorm";
 import type { EntityManager } from "typeorm";
+import {
+	deleteImageByPublicId,
+	extractPublicIdFromUrl,
+} from "@/lib/cloudinary";
 import { ProductCategory } from "@/lib/typeorm/entities/ProductCategory";
 import { ProductLine } from "@/lib/typeorm/entities/ProductLine";
+import { ProductSubcategory } from "@/lib/typeorm/entities/ProductSubcategory";
 import { ProductStatus } from "@/lib/typeorm/entities/ProductStatus";
 import { Product } from "@/lib/typeorm/entities/Product";
 import { SupportResourceType } from "@/lib/typeorm/entities/SupportResourceType";
@@ -26,6 +31,11 @@ const CONSTRAINT_ERRORS: Record<
 	UQ_product_lines_name: {
 		message: "Ya existe una linea comercial con ese nombre",
 		code: "DUPLICATE_PRODUCT_LINE_NAME",
+		status: 409,
+	},
+	product_subcategories_product_line_id_name_unique: {
+		message: "Ya existe una subcategoria con ese nombre dentro de la linea indicada",
+		code: "DUPLICATE_PRODUCT_SUBCATEGORY_NAME",
 		status: 409,
 	},
 	UQ_products_reference: {
@@ -173,6 +183,51 @@ export async function requireProductLineForCategory(
 	return productLine;
 }
 
+export async function requireProductSubcategory(
+	manager: EntityManager,
+	id: string,
+) {
+	const productSubcategory = await manager
+		.getRepository(ProductSubcategory)
+		.findOne({
+			where: { id },
+			relations: {
+				productLine: true,
+			},
+		});
+
+	if (!productSubcategory) {
+		throw new CatalogServiceError(
+			"Subcategoria de producto no encontrada",
+			404,
+			"PRODUCT_SUBCATEGORY_NOT_FOUND",
+		);
+	}
+
+	return productSubcategory;
+}
+
+export async function requireProductSubcategoryForLine(
+	manager: EntityManager,
+	productSubcategoryId: string,
+	productLineId: string,
+) {
+	const productSubcategory = await requireProductSubcategory(
+		manager,
+		productSubcategoryId,
+	);
+
+	if (productSubcategory.product_line_id !== productLineId) {
+		throw new CatalogServiceError(
+			"La subcategoria no pertenece a la linea comercial indicada",
+			400,
+			"PRODUCT_SUBCATEGORY_LINE_MISMATCH",
+		);
+	}
+
+	return productSubcategory;
+}
+
 export async function requireProductStatus(manager: EntityManager, id: number) {
 	const status = await manager.getRepository(ProductStatus).findOne({
 		where: { id },
@@ -195,6 +250,7 @@ export async function requireProduct(manager: EntityManager, id: string) {
 		relations: {
 			productCategory: true,
 			productLine: true,
+			productSubcategory: true,
 			status: true,
 		},
 	});
@@ -329,4 +385,23 @@ export async function requireColorReference(manager: EntityManager, id: string) 
 	}
 
 	return colorReference;
+}
+
+export async function cleanupCatalogImageReplacement(
+	previousImageUrl: string | null | undefined,
+	nextImageUrl: string | null | undefined,
+	context: string,
+) {
+	const previousPublicId = extractPublicIdFromUrl(previousImageUrl);
+	const nextPublicId = extractPublicIdFromUrl(nextImageUrl);
+
+	if (!previousPublicId || previousPublicId === nextPublicId) {
+		return;
+	}
+
+	try {
+		await deleteImageByPublicId(previousPublicId);
+	} catch (error) {
+		console.error(`[${context}] Error borrando imagen anterior de Cloudinary:`, error);
+	}
 }
