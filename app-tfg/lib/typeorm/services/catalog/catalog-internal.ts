@@ -1,9 +1,6 @@
 import { QueryFailedError } from "typeorm";
 import type { EntityManager } from "typeorm";
-import {
-	deleteImageByPublicId,
-	extractPublicIdFromUrl,
-} from "@/lib/cloudinary";
+import { deleteReplacedCloudinaryImage } from "@/lib/cloudinary";
 import { ProductCategory } from "@/lib/typeorm/entities/ProductCategory";
 import { ProductLine } from "@/lib/typeorm/entities/ProductLine";
 import { ProductSubcategory } from "@/lib/typeorm/entities/ProductSubcategory";
@@ -392,15 +389,8 @@ export async function cleanupCatalogImageReplacement(
 	nextImageUrl: string | null | undefined,
 	context: string,
 ) {
-	const previousPublicId = extractPublicIdFromUrl(previousImageUrl);
-	const nextPublicId = extractPublicIdFromUrl(nextImageUrl);
-
-	if (!previousPublicId || previousPublicId === nextPublicId) {
-		return;
-	}
-
 	try {
-		await deleteImageByPublicId(previousPublicId);
+		await deleteReplacedCloudinaryImage(previousImageUrl, nextImageUrl);
 	} catch (error) {
 		console.error(`[${context}] Error borrando imagen anterior de Cloudinary:`, error);
 	}
