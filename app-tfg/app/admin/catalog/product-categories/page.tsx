@@ -13,22 +13,8 @@ function mapProductCategoryToItem(
 		category: null,
 		status: null,
 		primaryDate: String(9999 - category.display_order).padStart(4, "0"),
-		badges: [
-			{
-				label: `Orden ${category.display_order}`,
-				className: "bg-slate-100 text-slate-700 border border-slate-200",
-			},
-		],
-		fields: [
-			{
-				label: "Descripcion",
-				value: category.description || "-",
-			},
-			{
-				label: "Orden",
-				value: String(category.display_order),
-			},
-		],
+		badges: [],
+		fields: [],
 		actions: [
 			{
 				label: "Editar",
@@ -63,6 +49,9 @@ export default async function AdminProductCategoriesPage() {
 					},
 				]}
 				tableConfig={{
+					cardVariant: "headline",
+					gridClassName:
+						"grid grid-cols-1 gap-3 p-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
 					emptyMessage: "No hay categorias registradas todavia.",
 				}}
 			/>

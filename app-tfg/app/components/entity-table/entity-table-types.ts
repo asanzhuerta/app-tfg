@@ -23,6 +23,8 @@ export type EntityTableExtraFilter = {
 	allLabel?: string;
 };
 
+export type EntityTableCardVariant = "default" | "headline" | "media";
+
 export type EntityTableItem = {
 	id: string;
 	title: string;
@@ -48,6 +50,8 @@ export type EntityTableConfig = {
 	defaultHideInactive?: boolean;
 	emptyMessage?: string;
 	extraFilters?: EntityTableExtraFilter[];
+	cardVariant?: EntityTableCardVariant;
+	gridClassName?: string;
 };
 
 export type EntitySortField =

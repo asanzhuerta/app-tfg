@@ -3,6 +3,25 @@ import CatalogAdminWorkspace from "@/app/components/catalog-admin/CatalogAdminWo
 import type { EntityTableItem } from "@/app/components/entity-table/entity-table-types";
 import { listProductLines } from "@/lib/typeorm/services/catalog/product-line";
 
+function getCategoryBadgeClass(categoryName: string | undefined) {
+	switch (categoryName) {
+		case "COLORACION":
+			return "bg-sky-100 text-sky-700 border border-sky-200";
+		case "FORMA":
+			return "bg-violet-100 text-violet-700 border border-violet-200";
+		case "ALTO RENDIMIENTO":
+			return "bg-amber-100 text-amber-700 border border-amber-200";
+		case "ACABADO":
+			return "bg-emerald-100 text-emerald-700 border border-emerald-200";
+		case "HOMBRE":
+			return "bg-slate-200 text-slate-700 border border-slate-300";
+		case "CUIDADO CAPILAR":
+			return "bg-rose-100 text-rose-700 border border-rose-200";
+		default:
+			return "bg-slate-100 text-slate-700 border border-slate-200";
+	}
+}
+
 function mapProductLineToItem(
 	productLine: Awaited<ReturnType<typeof listProductLines>>[number],
 ): EntityTableItem {
@@ -17,19 +36,10 @@ function mapProductLineToItem(
 		badges: [
 			{
 				label: productLine.productCategory?.name ?? "Sin categoria",
-				className: "bg-sky-100 text-sky-700 border border-sky-200",
-			},
-			{
-				label: `Orden ${productLine.display_order}`,
-				className: "bg-slate-100 text-slate-700 border border-slate-200",
+				className: getCategoryBadgeClass(productLine.productCategory?.name),
 			},
 		],
-		fields: [
-			{ label: "Descripcion", value: productLine.description || "-" },
-			{ label: "Categoria", value: productLine.productCategory?.name || "-" },
-			{ label: "Orden", value: String(productLine.display_order) },
-			{ label: "Imagen", value: productLine.image_url ? "Disponible" : "-" },
-		],
+		fields: [],
 		actions: [
 			{
 				label: "Editar",
@@ -79,6 +89,9 @@ export default async function AdminProductLinesPage() {
 					categoryLabel: "Categoria",
 					statusLabel: "Imagen",
 					showImageFilter: true,
+					cardVariant: "media",
+					gridClassName:
+						"grid grid-cols-1 gap-3 p-3 lg:grid-cols-2 2xl:grid-cols-3",
 					emptyMessage: "No hay lineas comerciales registradas todavia.",
 				}}
 			/>

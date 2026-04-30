@@ -52,6 +52,7 @@ export default function EntityTable({ items, config }: Props) {
 				<EntityTableView
 					items={table.filteredAndSortedItems}
 					emptyMessage={config?.emptyMessage}
+					config={config}
 				/>
 			</div>
 		</PageTransition>

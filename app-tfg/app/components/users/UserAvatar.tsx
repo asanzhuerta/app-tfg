@@ -8,6 +8,7 @@ type UserAvatarProps = {
 	name?: string | null;
 	imageUrl?: string | null;
 	size?: "sm" | "md" | "lg" | "xl";
+	shape?: "circle" | "soft-square";
 	className?: string;
 };
 
@@ -45,6 +46,7 @@ export default function UserAvatar({
 	name,
 	imageUrl,
 	size = "md",
+	shape = "circle",
 	className = "",
 }: UserAvatarProps) {
 	const userInitial = getUserInitial(name);
@@ -95,10 +97,11 @@ export default function UserAvatar({
 		imageCheck.checkedUrl === imageUrl &&
 		imageCheck.isValid;
 	const avatarSize = sizeClasses[size];
+	const shapeClass = shape === "soft-square" ? "rounded-2xl" : "rounded-full";
 
 	return (
 		<div
-			className={`relative flex items-center justify-center overflow-hidden rounded-full bg-slate-200 font-semibold text-slate-600 ${avatarSize.container} ${className}`}
+			className={`relative flex items-center justify-center overflow-hidden bg-slate-200 font-semibold text-slate-600 ${shapeClass} ${avatarSize.container} ${className}`}
 		>
 			{shouldShowImage ? (
 				<Image
