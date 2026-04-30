@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# sql auxiliares
+*.sql
+
 # Archivos generados por next-pwa
 public/sw.js
 public/workbox-*.js
