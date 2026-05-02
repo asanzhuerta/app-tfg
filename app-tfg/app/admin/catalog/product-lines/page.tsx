@@ -1,29 +1,16 @@
 import H1Title from "@/app/components/H1Title";
+import {
+	buildCategoryBadgeClassMap,
+	getCategoryBadgeClass,
+} from "@/app/components/catalog/category-badge-palette";
 import CatalogAdminWorkspace from "@/app/components/catalog-admin/CatalogAdminWorkspace";
 import type { EntityTableItem } from "@/app/components/entity-table/entity-table-types";
+import { listProductCategories } from "@/lib/typeorm/services/catalog/product-category";
 import { listProductLines } from "@/lib/typeorm/services/catalog/product-line";
-
-function getCategoryBadgeClass(categoryName: string | undefined) {
-	switch (categoryName) {
-		case "COLORACION":
-			return "bg-sky-100 text-sky-700 border border-sky-200";
-		case "FORMA":
-			return "bg-violet-100 text-violet-700 border border-violet-200";
-		case "ALTO RENDIMIENTO":
-			return "bg-amber-100 text-amber-700 border border-amber-200";
-		case "ACABADO":
-			return "bg-emerald-100 text-emerald-700 border border-emerald-200";
-		case "HOMBRE":
-			return "bg-slate-200 text-slate-700 border border-slate-300";
-		case "CUIDADO CAPILAR":
-			return "bg-rose-100 text-rose-700 border border-rose-200";
-		default:
-			return "bg-slate-100 text-slate-700 border border-slate-200";
-	}
-}
 
 function mapProductLineToItem(
 	productLine: Awaited<ReturnType<typeof listProductLines>>[number],
+	categoryBadgeClassMap: Map<string, string>,
 ): EntityTableItem {
 	return {
 		id: productLine.id,
@@ -36,7 +23,10 @@ function mapProductLineToItem(
 		badges: [
 			{
 				label: productLine.productCategory?.name ?? "Sin categoria",
-				className: getCategoryBadgeClass(productLine.productCategory?.name),
+				className: getCategoryBadgeClass(
+					productLine.productCategory?.name,
+					categoryBadgeClassMap,
+				),
 			},
 		],
 		fields: [],
@@ -58,7 +48,13 @@ function mapProductLineToItem(
 }
 
 export default async function AdminProductLinesPage() {
-	const productLines = await listProductLines();
+	const [productLines, productCategories] = await Promise.all([
+		listProductLines(),
+		listProductCategories(),
+	]);
+	const categoryBadgeClassMap = buildCategoryBadgeClassMap(
+		productCategories.map((productCategory) => productCategory.name),
+	);
 
 	return (
 		<div className="space-y-6">
@@ -70,7 +66,9 @@ export default async function AdminProductLinesPage() {
 			<CatalogAdminWorkspace
 				entityLabel="linea comercial"
 				basePath="/admin/catalog/product-lines"
-				items={productLines.map(mapProductLineToItem)}
+				items={productLines.map((productLine) =>
+					mapProductLineToItem(productLine, categoryBadgeClassMap),
+				)}
 				metrics={[
 					{ label: "lineas", value: productLines.length },
 					{

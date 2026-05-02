@@ -1,29 +1,16 @@
 import H1Title from "@/app/components/H1Title";
+import {
+	buildCategoryBadgeClassMap,
+	getCategoryBadgeClass,
+} from "@/app/components/catalog/category-badge-palette";
 import CatalogAdminWorkspace from "@/app/components/catalog-admin/CatalogAdminWorkspace";
 import type { EntityTableItem } from "@/app/components/entity-table/entity-table-types";
+import { listProductCategories } from "@/lib/typeorm/services/catalog/product-category";
 import { listProductSubcategories } from "@/lib/typeorm/services/catalog/product-subcategory";
-
-function getCategoryBadgeClass(categoryName: string | undefined) {
-	switch (categoryName) {
-		case "COLORACION":
-			return "bg-sky-100 text-sky-700 border border-sky-200";
-		case "FORMA":
-			return "bg-violet-100 text-violet-700 border border-violet-200";
-		case "ALTO RENDIMIENTO":
-			return "bg-amber-100 text-amber-700 border border-amber-200";
-		case "ACABADO":
-			return "bg-emerald-100 text-emerald-700 border border-emerald-200";
-		case "HOMBRE":
-			return "bg-slate-200 text-slate-700 border border-slate-300";
-		case "CUIDADO CAPILAR":
-			return "bg-rose-100 text-rose-700 border border-rose-200";
-		default:
-			return "bg-slate-100 text-slate-700 border border-slate-200";
-	}
-}
 
 function mapProductSubcategoryToItem(
 	productSubcategory: Awaited<ReturnType<typeof listProductSubcategories>>[number],
+	categoryBadgeClassMap: Map<string, string>,
 ): EntityTableItem {
 	return {
 		id: productSubcategory.id,
@@ -41,6 +28,7 @@ function mapProductSubcategoryToItem(
 					"Sin categoria",
 				className: getCategoryBadgeClass(
 					productSubcategory.productLine?.productCategory?.name,
+					categoryBadgeClassMap,
 				),
 			},
 			{
@@ -71,7 +59,13 @@ function mapProductSubcategoryToItem(
 }
 
 export default async function AdminProductSubcategoriesPage() {
-	const productSubcategories = await listProductSubcategories();
+	const [productSubcategories, productCategories] = await Promise.all([
+		listProductSubcategories(),
+		listProductCategories(),
+	]);
+	const categoryBadgeClassMap = buildCategoryBadgeClassMap(
+		productCategories.map((productCategory) => productCategory.name),
+	);
 
 	return (
 		<div className="space-y-6">
@@ -83,7 +77,12 @@ export default async function AdminProductSubcategoriesPage() {
 			<CatalogAdminWorkspace
 				entityLabel="subcategoria"
 				basePath="/admin/catalog/product-subcategories"
-				items={productSubcategories.map(mapProductSubcategoryToItem)}
+				items={productSubcategories.map((productSubcategory) =>
+					mapProductSubcategoryToItem(
+						productSubcategory,
+						categoryBadgeClassMap,
+					),
+				)}
 				metrics={[
 					{ label: "subcategorias", value: productSubcategories.length },
 					{

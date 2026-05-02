@@ -8,6 +8,7 @@ type Props = {
 	subtitle: string;
 	colorCharts: Awaited<ReturnType<typeof listColorCharts>>;
 	colorReferences: Awaited<ReturnType<typeof listColorReferences>>;
+	categoryBadgeClassMap: Map<string, string>;
 	detailBasePath: string;
 };
 
@@ -16,6 +17,7 @@ export default function ColorChartsExplorer({
 	subtitle,
 	colorCharts,
 	colorReferences,
+	categoryBadgeClassMap,
 	detailBasePath,
 }: Props) {
 	const lineCount = new Set(
@@ -76,6 +78,7 @@ export default function ColorChartsExplorer({
 				items={mapColorChartsToEntityTableItems(
 					colorCharts,
 					referenceCountByChartId,
+					categoryBadgeClassMap,
 					detailBasePath,
 				)}
 				config={{

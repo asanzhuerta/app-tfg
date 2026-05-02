@@ -2,36 +2,7 @@ import type { EntityTableBadge, EntityTableItem } from "@/app/components/entity-
 import { formatDateShort } from "@/lib/utils/user-utils";
 import type { listColorCharts } from "@/lib/typeorm/services/catalog/color-chart";
 import type { listProducts } from "@/lib/typeorm/services/catalog/product";
-
-function normalizeTag(value: string | null | undefined) {
-	return String(value ?? "")
-		.trim()
-		.normalize("NFD")
-		.replace(/\p{Diacritic}/gu, "")
-		.toLowerCase();
-}
-
-function getCategoryBadgeClass(categoryName: string | null | undefined) {
-	const normalized = normalizeTag(categoryName);
-
-	if (normalized.includes("color")) {
-		return "bg-fuchsia-100 text-fuchsia-700 border border-fuchsia-200";
-	}
-
-	if (normalized.includes("acabado")) {
-		return "bg-amber-100 text-amber-700 border border-amber-200";
-	}
-
-	if (normalized.includes("capilar")) {
-		return "bg-emerald-100 text-emerald-700 border border-emerald-200";
-	}
-
-	if (normalized.includes("hombre")) {
-		return "bg-slate-100 text-slate-700 border border-slate-200";
-	}
-
-	return "bg-sky-100 text-sky-700 border border-sky-200";
-}
+import { getCategoryBadgeClass } from "./category-badge-palette";
 
 function buildBadge(
 	label: string | null | undefined,
@@ -118,6 +89,7 @@ export function mapCatalogProductsToEntityTableItems(
 export function mapColorChartsToEntityTableItems(
 	colorCharts: Awaited<ReturnType<typeof listColorCharts>>,
 	referenceCountByChartId: Record<string, number>,
+	categoryBadgeClassMap: Map<string, string>,
 	detailBasePath: string,
 ): EntityTableItem[] {
 	return colorCharts.map((colorChart) => ({
@@ -130,7 +102,10 @@ export function mapColorChartsToEntityTableItems(
 		badges: [
 			buildBadge(
 				colorChart.productLine?.productCategory?.name,
-				getCategoryBadgeClass(colorChart.productLine?.productCategory?.name),
+				getCategoryBadgeClass(
+					colorChart.productLine?.productCategory?.name,
+					categoryBadgeClassMap,
+				),
 			),
 			buildBadge(
 				colorChart.productLine?.name,

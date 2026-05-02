@@ -87,6 +87,8 @@ function EntityCard({
 						imageUrl={item.imageUrl}
 						size={isMediaVariant ? "xl" : "md"}
 						shape={isMediaVariant ? "soft-square" : "circle"}
+						imageFit={isMediaVariant ? "contain" : "cover"}
+						imageBackgroundClass="bg-white"
 						className="flex-shrink-0"
 					/>
 				) : null}

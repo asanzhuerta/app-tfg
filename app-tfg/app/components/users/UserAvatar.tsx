@@ -9,6 +9,8 @@ type UserAvatarProps = {
 	imageUrl?: string | null;
 	size?: "sm" | "md" | "lg" | "xl";
 	shape?: "circle" | "soft-square";
+	imageFit?: "cover" | "contain";
+	imageBackgroundClass?: string;
 	className?: string;
 };
 
@@ -47,6 +49,8 @@ export default function UserAvatar({
 	imageUrl,
 	size = "md",
 	shape = "circle",
+	imageFit = "cover",
+	imageBackgroundClass = "bg-white",
 	className = "",
 }: UserAvatarProps) {
 	const userInitial = getUserInitial(name);
@@ -98,10 +102,17 @@ export default function UserAvatar({
 		imageCheck.isValid;
 	const avatarSize = sizeClasses[size];
 	const shapeClass = shape === "soft-square" ? "rounded-2xl" : "rounded-full";
+	const containerBackgroundClass = shouldShowImage
+		? imageBackgroundClass
+		: "bg-slate-200";
+	const imageClassName =
+		imageFit === "contain"
+			? "h-full w-full object-contain p-2"
+			: "h-full w-full object-cover";
 
 	return (
 		<div
-			className={`relative flex items-center justify-center overflow-hidden bg-slate-200 font-semibold text-slate-600 ${shapeClass} ${avatarSize.container} ${className}`}
+			className={`relative flex items-center justify-center overflow-hidden font-semibold text-slate-600 ${containerBackgroundClass} ${shapeClass} ${avatarSize.container} ${className}`}
 		>
 			{shouldShowImage ? (
 				<Image
@@ -109,7 +120,7 @@ export default function UserAvatar({
 					alt={name ?? "Avatar de usuario"}
 					width={avatarSize.pixels}
 					height={avatarSize.pixels}
-					className="h-full w-full object-cover"
+					className={imageClassName}
 					unoptimized={false}
 				/>
 			) : (
