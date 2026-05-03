@@ -5,28 +5,61 @@ import {
 } from "@/app/admin/catalog/_shared/catalog-form-config";
 import CatalogAdminForm from "@/app/components/catalog-admin/CatalogAdminForm";
 import { listProductLines } from "@/lib/typeorm/services/catalog/product-line";
+import { listProductSubcategories } from "@/lib/typeorm/services/catalog/product-subcategory";
 
-export default async function NewProductSubcategoryPage() {
-	const productLines = await listProductLines();
+type Props = {
+	searchParams?: Promise<{
+		productLineId?: string | string[];
+	}>;
+};
+
+type NewProductSubcategorySearchParams = {
+	productLineId?: string | string[];
+};
+
+function buildBackHref(productLineId: string | null) {
+	if (!productLineId) {
+		return "/admin/catalog/product-lines";
+	}
+
+	return `/admin/catalog/product-lines?expandedLineId=${encodeURIComponent(productLineId)}`;
+}
+
+export default async function NewProductSubcategoryPage({
+	searchParams,
+}: Props) {
+	const [{ productLineId }, productLines, productSubcategories] = await Promise.all([
+		searchParams ?? Promise.resolve<NewProductSubcategorySearchParams>({}),
+		listProductLines(),
+		listProductSubcategories(),
+	]);
+	const resolvedProductLineId = Array.isArray(productLineId)
+		? productLineId[0] ?? ""
+		: productLineId ?? "";
+	const backHref = buildBackHref(resolvedProductLineId || null);
 
 	return (
 		<CatalogAdminCreateShell
 			title="Nueva subcategoria"
 			subtitle="Crea una agrupacion interna para una linea cuando necesite identidad o imagen propia."
-			backHref="/admin/catalog/product-subcategories"
-			backLabel="subcategorias"
+			backHref={backHref}
+			backLabel="lineas comerciales"
 		>
 			<CatalogAdminForm
 				entityLabel="subcategoria"
 				entityLabelPlural="las subcategorias del catalogo"
-				basePath="/admin/catalog/product-subcategories"
+				basePath={backHref}
 				apiBasePath="/api/admin/catalog/product-subcategories"
-				initialValues={getProductSubcategoryInitialValues()}
-				fields={getProductSubcategoryFields(productLines)}
-				cancelHref="/admin/catalog/product-subcategories"
+				initialValues={{
+					...getProductSubcategoryInitialValues(),
+					productLineId: resolvedProductLineId,
+				}}
+				fields={getProductSubcategoryFields(
+					productLines,
+					productSubcategories,
+				)}
+				cancelHref={backHref}
 				showHeader={false}
-				editPathPattern="/admin/catalog/product-subcategories/[id]/edit"
-				createRedirectToEdit
 			/>
 		</CatalogAdminCreateShell>
 	);

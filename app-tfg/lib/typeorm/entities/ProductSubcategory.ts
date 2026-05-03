@@ -15,6 +15,7 @@ import { Product } from "./Product";
 
 @Entity("product_subcategories")
 @Index("product_subcategories_product_line_id_index", ["product_line_id"])
+@Index("product_subcategories_parent_subcategory_id_index", ["parent_subcategory_id"])
 @Index("product_subcategories_display_order_index", ["display_order"])
 @Index("product_subcategories_id_product_line_id_unique", ["id", "product_line_id"], {
 	unique: true,
@@ -35,6 +36,9 @@ export class ProductSubcategory {
 	@Column({ type: "text", nullable: true })
 	description!: string | null;
 
+	@Column({ type: "uuid", nullable: true })
+	parent_subcategory_id!: string | null;
+
 	@Column({ type: "text", nullable: true })
 	image_url!: string | null;
 
@@ -47,6 +51,23 @@ export class ProductSubcategory {
 	})
 	@JoinColumn({ name: "product_line_id" })
 	productLine!: Relation<ProductLine>;
+
+	@ManyToOne(() => ProductSubcategory, (productSubcategory) => productSubcategory.childSubcategories, {
+		onDelete: "SET NULL",
+		onUpdate: "CASCADE",
+		nullable: true,
+	})
+	@JoinColumn([
+		{ name: "parent_subcategory_id", referencedColumnName: "id" },
+		{ name: "product_line_id", referencedColumnName: "product_line_id" },
+	])
+	parentSubcategory!: Relation<ProductSubcategory | null>;
+
+	@OneToMany(
+		() => ProductSubcategory,
+		(productSubcategory) => productSubcategory.parentSubcategory,
+	)
+	childSubcategories!: Relation<ProductSubcategory[]>;
 
 	@OneToMany(() => Product, (product) => product.productSubcategory)
 	products!: Relation<Product[]>;

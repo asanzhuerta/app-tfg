@@ -18,6 +18,11 @@ type ProductLineOptionSource = NamedOptionSource & {
 
 type ProductSubcategoryOptionSource = NamedOptionSource & {
 	product_line_id: string;
+	parent_subcategory_id?: string | null;
+	parentSubcategory?: {
+		id?: string | null;
+		name: string | null;
+	} | null;
 	productLine?: {
 		name: string | null;
 		productCategory?: {
@@ -53,6 +58,7 @@ type ProductSubcategoryValues = {
 	name: string | null;
 	description: string | null;
 	product_line_id: string | null;
+	parent_subcategory_id: string | null;
 	image_url: string | null;
 	display_order: number | null;
 };
@@ -102,6 +108,33 @@ function buildOption(value: string, label: string): FieldOption {
 	return { value, label };
 }
 
+function buildProductSubcategoryPathLabel(
+	productSubcategory: ProductSubcategoryOptionSource,
+	productSubcategoriesById: Map<string, ProductSubcategoryOptionSource>,
+) {
+	const path: string[] = [productSubcategory.name];
+	const visited = new Set<string>([productSubcategory.id]);
+	let currentParentId = productSubcategory.parent_subcategory_id ?? null;
+
+	while (currentParentId) {
+		if (visited.has(currentParentId)) {
+			break;
+		}
+
+		visited.add(currentParentId);
+		const parentSubcategory = productSubcategoriesById.get(currentParentId);
+
+		if (!parentSubcategory) {
+			break;
+		}
+
+		path.unshift(parentSubcategory.name);
+		currentParentId = parentSubcategory.parent_subcategory_id ?? null;
+	}
+
+	return path.join(" / ");
+}
+
 export function getProductCategoryInitialValues(
 	category?: ProductCategoryValues | null,
 ): Record<string, FormValue> {
@@ -131,6 +164,7 @@ export function getProductSubcategoryInitialValues(
 		name: productSubcategory?.name ?? "",
 		description: productSubcategory?.description ?? "",
 		productLineId: productSubcategory?.product_line_id ?? "",
+		parentSubcategoryId: productSubcategory?.parent_subcategory_id ?? "",
 		imageUrl: productSubcategory?.image_url ?? "",
 		displayOrder: String(productSubcategory?.display_order ?? 0),
 	};
@@ -266,7 +300,15 @@ export function getProductLineFields(
 
 export function getProductSubcategoryFields(
 	productLines: ProductLineOptionSource[],
+	productSubcategories: ProductSubcategoryOptionSource[],
 ): FieldDescriptor[] {
+	const productSubcategoriesById = new Map(
+		productSubcategories.map((productSubcategory) => [
+			productSubcategory.id,
+			productSubcategory,
+		]),
+	);
+
 	return [
 		{
 			name: "name",
@@ -286,6 +328,22 @@ export function getProductSubcategoryFields(
 					`${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoria"}`,
 				),
 			),
+		},
+		{
+			name: "parentSubcategoryId",
+			label: "Subcategoria padre",
+			type: "select",
+			options: productSubcategories.map((productSubcategory) => ({
+				value: productSubcategory.id,
+				label: buildProductSubcategoryPathLabel(
+					productSubcategory,
+					productSubcategoriesById,
+				),
+				groupKey: productSubcategory.product_line_id,
+			})),
+			filterByFieldName: "productLineId",
+			helpText:
+				"Opcional. Si esta subcategoria depende de otra dentro de la misma linea, indicalo aqui.",
 		},
 		{
 			name: "imageUrl",

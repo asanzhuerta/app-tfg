@@ -117,10 +117,12 @@ export default function CatalogAdminForm({
 			if (name === "productCategoryId") {
 				nextValues.productLineId = "";
 				nextValues.productSubcategoryId = "";
+				nextValues.parentSubcategoryId = "";
 			}
 
 			if (name === "productLineId") {
 				nextValues.productSubcategoryId = "";
+				nextValues.parentSubcategoryId = "";
 			}
 
 			return nextValues;
