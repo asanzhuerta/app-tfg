@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
 				hostname: "kinmobileapp.com",
 				pathname: "/kincolor/img/**",
 			},
+			{
+				protocol: "https",
+				hostname: "www.kincosmetics.com",
+				pathname: "/tmp/images/**",
+			},
 		],
 	},
 };

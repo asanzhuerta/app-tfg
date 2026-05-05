@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
 	AnimatePresence,
@@ -47,6 +48,7 @@ function EntityCard({
 	const isHeadlineVariant = cardVariant === "headline";
 	const isMediaVariant = cardVariant === "media";
 	const isCatalogProductVariant = cardVariant === "catalog-product";
+	const isColorReferenceVariant = cardVariant === "color-reference";
 	const hasSubtitle = item.subtitle.trim().length > 0;
 	const motionProps = shouldReduceMotion
 		? {
@@ -61,6 +63,68 @@ function EntityCard({
 				exit: { opacity: 0, y: -12, scale: 0.98 },
 				transition: { duration: 0.28, ease: "easeInOut" as const },
 			};
+
+	if (isColorReferenceVariant) {
+		const colorReferenceCard = (
+			<m.div
+				layout
+				{...motionProps}
+				className="group relative min-h-[18rem] overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+			>
+				{item.imageUrl ? (
+					<div className="absolute inset-0">
+						<Image
+							src={item.imageUrl}
+							alt={item.title}
+							fill
+							className="object-cover transition duration-300 group-hover:scale-[1.02]"
+							sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
+						/>
+					</div>
+				) : null}
+
+				<div className="relative flex min-h-[18rem] flex-col justify-between p-4 sm:p-5">
+					<div className="flex justify-end">
+						{item.badges?.length ? (
+							<div className="flex max-w-full flex-wrap justify-end gap-2">
+								{item.badges.map((badge) => (
+									<span
+										key={`${item.id}-${badge.label}`}
+										className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold shadow-sm backdrop-blur-sm sm:text-xs ${badge.className ?? "bg-slate-100 text-slate-700"}`}
+									>
+										{badge.label}
+									</span>
+								))}
+							</div>
+						) : null}
+					</div>
+
+					<div className="max-w-[16ch]">
+						<p
+							className="text-2xl font-semibold leading-[1.05] text-white sm:text-[2rem]"
+							style={{ textShadow: "0 3px 16px rgba(0, 0, 0, 0.72)" }}
+						>
+							{item.title}
+						</p>
+					</div>
+				</div>
+			</m.div>
+		);
+
+		if (item.href) {
+			return (
+				<Link
+					href={item.href}
+					aria-label={`Editar ${item.title}`}
+					className="block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+				>
+					{colorReferenceCard}
+				</Link>
+			);
+		}
+
+		return colorReferenceCard;
+	}
 
 	return (
 		<m.div
