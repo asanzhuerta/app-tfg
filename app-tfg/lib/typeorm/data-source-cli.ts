@@ -32,6 +32,9 @@ import { Product } from "./entities/Product";
 import { SupportResource } from "./entities/SupportResource";
 import { ColorChart } from "./entities/ColorChart";
 import { ColorReference } from "./entities/ColorReference";
+import { OrderStatus } from "./entities/OrderStatus";
+import { Order } from "./entities/Order";
+import { OrderLine } from "./entities/OrderLine";
 
 const CliDataSource = new DataSource({
 	type: "postgres",
@@ -68,6 +71,9 @@ const CliDataSource = new DataSource({
 		SupportResource,
 		ColorChart,
 		ColorReference,
+		OrderStatus,
+		Order,
+		OrderLine,
 	],
 	migrations: ["migrations/typeorm/*.ts"],
 });

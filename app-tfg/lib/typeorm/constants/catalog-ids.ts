@@ -92,3 +92,14 @@ export const SUPPORT_RESOURCE_TYPE_IDS = {
 	COMMERCIAL_CATALOG: 2,
 	TRAINING_MATERIAL: 3,
 } as const;
+
+// -----------------------------------------------------------------------------
+// M4. Pedidos, entregas y cobros
+// -----------------------------------------------------------------------------
+
+export const ORDER_STATUS_IDS = {
+	CREATED: 1,
+	CONFIRMED: 2,
+	DELIVERED: 3,
+	CANCELLED: 4,
+} as const;
