@@ -2,7 +2,7 @@ Las instrucciones de uso del software se detallan a continuación. Este manual s
 
 \section{Introducción}
 
-KinEstilistas es una aplicación web para coordinar la relación entre un distribuidor y sus clientes profesionales. En la versión actual el sistema cubre de forma efectiva la gestión de acceso y usuarios del módulo \texttt{M1}, así como la base operativa del módulo \texttt{M2}: clientes, asignaciones, visitas, configuración diaria del comercial y estimación de reparto.
+KinEstilistas es una aplicación web para coordinar la relación entre un distribuidor y sus clientes profesionales. En la versión actual el sistema cubre de forma efectiva la gestión de acceso y usuarios del módulo \texttt{M1}, la base operativa del módulo \texttt{M2} y el primer bloque funcional del catálogo definido en \texttt{M3}.
 
 La aplicación diferencia tres perfiles de uso:
 
@@ -37,11 +37,12 @@ Si se desea ejecutar la aplicación en local para evaluación, deben seguirse lo
 
 \subsection{Uso como administrador}
 
-El panel de administración concentra dos áreas:
+El panel de administración concentra tres áreas:
 
 \begin{itemize}
     \item \textbf{Gestión de usuarios}: revisión de solicitudes, alta manual de cuentas, consulta de usuarios y cambio de estado.
     \item \textbf{Gestión de clientes}: consulta de clientes y asignaciones entre clientes y comerciales.
+    \item \textbf{Gestión de catálogo}: administración de categorías, líneas, subcategorías, productos, recursos de apoyo, cartas de color y referencias cromáticas.
 \end{itemize}
 
 Las operaciones más habituales para este rol son:
@@ -52,12 +53,15 @@ Las operaciones más habituales para este rol son:
     \item crear usuarios desde administración;
     \item acceder al detalle de cliente para revisar sus datos;
     \item asignar o reasignar clientes a un comercial;
+    \item mantener la estructura del catálogo y sus productos asociados;
+    \item cargar imágenes, documentación técnica y recursos de apoyo del módulo \texttt{M3};
+    \item administrar cartas de color y referencias visuales por línea comercial;
     \item consultar la vista de auditoría de accesos y acciones administrativas.
 \end{enumerate}
 
 \subsection{Uso como comercial}
 
-El panel comercial muestra actualmente una tarjeta principal de ruta diaria y varios accesos operativos del módulo \texttt{M2}.
+El panel comercial muestra actualmente una tarjeta principal de ruta diaria y varios accesos operativos de los módulos \texttt{M2} y \texttt{M3}.
 
 Los flujos ya disponibles son:
 
@@ -67,17 +71,22 @@ Los flujos ya disponibles son:
     \item abrir la ficha de un cliente para consultar su información operativa;
     \item consultar, crear y actualizar visitas comerciales;
     \item ajustar la jornada base, los puntos de salida y la duración estimada de visitas en \texttt{/commercials/settings};
-    \item abrir la página \texttt{/commercials/routes} para visualizar la ruta en una vista dedicada.
+    \item abrir la página \texttt{/commercials/routes} para visualizar la ruta en una vista dedicada;
+    \item acceder al catálogo de productos activos con filtros por familia, línea y subcategoría;
+    \item consultar fichas de producto con información técnica, recursos asociados y vínculos a coloración;
+    \item explorar cartas de color y localizar tonos concretos dentro de cada línea comercial.
 \end{enumerate}
 
 La información de ruta se apoya en la geolocalización del dispositivo cuando está disponible. Si el navegador no concede permiso, el sistema intenta utilizar el punto de salida guardado para el comercial.
 
 \subsection{Uso como cliente}
 
-En el estado actual del proyecto, el área cliente se centra en dos capacidades reales:
+En el estado actual del proyecto, el área cliente se centra en cuatro capacidades reales:
 
 \begin{itemize}
     \item consultar la tarjeta de estimación de reparto del día;
+    \item consultar el catálogo de productos activos;
+    \item explorar la sección de coloración y sus cartas disponibles;
     \item consultar y editar su propio perfil.
 \end{itemize}
 
@@ -92,6 +101,8 @@ La tarjeta de reparto indica, cuando existe una visita de entrega planificada:
 \end{itemize}
 
 Si no existe reparto para ese día, o si la visita ha quedado fuera de la franja horaria permitida, el sistema lo comunica expresamente.
+
+Desde el catálogo, el cliente puede navegar por productos activos, aplicar filtros y abrir la ficha completa de cada referencia. Esa ficha reúne la información técnica, los recursos de apoyo asociados al producto o a su línea comercial y, cuando corresponde, accesos directos a cartas de color relacionadas.
 
 \subsection{Perfil y datos personales}
 
@@ -110,5 +121,6 @@ Aunque la navegación ya anticipa futuros módulos del sistema, no todas las tar
 
 \begin{itemize}
     \item la previsualización de ruta existe tanto en el panel comercial principal como en una página independiente de rutas;
-    \item varias tarjetas del panel cliente quedan reservadas para módulos futuros como catálogo, pedidos o formaciones.
+    \item el catálogo y la coloración ya forman parte del alcance operativo de comerciales y clientes;
+    \item varias tarjetas siguen reservadas para módulos futuros, especialmente pedidos, cobros, agenda, citas y formaciones.
 \end{itemize}

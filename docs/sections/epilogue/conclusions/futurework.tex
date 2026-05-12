@@ -9,3 +9,33 @@ En particular, el sistema ha sido concebido con un enfoque modular y extensible,
     \item Gestión avanzada de sesiones, incluyendo el control de sesiones activas y su posible revocación.
     \item Desarrollo de herramientas específicas para la visualización y análisis de los registros de acceso y acciones administrativas.
 \end{itemize}
+
+\subsection*{M2. Gestión comercial y clientes}
+\begin{itemize}
+    \item Incorporación de vistas históricas y métricas agregadas sobre visitas, actividad comercial y cumplimiento de rutas.
+    \item Mejora de la replanificación diaria ante incidencias, cambios de franja o cancelaciones de última hora.
+    \item Mayor automatización en la preparación de jornadas, reutilizando patrones de visitas y configuraciones recurrentes.
+\end{itemize}
+
+\subsection*{M3. Catálogo, productos y coloración}
+\begin{itemize}
+    \item Refuerzo del módulo con importación masiva de productos y mantenimiento asistido del catálogo.
+    \item Incorporación de estados editoriales o flujos de borrador/publicación para contenidos comerciales y técnicos.
+    \item Mejora de la búsqueda semántica, filtrado avanzado y reutilización de recursos de apoyo entre líneas relacionadas.
+    \item Ampliación de la experiencia de coloración con comparativas, agrupaciones comerciales adicionales y material visual complementario.
+\end{itemize}
+
+\subsection*{M4. Pedidos, entregas y cobros}
+\begin{itemize}
+    \item Creación de pedidos a partir del catálogo ya implantado en \texttt{M3}, permitiendo seleccionar productos y cantidades sin exponer precios unitarios al cliente.
+    \item Gestión del historial de pedidos por cliente y consulta de su estado dentro del ciclo comercial.
+    \item Modelado de entregas, incidencias logísticas y productos pendientes de servir.
+    \item Registro de cobros totales o parciales y construcción del estado de cuenta asociado a cada cliente.
+\end{itemize}
+
+\subsection*{Evolución técnica transversal}
+\begin{itemize}
+    \item Incorporación progresiva de pruebas automatizadas de integración y de interfaz para reducir regresiones manuales.
+    \item Reorganización interna del código por \textit{feature}, especialmente en el área comercial, para facilitar la entrada de \texttt{M4} y módulos posteriores.
+    \item Refuerzo de observabilidad, trazas de errores y utilidades de administración para despliegues más controlados.
+\end{itemize}

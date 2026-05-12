@@ -9,18 +9,19 @@ El repositorio contiene dos bloques principales:
 
 ## Alcance actual
 
-La versión actual cubre el núcleo operativo de los módulos 1 y 2:
+La versión actual cubre el núcleo operativo de los módulos 1, 2 y 3:
 
 - `M1`: solicitud de alta, registro administrado, login con credenciales, control por roles, gestión de usuarios, estados de cuenta, logs de acceso y gestión de perfil.
 - `M2`: gestión de clientes, asignaciones comercial-cliente, geolocalización confirmada, ventanas horarias de visita, visitas comerciales, configuración operativa del comercial, previsualización de ruta diaria y ETA de reparto para cliente.
+- `M3`: gestión administrativa del catálogo, consulta pública de productos, navegación jerárquica por categorías y líneas, subcategorías, recursos de apoyo y exploración de cartas de color con sus referencias.
 
-Los módulos `M3+` aparecen ya reflejados en navegación y requisitos, pero no forman parte del alcance operativo implementado en esta rama.
+El módulo `M4` y los módulos posteriores aparecen ya reflejados en navegación y requisitos, pero todavía no forman parte del alcance operativo implementado en esta rama.
 
 ## Roles disponibles
 
-- `admin`: gestiona usuarios, solicitudes de alta, clientes y asignaciones comerciales.
-- `commercial`: consulta clientes asignados, visitas, configuración diaria y previsualización de ruta.
-- `client`: consulta su espacio, la estimación de reparto del día y su propio perfil.
+- `admin`: gestiona usuarios, solicitudes de alta, clientes, asignaciones comerciales y el catálogo del módulo `M3`.
+- `commercial`: consulta clientes asignados, visitas, configuración diaria, previsualización de ruta, catálogo y coloración.
+- `client`: consulta la estimación de reparto del día, su propio perfil, el catálogo público y las cartas de color disponibles.
 
 ## Stack real del proyecto
 
@@ -32,7 +33,7 @@ Los módulos `M3+` aparecen ya reflejados en navegación y requisitos, pero no f
 - `Auth.js / NextAuth 5 beta` con proveedor de credenciales
 - `PostgreSQL 16`
 - `TypeORM 0.3`
-- `Cloudinary` para imágenes de perfil
+- `Cloudinary` para imágenes de perfil y recursos visuales del catálogo
 - `Leaflet` y `react-leaflet` para mapas
 
 ## Estructura del repositorio
@@ -66,7 +67,7 @@ La aplicación se implementa como un monolito full-stack sobre Next.js:
 
 Servicios externos actualmente integrados:
 
-- `Cloudinary` para subida y reemplazo de imágenes de perfil,
+- `Cloudinary` para subida, reemplazo y validación de imágenes de perfil y catálogo,
 - `Nominatim` para geocodificación de direcciones,
 - `OSRM` para trazar rutas sobre mapa.
 
@@ -161,7 +162,9 @@ npm run migration:show
 - alta directa de usuarios,
 - consulta de usuarios, cambio de estado y auditoría básica,
 - lista de clientes y detalle editable,
-- asignación y reasignación de clientes a comerciales.
+- asignación y reasignación de clientes a comerciales,
+- gestión de categorías, líneas, subcategorías y productos del catálogo,
+- gestión de recursos de apoyo, cartas de color y referencias cromáticas.
 
 ### Comercial
 
@@ -170,19 +173,26 @@ npm run migration:show
 - detalle de cliente con información operativa,
 - planificación y seguimiento de visitas,
 - configuración de jornada, puntos de salida y duración base de visitas,
-- vista de ruta diaria en `/commercials/routes`.
+- vista de ruta diaria en `/commercials/routes`,
+- consulta del catálogo de productos con filtros por familia, línea y subcategoría,
+- acceso a fichas de producto con información técnica, recursos asociados y coloración relacionada,
+- exploración de cartas de color y referencias por línea comercial.
 
 ### Cliente
 
 - panel con tarjeta de ETA de reparto del día,
 - consulta y edición de perfil,
-- confirmación de geolocalización y franja horaria en su ficha asociada.
+- confirmación de geolocalización y franja horaria en su ficha asociada,
+- consulta del catálogo de productos activos,
+- acceso a fichas técnicas y recursos de apoyo,
+- exploración de coloración por cartas y tonos.
 
 ## Estado actual y límites conocidos
 
 - el panel comercial ya ofrece previsualización de ruta tanto en el dashboard como en `/commercials/routes`;
-- el panel de cliente ya muestra la ETA del reparto y el perfil, mientras que otras tarjetas visibles quedan reservadas para módulos futuros;
-- la base documental y de base de datos ya está preparada para seguir creciendo hacia catálogo, pedidos, cobros y formaciones.
+- el módulo `M3` está operativo para administración, comerciales y clientes, aunque sigue centrado en consulta y mantenimiento de catálogo, no en transacción comercial;
+- el panel de cliente ya muestra la ETA del reparto, el perfil, el catálogo y la coloración, mientras que otras tarjetas visibles quedan reservadas para módulos futuros;
+- la base de datos y la documentación funcional ya están preparadas para crecer hacia pedidos, entregas, cobros y formaciones a partir de `M4`.
 
 ## Documentación técnica
 

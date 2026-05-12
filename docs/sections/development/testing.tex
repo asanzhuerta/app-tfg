@@ -1,32 +1,127 @@
-% ------------------------------------------------------------------------------
-% Este fichero es parte de la plantilla LaTeX para la realización de Proyectos
-% Final de Grado, protegido bajo los términos de la licencia GFDL.
-% Para más información, la licencia completa viene incluida en el
-% fichero fdl-1.3.tex
-
-% Copyright (C) 2012 SPI-FM. Universidad de Cádiz
-% ------------------------------------------------------------------------------
-
-En este capítulo se presenta el plan de pruebas del sistema de información, incluyendo los diferentes tipos de pruebas que se han llevado a cabo, ya sean manuales (mediante listas de comprobación) o automatizadas mediante algún software específico de pruebas.
+En este capítulo se resume la estrategia de validación utilizada en la iteración actual del proyecto. Dado que se trata de un \textit{TFG} con una aplicación \textit{full-stack} de alcance incremental, la verificación combina comprobaciones automáticas de regresión con validaciones funcionales manuales sobre los flujos críticos de los módulos \texttt{M1}, \texttt{M2} y \texttt{M3}.
 
 \section{Estrategia}
-En esta sección se debe incluir el alcance de las pruebas, hasta donde se pretende llegar con ellas, si se registrarán todas o sólo aquellas de un cierto tipo y cómo se interpretarán y evaluarán los resultados.
-También, se incluirá el procedimiento a seguir para las pruebas de regresión, esto es, la repetición de ciertas pruebas para comprobar que nuevos cambios que se vayan introduciendo no originen errores en el software ya probado. Describir en esta sección cuáles serán los perfiles y participantes necesarios para la ejecución de cada uno de los niveles de prueba. Incluir en este apartado los requisitos de los entornos hardware/software donde se ejecutarán las pruebas.
+
+La estrategia de pruebas seguida persigue dos objetivos complementarios:
+
+\begin{itemize}
+    \item detectar regresiones técnicas rápidas después de cada cambio relevante mediante comprobaciones automáticas;
+    \item confirmar de forma manual que los flujos de negocio visibles para cada rol continúan funcionando de acuerdo con el alcance operativo implementado.
+\end{itemize}
+
+Las regresiones técnicas se evalúan repitiendo siempre la misma secuencia base:
+
+\begin{enumerate}
+    \item comprobación estática de tipos con \texttt{TypeScript};
+    \item análisis estático de código con \texttt{ESLint};
+    \item construcción completa de producción con \texttt{Next.js}.
+\end{enumerate}
+
+Esta rutina ofrece una señal rápida sobre errores de tipado, problemas de compilación, importaciones rotas, uso incorrecto de componentes de servidor o cliente y fallos en rutas dinámicas. Sobre esa base, las validaciones manuales se concentran en los recorridos funcionales con mayor impacto para cada perfil de usuario.
 
 \section{Pruebas Unitarias}
-Las pruebas unitarias tienen por objetivo localizar errores en cada nuevo artefacto software desarrollado, antes que se produzca la integración con el resto de artefactos del sistema.
+
+En la versión actual no se ha incorporado todavía una batería formal de pruebas unitarias con un \textit{runner} dedicado. Aun así, parte de la validación de bajo nivel se apoya en tres mecanismos que reducen errores locales antes de integrar cambios:
+
+\begin{itemize}
+    \item el tipado estricto de \texttt{TypeScript} sobre contratos, componentes y servicios;
+    \item la centralización de reglas de negocio en servicios de dominio de usuarios, operativa comercial y catálogo;
+    \item las validaciones normalizadas de entrada antes de persistir cambios, lo que limita estados inconsistentes en operaciones de administración y catálogo.
+\end{itemize}
+
+La ausencia de una suite unitaria completa sigue siendo una mejora pendiente, pero la separación actual de servicios facilita su incorporación futura.
 
 \section{Pruebas de Integración}
-Este tipo de pruebas tienen por objetivo localizar errores en módulos o subsistemas completos, analizando la interacción entre varios artefactos software.
+
+Las pruebas de integración se centran en comprobar la interacción entre interfaz, \textit{Route Handlers}, autenticación, persistencia y servicios externos. En esta línea resultan especialmente relevantes los siguientes puntos:
+
+\begin{itemize}
+    \item autenticación con \texttt{Auth.js} y control de acceso por rol en \texttt{proxy.ts};
+    \item coordinación entre formularios administrativos y servicios \texttt{TypeORM} para usuarios, clientes, visitas y catálogo;
+    \item integración con \texttt{Nominatim} y \texttt{OSRM} para geocodificación y cálculo de rutas del módulo \texttt{M2};
+    \item integración con \texttt{Cloudinary} para subida, reemplazo y validación de imágenes de perfil y catálogo en \texttt{M1} y \texttt{M3}.
+\end{itemize}
+
+Estas comprobaciones se realizan principalmente a través de la propia aplicación en entorno local, verificando que una acción iniciada desde la interfaz produce el efecto esperado en la API y en la base de datos.
 
 \section{Pruebas de Sistema}
-En esta actividad se realizan las pruebas de sistema de modo que se asegure que el sistema cumple con todos los requisitos establecidos: funcionales, de almacenamiento, reglas de negocio y no funcionales. Se suelen desarrollar en un entorno específico para pruebas.
+
+La evidencia automatizada disponible para el estado actual del repositorio se ha obtenido ejecutando los siguientes comandos sobre la aplicación \texttt{app-tfg/}:
+
+\begin{itemize}
+    \item \texttt{npm run typecheck}
+    \item \texttt{npm run lint}
+    \item \texttt{npm run build}
+\end{itemize}
+
+El resultado de esta validación es satisfactorio: la comprobación de tipos y la construcción completa de producción finalizan sin errores, y el análisis estático no detecta incidencias bloqueantes, aunque mantiene advertencias menores de limpieza de código que no impiden la ejecución del sistema.
 
 \subsection{Pruebas Funcionales}
-Con estas pruebas se analiza el buen funcionamiento de la implementación de los flujos normales y alternativos de los distintos casos de uso del sistema.
+
+Las comprobaciones funcionales prioritarias se organizan por módulo:
+
+\begin{itemize}
+    \item \texttt{M1}: registro de solicitud de alta, autenticación con credenciales, navegación protegida por rol, edición de perfil y cambio de contraseña.
+    \item \texttt{M2}: administración de clientes, asignación comercial-cliente, geolocalización confirmada, creación y seguimiento de visitas, configuración diaria del comercial y cálculo de ETA para cliente.
+    \item \texttt{M3}: mantenimiento del catálogo desde administración, consulta pública de productos activos, filtrado por categorías y líneas, acceso a fichas técnicas, consulta de recursos de apoyo y exploración de cartas de color con sus referencias.
+\end{itemize}
+
+En \texttt{M3}, la regresión funcional más sensible consiste en verificar que la misma información de catálogo se presenta de forma coherente en tres contextos distintos: administración, comercial y cliente. Por ello, cualquier cambio en entidades, serializadores o servicios de lectura debe comprobarse en esos tres recorridos.
+
+\subsubsection{Matriz resumida de cobertura de \texttt{M3}}
+
+Con el objetivo de dejar trazabilidad explícita entre requisitos y evidencia funcional implementada, la Tabla~\ref{tab:m3-validation-matrix} resume la cobertura manual revisada para el módulo \texttt{M3}.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{0.14\textwidth}|p{0.42\textwidth}|p{0.34\textwidth}|}
+\hline
+\textbf{RF} & \textbf{Evidencia implementada} & \textbf{Validación manual realizada} \\
+\hline
+\texttt{RF-M3-01} &
+Catálogo activo accesible desde las zonas \texttt{client} y \texttt{commercial}, con fichas de producto que muestran nombre, referencia, descripción, imagen, categoría, línea, información técnica, recursos de apoyo y coloración relacionada cuando aplica. &
+Recorrido completo desde el listado hasta la ficha de producto en ambos roles, comprobando la presencia de metadatos, bloque técnico y recursos enlazados. \\
+\hline
+\texttt{RF-M3-02} &
+Explorador de productos con clasificación comercial y filtros por categoría, línea y subcategoría, además de búsqueda textual sobre nombre, referencia y contenido relevante del producto. &
+Aplicación combinada de filtros y búsqueda sobre el catálogo, verificando que el listado resultante conserva coherencia con la clasificación comercial esperada. \\
+\hline
+\texttt{RF-M3-03} &
+Consulta de coloración por línea comercial, acceso a cartas de color asociadas y visualización de referencias cromáticas, incluyendo una vista global de tonos y localización por nomenclatura. &
+Navegación desde la línea hasta la carta y sus tonos, más comprobación adicional de búsqueda y localización de una referencia concreta dentro de la exploración cromática. \\
+\hline
+\texttt{RF-M3-04} &
+Panel administrativo bajo \texttt{/admin/catalog} con mantenimiento de categorías, líneas, subcategorías, productos, recursos de apoyo, cartas de color y referencias. Los productos pueden actualizarse y desactivarse mediante su estado, con soporte para imágenes en \texttt{Cloudinary}. &
+Alta o edición de elementos del catálogo desde administración, actualización de materiales asociados y verificación posterior de su reflejo en las vistas públicas del módulo. \\
+\hline
+\end{tabular}
+\caption{Matriz resumida de cobertura funcional del módulo \texttt{M3}}
+\label{tab:m3-validation-matrix}
+\end{table}
 
 \subsection{Pruebas No Funcionales}
-Estas pruebas pretenden comprobar el funcionamiento del sistema, con respecto a los requisitos no funcionales identificados: eficiencia, seguridad, etc.
+
+En el estado actual del proyecto, las comprobaciones no funcionales se concentran en:
+
+\begin{itemize}
+    \item seguridad básica de acceso mediante autenticación y autorización por roles;
+    \item robustez de compilación y tipado de toda la aplicación;
+    \item compatibilidad mínima de navegador a través de la ruta informativa para clientes no soportados;
+    \item validación de tamaño, tipo y procedencia de imágenes subidas a \texttt{Cloudinary}.
+\end{itemize}
+
+No se ha abordado todavía una campaña específica de rendimiento, carga o pruebas automatizadas de interfaz, por lo que estas áreas permanecen como trabajo de mejora futura.
 
 \section{Pruebas de Aceptación}
-El objetivo de estas pruebas es demostrar que el producto está listo para el paso a producción. Suelen ser las mismas pruebas que se realizaron anteriormente pero en el entorno de producción. En estas pruebas, es importante la participación del cliente final.
+
+La aceptación de la versión actual del sistema se interpreta como la disponibilidad integrada y estable de los módulos \texttt{M1}, \texttt{M2} y \texttt{M3}. En términos prácticos, esto implica que:
+
+\begin{itemize}
+    \item el administrador puede gestionar usuarios, clientes y catálogo;
+    \item el comercial puede consultar su operativa diaria y el catálogo;
+    \item el cliente puede consultar su previsión de reparto, su perfil, el catálogo y la coloración.
+\end{itemize}
+
+Con este umbral cubierto, el siguiente salto funcional razonable del proyecto pasa a ser la incorporación del módulo \texttt{M4}, centrado ya en pedidos, entregas y cobros.

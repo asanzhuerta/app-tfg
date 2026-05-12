@@ -1,4 +1,4 @@
-Este capítulo describe la implementación real del sistema, centrada en la aplicación web desarrollada en \texttt{Next.js}, la capa de persistencia basada en \texttt{TypeORM} y la evolución ya materializada de los módulos \texttt{M1} y \texttt{M2}.
+Este capítulo describe la implementación real del sistema, centrada en la aplicación web desarrollada en \texttt{Next.js}, la capa de persistencia basada en \texttt{TypeORM} y la evolución ya materializada de los módulos \texttt{M1}, \texttt{M2} y \texttt{M3}.
 
 \section{Entorno de Construcción}
 \label{sec:ConstructionEnvironment}
@@ -10,11 +10,11 @@ La implementación actual del proyecto se concentra en la carpeta \texttt{app-tf
 
 \begin{itemize}
     \item \texttt{app/}: páginas, layouts, \textit{Route Handlers} y componentes de interfaz.
-    \item \texttt{app/api/}: endpoints internos para autenticación, perfil, administración, clientes y operativa comercial.
+    \item \texttt{app/api/}: endpoints internos para autenticación, perfil, administración, clientes, catálogo y operativa comercial.
     \item \texttt{app/components/}: componentes reutilizables de interfaz, mapas, formularios y vistas por rol.
     \item \texttt{app/hooks/api/}: hooks cliente para encapsular llamadas HTTP, estado de carga y mensajes de error.
     \item \texttt{lib/}: contratos compartidos, lógica de negocio, integraciones externas, seguridad y acceso a datos.
-    \item \texttt{migrations/typeorm/}: migraciones versionadas de base de datos para los módulos \texttt{M1} y \texttt{M2}.
+    \item \texttt{migrations/typeorm/}: migraciones versionadas de base de datos para los módulos \texttt{M1}, \texttt{M2} y \texttt{M3}.
 \end{itemize}
 
 \subsection{Implementación del módulo M1}
@@ -49,6 +49,23 @@ Actualmente ya están implementados:
 
 La lógica temporal de rutas y estimaciones no reside en la capa visual, sino que se centraliza en \texttt{lib/commercial/daily-route-planning.ts}. Esta decisión permite reutilizar el mismo cálculo tanto en el panel comercial como en la tarjeta de ETA que visualiza el cliente.
 
+\subsection{Implementación del módulo M3}
+
+El módulo \texttt{M3} se apoya en las rutas de administración bajo \texttt{/admin/catalog}, en las vistas públicas de consulta distribuidas entre las zonas cliente y comercial, y en la lógica de dominio ubicada en \texttt{lib/typeorm/services/catalog/}.
+
+Actualmente ya están implementados:
+
+\begin{itemize}
+    \item Gestión administrativa de categorías, líneas comerciales, subcategorías jerárquicas y productos.
+    \item Gestión de recursos de apoyo vinculados a productos o líneas, como fichas técnicas, catálogos comerciales o materiales formativos.
+    \item Consulta del catálogo de productos activos por parte de clientes y comerciales, con filtros por categoría, línea comercial y subcategoría.
+    \item Visualización de fichas de producto con información comercial, datos técnicos, recursos asociados y enlaces a coloración relacionada cuando procede.
+    \item Gestión y consulta de cartas de color y referencias cromáticas, incluyendo navegación jerárquica por línea comercial y búsqueda directa de tonos.
+    \item Subida y reemplazo de imágenes del catálogo mediante \texttt{Cloudinary}, con validación de tamaño, tipo y limpieza de imágenes sustituidas.
+\end{itemize}
+
+Desde el punto de vista interno, \texttt{M3} reutiliza la misma aproximación de servicios transaccionales ya usada en módulos anteriores, pero especializada en el dominio de catálogo. Las validaciones de consistencia entre categoría, línea, subcategoría, estado y recursos asociados se centralizan en \texttt{catalog-validation.ts} y \texttt{catalog-internal.ts}. Por su parte, la lectura orientada a cliente y comercial se resuelve desde \texttt{catalog-reader.ts}, evitando duplicar lógica entre el área administrativa y las vistas públicas del catálogo.
+
 \section{Scripts de Base de datos}
 
 La persistencia se gestiona mediante migraciones de \texttt{TypeORM}. No se han empleado procedimientos almacenados ni disparadores específicos; la lógica de negocio se mantiene en servicios TypeScript, lo que simplifica su trazabilidad junto al resto del código fuente.
@@ -57,7 +74,8 @@ La serie de migraciones actual queda organizada del siguiente modo:
 
 \begin{itemize}
     \item Migraciones \texttt{001} a \texttt{005}: tablas base del módulo \texttt{M1}, catálogos de roles y estados, usuarios, solicitudes, logs de acceso y datos semilla iniciales.
-    \item Migraciones \texttt{006} a \texttt{018}: tablas y ajustes del módulo \texttt{M2}, incluyendo clientes, comerciales, asignaciones, configuración de ruta, geodatos, tipos de visita, modelo de visitas por jornada y estado aplazado.
+    \item Migraciones \texttt{006} a \texttt{019}: tablas y ajustes del módulo \texttt{M2}, incluyendo clientes, comerciales, asignaciones, configuración de ruta, geodatos, tipos de visita, modelo de visitas por jornada y estado aplazado.
+    \item Migraciones \texttt{020} a \texttt{028}: estructura del módulo \texttt{M3}, con catálogos auxiliares, jerarquía comercial de categorías y líneas, productos, recursos de apoyo, cartas de color, referencias cromáticas, subcategorías jerárquicas y miniaturas públicas de coloración.
 \end{itemize}
 
 Esta estrategia permite reconstruir el esquema de forma controlada en cualquier entorno, auditar los cambios estructurales del sistema y extender el proyecto sin depender de modificaciones manuales sobre la base de datos.
