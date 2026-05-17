@@ -1,0 +1,25 @@
+import { NextResponse } from "next/server";
+import type { RouteContext } from "@/lib/contracts/api";
+import {
+	jsonFromError,
+	requireRoleUser,
+	unauthorizedError,
+} from "@/lib/api/server";
+import { getOrderDetailForClientUser } from "@/lib/typeorm/services/orders/order";
+
+export async function GET(_: Request, context: RouteContext) {
+	const user = await requireRoleUser("client");
+
+	if (!user) {
+		return unauthorizedError();
+	}
+
+	try {
+		const { id } = await context.params;
+		const detail = await getOrderDetailForClientUser(user.id, id);
+		return NextResponse.json(detail, { status: 200 });
+	} catch (error) {
+		console.error("[clients/orders/[id]][GET] error:", error);
+		return jsonFromError(error, "Error al obtener el detalle del pedido");
+	}
+}

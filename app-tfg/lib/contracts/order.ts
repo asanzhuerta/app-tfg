@@ -52,6 +52,17 @@ export type OrderSummary = {
 	lines: OrderSummaryLine[];
 };
 
+export type OrderStatusOption = {
+	id: number;
+	code: OrderStatusCode | string;
+	name: string;
+};
+
+export type OrderDetail = {
+	order: OrderSummary;
+	availableStatusTransitions: OrderStatusOption[];
+};
+
 export type CreateOrderLineBody = {
 	productId?: string;
 	colorReferenceId?: string | null;
@@ -91,6 +102,10 @@ export type AddCommercialDraftOrderLineBody = {
 	productId?: string;
 	colorReferenceId?: string | null;
 	quantity?: number | string | null;
+};
+
+export type UpdateOrderStatusBody = {
+	statusId?: number | string | null;
 };
 
 export function buildCreateClientOrderInput(body: CreateClientOrderBody) {
@@ -143,5 +158,11 @@ export function buildAddCommercialDraftOrderLineInput(
 		productId: body.productId,
 		colorReferenceId: body.colorReferenceId,
 		quantity: body.quantity,
+	};
+}
+
+export function buildUpdateOrderStatusInput(body: UpdateOrderStatusBody) {
+	return {
+		statusId: body.statusId,
 	};
 }

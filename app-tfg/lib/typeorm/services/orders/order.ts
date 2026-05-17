@@ -1,6 +1,8 @@
 import type {
 	CreateOrderLineBody,
+	OrderDetail,
 	OrderProductOption,
+	OrderStatusOption,
 	OrderSummary,
 	OrderSummaryLine,
 } from "@/lib/contracts/order";
@@ -16,6 +18,7 @@ import { Client } from "@/lib/typeorm/entities/Client";
 import { User } from "@/lib/typeorm/entities/User";
 import { Order } from "@/lib/typeorm/entities/Order";
 import { OrderLine } from "@/lib/typeorm/entities/OrderLine";
+import { OrderStatus } from "@/lib/typeorm/entities/OrderStatus";
 import { ColorReference } from "@/lib/typeorm/entities/ColorReference";
 import { ClientCommercialAssignment } from "@/lib/typeorm/entities/ClientCommercialAssignment";
 import { getClientByUserId } from "@/lib/typeorm/services/commercial/client";
@@ -65,6 +68,14 @@ type PreparedOrderLineRecord = {
 	orderReferenceSnapshot: string;
 	variantCodeSnapshot: string | null;
 	variantNameSnapshot: string | null;
+};
+
+const ORDER_STATUS_TRANSITION_IDS_BY_CODE: Record<string, number[]> = {
+	created: [ORDER_STATUS_IDS.CONFIRMED, ORDER_STATUS_IDS.CANCELLED],
+	confirmed: [ORDER_STATUS_IDS.DELIVERED, ORDER_STATUS_IDS.CANCELLED],
+	delivered: [],
+	cancelled: [],
+	draft: [],
 };
 
 function toIsoString(value: Date | string | null | undefined) {
@@ -209,6 +220,88 @@ function mapOrderToSummary(order: Order): OrderSummary {
 	};
 }
 
+function mapOrderStatusToOption(status: OrderStatus): OrderStatusOption {
+	return {
+		id: status.id,
+		code: status.code,
+		name: status.name,
+	};
+}
+
+function getAllowedOrderTransitionIds(statusCode: string | null | undefined) {
+	return ORDER_STATUS_TRANSITION_IDS_BY_CODE[String(statusCode ?? "").trim()] ?? [];
+}
+
+function normalizeOrderStatusId(statusId: number | string | null | undefined) {
+	const parsed = Number(statusId);
+
+	if (!Number.isInteger(parsed) || parsed <= 0) {
+		throw new OrderServiceError(
+			"Debes indicar un estado de pedido valido",
+			400,
+			"ORDER_STATUS_ID_INVALID",
+		);
+	}
+
+	return parsed;
+}
+
+function ensureManageableOrder(order: Order) {
+	if (order.status_id === ORDER_STATUS_IDS.DRAFT) {
+		throw new OrderServiceError(
+			"El pedido solicitado no existe",
+			404,
+			"ORDER_NOT_FOUND",
+		);
+	}
+}
+
+function ensureOrderTransitionAllowed(order: Order, nextStatusId: number) {
+	if (order.status_id === nextStatusId) {
+		return;
+	}
+
+	const allowedStatusIds = getAllowedOrderTransitionIds(order.status?.code);
+
+	if (!allowedStatusIds.includes(nextStatusId)) {
+		throw new OrderServiceError(
+			`No se puede cambiar un pedido en estado ${order.status?.name ?? "actual"} al estado solicitado`,
+			400,
+			"ORDER_STATUS_TRANSITION_NOT_ALLOWED",
+		);
+	}
+}
+
+async function listOrderStatusOptionsByIds(statusIds: number[]) {
+	if (statusIds.length === 0) {
+		return [] as OrderStatusOption[];
+	}
+
+	const ds = await getDataSource();
+	const statuses = await ds
+		.getRepository(OrderStatus)
+		.createQueryBuilder("status")
+		.where("status.id IN (:...statusIds)", { statusIds })
+		.getMany();
+	const statusMap = new Map(statuses.map((status) => [status.id, status]));
+
+	return statusIds
+		.map((statusId) => statusMap.get(statusId))
+		.filter((status): status is OrderStatus => Boolean(status))
+		.map(mapOrderStatusToOption);
+}
+
+async function buildOrderDetail(order: Order): Promise<OrderDetail> {
+	const availableStatusTransitions = await listOrderStatusOptionsByIds(
+		getAllowedOrderTransitionIds(order.status?.code),
+	);
+
+	return {
+		order: mapOrderToSummary(order),
+		availableStatusTransitions,
+	};
+}
+
 function createOrdersBaseQuery(repo: Repository<Order>) {
 	return repo
 		.createQueryBuilder("order")
@@ -231,6 +324,44 @@ async function getOrderById(orderId: string) {
 		.addOrderBy("lines.order_reference_snapshot", "ASC")
 		.addOrderBy("product.name", "ASC")
 		.getOne();
+}
+
+async function getRequiredOrderById(orderId: string) {
+	const order = await getOrderById(orderId);
+
+	if (!order) {
+		throw new OrderServiceError(
+			"El pedido solicitado no existe",
+			404,
+			"ORDER_NOT_FOUND",
+		);
+	}
+
+	return order;
+}
+
+async function updateOrderStatusRecord(
+	order: Order,
+	statusId: number | string | null | undefined,
+) {
+	ensureManageableOrder(order);
+	const nextStatusId = normalizeOrderStatusId(statusId);
+	ensureOrderTransitionAllowed(order, nextStatusId);
+
+	if (order.status_id !== nextStatusId) {
+		const ds = await getDataSource();
+		const orderRepo = ds.getRepository(Order);
+
+		await orderRepo.save(
+			orderRepo.create({
+				id: order.id,
+				status_id: nextStatusId,
+			}),
+		);
+	}
+
+	const updatedOrder = await getRequiredOrderById(order.id);
+	return buildOrderDetail(updatedOrder);
 }
 
 async function findDraftOrderId(
@@ -869,6 +1000,119 @@ export async function listOrdersForCommercialUser(
 
 	const orders = await query.getMany();
 	return orders.map(mapOrderToSummary);
+}
+
+export async function listOrdersForAdmin(
+	input: {
+		clientId?: string | null;
+	} = {},
+) {
+	const ds = await getDataSource();
+	const repo = ds.getRepository(Order);
+	const query = createOrdersBaseQuery(repo)
+		.where("order.status_id != :draftStatusId", {
+			draftStatusId: ORDER_STATUS_IDS.DRAFT,
+		})
+		.orderBy("order.created_at", "DESC")
+		.addOrderBy("lines.order_reference_snapshot", "ASC")
+		.addOrderBy("product.name", "ASC");
+	const clientId = String(input.clientId ?? "").trim();
+
+	if (clientId) {
+		query.andWhere("order.client_id = :clientId", { clientId });
+	}
+
+	const orders = await query.getMany();
+	return orders.map(mapOrderToSummary);
+}
+
+export async function getOrderDetailForClientUser(userId: string, orderId: string) {
+	const client = await getClientByUserId(userId);
+
+	if (!client) {
+		throw new OrderServiceError(
+			"No existe ficha de cliente para este usuario",
+			404,
+			"ORDER_CLIENT_PROFILE_NOT_FOUND",
+		);
+	}
+
+	const order = await getRequiredOrderById(orderId);
+	ensureManageableOrder(order);
+
+	if (order.client_id !== client.id) {
+		throw new OrderServiceError(
+			"El pedido solicitado no existe",
+			404,
+			"ORDER_NOT_FOUND",
+		);
+	}
+
+	return buildOrderDetail(order);
+}
+
+export async function getOrderDetailForCommercialUser(
+	userId: string,
+	orderId: string,
+) {
+	const commercial = await requireCommercialByUserId(userId);
+	const order = await getRequiredOrderById(orderId);
+	ensureManageableOrder(order);
+	const canAccessClient = await canCommercialAccessClient(
+		commercial.id,
+		order.client_id,
+	);
+
+	if (!canAccessClient) {
+		throw new OrderServiceError(
+			"El cliente de este pedido no esta asignado a este comercial",
+			403,
+			"ORDER_CLIENT_NOT_ASSIGNED",
+		);
+	}
+
+	return buildOrderDetail(order);
+}
+
+export async function getOrderDetailForAdmin(orderId: string) {
+	const order = await getRequiredOrderById(orderId);
+	ensureManageableOrder(order);
+	return buildOrderDetail(order);
+}
+
+export async function updateOrderStatusForCommercialUser(
+	userId: string,
+	input: {
+		orderId: string;
+		statusId: number | string | null | undefined;
+	},
+) {
+	const commercial = await requireCommercialByUserId(userId);
+	const order = await getRequiredOrderById(input.orderId);
+	ensureManageableOrder(order);
+	const canAccessClient = await canCommercialAccessClient(
+		commercial.id,
+		order.client_id,
+	);
+
+	if (!canAccessClient) {
+		throw new OrderServiceError(
+			"El cliente de este pedido no esta asignado a este comercial",
+			403,
+			"ORDER_CLIENT_NOT_ASSIGNED",
+		);
+	}
+
+	return updateOrderStatusRecord(order, input.statusId);
+}
+
+export async function updateOrderStatusForAdmin(input: {
+	orderId: string;
+	statusId: number | string | null | undefined;
+}) {
+	const order = await getRequiredOrderById(input.orderId);
+	ensureManageableOrder(order);
+	return updateOrderStatusRecord(order, input.statusId);
 }
 
 export async function saveDraftForClientUser(
