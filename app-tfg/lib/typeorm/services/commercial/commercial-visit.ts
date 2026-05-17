@@ -124,6 +124,73 @@ function normalizeOrderIds(orderIds: string[] | null | undefined) {
 	);
 }
 
+async function validateDeliveryOrderIdsForVisit(
+	manager: Awaited<ReturnType<typeof getDataSource>>["manager"],
+	input: {
+		clientId: string;
+		visitId?: string | null;
+		orderIds?: string[] | null;
+		errorFactory?: (message: string, status: number, code: string) => Error;
+	},
+) {
+	const normalizedOrderIds = normalizeOrderIds(input.orderIds);
+	const createError =
+		input.errorFactory ??
+		((message: string, status: number, code: string) =>
+			new UpdateCommercialVisitError(message, status, code));
+
+	if (normalizedOrderIds.length === 0) {
+		return [] as string[];
+	}
+
+	const orderRepo = manager.getRepository(Order);
+	const selectedOrders = await orderRepo
+		.createQueryBuilder("order")
+		.where("order.id IN (:...orderIds)", {
+			orderIds: normalizedOrderIds,
+		})
+		.getMany();
+
+	if (selectedOrders.length !== normalizedOrderIds.length) {
+		throw createError(
+			"Uno o varios pedidos indicados no existen",
+			404,
+			"VISIT_ORDER_NOT_FOUND",
+		);
+	}
+
+	for (const order of selectedOrders) {
+		if (order.client_id !== input.clientId) {
+			throw createError(
+				"Solo puedes vincular pedidos del mismo cliente de la visita",
+				409,
+				"VISIT_ORDER_CLIENT_MISMATCH",
+			);
+		}
+
+		if (order.status_id !== ORDER_STATUS_IDS.CONFIRMED) {
+			throw createError(
+				"Solo se pueden vincular pedidos confirmados a un reparto",
+				409,
+				"VISIT_ORDER_STATUS_INVALID",
+			);
+		}
+
+		if (
+			order.delivery_visit_id &&
+			order.delivery_visit_id !== (input.visitId ?? null)
+		) {
+			throw createError(
+				"Hay pedidos seleccionados que ya estan asignados a otro reparto",
+				409,
+				"VISIT_ORDER_ALREADY_ASSIGNED",
+			);
+		}
+	}
+
+	return normalizedOrderIds;
+}
+
 function isValidCommercialVisitStatus(statusId: number) {
 	return Object.values(COMMERCIAL_VISIT_STATUS_IDS).includes(
 		statusId as (typeof COMMERCIAL_VISIT_STATUS_IDS)[keyof typeof COMMERCIAL_VISIT_STATUS_IDS],
@@ -180,6 +247,7 @@ type CreateCommercialVisitInput = {
 	scheduledForDate: string;
 	visitTypeId: number;
 	notes?: string | null;
+	orderIds?: string[] | null;
 };
 
 type UpdateCommercialVisitInput = {
@@ -295,10 +363,11 @@ export async function autoPostponeExpiredPlannedVisitsByCommercial(
 export async function createCommercialVisit(input: CreateCommercialVisitInput) {
 	const ds = await getDataSource();
 
-	return ds.transaction(async (manager) => {
+	const visitId = await ds.transaction(async (manager) => {
 		const visitRepo = manager.getRepository(CommercialVisit);
 		const clientRepo = manager.getRepository(Client);
 		const commercialRepo = manager.getRepository(Commercial);
+		const orderRepo = manager.getRepository(Order);
 
 		if (
 			!input.clientId ||
@@ -370,6 +439,29 @@ export async function createCommercialVisit(input: CreateCommercialVisitInput) {
 			);
 		}
 
+		const normalizedInputOrderIds = normalizeOrderIds(input.orderIds);
+
+		if (
+			Number(input.visitTypeId) !== COMMERCIAL_VISIT_TYPE_IDS.DELIVERY &&
+			normalizedInputOrderIds.length > 0
+		) {
+			throw new CreateCommercialVisitError(
+				"Solo las visitas de reparto pueden crearse con pedidos vinculados",
+				409,
+				"VISIT_ORDERS_REQUIRE_DELIVERY_TYPE",
+			);
+		}
+
+		const validatedOrderIds =
+			Number(input.visitTypeId) === COMMERCIAL_VISIT_TYPE_IDS.DELIVERY
+				? await validateDeliveryOrderIdsForVisit(manager, {
+						clientId: input.clientId,
+						orderIds: normalizedInputOrderIds,
+						errorFactory: (message, status, code) =>
+							new CreateCommercialVisitError(message, status, code),
+					})
+				: [];
+
 		const visit = visitRepo.create({
 			client_id: input.clientId,
 			commercial_id: input.commercialId,
@@ -382,20 +474,36 @@ export async function createCommercialVisit(input: CreateCommercialVisitInput) {
 
 		await visitRepo.save(visit);
 
-		const createdVisit = await buildCommercialVisitQuery(visitRepo)
-			.where("visit.id = :visitId", { visitId: visit.id })
-			.getOne();
-
-		if (!createdVisit) {
-			throw new CreateCommercialVisitError(
-				"No se pudo recuperar la visita recién creada",
-				500,
-				"VISIT_CREATED_BUT_NOT_RELOADED",
-			);
+		if (validatedOrderIds.length > 0) {
+			await orderRepo
+				.createQueryBuilder()
+				.update(Order)
+				.set({
+					delivery_visit_id: visit.id,
+				})
+				.where("id IN (:...orderIds)", {
+					orderIds: validatedOrderIds,
+				})
+				.execute();
 		}
 
-		return createdVisit;
+		return visit.id;
 	});
+
+	const createdVisit = await getCommercialVisitDetailByIdForCommercial(
+		visitId,
+		input.commercialId,
+	);
+
+	if (!createdVisit) {
+		throw new CreateCommercialVisitError(
+			"No se pudo recuperar la visita recién creada",
+			500,
+			"VISIT_CREATED_BUT_NOT_RELOADED",
+		);
+	}
+
+	return createdVisit;
 }
 
 // Obtener visita comercial por su ID, incluyendo relaciones principales.
@@ -672,55 +780,11 @@ export async function updateCommercialVisit(input: UpdateCommercialVisitInput) {
 				);
 			}
 
-			const normalizedOrderIds = normalizeOrderIds(input.orderIds);
-
-			if (normalizedOrderIds.length > 0) {
-				const selectedOrders = await orderRepo
-					.createQueryBuilder("order")
-					.where("order.id IN (:...orderIds)", {
-						orderIds: normalizedOrderIds,
-					})
-					.getMany();
-
-				if (selectedOrders.length !== normalizedOrderIds.length) {
-					throw new UpdateCommercialVisitError(
-						"Uno o varios pedidos indicados no existen",
-						404,
-						"VISIT_ORDER_NOT_FOUND",
-					);
-				}
-
-				for (const order of selectedOrders) {
-					if (order.client_id !== visit.client_id) {
-						throw new UpdateCommercialVisitError(
-							"Solo puedes vincular pedidos del mismo cliente de la visita",
-							409,
-							"VISIT_ORDER_CLIENT_MISMATCH",
-						);
-					}
-
-					if (order.status_id !== ORDER_STATUS_IDS.CONFIRMED) {
-						throw new UpdateCommercialVisitError(
-							"Solo se pueden vincular pedidos confirmados a un reparto",
-							409,
-							"VISIT_ORDER_STATUS_INVALID",
-						);
-					}
-
-					if (
-						order.delivery_visit_id &&
-						order.delivery_visit_id !== visit.id
-					) {
-						throw new UpdateCommercialVisitError(
-							"Hay pedidos seleccionados que ya estan asignados a otro reparto",
-							409,
-							"VISIT_ORDER_ALREADY_ASSIGNED",
-						);
-					}
-				}
-			}
-
-			finalAssignedOrderIds = normalizedOrderIds;
+			finalAssignedOrderIds = await validateDeliveryOrderIdsForVisit(manager, {
+				clientId: visit.client_id,
+				visitId: visit.id,
+				orderIds: input.orderIds,
+			});
 		}
 
 		if (
