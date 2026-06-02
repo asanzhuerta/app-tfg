@@ -5,6 +5,7 @@ import {
 	ClientsIcon,
 	OrderIcon,
 	ReportsIcon,
+	SettingsIcon,
 } from "../components/IconsSVGs";
 
 const navItems = [
@@ -32,6 +33,11 @@ const navItems = [
 		title: "Auditoria",
 		icon: <ReportsIcon className="h-6 w-6" />,
 		href: "/admin/audit",
+	},
+	{
+		title: "Ajustes globales",
+		icon: <SettingsIcon className="h-6 w-6" />,
+		href: "/admin/settings",
 	},
 ];
 
