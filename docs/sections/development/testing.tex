@@ -1,127 +1,109 @@
-En este capítulo se resume la estrategia de validación utilizada en la iteración actual del proyecto. Dado que se trata de un \textit{TFG} con una aplicación \textit{full-stack} de alcance incremental, la verificación combina comprobaciones automáticas de regresión con validaciones funcionales manuales sobre los flujos críticos de los módulos \texttt{M1}, \texttt{M2} y \texttt{M3}.
+En este capitulo se resume la estrategia de validacion utilizada en la iteracion actual del proyecto. Dado que se trata de un \textit{TFG} con una aplicacion \textit{full-stack} de alcance incremental, la verificacion combina comprobaciones automaticas de regresion con validaciones funcionales manuales y asistidas sobre los flujos criticos de los modulos \texttt{M1}, \texttt{M2}, \texttt{M3} y \texttt{M4}.
 
 \section{Estrategia}
 
 La estrategia de pruebas seguida persigue dos objetivos complementarios:
 
 \begin{itemize}
-    \item detectar regresiones técnicas rápidas después de cada cambio relevante mediante comprobaciones automáticas;
-    \item confirmar de forma manual que los flujos de negocio visibles para cada rol continúan funcionando de acuerdo con el alcance operativo implementado.
+    \item detectar regresiones tecnicas rapidas despues de cada cambio relevante mediante comprobaciones automaticas;
+    \item confirmar de forma funcional que los recorridos visibles para cada rol continuan funcionando de acuerdo con el alcance operativo implementado.
 \end{itemize}
 
-Las regresiones técnicas se evalúan repitiendo siempre la misma secuencia base:
+Las regresiones tecnicas se evaluan repitiendo siempre la misma secuencia base:
 
 \begin{enumerate}
-    \item comprobación estática de tipos con \texttt{TypeScript};
-    \item análisis estático de código con \texttt{ESLint};
-    \item construcción completa de producción con \texttt{Next.js}.
+    \item comprobacion estatica de tipos con \texttt{TypeScript};
+    \item analisis estatico de codigo con \texttt{ESLint};
+    \item construccion completa de produccion con \texttt{Next.js};
+    \item smoke test funcional de \texttt{M4} sobre servicios y persistencia;
+    \item pasada visual hidratada de \texttt{M4} sobre rutas criticas por rol.
 \end{enumerate}
 
-Esta rutina ofrece una señal rápida sobre errores de tipado, problemas de compilación, importaciones rotas, uso incorrecto de componentes de servidor o cliente y fallos en rutas dinámicas. Sobre esa base, las validaciones manuales se concentran en los recorridos funcionales con mayor impacto para cada perfil de usuario.
+Esta rutina ofrece una senal rapida sobre errores de tipado, problemas de compilacion, importaciones rotas, uso incorrecto de componentes de servidor o cliente, fallos en rutas dinamicas y desviaciones funcionales del flujo de pedidos, reparto y cobro.
 
 \section{Pruebas Unitarias}
 
-En la versión actual no se ha incorporado todavía una batería formal de pruebas unitarias con un \textit{runner} dedicado. Aun así, parte de la validación de bajo nivel se apoya en tres mecanismos que reducen errores locales antes de integrar cambios:
+En la version actual no se ha incorporado todavia una bateria formal de pruebas unitarias con un \textit{runner} dedicado. Aun asi, parte de la validacion de bajo nivel se apoya en tres mecanismos que reducen errores locales antes de integrar cambios:
 
 \begin{itemize}
     \item el tipado estricto de \texttt{TypeScript} sobre contratos, componentes y servicios;
-    \item la centralización de reglas de negocio en servicios de dominio de usuarios, operativa comercial y catálogo;
-    \item las validaciones normalizadas de entrada antes de persistir cambios, lo que limita estados inconsistentes en operaciones de administración y catálogo.
+    \item la centralizacion de reglas de negocio en servicios de dominio de usuarios, operativa comercial, catalogo y pedidos;
+    \item las validaciones normalizadas de entrada antes de persistir cambios, lo que limita estados inconsistentes en operaciones de administracion, catalogo, reparto y cobro.
 \end{itemize}
 
-La ausencia de una suite unitaria completa sigue siendo una mejora pendiente, pero la separación actual de servicios facilita su incorporación futura.
+La ausencia de una suite unitaria completa sigue siendo una mejora pendiente, pero la separacion actual de servicios facilita su incorporacion futura.
 
-\section{Pruebas de Integración}
+\section{Pruebas de Integracion}
 
-Las pruebas de integración se centran en comprobar la interacción entre interfaz, \textit{Route Handlers}, autenticación, persistencia y servicios externos. En esta línea resultan especialmente relevantes los siguientes puntos:
+Las pruebas de integracion se centran en comprobar la interaccion entre interfaz, \textit{Route Handlers}, autenticacion, persistencia y servicios externos. En esta linea resultan especialmente relevantes los siguientes puntos:
 
 \begin{itemize}
-    \item autenticación con \texttt{Auth.js} y control de acceso por rol en \texttt{proxy.ts};
-    \item coordinación entre formularios administrativos y servicios \texttt{TypeORM} para usuarios, clientes, visitas y catálogo;
-    \item integración con \texttt{Nominatim} y \texttt{OSRM} para geocodificación y cálculo de rutas del módulo \texttt{M2};
-    \item integración con \texttt{Cloudinary} para subida, reemplazo y validación de imágenes de perfil y catálogo en \texttt{M1} y \texttt{M3}.
+    \item autenticacion con \texttt{Auth.js} y control de acceso por rol en \texttt{proxy.ts};
+    \item coordinacion entre formularios administrativos y servicios \texttt{TypeORM} para usuarios, clientes, visitas, catalogo y pedidos;
+    \item integracion con \texttt{Nominatim} y \texttt{OSRM} para geocodificacion y calculo de rutas del modulo \texttt{M2};
+    \item integracion con \texttt{Cloudinary} para subida, reemplazo y validacion de imagenes de perfil y catalogo en \texttt{M1} y \texttt{M3};
+    \item integracion con \texttt{QuickChart} para representar el QR operativo de cada pedido dentro del flujo de reparto de \texttt{M4}.
 \end{itemize}
 
-Estas comprobaciones se realizan principalmente a través de la propia aplicación en entorno local, verificando que una acción iniciada desde la interfaz produce el efecto esperado en la API y en la base de datos.
+Estas comprobaciones se realizan principalmente a traves de la propia aplicacion en entorno local, verificando que una accion iniciada desde la interfaz produce el efecto esperado en la API y en la base de datos.
 
 \section{Pruebas de Sistema}
 
-La evidencia automatizada disponible para el estado actual del repositorio se ha obtenido ejecutando los siguientes comandos sobre la aplicación \texttt{app-tfg/}:
+La evidencia automatizada disponible para el estado actual del repositorio se ha obtenido ejecutando los siguientes comandos sobre la aplicacion \texttt{app-tfg/}:
 
 \begin{itemize}
     \item \texttt{npm run typecheck}
     \item \texttt{npm run lint}
     \item \texttt{npm run build}
+    \item \texttt{npm run m4:closeout}
+    \item \texttt{npm run m4:ui-check}
 \end{itemize}
 
-El resultado de esta validación es satisfactorio: la comprobación de tipos y la construcción completa de producción finalizan sin errores, y el análisis estático no detecta incidencias bloqueantes, aunque mantiene advertencias menores de limpieza de código que no impiden la ejecución del sistema.
+El resultado de esta validacion es satisfactorio: la comprobacion de tipos, el analisis estatico y la construccion completa de produccion finalizan sin errores, y el cierre tecnico de \texttt{M4} queda reforzado por dos evidencias adicionales:
+
+\begin{itemize}
+    \item un smoke test funcional de servicios y persistencia, que cubre el flujo principal de pedidos, reparto y cobro y finaliza con \texttt{19/19} comprobaciones satisfactorias en la bateria principal y \texttt{12/12} en la pasada de cierre;
+    \item una verificacion visual hidratada sobre cliente, comercial y administrador, reutilizable para comprobar bandeja de reparto, detalle de visita, cobros, ETA del cliente, detalle administrativo y gestion de errores de sesion o de carga.
+\end{itemize}
+
+Una mejora tecnica asociada a esta fase de pruebas ha consistido en desacoplar la construccion de \texttt{Next.js} de fuentes remotas, de modo que \texttt{npm run build} ya no depende de descargar \texttt{Geist} desde \texttt{next/font/google} para completarse en local.
 
 \subsection{Pruebas Funcionales}
 
-Las comprobaciones funcionales prioritarias se organizan por módulo:
+Las comprobaciones funcionales prioritarias se organizan por modulo:
 
 \begin{itemize}
-    \item \texttt{M1}: registro de solicitud de alta, autenticación con credenciales, navegación protegida por rol, edición de perfil y cambio de contraseña.
-    \item \texttt{M2}: administración de clientes, asignación comercial-cliente, geolocalización confirmada, creación y seguimiento de visitas, configuración diaria del comercial y cálculo de ETA para cliente.
-    \item \texttt{M3}: mantenimiento del catálogo desde administración, consulta pública de productos activos, filtrado por categorías y líneas, acceso a fichas técnicas, consulta de recursos de apoyo y exploración de cartas de color con sus referencias.
+    \item \texttt{M1}: registro de solicitud de alta, autenticacion con credenciales, navegacion protegida por rol, edicion de perfil y cambio de contrasena.
+    \item \texttt{M2}: administracion de clientes, asignacion comercial-cliente, geolocalizacion confirmada, creacion y seguimiento de visitas, configuracion diaria del comercial y calculo de ETA para cliente.
+    \item \texttt{M3}: mantenimiento del catalogo desde administracion, consulta publica de productos activos, filtrado por categorias y lineas, acceso a fichas tecnicas, consulta de recursos de apoyo y exploracion de cartas de color con sus referencias.
+    \item \texttt{M4}: borradores de pedido en cliente y comercial, confirmacion y cancelacion coherente, bandeja de pedidos pendientes de reparto, visita de entrega con validacion QR, paso a \texttt{delivered}, subflujo minimo de cobro y trazabilidad cruzada desde admin.
 \end{itemize}
 
-En \texttt{M3}, la regresión funcional más sensible consiste en verificar que la misma información de catálogo se presenta de forma coherente en tres contextos distintos: administración, comercial y cliente. Por ello, cualquier cambio en entidades, serializadores o servicios de lectura debe comprobarse en esos tres recorridos.
-
-\subsubsection{Matriz resumida de cobertura de \texttt{M3}}
-
-Con el objetivo de dejar trazabilidad explícita entre requisitos y evidencia funcional implementada, la Tabla~\ref{tab:m3-validation-matrix} resume la cobertura manual revisada para el módulo \texttt{M3}.
-
-\begin{table}[H]
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|p{0.14\textwidth}|p{0.42\textwidth}|p{0.34\textwidth}|}
-\hline
-\textbf{RF} & \textbf{Evidencia implementada} & \textbf{Validación manual realizada} \\
-\hline
-\texttt{RF-M3-01} &
-Catálogo activo accesible desde las zonas \texttt{client} y \texttt{commercial}, con fichas de producto que muestran nombre, referencia, descripción, imagen, categoría, línea, información técnica, recursos de apoyo y coloración relacionada cuando aplica. &
-Recorrido completo desde el listado hasta la ficha de producto en ambos roles, comprobando la presencia de metadatos, bloque técnico y recursos enlazados. \\
-\hline
-\texttt{RF-M3-02} &
-Explorador de productos con clasificación comercial y filtros por categoría, línea y subcategoría, además de búsqueda textual sobre nombre, referencia y contenido relevante del producto. &
-Aplicación combinada de filtros y búsqueda sobre el catálogo, verificando que el listado resultante conserva coherencia con la clasificación comercial esperada. \\
-\hline
-\texttt{RF-M3-03} &
-Consulta de coloración por línea comercial, acceso a cartas de color asociadas y visualización de referencias cromáticas, incluyendo una vista global de tonos y localización por nomenclatura. &
-Navegación desde la línea hasta la carta y sus tonos, más comprobación adicional de búsqueda y localización de una referencia concreta dentro de la exploración cromática. \\
-\hline
-\texttt{RF-M3-04} &
-Panel administrativo bajo \texttt{/admin/catalog} con mantenimiento de categorías, líneas, subcategorías, productos, recursos de apoyo, cartas de color y referencias. Los productos pueden actualizarse y desactivarse mediante su estado, con soporte para imágenes en \texttt{Cloudinary}. &
-Alta o edición de elementos del catálogo desde administración, actualización de materiales asociados y verificación posterior de su reflejo en las vistas públicas del módulo. \\
-\hline
-\end{tabular}
-\caption{Matriz resumida de cobertura funcional del módulo \texttt{M3}}
-\label{tab:m3-validation-matrix}
-\end{table}
+En \texttt{M4}, la regresion funcional mas sensible consiste en comprobar que el mismo pedido se mantiene coherente al pasar por tres contextos distintos: cliente, comercial y administrador. Por ello, cualquier cambio en entidades, serializadores, servicios de pedido o logica de visitas de reparto debe revalidarse en esos tres recorridos.
 
 \subsection{Pruebas No Funcionales}
 
 En el estado actual del proyecto, las comprobaciones no funcionales se concentran en:
 
 \begin{itemize}
-    \item seguridad básica de acceso mediante autenticación y autorización por roles;
-    \item robustez de compilación y tipado de toda la aplicación;
-    \item compatibilidad mínima de navegador a través de la ruta informativa para clientes no soportados;
-    \item validación de tamaño, tipo y procedencia de imágenes subidas a \texttt{Cloudinary}.
+    \item seguridad basica de acceso mediante autenticacion y autorizacion por roles;
+    \item robustez de compilacion y tipado de toda la aplicacion;
+    \item validacion basica de errores de sesion y de carga en rutas criticas de \texttt{M4};
+    \item compatibilidad minima de navegador a traves de la ruta informativa para clientes no soportados;
+    \item validacion de tamano, tipo y procedencia de imagenes subidas a \texttt{Cloudinary}.
 \end{itemize}
 
-No se ha abordado todavía una campaña específica de rendimiento, carga o pruebas automatizadas de interfaz, por lo que estas áreas permanecen como trabajo de mejora futura.
+No se ha abordado todavia una campana especifica de rendimiento, carga o pruebas automatizadas de interfaz con un \textit{framework} dedicado, por lo que estas areas permanecen como trabajo de mejora futura.
 
-\section{Pruebas de Aceptación}
+\section{Pruebas de Aceptacion}
 
-La aceptación de la versión actual del sistema se interpreta como la disponibilidad integrada y estable de los módulos \texttt{M1}, \texttt{M2} y \texttt{M3}. En términos prácticos, esto implica que:
+La aceptacion de la version actual del sistema se interpreta como la disponibilidad integrada y estable de los modulos \texttt{M1}, \texttt{M2}, \texttt{M3} y \texttt{M4}. En terminos practicos, esto implica que:
 
 \begin{itemize}
-    \item el administrador puede gestionar usuarios, clientes y catálogo;
-    \item el comercial puede consultar su operativa diaria y el catálogo;
-    \item el cliente puede consultar su previsión de reparto, su perfil, el catálogo y la coloración.
+    \item el administrador puede gestionar usuarios, clientes, catalogo y pedidos globales;
+    \item el comercial puede consultar su operativa diaria, el catalogo, sus pedidos, los repartos asociados y el subflujo minimo de cobro;
+    \item el cliente puede consultar su prevision de reparto, su perfil, el catalogo, la coloracion y el historial de pedidos;
+    \item el flujo \texttt{pedido -> reparto -> entrega -> cobro minimo} queda cerrado y trazable en la implementacion actual.
 \end{itemize}
 
-Con este umbral cubierto, el siguiente salto funcional razonable del proyecto pasa a ser la incorporación del módulo \texttt{M4}, centrado ya en pedidos, entregas y cobros.
+Con este umbral cubierto, el siguiente salto funcional razonable del proyecto no pasa ya por incorporar \texttt{M4}, sino por consolidar documentalmente su alcance final y, en futuras iteraciones, ampliar el dominio de cobros hacia pagos parciales, facturacion y conciliacion avanzada si el proyecto lo requiere.

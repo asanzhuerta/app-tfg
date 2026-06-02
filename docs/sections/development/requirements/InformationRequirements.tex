@@ -355,7 +355,7 @@ Los datos asociados a una referencia de color incluyen:
 
 \subsubsection*{Pedido}
 
-El sistema debe almacenar la información general asociada a cada pedido realizado por un cliente profesional o por un usuario autorizado en su nombre. Esta información permite identificar el pedido, conocer su situación dentro del proceso comercial y relacionarlo con el cliente correspondiente.
+El sistema debe almacenar la informacion general asociada a cada pedido realizado por un cliente profesional o por un usuario autorizado en su nombre. Esta informacion permite identificar el pedido, conocer su situacion dentro del flujo comercial y relacionarlo tanto con su ciclo logistico como con su situacion minima de cobro.
 
 Los datos asociados a un pedido incluyen:
 
@@ -363,93 +363,79 @@ Los datos asociados a un pedido incluyen:
     \item Identificador del pedido.
     \item Cliente asociado al pedido.
     \item Usuario que registra el pedido.
-    \item Fecha de creación del pedido.
     \item Estado del pedido.
+    \item Estado de cobro del pedido.
+    \item Visita de reparto vinculada, cuando exista.
+    \item Metodo de cobro, cuando se haya registrado.
+    \item Notas de cobro, cuando se hayan registrado.
+    \item Fecha del cobro, cuando exista.
+    \item Usuario que marco el cobro, cuando exista.
     \item Importe total del pedido.
     \item Observaciones asociadas al pedido.
-    \item Fecha de última actualización del pedido.
+    \item Fecha de creacion del pedido.
+    \item Fecha de ultima actualizacion del pedido.
 \end{itemize}
 
-\subsubsection*{Línea de pedido}
+\subsubsection*{Linea de pedido}
 
-El sistema debe almacenar el detalle de los productos incluidos en cada pedido. Esta información permite conocer qué productos se han solicitado y en qué cantidades.
+El sistema debe almacenar el detalle de los productos incluidos en cada pedido. Esta informacion permite conocer que productos se han solicitado, en que cantidades y con que instantanea comercial se consolidaron en el momento del pedido.
 
-Los datos asociados a una línea de pedido incluyen:
+Los datos asociados a una linea de pedido incluyen:
 
 \begin{itemize}
-    \item Identificador de la línea de pedido.
+    \item Identificador de la linea de pedido.
     \item Pedido asociado.
-    \item Producto incluido en la línea.
+    \item Producto incluido en la linea.
+    \item Referencia cromatica asociada, cuando proceda.
     \item Cantidad solicitada.
-    \item Precio unitario aplicado.
-    \item Descuento aplicado, en caso de existir.
-    \item Importe total de la línea.
+    \item Precio unitario consolidado en el momento del pedido.
+    \item Porcentaje de descuento aplicado a la linea.
+    \item Importe total de la linea.
+    \item Referencia comercial consolidada del producto.
+    \item Codigo y nombre de variante consolidados, cuando existan.
 \end{itemize}
 
-\subsubsection*{Concepto adicional de pedido}
+\subsubsection*{Estado de pedido}
 
-El sistema debe permitir registrar elementos económicos adicionales asociados a un pedido que no correspondan directamente a productos del catálogo, como gastos, ajustes o servicios complementarios.
+El sistema debe gestionar un catalogo controlado de estados de pedido para representar el ciclo de vida permitido de cada encargo.
 
-Los datos asociados incluyen:
+Los datos asociados a un estado de pedido incluyen:
 
 \begin{itemize}
-    \item Identificador del concepto.
-    \item Pedido asociado.
-    \item Descripción del concepto.
-    \item Importe asociado.
+    \item Identificador del estado.
+    \item Codigo interno del estado.
+    \item Nombre visible del estado.
 \end{itemize}
 
-\subsubsection*{Entrega}
+\subsubsection*{Estado de cobro del pedido}
 
-El sistema debe almacenar la información relativa a la entrega asociada a cada pedido. Esta información permite conocer la modalidad de entrega seleccionada, su estado, las fechas previstas o reales asociadas al proceso y las incidencias producidas durante la entrega.
+El sistema debe gestionar un catalogo controlado de estados de cobro para representar el seguimiento minimo del pago asociado al pedido.
 
-Los datos asociados a una entrega incluyen:
+Los datos asociados a un estado de cobro incluyen:
 
 \begin{itemize}
-    \item Identificador de la entrega.
-    \item Pedido asociado a la entrega.
-    \item Modalidad de entrega.
-    \item Usuario responsable de la entrega, en caso de entrega directa.
-    \item Estado de la entrega.
-    \item Fecha prevista de entrega.
-    \item Fecha real de entrega.
-    \item Número de bultos o cajas asociados a la entrega, cuando corresponda.
-    \item Importe de contrareembolso, cuando corresponda.
-    \item Observaciones de la entrega.
+    \item Identificador del estado de cobro.
+    \item Codigo interno del estado.
+    \item Nombre visible del estado.
 \end{itemize}
 
-\subsubsection*{Incidencia de entrega}
+\subsubsection*{Visita comercial de reparto vinculada}
 
-El sistema debe permitir registrar incidencias asociadas a una entrega. Estas incidencias permiten documentar problemas detectados durante el proceso de entrega, productos pendientes de servir, entregas parciales u otras situaciones relevantes para el seguimiento logístico del pedido.
+La implementacion actual reutiliza la entidad de visita comercial del modulo \texttt{M2} para modelar la fase logistica del pedido. Cuando un pedido queda asociado a un reparto, la relacion se almacena mediante una visita comercial de tipo entrega o reparto.
 
-Los datos asociados a una incidencia de entrega incluyen:
+Los datos relevantes de esa visita vinculada incluyen:
 
 \begin{itemize}
-    \item Identificador de la incidencia.
-    \item Entrega asociada.
-    \item Tipo de incidencia.
-    \item Descripción de la incidencia.
-    \item Fecha de registro de la incidencia.
-    \item Estado de la incidencia.
+    \item Identificador de la visita de reparto.
+    \item Cliente asociado a la visita.
+    \item Comercial responsable.
+    \item Fecha prevista del reparto.
+    \item Tipo de visita, que debe corresponder a reparto.
+    \item Estado de la visita.
+    \item Observaciones o resultado asociados a la visita.
 \end{itemize}
 
-\subsubsection*{Cobro}
-
-El sistema debe permitir registrar los cobros asociados a pedidos o entregas. Esta información permite reflejar los importes abonados por los clientes y mantener el seguimiento de pagos totales o parciales.
-
-Los datos asociados a un cobro incluyen:
-
-\begin{itemize}
-    \item Identificador del cobro.
-    \item Cliente asociado al cobro.
-    \item Pedido asociado al cobro, en caso de existir.
-    \item Entrega asociada al cobro, en caso de existir.
-    \item Fecha del cobro.
-    \item Importe cobrado.
-    \item Método de cobro.
-    \item Observaciones asociadas al cobro.
-\end{itemize}
-
+En la implementacion actual no existe una entidad de cobro independiente ni una entidad de entrega separada del subsistema de visitas comerciales. El seguimiento minimo del cobro se resuelve sobre el propio pedido y la fase logistica reutiliza visitas comerciales de tipo reparto.
 % ------------------------------------------------------------------------------
 \subsection{RI-M5}
 % ------------------------------------------------------------------------------

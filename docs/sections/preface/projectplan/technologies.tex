@@ -1,0 +1,41 @@
+La selección tecnológica del proyecto se ha realizado teniendo en cuenta los objetivos del sistema, la necesidad de construir una aplicación web accesible desde distintos dispositivos y la conveniencia de disponer de una arquitectura mantenible y extensible. Al tratarse de una solución orientada a la gestión comercial y a la centralización de información, se han priorizado tecnologías consolidadas, ampliamente utilizadas en el desarrollo web y compatibles con un despliegue progresivo.
+
+\subsection{Tecnologías de desarrollo web}
+
+Para el desarrollo de la aplicación se ha seleccionado \textbf{Next.js}, un framework basado en React que permite construir aplicaciones web modernas combinando funcionalidades de frontend y backend dentro de un mismo proyecto. Esta elección facilita el desarrollo de una aplicación full-stack, reduce la necesidad de mantener proyectos separados para cliente y servidor, y permite organizar la lógica de presentación, las rutas y las operaciones de servidor de forma integrada.
+
+El uso de \textbf{React} permite construir interfaces de usuario basadas en componentes reutilizables, lo que favorece la mantenibilidad del código y la evolución progresiva de la aplicación. Además, se ha empleado \textbf{TypeScript} para mejorar la seguridad del desarrollo mediante tipado estático, reduciendo errores derivados del uso incorrecto de datos y facilitando la comprensión del código.
+
+Para la capa visual se ha utilizado \textbf{Tailwind CSS}, una herramienta de estilos basada en clases de utilidad que facilita la creación de interfaces responsive. Esta tecnología permite adaptar la aplicación a distintos tamaños de pantalla, aspecto especialmente relevante al tratarse de una herramienta que puede ser utilizada desde ordenadores, tablets y teléfonos móviles.
+
+\subsection{Persistencia de datos}
+
+Como sistema gestor de base de datos se ha escogido \textbf{PostgreSQL}, una base de datos relacional adecuada para representar entidades estructuradas y relaciones entre usuarios, roles, clientes, pedidos u otros elementos del dominio. El uso de una base de datos relacional resulta apropiado para este proyecto, ya que el sistema requiere consistencia en la información, integridad referencial y capacidad de consulta sobre datos vinculados.
+
+Durante el desarrollo se ha empleado una base de datos en entorno local, levantada mediante contenedores Docker, lo que permite reproducir el entorno de forma sencilla y mantener separada la configuración del sistema respecto al equipo físico de desarrollo.
+
+\subsection{Autenticación y seguridad}
+
+La autenticación de usuarios constituye una de las bases funcionales del sistema. Para ello se ha utilizado \textbf{Auth.js}, que permite gestionar sesiones, credenciales y control de acceso en aplicaciones desarrolladas con Next.js. Las contraseñas se almacenan de forma segura mediante funciones de hash, evitando guardar credenciales en texto plano.
+
+El sistema incorpora una estructura de roles que permite diferenciar permisos entre los distintos perfiles previstos: administrador, comercial y cliente profesional. Esta separación es fundamental para garantizar que cada usuario solo pueda acceder a las funcionalidades correspondientes a su responsabilidad dentro del sistema.
+
+\subsection{Entorno de desarrollo y despliegue}
+
+Para facilitar la preparación del entorno se ha utilizado \textbf{Docker}, especialmente para la ejecución de servicios auxiliares como la base de datos. Esta herramienta permite definir servicios mediante archivos de configuración y simplifica la reproducción del entorno en otros equipos.
+
+Como apoyo durante las pruebas en dispositivos externos se ha utilizado \textbf{Cloudflare Tunnel}, que permite exponer temporalmente el entorno local de desarrollo a través de una URL accesible desde otros dispositivos. Esta herramienta resulta útil para validar el comportamiento responsive y PWA de la aplicación en móviles o tablets sin necesidad de realizar un despliegue público definitivo.
+
+\subsection{Aplicación web progresiva}
+
+La aplicación se ha planteado con enfoque \textbf{PWA}, permitiendo que pueda comportarse de forma similar a una aplicación instalable en determinados dispositivos. Este enfoque resulta adecuado para el contexto del proyecto, ya que los usuarios previstos pueden necesitar acceder al sistema desde dispositivos móviles durante visitas comerciales, consultas de catálogo o gestión diaria de actividad.
+
+La configuración PWA incluye elementos como el manifiesto de la aplicación, iconos, nombre visible, color de tema y compatibilidad con instalación desde navegador en los dispositivos que lo permitan.
+
+\subsection{Herramientas de documentación y apoyo}
+
+La memoria del proyecto se ha elaborado utilizando \textbf{LaTeX}, por su adecuación para documentos académicos extensos y por las facilidades que ofrece para gestionar índices, figuras, tablas, referencias y estructura de capítulos.
+
+Para la elaboración de diagramas y recursos gráficos se han empleado herramientas como \textbf{Draw.io} e \textbf{Inkscape}, que permiten crear y exportar diagramas en formatos adecuados para su inclusión en la memoria.
+
+En conjunto, las tecnologías seleccionadas permiten desarrollar una solución web moderna, mantenible y preparada para crecer progresivamente, manteniendo una separación clara entre interfaz, lógica de negocio, persistencia de datos y configuración del entorno.

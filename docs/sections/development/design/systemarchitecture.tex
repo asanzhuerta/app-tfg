@@ -1,56 +1,58 @@
-En esta sección se documenta la arquitectura lógica actual del sistema, centrada en la aplicación web, la organización del código y las integraciones externas necesarias para soportar los módulos implementados.
+En esta seccion se documenta la arquitectura logica actual del sistema, centrada en la aplicacion web, la organizacion del codigo y las integraciones externas necesarias para soportar los modulos ya implementados, incluido \texttt{M4}.
 
-\subsection{Diseño de alto nivel}
+\subsection{Diseno de alto nivel}
 
-KinEstilistas se implementa como una aplicación web monolítica full-stack. La misma base de código contiene tanto la interfaz de usuario como la lógica de servidor y el acceso a datos, lo que simplifica la trazabilidad entre requisitos, código y despliegue.
+KinEstilistas se implementa como una aplicacion web monolitica full-stack. La misma base de codigo contiene tanto la interfaz de usuario como la logica de servidor y el acceso a datos, lo que simplifica la trazabilidad entre requisitos, codigo y despliegue.
 
-Los contenedores lógicos que forman la solución son los siguientes:
+Los contenedores logicos que forman la solucion son los siguientes:
 
 \begin{itemize}
     \item \textbf{Cliente web}: interfaz renderizada con \texttt{Next.js} y \texttt{React}, diferenciada por rol.
-    \item \textbf{Servidor de aplicación}: \texttt{Route Handlers}, autenticación, protección de rutas, validación y orquestación de servicios.
+    \item \textbf{Servidor de aplicacion}: \texttt{Route Handlers}, autenticacion, proteccion de rutas, validacion y orquestacion de servicios.
     \item \textbf{Base de datos relacional}: \texttt{PostgreSQL}, persistida y versionada mediante migraciones.
-    \item \textbf{Servicios externos}: \texttt{Cloudinary} para imágenes, \texttt{Nominatim} para geocodificación y \texttt{OSRM} para trazado de rutas.
+    \item \textbf{Servicios externos}: \texttt{Cloudinary} para imagenes, \texttt{Nominatim} para geocodificacion, \texttt{OSRM} para trazado de rutas y \texttt{QuickChart} para la representacion del QR operativo de pedido.
 \end{itemize}
 
-La aplicación resuelve además varias responsabilidades transversales desde una capa común:
+La aplicacion resuelve ademas varias responsabilidades transversales desde una capa comun:
 
 \begin{itemize}
-    \item autenticación y sesión con \texttt{Auth.js},
+    \item autenticacion y sesion con \texttt{Auth.js},
     \item control de acceso por rol,
-    \item compatibilidad mínima de navegador,
+    \item compatibilidad minima de navegador,
     \item rate limiting sobre \texttt{/api},
     \item contratos de datos compartidos entre cliente y servidor.
 \end{itemize}
 
-\subsection{Diseño detallado}
+\subsection{Diseno detallado}
 
-La estructura del código combina una organización por capas técnicas con subdirectorios funcionales para las áreas principales del dominio.
+La estructura del codigo combina una organizacion por capas tecnicas con subdirectorios funcionales para las areas principales del dominio.
 
 \begin{itemize}
     \item \texttt{app/admin/}, \texttt{app/commercials/} y \texttt{app/clients/}: entrada funcional por rol.
-    \item \texttt{app/api/}: endpoints internos segmentados por área de negocio.
-    \item \texttt{app/components/}: componentes de interfaz reutilizables, incluyendo formularios, mapas y tablas.
+    \item \texttt{app/api/}: endpoints internos segmentados por area de negocio.
+    \item \texttt{app/components/}: componentes de interfaz reutilizables, incluyendo formularios, mapas, tablas y vistas especializadas de pedido o reparto.
     \item \texttt{app/hooks/api/}: capa cliente para acceso declarativo a la API.
     \item \texttt{lib/contracts/}: DTOs y contratos comunes.
-    \item \texttt{lib/commercial/}: lógica de planificación de rutas y cálculo temporal reutilizable.
+    \item \texttt{lib/commercial/}: logica de planificacion de rutas y calculo temporal reutilizable.
+    \item \texttt{lib/clients/}: lectura de ETA y resumen de reparto para la zona cliente.
+    \item \texttt{lib/orders/}: utilidades operativas del dominio de pedidos, como el soporte QR.
     \item \texttt{lib/typeorm/entities/} y \texttt{lib/typeorm/services/}: modelo persistente y servicios de dominio asociados a la base de datos.
-    \item \texttt{migrations/typeorm/}: evolución versionada del esquema.
+    \item \texttt{migrations/typeorm/}: evolucion versionada del esquema.
 \end{itemize}
 
-\paragraph{Flujo típico de una operación protegida}
+\paragraph{Flujo tipico de una operacion protegida}
 
-El flujo interno de una operación sensible sigue de forma general los siguientes pasos:
+El flujo interno de una operacion sensible sigue de forma general los siguientes pasos:
 
 \begin{enumerate}
-    \item La petición llega a \texttt{proxy.ts}, donde se aplica control de navegador, autenticación base y rate limiting.
-    \item La página o el endpoint correspondiente obtiene la sesión y comprueba el rol requerido.
-    \item El \textit{Route Handler} delega la lógica de negocio en servicios o helpers de \texttt{lib/}.
-    \item Si se requiere persistencia, la operación utiliza \texttt{TypeORM} sobre entidades y repositorios.
+    \item La peticion llega a \texttt{proxy.ts}, donde se aplica control de navegador, autenticacion base y rate limiting.
+    \item La pagina o el endpoint correspondiente obtiene la sesion y comprueba el rol requerido.
+    \item El \textit{Route Handler} delega la logica de negocio en servicios o helpers de \texttt{lib/}.
+    \item Si se requiere persistencia, la operacion utiliza \texttt{TypeORM} sobre entidades y repositorios.
     \item La respuesta se normaliza y se devuelve al cliente mediante contratos compartidos.
 \end{enumerate}
 
-\paragraph{Organización actual por carpetas}
+\paragraph{Organizacion actual por carpetas}
 
 La arquitectura de carpetas actual es adecuada para el alcance ya construido, porque separa claramente:
 
@@ -61,8 +63,8 @@ La arquitectura de carpetas actual es adecuada para el alcance ya construido, po
     \item persistencia y migraciones.
 \end{itemize}
 
-No obstante, el crecimiento del módulo comercial ya apunta a una evolución deseable: reforzar la agrupación por \textit{feature} para reducir la dispersión entre componentes, hooks, contratos y servicios relacionados con una misma capacidad de negocio. La base actual sigue siendo válida, pero esta mejora será especialmente interesante cuando entren en alcance \texttt{M3} y \texttt{M4}.
+No obstante, el crecimiento conjunto de los modulos comercial y de pedidos ya apunta a una evolucion deseable: reforzar la agrupacion por \textit{feature} para reducir la dispersion entre componentes, hooks, contratos y servicios relacionados con una misma capacidad de negocio. La base actual sigue siendo valida, pero esta mejora seria especialmente interesante en futuras iteraciones del flujo completo de \texttt{M2} y \texttt{M4}.
 
-\subsection{Gestión de almacenamiento de imágenes de perfil}
+\subsection{Gestion de almacenamiento de imagenes de perfil}
 \label{sec:storageDesign}
 \input{./sections/development/design/systemarchitecture/storagedesign.tex}

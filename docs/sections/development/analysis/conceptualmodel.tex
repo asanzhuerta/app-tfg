@@ -794,227 +794,194 @@ La clase \textit{Referencia de color} representa cada uno de los tonos o referen
 \subsection{Modelo conceptual de datos M4}
 % ------------------------------------------------------------------------------
 
-En este apartado se describe el modelo conceptual correspondiente al módulo de pedidos, entregas y cobros.
+En este apartado se describe el modelo conceptual correspondiente al modulo de pedidos, entregas y cobros.
 
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=\textwidth]{figures/MCD/M4_ModeloConceptual.pdf}
-%     \caption{Modelo conceptual de datos del módulo M4.}
+%     \caption{Modelo conceptual de datos del modulo M4.}
 %     \label{fig:mcd-m4}
 % \end{figure}
 
 \subsubsection{Clase Pedido}
 
-La clase \textit{Pedido} representa cada solicitud de compra realizada por un cliente profesional o por un usuario autorizado en su nombre. En ella se almacena la información general necesaria para identificar el pedido, relacionarlo con el cliente correspondiente y conocer su estado dentro del proceso comercial.
+La clase \textit{Pedido} representa cada solicitud de compra realizada por un cliente profesional o por un usuario autorizado en su nombre. En ella se almacena la informacion necesaria para identificar el pedido, conocer su estado dentro del ciclo comercial, vincularlo opcionalmente a un reparto y mantener su seguimiento minimo de cobro.
 
 \textbf{Atributos}
 
 \begin{itemize}
       \item \textit{id}
-            Identificador único del pedido.
+            Identificador unico del pedido.
       \item \textit{client}
             Cliente asociado al pedido.
       \item \textit{created\_by}
             Usuario que registra el pedido.
-      \item \textit{created\_at}
-            Fecha de creación del pedido.
       \item \textit{status}
             Estado actual del pedido.
+      \item \textit{payment\_status}
+            Estado actual de cobro del pedido.
+      \item \textit{delivery\_visit}
+            Visita de reparto vinculada, cuando exista.
+      \item \textit{payment\_method}
+            Metodo de cobro registrado, cuando exista.
+      \item \textit{payment\_notes}
+            Notas de cobro, cuando existan.
+      \item \textit{paid\_at}
+            Fecha en la que se marco el cobro, cuando exista.
+      \item \textit{paid\_by\_user}
+            Usuario que registro el cambio de cobro, cuando exista.
       \item \textit{total\_amount}
             Importe total del pedido.
       \item \textit{notes}
             Observaciones asociadas al pedido.
+      \item \textit{created\_at}
+            Fecha de creacion del pedido.
       \item \textit{updated\_at}
-            Fecha de última actualización del pedido.
+            Fecha de ultima actualizacion del pedido.
 \end{itemize}
 
 \textbf{Restricciones textuales}
 
 \begin{itemize}
-      \item \textbf{RT-O1 — Asociación obligatoria del pedido}
-            Todo pedido debe estar asociado a un cliente existente y a un usuario válido que lo registre.
-      \item \textbf{RT-O2 — Estado válido del pedido}
-            El estado de un pedido solo puede tomar valores definidos por el sistema.
-      \item \textbf{RT-O3 — Importe total coherente}
-            Todo pedido debe disponer de un importe total coherente con la suma de sus líneas de pedido.
-      \item \textbf{RT-O4 — Coherencia temporal del pedido}
-            Si el atributo \textit{updated\_at} tiene valor, este debe ser posterior o igual a la fecha de creación del pedido.
+      \item \textbf{RT-O1 --- Asociacion obligatoria del pedido}
+            Todo pedido debe estar asociado a un cliente existente y a un usuario valido que lo registre.
+      \item \textbf{RT-O2 --- Estado valido del pedido}
+            El estado de un pedido solo puede tomar valores definidos por el sistema y respetar las transiciones permitidas del flujo implementado.
+      \item \textbf{RT-O3 --- Limite de pedidos abiertos sin cobrar}
+            Un mismo cliente no debe acumular mas de dos pedidos abiertos pendientes de cobro.
+      \item \textbf{RT-O4 --- Vinculacion logistica coherente}
+            Solo un pedido confirmado puede vincularse a una visita de reparto activa.
+      \item \textbf{RT-O5 --- Coherencia de entrega}
+            Un pedido solo puede pasar a \texttt{delivered} al completarse correctamente la visita de reparto vinculada.
+      \item \textbf{RT-O6 --- Coherencia de cobro}
+            Un pedido solo puede pasar a \texttt{paid} si previamente se encuentra entregado y dispone del registro minimo de cobro asociado.
 \end{itemize}
 
-\subsubsection{Clase Línea de pedido}
+\subsubsection{Clase Linea de pedido}
 
-La clase \textit{Línea de pedido} representa cada uno de los productos incluidos en un pedido. Su finalidad es detallar la composición del pedido, las cantidades solicitadas y las condiciones económicas aplicadas en cada línea.
+La clase \textit{Linea de pedido} representa cada uno de los productos incluidos en un pedido. Su finalidad es detallar la composicion del pedido, las cantidades solicitadas y la instantanea comercial consolidada en el momento de crear la linea.
 
 \textbf{Atributos}
 
 \begin{itemize}
       \item \textit{id}
-            Identificador único de la línea de pedido.
+            Identificador unico de la linea de pedido.
       \item \textit{order}
-            Pedido asociado a la línea.
+            Pedido asociado a la linea.
       \item \textit{product}
-            Producto incluido en la línea de pedido.
+            Producto incluido en la linea.
+      \item \textit{color\_reference}
+            Referencia cromatica asociada, cuando proceda.
       \item \textit{quantity}
             Cantidad solicitada del producto.
-      \item \textit{unit\_price}
-            Precio unitario aplicado.
-      \item \textit{discount\_amount}
-            Descuento aplicado a la línea, en caso de existir.
-      \item \textit{line\_amount}
-            Importe total de la línea.
-            
+      \item \textit{unit\_price\_snapshot}
+            Precio unitario consolidado en el momento del pedido.
+      \item \textit{discount\_percentage}
+            Porcentaje de descuento aplicado a la linea.
+      \item \textit{line\_total}
+            Importe total de la linea.
+      \item \textit{order\_reference\_snapshot}
+            Referencia comercial consolidada del producto.
+      \item \textit{variant\_code\_snapshot}
+            Codigo de variante consolidado, cuando exista.
+      \item \textit{variant\_name\_snapshot}
+            Nombre de variante consolidado, cuando exista.
 \end{itemize}
 
 \textbf{Restricciones textuales}
 
 \begin{itemize}
-      \item \textbf{RT-OL1 — Asociación obligatoria de la línea}
-            Toda línea de pedido debe estar asociada a un pedido y a un producto existentes.
-      \item \textbf{RT-OL2 — Cantidad válida}
-            Toda línea de pedido debe registrar una cantidad solicitada válida y mayor que cero.
-      \item \textbf{RT-OL3 — Importe coherente de línea}
-            El importe total de la línea debe ser coherente con la cantidad, el precio unitario y el descuento aplicado.
+      \item \textbf{RT-OL1 --- Asociacion obligatoria de la linea}
+            Toda linea de pedido debe estar asociada a un pedido y a un producto existentes.
+      \item \textbf{RT-OL2 --- Cantidad valida}
+            Toda linea de pedido debe registrar una cantidad solicitada valida y mayor que cero.
+      \item \textbf{RT-OL3 --- Importe coherente de linea}
+            El importe total de la linea debe ser coherente con la cantidad, el precio consolidado y el descuento aplicado.
+      \item \textbf{RT-OL4 --- Trazabilidad comercial de la linea}
+            La linea debe conservar la instantanea minima necesaria para seguir identificando el producto pedido aunque cambien metadatos posteriores del catalogo.
 \end{itemize}
 
-\subsubsection{Clase Concepto adicional de pedido}
+\subsubsection{Clase Estado de pedido}
 
-La clase \textit{Concepto adicional de pedido} representa elementos económicos asociados a un pedido que no corresponden directamente a productos del catálogo.
-
-\textbf{Atributos}
-
-\begin{itemize}
-
-      \item \textit{id}
-            Identificador del concepto.
-      \item \textit{order}
-            Pedido asociado.
-      \item \textit{description}
-            Descripción del concepto.
-      \item \textit{amount}
-            Importe asociado.
-
-\end{itemize}
-
-\subsubsection{Clase Entrega}
-
-La clase \textit{Entrega} representa la información asociada al proceso de suministro de un pedido. Permite registrar la modalidad de entrega, su estado, las fechas previstas o reales asociadas al reparto y la información necesaria para el seguimiento logístico de la entrega.
+La clase \textit{Estado de pedido} representa el catalogo controlado de estados que puede adoptar un pedido dentro del flujo implementado.
 
 \textbf{Atributos}
 
 \begin{itemize}
       \item \textit{id}
-            Identificador único de la entrega.
-      \item \textit{order}
-            Pedido asociado a la entrega.
-      \item \textit{delivery\_method}
-            Modalidad de entrega.
-      \item \textit{responsible\_user}
-            Usuario responsable de la entrega, en caso de entrega directa.
-      \item \textit{status}
-            Estado actual de la entrega.
-      \item \textit{expected\_delivery\_at}
-            Fecha prevista de entrega.
-      \item \textit{delivered\_at}
-            Fecha real de entrega.
-      \item \textit{packages\_count}
-            Número de bultos o cajas asociados a la entrega.
-      \item \textit{cash\_on\_delivery\_amount}
-            Importe de contrareembolso asociado.
-      \item \textit{notes}
-            Observaciones asociadas a la entrega.
+            Identificador unico del estado.
+      \item \textit{code}
+            Codigo interno del estado.
+      \item \textit{name}
+            Nombre visible del estado.
 \end{itemize}
 
 \textbf{Restricciones textuales}
 
 \begin{itemize}
-      \item \textbf{RT-D1 — Asociación obligatoria de la entrega}
-            Toda entrega debe estar asociada a un pedido existente.
-      \item \textbf{RT-D2 — Modalidad válida de entrega}
-            Toda entrega debe registrar una modalidad de entrega definida por el sistema.
-      \item \textbf{RT-D3 — Estado válido de la entrega}
-            El estado de una entrega solo puede tomar valores definidos por el sistema.
-      \item \textbf{RT-D4 — Responsable en entrega directa}
-            Si la modalidad de entrega corresponde a reparto directo, debe registrarse el usuario responsable de la entrega.
-      \item \textbf{RT-D5 — Coherencia temporal de la entrega}
-            Si existe una fecha real de entrega, esta debe ser posterior o igual a la fecha prevista de entrega, cuando esta exista.
-      \item \textbf{RT-D6 — Unicidad de la entrega por pedido}
-            Un mismo pedido no debe estar asociado a más de una entrega dentro del sistema.
+      \item \textbf{RT-OS1 --- Unicidad del estado}
+            Cada estado de pedido debe disponer de un codigo y un nombre unicos dentro del sistema.
 \end{itemize}
 
-\subsubsection{Clase Incidencia de entrega}
+\subsubsection{Clase Estado de cobro del pedido}
 
-La clase \textit{Incidencia de entrega} representa los problemas o situaciones excepcionales detectadas durante el proceso de entrega. Su finalidad es documentar incidencias logísticas, productos pendientes de servir u otras anomalías relacionadas con la entrega.
+La clase \textit{Estado de cobro del pedido} representa el catalogo controlado de estados de pago asociado al seguimiento minimo de cobros implementado en \texttt{M4}.
 
 \textbf{Atributos}
 
 \begin{itemize}
       \item \textit{id}
-            Identificador único de la incidencia.
-      \item \textit{delivery}
-            Entrega asociada a la incidencia.
-      \item \textit{incident\_type}
-            Tipo de incidencia registrada.
-      \item \textit{description}
-            Descripción de la incidencia.
-      \item \textit{created\_at}
-            Fecha de registro de la incidencia.
-      \item \textit{status}
-            Estado de la incidencia.
+            Identificador unico del estado de cobro.
+      \item \textit{code}
+            Codigo interno del estado de cobro.
+      \item \textit{name}
+            Nombre visible del estado de cobro.
 \end{itemize}
 
 \textbf{Restricciones textuales}
 
 \begin{itemize}
-      \item \textbf{RT-DI1 — Asociación obligatoria de la incidencia}
-            Toda incidencia de entrega debe estar asociada a una entrega existente.
-      \item \textbf{RT-DI2 — Tipo válido de incidencia}
-            Toda incidencia debe registrar un tipo definido por el sistema.
-      \item \textbf{RT-DI3 — Estado válido de la incidencia}
-            El estado de una incidencia solo puede tomar valores definidos por el sistema.
-      \item \textbf{RT-DI4 — Registro de situaciones logísticas relevantes}
-            Las incidencias de entrega podrán utilizarse para documentar productos pendientes de servir, entregas parciales u otras incidencias relevantes del proceso logístico.
+      \item \textbf{RT-OPS1 --- Unicidad del estado de cobro}
+            Cada estado de cobro debe disponer de un codigo y un nombre unicos dentro del sistema.
 \end{itemize}
 
-\subsubsection{Clase Cobro}
+\subsubsection{Clase Visita comercial de reparto vinculada}
 
-La clase \textit{Cobro} representa cada uno de los pagos registrados por parte de los clientes profesionales. Permite reflejar cobros totales o parciales y mantener el seguimiento económico asociado a pedidos o entregas.
+La implementacion actual reutiliza la clase de visita comercial del modulo \texttt{M2} para modelar la fase logistica del pedido. Cuando una visita es de tipo reparto, puede actuar como soporte logistico de uno o varios pedidos del mismo cliente.
 
 \textbf{Atributos}
 
 \begin{itemize}
       \item \textit{id}
-            Identificador único del cobro.
+            Identificador unico de la visita de reparto.
       \item \textit{client}
-            Cliente asociado al cobro.
-      \item \textit{order}
-            Pedido asociado al cobro, en caso de existir.
-      \item \textit{delivery}
-            Entrega asociada al cobro, en caso de existir.
-      \item \textit{payment\_at}
-            Fecha del cobro.
-      \item \textit{amount}
-            Importe cobrado.
-      \item \textit{payment\_method}
-            Método de cobro.
+            Cliente asociado a la visita.
+      \item \textit{commercial}
+            Comercial responsable del reparto.
+      \item \textit{scheduled\_for\_date}
+            Fecha prevista del reparto.
+      \item \textit{visit\_type}
+            Tipo de visita, que debe corresponder a reparto.
+      \item \textit{status}
+            Estado actual de la visita.
       \item \textit{notes}
-            Observaciones asociadas al cobro.
+            Observaciones asociadas a la visita.
+      \item \textit{result}
+            Resultado operativo de la visita, cuando exista.
 \end{itemize}
 
 \textbf{Restricciones textuales}
 
 \begin{itemize}
-      \item \textbf{RT-PY1 — Cliente obligatorio en el cobro}
-            Todo cobro debe estar asociado a un cliente existente.
-      \item \textbf{RT-PY2 — Asociación contextual del cobro}
-            Todo cobro debe estar asociado, al menos, a un pedido o a una entrega.
-      \item \textbf{RT-PY3 — Importe válido de cobro}
-            Todo cobro debe registrar un importe válido y mayor que cero.
-      \item \textbf{RT-PY4 — Método válido de cobro}
-            Todo cobro debe registrar un método de cobro definido por el sistema.
-      \item \textbf{RT-PY5 — Coherencia entre cobro y contexto asociado}
-            Si un cobro se asocia a un pedido o a una entrega, el cliente asociado al cobro debe corresponder con el cliente relacionado con dicho pedido o entrega.
+      \item \textbf{RT-DV1 --- Tipo de visita compatible}
+            Solo una visita comercial de tipo reparto puede vincularse logisticamente a pedidos del modulo \texttt{M4}.
+      \item \textbf{RT-DV2 --- Coherencia de cliente}
+            Todos los pedidos vinculados a una visita de reparto deben pertenecer al mismo cliente asociado a dicha visita.
+      \item \textbf{RT-DV3 --- Minimo de pedidos confirmados en reparto activo}
+            Mientras una visita de reparto permanezca activa, debe mantener al menos un pedido confirmado vinculado.
+      \item \textbf{RT-DV4 --- Cierre con validacion QR}
+            Para completar un reparto, debe aportarse evidencia QR suficiente para todos los pedidos vinculados.
 \end{itemize}
-
 % ------------------------------------------------------------------------------
 \subsection{Modelo conceptual de datos M5}
 % ------------------------------------------------------------------------------

@@ -53,13 +53,13 @@ Si se incorpora una nueva ruta privada o un nuevo endpoint sensible, debe revisa
 
 \subsection{Persistencia y migraciones}
 
-La base de datos se gestiona con \texttt{TypeORM}. Las entidades viven en \texttt{lib/typeorm/entities/} y la evolución del esquema en \texttt{migrations/typeorm/}.
+La base de datos se gestiona con \texttt{TypeORM}. Las entidades viven en \path{lib/typeorm/entities/} y la evolución del esquema en \path{migrations/typeorm/}.
 
 Las pautas recomendadas son:
 
 \begin{itemize}
     \item no modificar manualmente la base de datos fuera del sistema de migraciones;
-    \item mantener separados los servicios de lectura y escritura en \texttt{lib/typeorm/services/};
+    \item mantener separados los servicios de lectura y escritura en \path{lib/typeorm/services/};
     \item versionar cualquier nuevo cambio estructural mediante una migración específica;
     \item conservar la trazabilidad entre requisito funcional, entidad y migración.
 \end{itemize}

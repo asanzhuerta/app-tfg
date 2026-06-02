@@ -1,0 +1,55 @@
+La gestión de la configuración tiene como objetivo controlar la evolución del proyecto, mantener la trazabilidad de los cambios realizados y facilitar la reproducción del entorno de desarrollo. En este proyecto, dicha gestión se ha aplicado principalmente sobre el código fuente, los scripts de base de datos, la configuración del entorno y la documentación.
+
+\subsection{Control de versiones}
+
+El proyecto se ha gestionado mediante \textbf{Git} como sistema de control de versiones. Esta herramienta permite registrar los cambios realizados sobre el código fuente y la documentación, recuperar versiones anteriores y mantener un historial ordenado de la evolución del trabajo.
+
+El uso de control de versiones resulta especialmente importante en un proyecto de estas características, ya que permite diferenciar cambios funcionales, correcciones, ajustes de configuración y modificaciones en la documentación.
+
+\subsection{Repositorio del proyecto}
+
+El código fuente y los recursos asociados se han organizado en un repositorio remoto, utilizado como copia de seguridad y como punto central para la evolución del proyecto. La estructura del repositorio separa los distintos elementos del sistema, incluyendo aplicación, configuración, scripts de base de datos, recursos públicos y documentación.
+
+De forma general, el repositorio se organiza en torno a los siguientes tipos de contenido:
+
+\begin{itemize}
+    \item Código fuente de la aplicación web.
+    \item Componentes de interfaz y lógica de presentación.
+    \item Rutas y lógica de servidor.
+    \item Scripts de inicialización o migración de base de datos.
+    \item Recursos estáticos de la aplicación.
+    \item Archivos de configuración del entorno.
+    \item Documentación técnica y memoria del Trabajo Fin de Grado.
+\end{itemize}
+
+\subsection{Estrategia de ramas}
+
+Al tratarse de un proyecto individual, se ha seguido una estrategia de ramas sencilla. La rama principal se utiliza para mantener una versión estable del proyecto, mientras que los cambios de desarrollo se realizan de forma controlada antes de integrarse en dicha rama.
+
+La estrategia seguida puede resumirse de la siguiente forma:
+
+\begin{itemize}
+    \item \textbf{Rama principal:} contiene las versiones estables del sistema y los cambios consolidados.
+    \item \textbf{Cambios de desarrollo:} se realizan en iteraciones pequeñas, procurando que cada conjunto de cambios responda a una funcionalidad, corrección o mejora concreta.
+    \item \textbf{Revisión antes de integración:} antes de consolidar cambios, se comprueba que la aplicación compila y que los flujos principales siguen funcionando.
+\end{itemize}
+
+\subsection{Gestión de versiones y entregas}
+
+Las versiones del proyecto se han gestionado de acuerdo con los principales hitos del Trabajo Fin de Grado. Cada versión relevante agrupa cambios funcionales o documentales significativos, como la preparación del entorno, la implementación de autenticación, la definición de roles o la consolidación de la memoria.
+
+Para las entregas finales se consideran especialmente importantes los siguientes elementos:
+
+\begin{itemize}
+    \item Estado estable del código fuente.
+    \item Scripts de base de datos necesarios para reproducir el sistema.
+    \item Archivos de configuración documentados.
+    \item Memoria en formato PDF.
+    \item Manual del desarrollador y manual de usuario.
+\end{itemize}
+
+\subsection{Gestión de configuración sensible}
+
+Los datos sensibles, como claves secretas, credenciales o variables de entorno, no deben almacenarse directamente en el repositorio. Para ello, se utilizan archivos de entorno excluidos del control de versiones y se documentan las variables necesarias mediante ejemplos o descripciones en la documentación técnica.
+
+Esta estrategia reduce el riesgo de exposición de información sensible y facilita que el sistema pueda desplegarse en distintos entornos ajustando únicamente la configuración correspondiente.

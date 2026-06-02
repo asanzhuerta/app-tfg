@@ -1,0 +1,65 @@
+La organización del proyecto se ha definido atendiendo a su naturaleza académica y al hecho de que el desarrollo ha sido realizado por un único estudiante. A pesar de ello, el proyecto cuenta con distintos perfiles implicados, tanto desde el punto de vista de supervisión académica como desde el conocimiento del dominio del problema.
+
+\subsection{Personas y roles involucrados}
+
+Los principales roles involucrados en el proyecto son los siguientes:
+
+\begin{itemize}
+    \item \textbf{Autor del proyecto:} responsable del análisis, diseño, implementación, pruebas y documentación del sistema. Asume las tareas propias de analista, diseñador, desarrollador y responsable de documentación.
+    \item \textbf{Director del Trabajo Fin de Grado:} encargado de orientar el desarrollo académico del proyecto, revisar el avance de la memoria y supervisar que el trabajo se ajuste a los objetivos propios de un Trabajo Fin de Grado.
+    \item \textbf{Cliente o usuario experto:} distribuidor de productos capilares profesionales que aporta información sobre la situación actual, los procesos de negocio y las necesidades reales del dominio.
+    \item \textbf{Usuarios finales previstos:} perfiles que podrían utilizar el sistema una vez evolucionado, incluyendo administrador o distribuidor, comerciales y peluquerías profesionales.
+\end{itemize}
+
+La comunicación con el cliente o usuario experto ha sido especialmente relevante durante la fase de captura de requisitos, ya que ha permitido comprender la operativa real del distribuidor y detectar las carencias de los procesos actuales. Por su parte, las revisiones académicas han servido para orientar la estructura de la memoria y ajustar el alcance del sistema al contexto del proyecto.
+
+\subsection{Estructura de trabajo}
+
+Al tratarse de un proyecto individual, no se ha definido una estructura jerárquica compleja. Sin embargo, las responsabilidades se han organizado por áreas de trabajo:
+
+\begin{itemize}
+    \item \textbf{Gestión del proyecto:} planificación temporal, control del alcance, seguimiento de hitos y gestión de riesgos.
+    \item \textbf{Análisis funcional:} estudio del dominio, identificación de actores, definición de requisitos y reglas de negocio.
+    \item \textbf{Diseño técnico:} definición de arquitectura, diseño de datos, diseño de interfaz y selección tecnológica.
+    \item \textbf{Construcción:} implementación de la aplicación, configuración del entorno, base de datos y funcionalidades iniciales.
+    \item \textbf{Validación:} realización de pruebas, revisión de flujos y comprobación del cumplimiento de los requisitos desarrollados.
+    \item \textbf{Documentación:} elaboración de la memoria, anexos, manuales y documentación técnica asociada.
+\end{itemize}
+
+\subsection{Recursos utilizados}
+
+Para el desarrollo del proyecto se han empleado recursos hardware, software y servicios externos. La Tabla~\ref{tab:project-resources} resume los principales recursos utilizados.
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \caption{Recursos utilizados en el proyecto}
+    \label{tab:project-resources}
+    \begin{tabularx}{\textwidth}{|L{3.2cm}|L{3.5cm}|Y|}
+        \hline
+        \textbf{Tipo de recurso} & \textbf{Recurso} & \textbf{Uso en el proyecto} \\
+        \hline
+        Hardware & Equipo de desarrollo & Implementación, pruebas locales, documentación y ejecución del entorno de desarrollo. \\
+        \hline
+        Software base & Windows 11 & Sistema operativo utilizado para el desarrollo del proyecto. \\
+        \hline
+        Entorno de desarrollo & Visual Studio Code & Edición de código fuente, documentación LaTeX y gestión del proyecto. \\
+        \hline
+        Control de versiones & Git & Registro de cambios, seguimiento de versiones y control del código fuente. \\
+        \hline
+        Repositorio remoto & GitHub & Almacenamiento remoto del código fuente y respaldo del proyecto. \\
+        \hline
+        Base de datos & PostgreSQL & Persistencia de los datos principales de la aplicación. \\
+        \hline
+        Contenedores & Docker y Docker Compose & Ejecución de servicios locales y reproducción del entorno de desarrollo. \\
+        \hline
+        Documentación & LaTeX & Elaboración de la memoria académica del Trabajo Fin de Grado. \\
+        \hline
+        Diagramas & Draw.io e Inkscape & Elaboración y adaptación de diagramas incluidos en la documentación. \\
+        \hline
+        Pruebas externas & Cloudflare Tunnel & Acceso temporal al entorno local desde otros dispositivos durante las pruebas. \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+La combinación de estos recursos ha permitido desarrollar una solución reproducible, documentada y preparada para continuar su evolución en fases posteriores.

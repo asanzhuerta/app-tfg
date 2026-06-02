@@ -190,50 +190,54 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
 % ------------------------------------------------------------------------------
 
 \vspace{-0.75em}
-\subsubsection{RF-M4-01 Gestión de pedidos}
+\subsubsection{RF-M4-01 Gestion de pedidos}
 \vspace{-1em}
 
 \begin{itemize}
-    \item El sistema debe permitir la creación y gestión de pedidos de productos por parte de clientes profesionales o agentes comerciales autorizados.
-    \item El sistema debe permitir seleccionar los productos del catálogo y las cantidades deseadas para cada pedido.
-    \item El sistema no debe mostrar el precio de los productos de manera individual, pero sí el importe total del pedido.
+    \item El sistema debe permitir la creacion y gestion de pedidos de productos por parte de clientes profesionales o agentes comerciales autorizados.
+    \item El sistema debe permitir crear, recuperar y seguir editando borradores de pedido antes de su confirmacion.
+    \item El sistema debe permitir seleccionar productos del catalogo, cantidades y, cuando proceda, referencias cromaticas asociadas a cada linea.
+    \item El sistema debe calcular y persistir el importe total del pedido a partir de sus lineas.
     \item El sistema debe permitir consultar el estado y el historial de pedidos asociados a cada cliente.
+    \item El sistema debe impedir que un mismo cliente acumule mas de dos pedidos abiertos pendientes de cobro.
 \end{itemize}
 
 \vspace{-0.75em}
-\subsubsection{RF-M4-02 Gestión de entregas}
+\subsubsection{RF-M4-02 Gestion de entregas y reparto}
 \vspace{-1em}
 
 \begin{itemize}
-    \item El sistema debe permitir definir la modalidad de entrega asociada a cada pedido.
-    \item Entre las modalidades de entrega podrán contemplarse:
-          \begin{itemize}
-              \item Entrega el día previsto de reparto (normalmente los Viernes).
-              \item Entrega un día específico, por ejemplo, cuádo tenga prevista una visita comercial.
-              \item Entrega urgente o en el mismo día (gestionado con una empresa extera de reparto).
-          \end{itemize}
-    \item El sistema debe permitir consultar el estado de entrega del pedido y registrar incidencias o productos pendientes de servir.
+    \item El sistema debe permitir vincular pedidos confirmados a visitas comerciales de tipo reparto del cliente correcto.
+    \item El sistema debe mostrar al comercial una bandeja de pedidos confirmados pendientes de reparto.
+    \item El sistema no debe permitir crear ni completar un reparto sin pedidos confirmados vinculados.
+    \item El sistema debe exigir la aportacion de un QR por cada pedido vinculado antes de completar un reparto.
+    \item Si la validacion QR es correcta, el cierre del reparto debe marcar los pedidos vinculados como \texttt{delivered}.
+    \item Si una visita de reparto se aplaza o se cancela, el sistema debe mantener los pedidos en un estado coherente y sin enlaces huerfanos.
+    \item El cliente solo debe visualizar una ETA cuando exista una visita de reparto real y valida asociada a su pedido.
 \end{itemize}
 
 \vspace{-0.75em}
-\subsubsection{RF-M4-03 Registro de cobros}
+\subsubsection{RF-M4-03 Registro minimo de cobros}
 \vspace{-1em}
 
 \begin{itemize}
-    \item El sistema debe permitir registrar cobros asociados a pedidos o albaranes.
-    \item El sistema debe permitir registrar tanto cobros totales como cobros parciales realizados por los clientes.
-    \item El sistema debe permitir consultar el importe pendiente de pago asociado a cada cliente o pedido.
+    \item El sistema debe permitir registrar el cobro asociado a un pedido entregado.
+    \item El sistema debe permitir distinguir, al menos, entre pedidos con cobro \texttt{pending} y pedidos con cobro \texttt{paid}.
+    \item El sistema debe permitir registrar metodo de cobro, fecha y notas asociadas al cambio de estado de cobro.
+    \item El sistema debe permitir revertir un pedido a \texttt{pending} cuando la regla de negocio vigente lo permita y la consistencia del flujo se mantenga.
+    \item El sistema no cubre en esta iteracion pagos parciales, facturacion ni conciliacion avanzada.
 \end{itemize}
 
 \vspace{-0.75em}
-\subsubsection{RF-M4-04 Consulta de estado de cuenta}
+\subsubsection{RF-M4-04 Consulta y trazabilidad operativa}
 \vspace{-1em}
 
 \begin{itemize}
-    \item El sistema debe permitir consultar el estado de cuenta de cada cliente profesional.
-    \item El sistema debe permitir visualizar el conjunto de pedidos, cobros realizados e importes pendientes asociados a cada cliente.
+    \item El sistema debe permitir al cliente consultar el historial y el detalle de sus propios pedidos.
+    \item El sistema debe permitir al comercial consultar pedidos, repartos y cobros de los clientes que tiene asignados.
+    \item El sistema debe permitir al administrador consultar el historial global de pedidos y abrir su detalle completo.
+    \item El detalle de un pedido debe mostrar, cuando aplique, su estado, su estado de cobro, sus lineas, el QR del paquete y la visita de reparto vinculada.
 \end{itemize}
-
 % ------------------------------------------------------------------------------
 \subsection{RF-M5}
 % ------------------------------------------------------------------------------

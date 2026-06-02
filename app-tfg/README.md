@@ -1,5 +1,10 @@
 # KinEstilistas App
 
+## Estado actual del TFG
+
+La referencia actualizada del estado funcional, la revision tecnica y el planning de cierre esta en `TFG_STATUS_MASTER_PLAN.md`.
+Este `README` sigue siendo util para setup y estructura tecnica, pero puede no reflejar por si solo el avance modulo a modulo.
+
 Aplicación principal del proyecto `KinEstilistas`, construida con `Next.js 16`, `React 19`, `TypeScript` y `PostgreSQL`.
 
 ## Qué incluye esta carpeta
@@ -8,7 +13,7 @@ Aplicación principal del proyecto `KinEstilistas`, construida con `Next.js 16`,
 - API interna basada en `Route Handlers`;
 - autenticación con `Auth.js`;
 - capa de acceso a datos con `TypeORM`;
-- migraciones versionadas para los módulos 1 y 2;
+- migraciones versionadas para los módulos 1 a 4;
 - integración con `Cloudinary`, `Nominatim` y `OSRM`.
 
 ## Rutas funcionales más importantes
@@ -44,7 +49,7 @@ lib/
   geocoding/          geocodificación de direcciones
   security/           rate limiting y seguridad transversal
   typeorm/            data source, entidades y servicios
-migrations/typeorm/   migraciones M1 y M2
+migrations/typeorm/   migraciones M1 a M4
 ```
 
 ## Requisitos

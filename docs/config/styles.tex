@@ -7,6 +7,15 @@
 \titlespacing*{\chapter}{0pt}{-19pt}{25pt}
 \titleformat{\section}[block]{\normalfont\Large\bfseries}{\thesection.}{.5em}{\Large}
 
+\raggedbottom
+\setlength{\emergencystretch}{3em}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\makeatletter
+\renewcommand{\es@scroman}[1]{#1}
+\makeatother
+\pdfsuppresswarningpagegroup=1
+
 % Formato del código fuente con lstlisting
 \lstset{
   basicstyle=\ttfamily,
