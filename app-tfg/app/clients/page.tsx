@@ -6,6 +6,7 @@ import {
 	AgendaIcon,
 	AppointmentIcon,
 	CatalogIcon,
+	ClientsIcon,
 	ColorIcon,
 	OrderIcon,
 	PricesIcon,
@@ -24,6 +25,11 @@ const navItems = [
 		title: "Catalogos",
 		icon: <CatalogIcon className="h-6 w-6" />,
 		href: "/clients/catalog",
+	},
+	{
+		title: "Fichas",
+		icon: <ClientsIcon className="h-6 w-6" />,
+		href: "/clients/salon-clients",
 	},
 	{ title: "Agenda", icon: <AgendaIcon className="h-6 w-6" />, disabled: true },
 	{ title: "Citas", icon: <AppointmentIcon className="h-6 w-6" />, disabled: true },
@@ -52,7 +58,8 @@ export default function ClientsHome() {
 			<div className="mb-4 rounded-2xl border border-slate-200 bg-white/75 px-4 py-3 text-sm text-slate-600 shadow-sm">
 				En esta version ya tienes operativos la prevision de reparto, el
 				catalogo de productos, la consulta de coloracion, la gestion de
-				pedidos y la gestion de tu perfil. El resto de accesos se activaran
+				pedidos, las fichas tecnicas del salon con plantillas y borradores
+				tecnicos, y la gestion de tu perfil. El resto de accesos se activaran
 				en las siguientes iteraciones.
 			</div>
 

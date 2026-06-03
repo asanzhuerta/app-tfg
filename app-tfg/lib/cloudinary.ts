@@ -28,6 +28,10 @@ export const CLOUDINARY_CATALOG_IMAGES_FOLDER =
 	process.env.CLOUDINARY_CATALOG_IMAGES_FOLDER ||
 	"kinestilistas/catalog-images";
 
+export const CLOUDINARY_SALON_RESULT_IMAGES_FOLDER =
+	process.env.CLOUDINARY_SALON_RESULT_IMAGES_FOLDER ||
+	"kinestilistas/salon-result-images";
+
 // ============================================================================
 // HELPERS REUTILIZABLES
 // ============================================================================
@@ -43,6 +47,13 @@ export async function uploadProfileImage(base64File: string) {
 export async function uploadCatalogImage(base64File: string) {
 	return cloudinary.uploader.upload(base64File, {
 		folder: CLOUDINARY_CATALOG_IMAGES_FOLDER,
+		resource_type: "image",
+	});
+}
+
+export async function uploadSalonResultImage(base64File: string) {
+	return cloudinary.uploader.upload(base64File, {
+		folder: CLOUDINARY_SALON_RESULT_IMAGES_FOLDER,
 		resource_type: "image",
 	});
 }
