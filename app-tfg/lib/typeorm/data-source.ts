@@ -35,6 +35,14 @@ import { OrderPaymentStatus } from "./entities/OrderPaymentStatus";
 import { Order } from "./entities/Order";
 import { OrderLine } from "./entities/OrderLine";
 import { AppRateLimitPolicy } from "./entities/AppRateLimitPolicy";
+import { SalonClient } from "./entities/SalonClient";
+import { SalonService } from "./entities/SalonService";
+import { SalonServiceTechnicalSheet } from "./entities/SalonServiceTechnicalSheet";
+import { SalonServiceProductUsage } from "./entities/SalonServiceProductUsage";
+import { SalonServiceResultImage } from "./entities/SalonServiceResultImage";
+import { SalonProductSuggestion } from "./entities/SalonProductSuggestion";
+import { SalonServiceTemplate } from "./entities/SalonServiceTemplate";
+import { SalonServiceTemplateProductUsage } from "./entities/SalonServiceTemplateProductUsage";
 
 export const entities = [
 	Role,
@@ -71,6 +79,14 @@ export const entities = [
 	Order,
 	OrderLine,
 	AppRateLimitPolicy,
+	SalonClient,
+	SalonService,
+	SalonServiceTechnicalSheet,
+	SalonServiceProductUsage,
+	SalonServiceResultImage,
+	SalonProductSuggestion,
+	SalonServiceTemplate,
+	SalonServiceTemplateProductUsage,
 ];
 
 function createDataSource() {
