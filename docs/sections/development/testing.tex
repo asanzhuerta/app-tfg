@@ -103,6 +103,8 @@ El quinto incremento de \texttt{M7} incorpora el diagnóstico agregado de rate l
 
 El sexto incremento de \texttt{M7} añade la exportación \texttt{CSV} del informe operativo desde \path{/admin/operations}. La comprobación \texttt{npm run m7:operations-report-smoke} valida que el informe contiene la cabecera esperada, que incluye los cuatro bloques transversales y que conserva un número suficiente de métricas para cada sección. El script \texttt{npm run m7:closeout} encadena las comprobaciones de integraciones, soporte, operación, exportación de auditoría, rate limiting e informe operativo para repetir el cierre del módulo completo.
 
+Como cierre funcional de \texttt{M7}, se ha ejecutado una pasada completa de validación con \texttt{npm run m7:closeout}, \texttt{npm run typecheck}, \texttt{npm run lint}, \texttt{npm run build}, \texttt{npm run migration:run} y la compilación \LaTeX{} de la memoria. La revisión manual en producción local ha comprobado \path{/admin/operations}, \path{/admin/audit}, \path{/admin/settings}, \path{/admin/integrations} y \path{/admin/support}, verificando la presencia de resúmenes, inventarios, diagnósticos, enlaces de detalle y exportaciones \texttt{CSV}. Además, se han comprobado los endpoints administrativos principales sin sesión, confirmando respuesta \texttt{401}, y no se han observado errores de consola en las pantallas revisadas.
+
 \subsection{Pruebas Funcionales}
 
 Las comprobaciones funcionales prioritarias se organizan por módulo:
