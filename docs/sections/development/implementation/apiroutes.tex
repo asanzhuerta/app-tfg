@@ -10,12 +10,12 @@ La documentacion siguiente se presenta con una estructura similar a una coleccio
 Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no existe sesion valida y \texttt{403} cuando el rol no esta autorizado. Las validaciones de entrada se responden habitualmente con \texttt{400}, los recursos inexistentes con \texttt{404}, los conflictos de datos con \texttt{409} cuando procede y los errores no controlados con \texttt{500}. Todas las rutas bajo \path{/api} pasan por el control de \textit{rate limiting} del \path{proxy.ts}, que puede responder \texttt{429} si se supera la politica aplicable.
 
 \newcommand{\apiHeader}{\textbf{Metodo} & \textbf{Ruta} & \textbf{Acceso} & \textbf{Entrada y respuesta principal}\\}
-\newcommand{\apiColumns}{>{\RaggedRight\arraybackslash}p{0.10\textwidth}>{\RaggedRight\arraybackslash}p{0.27\textwidth}>{\RaggedRight\arraybackslash}p{0.15\textwidth}>{\RaggedRight\arraybackslash}p{0.38\textwidth}}
+\newcolumntype{A}[1]{>{\RaggedRight\arraybackslash}p{#1}}
 
 \subsubsection{Autenticacion, cuenta y perfil}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints de autenticacion, cuenta y perfil}\\
 \apiHeader
 \endfirsthead
@@ -33,7 +33,7 @@ Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no
 \subsubsection{Administracion de usuarios y solicitudes}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints administrativos de usuarios}\\
 \apiHeader
 \endfirsthead
@@ -57,7 +57,7 @@ Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no
 \subsubsection{Clientes profesionales y asignaciones comerciales}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints de clientes profesionales y asignacion comercial}\\
 \apiHeader
 \endfirsthead
@@ -81,7 +81,7 @@ Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no
 \subsubsection{Visitas, rutas y perfil comercial}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints de visitas comerciales, rutas y configuracion operativa}\\
 \apiHeader
 \endfirsthead
@@ -106,7 +106,7 @@ Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no
 \subsubsection{Catalogo, productos, recursos y coloracion}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints administrativos de catalogo}\\
 \apiHeader
 \endfirsthead
@@ -148,7 +148,7 @@ Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no
 \subsubsection{Pedidos, borradores, reparto y cobro}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints de pedidos y cobros}\\
 \apiHeader
 \endfirsthead
@@ -177,7 +177,7 @@ Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no
 \subsubsection{Historial tecnico de salon}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints del historial tecnico de salon}\\
 \apiHeader
 \endfirsthead
@@ -202,7 +202,7 @@ Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no
 \subsubsection{Comunicaciones internas}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints de comunicaciones, promociones, formaciones y recordatorios}\\
 \apiHeader
 \endfirsthead
@@ -242,7 +242,7 @@ Como convencion general, las rutas autenticadas devuelven \texttt{401} cuando no
 \subsubsection{Configuracion transversal}
 
 {\footnotesize
-\begin{longtable}{\apiColumns}
+\begin{longtable}{A{0.10\textwidth}A{0.27\textwidth}A{0.15\textwidth}A{0.38\textwidth}}
 \caption{Endpoints transversales de configuracion}\\
 \apiHeader
 \endfirsthead
