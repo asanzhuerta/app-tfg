@@ -46,6 +46,11 @@ const navItems = [
 		href: "/admin/integrations",
 	},
 	{
+		title: "Soporte tecnico",
+		icon: <SettingsIcon className="h-6 w-6" />,
+		href: "/admin/support",
+	},
+	{
 		title: "Ajustes globales",
 		icon: <SettingsIcon className="h-6 w-6" />,
 		href: "/admin/settings",
