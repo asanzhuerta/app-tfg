@@ -31,7 +31,7 @@ La estructura recomendada para incorporar cambios es la siguiente:
     \item \texttt{lib/orders/}: soporte transversal del dominio de pedidos, incluyendo QR.
     \item \texttt{lib/geocoding/}: resolución de direcciones y normalización geográfica.
     \item \texttt{lib/security/}: rate limiting y utilidades de seguridad transversal.
-    \item \texttt{lib/integrations/}, \texttt{lib/support/} y \texttt{lib/admin/operational-overview.ts}: inventarios administrativos y resumen operativo de \texttt{M7}.
+    \item \texttt{lib/integrations/}, \texttt{lib/support/} y \texttt{lib/admin/}: inventarios administrativos, diagnóstico de rate limiting, exportación de auditoría y resumen operativo de \texttt{M7}.
     \item \texttt{lib/typeorm/services/}: acceso a datos y lógica persistente.
 \end{itemize}
 
@@ -56,7 +56,7 @@ Los puntos de entrada más sensibles estan centralizados en dos archivos:
 
 Si se incorpora una nueva ruta privada o un nuevo endpoint sensible, debe revisarse su encaje en estos dos puntos. Esto evita que aparezcan flujos accesibles sin protección o inconsistencias entre la navegacion y la autorización real.
 
-Además, las políticas de rate limiting ya no son completamente estáticas: una parte de su configuración puede modificarse desde administración y se persiste en base de datos. Cualquier cambio en este ámbito debe comprobar tanto el catálogo de políticas base como la lógica de sobreescritura persistida.
+Además, las políticas de rate limiting ya no son completamente estáticas: una parte de su configuración puede modificarse desde administración, se persiste en base de datos y se resume mediante diagnóstico operativo. Cualquier cambio en este ámbito debe comprobar tanto el catálogo de políticas base como la lógica de sobrescritura persistida.
 
 Las vistas de \path{/admin/integrations} y \path{/admin/support} no persisten estado propio: calculan inventarios desde variables de entorno, activos públicos y configuración del proyecto. Si se amplían, conviene mantenerlas como observabilidad ligera salvo que se cree una migración específica para historificar estados.
 

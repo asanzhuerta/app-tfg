@@ -859,6 +859,8 @@ El resumen operativo de \path{/admin/operations} sigue el mismo criterio: agrega
 
 La exportación \texttt{CSV} de auditoría desde \path{/admin/audit} tampoco introduce una entidad nueva. El fichero se genera bajo demanda a partir de \texttt{user\_access\_log} y \texttt{user\_management\_log}, aplicando una ventana temporal y un límite de registros para facilitar la revisión externa de accesos y acciones administrativas sin duplicar persistencia.
 
+El diagnóstico de rate limiting expuesto en \path{/admin/settings} y en \path{/api/admin/settings/rate-limits/status} reutiliza la configuración efectiva de políticas y sus valores por defecto. Por tanto, tampoco amplía el modelo de datos: resume la tabla de sobrescrituras persistidas y el catálogo estático de políticas definido en código.
+
 \subsubsection*{Exportación o sincronización}
 
 El sistema debe permitir registrar las operaciones de exportación o sincronización de información realizadas con sistemas externos.

@@ -66,6 +66,16 @@ export default function AdminRateLimitSettingsForm() {
 			);
 		});
 	}, [draftPolicies, policies]);
+	const summary = useMemo(
+		() => ({
+			total: policies.length,
+			active: policies.filter((policy) => policy.enabled).length,
+			customized: policies.filter((policy) => policy.enabled && !policy.isDefault)
+				.length,
+			disabled: policies.filter((policy) => !policy.enabled).length,
+		}),
+		[policies],
+	);
 
 	useEffect(() => {
 		let isCancelled = false;
@@ -202,6 +212,35 @@ export default function AdminRateLimitSettingsForm() {
 						</p>
 					</div>
 				</section>
+
+				{!loading ? (
+					<section className="grid gap-4 md:grid-cols-4">
+						<div className="glass-card rounded-3xl border border-white/30 bg-white/80 p-5 shadow-lg backdrop-blur">
+							<p className="text-sm text-slate-500">Politicas</p>
+							<p className="mt-2 text-3xl font-semibold text-slate-900">
+								{summary.total}
+							</p>
+						</div>
+						<div className="glass-card rounded-3xl border border-white/30 bg-white/80 p-5 shadow-lg backdrop-blur">
+							<p className="text-sm text-slate-500">Activas</p>
+							<p className="mt-2 text-3xl font-semibold text-emerald-700">
+								{summary.active}
+							</p>
+						</div>
+						<div className="glass-card rounded-3xl border border-white/30 bg-white/80 p-5 shadow-lg backdrop-blur">
+							<p className="text-sm text-slate-500">Personalizadas</p>
+							<p className="mt-2 text-3xl font-semibold text-amber-700">
+								{summary.customized}
+							</p>
+						</div>
+						<div className="glass-card rounded-3xl border border-white/30 bg-white/80 p-5 shadow-lg backdrop-blur">
+							<p className="text-sm text-slate-500">Desactivadas</p>
+							<p className="mt-2 text-3xl font-semibold text-rose-700">
+								{summary.disabled}
+							</p>
+						</div>
+					</section>
+				) : null}
 
 				{loading ? (
 					<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
