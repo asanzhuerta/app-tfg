@@ -18,7 +18,7 @@ Las regresiones técnicas se evaluan repitiendo siempre la misma secuencia base:
     \item smoke test funcional de \texttt{M4} sobre servicios y persistencia;
     \item pasada visual hidratada de \texttt{M4} sobre rutas criticas por rol;
     \item comprobación puntual de \texttt{M5} creando una ficha técnica temporal, registrando un servicio con tonalidad e imagenes finales, generando su borrador técnico de correo, creando una plantilla reutilizable y limpiando el dato generado;
-    \item comprobación puntual de \texttt{M6} validando migración, carga de pantallas de comunicación, visibilidad de promociones activas, notificaciones segmentadas, recordatorios e inscripción a formaciones publicadas.
+    \item comprobación puntual de \texttt{M6} validando migración, carga de pantallas de comunicación, visibilidad de promociones activas, aplicación de descuentos promocionales en pedidos, notificaciones segmentadas, recordatorios e inscripción a formaciones publicadas.
 \end{enumerate}
 
 Esta rutina ofrece una senal rapida sobre errores de tipado, problemas de compilacion, importaciones rotas, uso incorrecto de componentes de servidor o cliente, fallos en rutas dinamicas y desviaciones funcionales del flujo de pedidos, reparto y cobro.
@@ -42,7 +42,7 @@ Las pruebas de integracion se centran en comprobar la interaccion entre interfaz
 \begin{itemize}
     \item autenticación con \texttt{Auth.js} y control de acceso por rol en \texttt{proxy.ts};
     \item coordinación entre formularios administrativos y servicios \texttt{TypeORM} para usuarios, clientes, visitas, catálogo, pedidos, seguimiento técnico del salón y comunicaciones internas;
-    \item coordinación entre el centro administrativo de comunicaciones, las APIs de \texttt{M6} y las vistas cliente/comercial de promociones, formaciones, avisos y recordatorios;
+    \item coordinación entre el centro administrativo de comunicaciones, las APIs de \texttt{M6}, los servicios de pedido y las vistas cliente/comercial de promociones, formaciones, avisos y recordatorios;
     \item integracion con \texttt{Nominatim} y \texttt{OSRM} para geocodificación y cálculo de rutas del módulo \texttt{M2};
     \item integracion con \texttt{Cloudinary} para subida, reemplazo y validación de imágenes de perfil y catálogo en \texttt{M1} y \texttt{M3};
     \item integracion con \texttt{QuickChart} para representar el QR operativo de cada pedido dentro del flujo de reparto de \texttt{M4}.
@@ -92,7 +92,7 @@ Las comprobaciones funcionales prioritarias se organizan por módulo:
     \item \texttt{M3}: mantenimiento del catálogo desde administración, consulta publica de productos activos, filtrado por categorías y líneas, acceso a fichas técnicas, consulta de recursos de apoyo y exploracion de cartas de color con sus referencias.
     \item \texttt{M4}: borradores de pedido en cliente y comercial, confirmación y cancelacion coherente, bandeja de pedidos pendientes de reparto, visita de entrega con validación QR, paso a \texttt{delivered}, subflujo mínimo de cobro y trazabilidad cruzada desde admin.
     \item \texttt{M5}: alta de clientes del salón, edición de ficha base, registro, edición y borrado de servicios con ficha técnica, selección de tonalidades de color, galería de imagenes finales, plantillas reutilizables, filtrado del historial, uso de productos, sugerencias derivadas y generación de borradores técnicos editables con persistencia real sobre la base de datos.
-    \item \texttt{M6}: gestión, edición y borrado de promociones, segmentos y formaciones desde administración, visibilidad de promociones activas por rol, inscripción a formaciones publicadas, notificaciones internas segmentadas y recordatorios personales.
+    \item \texttt{M6}: gestión, edición y borrado de promociones, segmentos y formaciones desde administración, visibilidad de promociones activas por rol, aplicación de descuentos promocionales sobre borradores y pedidos, inscripción a formaciones publicadas, notificaciones internas segmentadas y recordatorios personales.
 \end{itemize}
 
 En \texttt{M4}, la regresion funcional más sensible consiste en comprobar que el mismo pedido se mantiene coherente al pasar por tres contextos distintos: cliente, comercial y administrador. Por ello, cualquier cambio en entidades, serializadores, servicios de pedido o lógica de visitas de reparto debe revalidarse en esos tres recorridos.
@@ -119,7 +119,7 @@ La Tabla~\ref{tab:test-traceability} resume la relación entre los módulos prin
         \hline
         \texttt{M5} & Fichas de clientes de salón, servicios, ficha técnica, tonalidades, imágenes finales, plantillas y borradores técnicos. & \texttt{m5:technical-email-smoke}, \texttt{m5:service-templates-smoke}, \texttt{m5:salon-visual-smoke} y revisión manual responsive. \\
         \hline
-        \texttt{M6} & Promociones, segmentos, formaciones, inscripciones, notificaciones internas segmentadas y recordatorios. & Typecheck, lint, build, \texttt{migration:run}, \texttt{m6:communications-smoke} y validación manual en navegador local con datos temporales de promoción/formación. \\
+        \texttt{M6} & Promociones, segmentos, descuentos aplicados al pedido, formaciones, inscripciones, notificaciones internas segmentadas y recordatorios. & Typecheck, lint, build, \texttt{migration:run}, \texttt{m6:communications-smoke} y validación manual en navegador local con datos temporales de promoción, pedido con descuento y formación. \\
         \hline
     \end{tabularx}
     \caption{Trazabilidad resumida entre módulos funcionales y evidencias de prueba}
@@ -150,7 +150,7 @@ La aceptacion de la versión actual del sistema se interpreta como la disponibil
     \item el cliente puede consultar su previsión de reparto, su perfil, el catálogo, la coloración, el historial de pedidos, promociones, formaciones y avisos;
     \item el cliente profesional puede además mantener fichas técnicas de salón, registrar servicios con tonos e imagenes finales, reutilizar plantillas técnicas y preparar borradores técnicos editables por servicio;
     \item el flujo \texttt{pedido -> reparto -> entrega -> cobro mínimo} queda cerrado y trazable en la implementación actual;
-    \item el núcleo de comunicación interna \texttt{promocion -> publicacion -> consulta por rol} y \texttt{formacion -> publicacion -> inscripcion} queda operativo dentro de la aplicación.
+    \item el núcleo de comunicación interna \texttt{promocion -> publicacion -> consulta por rol}, \texttt{promocion -> pedido -> descuento aplicado} y \texttt{formacion -> publicacion -> inscripcion} queda operativo dentro de la aplicación.
 \end{itemize}
 
 Con este umbral cubierto, el siguiente salto funcional razonable del proyecto no pasa ya por incorporar \texttt{M4}, sino por consolidar documentalmente su alcance final y, en futuras iteraciones, ampliar el dominio de cobros hacia pagos parciales, facturación y conciliación avanzada si el proyecto lo requiere.
