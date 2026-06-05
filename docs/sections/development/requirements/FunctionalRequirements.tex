@@ -401,14 +401,66 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
 
 \begin{itemize}
     \item El sistema debe proporcionar un panel de administración accesible únicamente por usuarios con rol de distribuidor administrador.
-    \item El panel de administración debe permitir gestionar los elementos principales del sistema ya implementados, tales como usuarios, clientes, catálogo, pedidos globales, auditoría y configuraciones transversales.
+    \item El panel de administración debe permitir gestionar los elementos principales del sistema, tales como usuarios, clientes, catálogo de productos, promociones, pedidos globales, auditoría y configuraciones generales o transversales.
     \item El sistema debe permitir consultar un resumen operativo de las capacidades transversales de \texttt{M7}, agregando auditoría, rate limiting, integraciones y soporte técnico.
     \item El sistema debe permitir exportar dicho resumen operativo en formato \texttt{CSV} como evidencia de revisión y mantenimiento del módulo.
     \item El sistema debe permitir realizar tareas de mantenimiento y actualización de la información almacenada en la plataforma.
 \end{itemize}
 
 \vspace{-0.75em}
-\subsubsection{RF-M7-02 Auditoría y trazabilidad administrativa}
+\subsubsection{RF-M7-02 Consulta de información operativa}
+\vspace{-1em}
+
+\begin{itemize}
+    \item El sistema debe permitir consultar información operativa relevante para el distribuidor relacionada con la actividad comercial.
+    \item \textcolor{red}{El sistema debe permitir visualizar información agregada sobre pedidos, ventas, cobros y actividad comercial.}
+    \item El sistema debe permitir generar resúmenes o informes que faciliten el seguimiento del negocio y la toma de decisiones.
+    \item En la versión implementada, esta consulta operativa se materializa mediante un resumen transversal de auditoría, rate limiting, integraciones, soporte técnico y operación empresarial.
+    \item \textcolor{red}{La agregación completa de ventas, cobros y actividad comercial avanzada queda como alcance objetivo para siguientes incrementos, apoyada en los registros comerciales ya existentes.}
+\end{itemize}
+
+\vspace{-0.75em}
+\subsubsection{RF-M7-03 Integración con sistemas externos}
+\vspace{-1em}
+
+\begin{itemize}
+    \item El sistema debe permitir la integración con herramientas o servicios externos utilizados en la actividad del distribuidor.
+    \item \textcolor{red}{Entre dichas integraciones podrán contemplarse servicios de mensajería, sistemas de gestión empresarial o flujos de automatización externos como \texttt{n8n}.}
+    \item El sistema debe permitir exportar o intercambiar información con dichos sistemas cuando sea necesario.
+    \item En la versión implementada, el sistema ya utiliza servicios externos de soporte para almacenamiento de imágenes, geocodificación, cálculo de rutas y representación del QR operativo de pedido.
+    \item El administrador debe poder consultar un inventario operativo de integraciones, incluyendo proveedor, estado, configuración relevante, uso dentro de la aplicación y mecanismo de degradación previsto.
+    \item El sistema debe degradar de forma controlada cuando una de estas integraciones no pueda responder o no esté disponible temporalmente.
+    \item \textcolor{red}{La conexión directa con proveedores externos de mensajería, automatización empresarial o ERP real queda como evolución posterior sobre el inventario y las entidades persistidas.}
+\end{itemize}
+
+\vspace{-0.75em}
+\subsubsection{RF-M7-04 Integración con sistemas de gestión comercial}
+\vspace{-1em}
+
+\begin{itemize}
+    \item \textcolor{red}{El sistema debe permitir la exportación o sincronización de información comercial con herramientas externas de gestión utilizadas por el distribuidor, como sistemas de facturación o contabilidad.}
+    \item \textcolor{red}{El sistema debe facilitar el intercambio de información relacionada con pedidos, clientes o cobros con dichos sistemas externos.}
+    \item \textcolor{red}{El sistema debe permitir generar información estructurada que pueda ser utilizada posteriormente en sistemas de gestión empresarial.}
+    \item El administrador debe poder consultar un registro persistente de integraciones externas empresariales, diferenciando tipo, estado, configuración y operaciones asociadas.
+    \item El sistema debe permitir registrar operaciones de exportación, importación, sincronización, webhook o registro manual asociadas a una integración externa.
+    \item \textcolor{red}{La sincronización completa con Factusol mediante \texttt{n8n}, incluyendo credenciales reales, albaranes definitivos, facturación y conciliación de cobros, queda como alcance aspiracional documentado para siguientes incrementos.}
+\end{itemize}
+
+\vspace{-0.75em}
+\subsubsection{RF-M7-05 Automatización de pedidos a proveedor}
+\vspace{-1em}
+
+\begin{itemize}
+    \item El sistema debe permitir facilitar el proceso de realización de pedidos del distribuidor a la empresa proveedora de productos.
+    \item \textcolor{red}{El sistema debe permitir generar pedidos de reposición a partir de la información registrada en el sistema, como pedidos realizados por clientes o históricos de ventas.}
+    \item \textcolor{red}{El sistema debe permitir generar automáticamente propuestas de pedido basadas en el consumo previo o en los productos más demandados.}
+    \item En la versión implementada, el sistema permite generar propuestas de pedido a proveedor a partir de productos activos del catálogo, conservando líneas, cantidades, importes y motivo de reposición.
+    \item \textcolor{red}{El sistema debe permitir exportar o generar dichos pedidos en un formato adecuado para su envío a la empresa proveedora.}
+    \item \textcolor{red}{La propuesta automática basada en rotación real, mínimos de stock, histórico completo de ventas o integración directa con el proveedor queda pendiente de automatización completa.}
+\end{itemize}
+
+\vspace{-0.75em}
+\subsubsection{RF-M7-06 Auditoría y trazabilidad administrativa}
 \vspace{-1em}
 
 \begin{itemize}
@@ -419,32 +471,18 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
 \end{itemize}
 
 \vspace{-0.75em}
-\subsubsection{RF-M7-03 Configuración global de rate limiting}
+\subsubsection{RF-M7-07 Configuración global de rate limiting}
 \vspace{-1em}
 
 \begin{itemize}
     \item El sistema debe permitir al administrador consultar las políticas globales de rate limiting activas.
-    \item El sistema debe permitir habilitar o deshabilitar políticas concretas y ajustar su número maximo de peticiones y su ventana temporal.
+    \item El sistema debe permitir habilitar o deshabilitar políticas concretas y ajustar su número máximo de peticiones y su ventana temporal.
     \item El sistema debe permitir consultar un diagnóstico agregado de las políticas de rate limiting, diferenciando políticas activas, personalizadas, desactivadas y valores por defecto.
     \item El sistema debe aplicar estas políticas de forma coherente sobre login y API sin exigir cambios manuales en el código para cada ajuste operativo.
 \end{itemize}
 
 \vspace{-0.75em}
-\subsubsection{RF-M7-04 Integraciones externas de soporte}
-\vspace{-1em}
-
-\begin{itemize}
-    \item El sistema debe apoyarse en servicios externos de soporte cuando una capacidad implementada lo requiera.
-    \item Entre dichas integraciones ya operativas se incluyen almacenamiento de imágenes, geocodificación, cálculo de rutas y representación del QR operativo de pedido.
-    \item El administrador debe poder consultar un inventario operativo de integraciones, incluyendo proveedor, estado, configuración relevante, uso dentro de la aplicación y mecanismo de degradación previsto.
-    \item El administrador debe poder consultar un registro persistente de integraciones externas empresariales, diferenciando tipo, estado, configuración y operaciones asociadas.
-    \item El sistema debe permitir registrar operaciones de exportación, importación, sincronización, webhook o registro manual asociadas a una integración externa.
-    \item El sistema debe permitir generar propuestas de pedido a proveedor a partir de productos activos del catálogo, conservando líneas, cantidades, importes y motivo de reposición.
-    \item El sistema debe degradar de forma controlada cuando una de estas integraciones no pueda responder o no este disponible temporalmente.
-\end{itemize}
-
-\vspace{-0.75em}
-\subsubsection{RF-M7-05 Servicios transversales de compatibilidad y soporte}
+\subsubsection{RF-M7-08 Servicios transversales de compatibilidad y soporte}
 \vspace{-1em}
 
 \begin{itemize}
