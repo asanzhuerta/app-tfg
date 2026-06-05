@@ -5,38 +5,11 @@ import Link from "next/link";
 import { useState } from "react";
 import PageTransition from "./components/animations/PageTransition";
 
-const featureCards = [
-	{
-		kicker: "Clientes",
-		title: "Fichas de salon y visitas",
-		description:
-			"Historial tecnico, servicios, imagenes de resultado y datos comerciales en un mismo sitio.",
-	},
-	{
-		kicker: "Comercial",
-		title: "Pedidos, rutas y QR",
-		description:
-			"Prepara pedidos, valida entregas y organiza rutas sin saltar entre herramientas.",
-	},
-	{
-		kicker: "Gestion",
-		title: "Catalogo y promociones",
-		description:
-			"Coloracion, productos, segmentos, descuentos y avisos conectados al trabajo diario.",
-	},
-];
-
 const workflowItems = [
 	"Cliente profesional",
 	"Catalogo y coloracion",
 	"Pedido con promocion",
 	"Ruta y entrega QR",
-];
-
-const statItems = [
-	{ value: "3", label: "roles conectados" },
-	{ value: "7", label: "modulos operativos" },
-	{ value: "1", label: "flujo unificado" },
 ];
 
 export default function Home() {
@@ -82,13 +55,9 @@ export default function Home() {
 				<PageTransition
 					isLeaving={leaving}
 					durationMs={420}
-					className="grid flex-1 items-center gap-8 py-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:py-10"
+					className="grid flex-1 items-center gap-9 pt-20 pb-8 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_420px] lg:py-10"
 				>
 					<div className="max-w-3xl">
-						<div className="mb-5 inline-flex rounded-full border border-white/70 bg-white/60 px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-slate-700 shadow-sm backdrop-blur">
-							Salon, ventas y operaciones en una sola app
-						</div>
-
 						<h1 className="text-balance text-5xl font-black leading-[0.94] tracking-[-0.07em] text-slate-950 sm:text-6xl lg:text-7xl">
 							La gestion diaria de tu salon, con mirada profesional.
 						</h1>
@@ -114,22 +83,6 @@ export default function Home() {
 							>
 								Solicitar acceso
 							</Link>
-						</div>
-
-						<div className="mt-8 grid max-w-2xl grid-cols-3 gap-3">
-							{statItems.map((item) => (
-								<div
-									key={item.label}
-									className="rounded-3xl border border-white/60 bg-white/55 p-4 shadow-sm backdrop-blur"
-								>
-									<p className="text-2xl font-black text-slate-950">
-										{item.value}
-									</p>
-									<p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
-										{item.label}
-									</p>
-								</div>
-							))}
 						</div>
 					</div>
 
@@ -175,25 +128,6 @@ export default function Home() {
 							</div>
 						</div>
 					</aside>
-
-					<div className="grid gap-3 lg:col-span-2 lg:grid-cols-3">
-						{featureCards.map((feature) => (
-							<article
-								key={feature.title}
-								className="rounded-[2rem] border border-white/65 bg-white/62 p-5 shadow-[0_18px_60px_rgba(15,23,42,0.10)] backdrop-blur-xl"
-							>
-								<p className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">
-									{feature.kicker}
-								</p>
-								<h3 className="mt-3 text-xl font-black tracking-[-0.03em] text-slate-950">
-									{feature.title}
-								</h3>
-								<p className="mt-3 text-sm leading-6 text-slate-600">
-									{feature.description}
-								</p>
-							</article>
-						))}
-					</div>
 				</PageTransition>
 			</section>
 		</main>
