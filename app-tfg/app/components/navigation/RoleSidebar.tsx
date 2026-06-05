@@ -187,7 +187,13 @@ export default function RoleSidebar({
 						: "-translate-x-full opacity-0 lg:translate-x-0 lg:opacity-100"
 				}`}
 			>
-				<div className="relative flex items-center justify-between gap-3 border-b border-slate-200/70 px-4 py-4">
+				<div
+					className={`relative flex items-center gap-3 border-b border-slate-200/70 py-4 ${
+						isExpanded
+							? "justify-between px-4"
+							: "justify-between px-4 lg:justify-center lg:px-0"
+					}`}
+				>
 					<div
 						className={`flex min-w-0 items-center ${
 							isExpanded
