@@ -68,7 +68,7 @@ export default function ProfileDetailsSection({
 
 			<div className={cardClass}>
 				<p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-					Telefono
+					Teléfono
 				</p>
 
 				{isEditableMode ? (

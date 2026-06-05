@@ -29,15 +29,15 @@ export default function CommercialClientDetail({ clientId }: Props) {
 			{ label: "Persona de contacto", value: client.contact_name },
 			{ label: "Identificador fiscal", value: client.tax_id },
 			{ label: "Correo vinculado", value: client.user?.email },
-			{ label: "Telefono", value: client.user?.phone },
+			{ label: "Teléfono", value: client.user?.phone },
 			{ label: "Empresa", value: client.user?.company },
-			{ label: "Direccion", value: client.address },
+			{ label: "Dirección", value: client.address },
 			{ label: "Ciudad", value: client.city },
-			{ label: "Codigo postal", value: client.postal_code },
+			{ label: "Código postal", value: client.postal_code },
 			{ label: "Provincia", value: client.province },
 			{ label: "Fecha de alta", value: formatDate(client.created_at) },
 			{
-				label: "Ultima actualizacion",
+				label: "Última actualización",
 				value: formatDate(client.updated_at),
 			},
 		];
@@ -54,11 +54,11 @@ export default function CommercialClientDetail({ clientId }: Props) {
 				value: activeAssignment?.commercial?.user?.email ?? "-",
 			},
 			{
-				label: "Telefono del comercial",
+				label: "Teléfono del comercial",
 				value: activeAssignment?.commercial?.user?.phone ?? "-",
 			},
 			{
-				label: "Codigo interno",
+				label: "Código interno",
 				value: activeAssignment?.commercial?.employee_code ?? "-",
 			},
 			{
@@ -77,7 +77,7 @@ export default function CommercialClientDetail({ clientId }: Props) {
 		() => [
 			{ label: "Nombre", value: client?.user?.name },
 			{ label: "Correo", value: client?.user?.email },
-			{ label: "Telefono", value: client?.user?.phone },
+			{ label: "Teléfono", value: client?.user?.phone },
 			{ label: "Empresa", value: client?.user?.company },
 		],
 		[client],

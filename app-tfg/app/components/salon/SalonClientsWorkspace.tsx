@@ -149,7 +149,7 @@ export default function SalonClientsWorkspace({
 								htmlFor="salon-client-phone"
 								className="mb-2 block text-sm font-medium text-slate-700"
 							>
-								Telefono
+								Teléfono
 							</label>
 							<input
 								id="salon-client-phone"
@@ -158,7 +158,7 @@ export default function SalonClientsWorkspace({
 								value={phone}
 								onChange={(event) => setPhone(event.target.value)}
 								className={inputClassName}
-								placeholder="Telefono de contacto"
+								placeholder="Teléfono de contacto"
 								autoComplete="tel"
 								disabled={isSubmitting}
 							/>

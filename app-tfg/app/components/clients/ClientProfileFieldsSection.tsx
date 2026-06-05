@@ -79,9 +79,9 @@ export default function ClientProfileFieldsSection({
 			label: "Persona de contacto",
 		},
 		{ field: "tax_id", id: "client-tax-id", label: "Identificador fiscal" },
-		{ field: "address", id: "client-address", label: "Direccion" },
+		{ field: "address", id: "client-address", label: "Dirección" },
 		{ field: "city", id: "client-city", label: "Ciudad" },
-		{ field: "postal_code", id: "client-postal-code", label: "Codigo postal" },
+		{ field: "postal_code", id: "client-postal-code", label: "Código postal" },
 		{ field: "province", id: "client-province", label: "Provincia / zona" },
 		{
 			field: "visit_window_start_time",
@@ -134,7 +134,7 @@ export default function ClientProfileFieldsSection({
 					Datos del cliente profesional
 				</h3>
 				<p className="mt-1 text-sm text-slate-600">
-					Informacion comercial, localizacion y disponibilidad para visitas.
+					Información comercial, localización y disponibilidad para visitas.
 				</p>
 			</div>
 
@@ -152,7 +152,7 @@ export default function ClientProfileFieldsSection({
 						compact ? "2xl:col-span-2" : "md:col-span-2"
 					}`}
 				>
-					<p className={labelClass}>Estado de geolocalizacion</p>
+					<p className={labelClass}>Estado de geolocalización</p>
 
 					<div
 						className={`mt-2 rounded-2xl px-4 py-3 text-sm ${
@@ -162,8 +162,8 @@ export default function ClientProfileFieldsSection({
 						}`}
 					>
 						{hasConfirmedLocation
-							? "Ubicacion confirmada. Si cambias la direccion, vuelve a validarla en el mapa."
-							: "Direccion pendiente de confirmar en mapa. Puedes guardar sin hacerlo y el sistema intentara geocodificarla automaticamente."}
+							? "Ubicación confirmada. Si cambias la dirección, vuelve a validarla en el mapa."
+							: "Dirección pendiente de confirmar en mapa. Puedes guardar sin hacerlo y el sistema intentará geocodificarla automáticamente."}
 					</div>
 
 					<div className="mt-3 grid gap-3 md:grid-cols-2">
@@ -186,10 +186,10 @@ export default function ClientProfileFieldsSection({
 					>
 						<div className="mb-3">
 							<h4 className="text-base font-semibold text-slate-900">
-								Confirmacion en mapa
+								Confirmación en mapa
 							</h4>
 							<p className="mt-1 text-sm text-slate-600">
-								Busca la direccion y ajusta el marcador si hace falta.
+								Busca la dirección y ajusta el marcador si hace falta.
 							</p>
 						</div>
 
@@ -205,8 +205,8 @@ export default function ClientProfileFieldsSection({
 							/>
 						) : (
 							<div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-								La ubicacion solo puede confirmarse desde edicion propia del
-								cliente o edicion administrativa.
+								La ubicación solo puede confirmarse desde edición propia del
+								cliente o edición administrativa.
 							</div>
 						)}
 					</div>

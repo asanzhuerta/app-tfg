@@ -46,7 +46,7 @@ export default async function ProfilePage() {
 						<div className="lg:hidden">
 							<HeaderTitle
 								title="KinEstilistas"
-								subtitle="Alta Peluqueria &amp; Estetica"
+								subtitle="Alta Peluquería &amp; Estética"
 							/>
 						</div>
 
@@ -61,7 +61,7 @@ export default async function ProfilePage() {
 								>
 									<div className="glass-card rounded-[28px] border border-white/35 bg-white/70 px-4 py-3 shadow-xl shadow-slate-950/10 backdrop-blur sm:px-5">
 										<p className="text-xs font-black uppercase tracking-[0.24em] text-slate-500">
-											Area personal
+											Área personal
 										</p>
 										<div className="mt-1 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
 											<div>
@@ -70,7 +70,7 @@ export default async function ProfilePage() {
 												</h1>
 												<p className="text-sm text-slate-600">
 													Consulta y edita tus datos sin perder de vista la
-													informacion del salon.
+													información del salón.
 												</p>
 											</div>
 											<p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
