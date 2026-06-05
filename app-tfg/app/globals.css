@@ -44,6 +44,16 @@ body {
 	}
 }
 
+.role-sidebar-scroll {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.role-sidebar-scroll::-webkit-scrollbar {
+	height: 0;
+	width: 0;
+}
+
 .bg-overlay {
 	background: linear-gradient(
 		to bottom,

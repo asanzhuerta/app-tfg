@@ -189,8 +189,14 @@ export default function RoleSidebar({
 						: "-translate-x-full opacity-0 lg:translate-x-0 lg:opacity-100"
 				}`}
 			>
-				<div className="flex items-center justify-between gap-3 border-b border-slate-200/70 px-4 py-4">
-					<div className="flex min-w-0 items-center gap-3">
+				<div className="relative flex items-center justify-between gap-3 border-b border-slate-200/70 px-4 py-4">
+					<div
+						className={`flex min-w-0 items-center ${
+							isExpanded
+								? "gap-3 pr-11"
+								: "gap-3 lg:w-full lg:justify-center lg:gap-0 lg:pr-0"
+						}`}
+					>
 						<div
 							aria-hidden="true"
 							className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-slate-950/10 ring-1 ring-slate-200"
@@ -200,7 +206,7 @@ export default function RoleSidebar({
 								alt=""
 								width={44}
 								height={44}
-								className="h-11 w-11 object-contain"
+								className="h-11 w-11 object-contain object-center"
 								sizes="44px"
 							/>
 						</div>
@@ -223,7 +229,7 @@ export default function RoleSidebar({
 					<div className="flex items-center gap-2">
 						<button
 							type="button"
-							className="hidden scale-90 rounded-full border border-slate-200 bg-white/75 px-3 py-2 text-xs font-bold text-slate-700 opacity-0 shadow-sm transition-[opacity,transform,background-color,color] duration-200 hover:bg-slate-950 hover:text-white focus-visible:scale-100 focus-visible:opacity-100 lg:inline-flex lg:group-hover:scale-100 lg:group-hover:opacity-100"
+							className="absolute right-3 top-1/2 hidden h-9 w-9 -translate-y-1/2 scale-90 items-center justify-center rounded-full border border-slate-200 bg-white/75 p-0 text-xs font-bold text-slate-700 opacity-0 shadow-sm transition-[opacity,transform,background-color,color] duration-200 hover:bg-slate-950 hover:text-white focus-visible:scale-100 focus-visible:opacity-100 lg:inline-flex lg:group-hover:scale-100 lg:group-hover:opacity-100"
 							onClick={() => setIsExpanded((value) => !value)}
 							aria-label={isExpanded ? "Plegar menu" : "Desplegar menu"}
 						>
@@ -241,7 +247,11 @@ export default function RoleSidebar({
 				</div>
 
 				<div className="border-b border-slate-200/70 px-4 py-4">
-					<div className="flex items-center gap-3">
+					<div
+						className={`flex items-center ${
+							isExpanded ? "gap-3" : "gap-3 lg:justify-center lg:gap-0"
+						}`}
+					>
 						<UserAvatar
 							name={userName}
 							imageUrl={userImageUrl}
@@ -267,15 +277,15 @@ export default function RoleSidebar({
 
 				<nav
 					aria-label="Navegacion principal"
-					className="min-h-0 flex-1 space-y-5 overflow-y-auto px-3 py-4"
+					className="role-sidebar-scroll min-h-0 flex-1 space-y-5 overflow-y-auto px-3 py-4"
 				>
 					{sections.map((section) => (
 						<section key={section.title}>
 							<p
-								className={`mb-2 overflow-hidden px-3 text-xs font-black uppercase tracking-[0.18em] text-slate-400 transition-[max-height,opacity,transform] duration-300 ease-out ${
+								className={`overflow-hidden px-3 text-xs font-black uppercase tracking-[0.18em] text-slate-400 transition-[max-height,opacity,transform,margin] duration-300 ease-out ${
 									isExpanded
-										? "max-h-8 translate-x-0 opacity-100"
-										: "max-h-8 translate-x-0 opacity-100 lg:max-h-0 lg:-translate-x-2 lg:opacity-0"
+										? "mb-2 max-h-8 translate-x-0 opacity-100"
+										: "mb-2 max-h-8 translate-x-0 opacity-100 lg:mb-0 lg:max-h-0 lg:-translate-x-2 lg:opacity-0"
 								}`}
 							>
 								{section.title}
@@ -292,13 +302,19 @@ export default function RoleSidebar({
 											onClick={closeMobileSidebar}
 											aria-current={isActive ? "page" : undefined}
 											aria-label={item.title}
-											className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
+											className={`flex w-full items-center rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
 												isActive
 													? "bg-slate-950 text-white shadow-lg shadow-slate-950/15"
 													: "text-slate-600 hover:bg-white hover:text-slate-950 hover:shadow-sm"
-											} ${isExpanded ? "lg:justify-start" : "lg:justify-center"}`}
+											} ${
+												isExpanded
+													? "gap-3 lg:justify-start"
+													: "gap-3 lg:h-12 lg:justify-center lg:gap-0 lg:px-0 lg:py-0"
+											}`}
 										>
-											<Icon className="h-5 w-5 shrink-0" />
+											<span className="grid h-8 w-8 shrink-0 place-items-center">
+												<Icon className="block h-5 w-5" />
+											</span>
 											<span
 												className={`truncate overflow-hidden transition-[max-width,opacity,transform] duration-300 ease-out ${
 													isExpanded
@@ -320,11 +336,15 @@ export default function RoleSidebar({
 					<button
 						type="button"
 						onClick={handleLogout}
-						className={`flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-bold text-slate-600 transition hover:bg-rose-50 hover:text-rose-700 ${
-							isExpanded ? "lg:justify-start" : "lg:justify-center"
+						className={`flex w-full items-center rounded-2xl px-3 py-2.5 text-sm font-bold text-slate-600 transition hover:bg-rose-50 hover:text-rose-700 ${
+							isExpanded
+								? "gap-3 lg:justify-start"
+								: "gap-3 lg:h-12 lg:justify-center lg:gap-0 lg:px-0 lg:py-0"
 						}`}
 					>
-						<LogoutIcon className="h-5 w-5 shrink-0" />
+						<span className="grid h-8 w-8 shrink-0 place-items-center">
+							<LogoutIcon className="block h-5 w-5" />
+						</span>
 						<span
 							className={`truncate overflow-hidden transition-[max-width,opacity,transform] duration-300 ease-out ${
 								isExpanded
