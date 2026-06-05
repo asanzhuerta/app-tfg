@@ -65,7 +65,7 @@ export function mapCatalogProductsToEntityTableItems(
 		imageUrl: product.image_url,
 		secondaryImageUrl: product.productLine?.image_url ?? null,
 		secondaryImageLabel: product.productLine?.name ?? null,
-		category: product.productCategory?.name ?? "Sin categoria",
+		category: product.productCategory?.name ?? "Sin categoría",
 		primaryDate: product.created_at.toISOString(),
 		badges: [
 			buildBadge(

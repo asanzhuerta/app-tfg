@@ -32,7 +32,7 @@ function getActionClasses(variant?: "primary" | "secondary" | "warning") {
 		return "bg-slate-100 text-slate-700 hover:bg-slate-200";
 	}
 
-	return "bg-sky-600 text-white hover:bg-sky-700";
+	return "bg-slate-950 text-white shadow-lg shadow-slate-950/15 hover:bg-slate-800";
 }
 
 // Tarjeta reutilizable que representa un unico elemento del listado.
@@ -124,6 +124,105 @@ function EntityCard({
 		}
 
 		return colorReferenceCard;
+	}
+
+	if (isCatalogProductVariant) {
+		return (
+			<m.div
+				layout
+				{...motionProps}
+				className="group flex h-full flex-col rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-950/10"
+			>
+				<div className="relative overflow-hidden rounded-[1.45rem] border border-slate-100 bg-white shadow-inner shadow-slate-950/5">
+					<div className="aspect-[4/3] w-full p-3 sm:aspect-[5/4] xl:aspect-[4/3]">
+						<UserAvatar
+							name={item.title}
+							imageUrl={item.imageUrl}
+							size="xl"
+							shape="soft-square"
+							imageFit="contain"
+							imagePositionClass="object-center"
+							imagePaddingClass="p-0"
+							imageBackgroundClass="bg-white"
+							className="h-full w-full rounded-[1.2rem] text-5xl"
+						/>
+					</div>
+
+					{item.badges?.length ? (
+						<div className="absolute right-3 top-3 flex max-w-[75%] flex-wrap justify-end gap-2">
+							{item.badges.map((badge) => (
+								<span
+									key={`${item.id}-${badge.label}`}
+									className={`inline-flex rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-[0.08em] shadow-sm backdrop-blur-md ${badge.className ?? "border border-slate-200 bg-white/90 text-slate-700"}`}
+								>
+									{badge.label}
+								</span>
+							))}
+						</div>
+					) : null}
+
+					{item.secondaryImageUrl || item.secondaryImageLabel ? (
+						<div className="absolute bottom-3 right-3 rounded-2xl border border-white/80 bg-white/90 p-1.5 shadow-lg shadow-slate-950/10 backdrop-blur">
+							<UserAvatar
+								name={item.secondaryImageLabel ?? item.title}
+								imageUrl={item.secondaryImageUrl}
+								size="xl"
+								shape="soft-square"
+								imageFit="contain"
+								imagePaddingClass="p-0"
+								imageBackgroundClass="bg-white"
+								className="h-14 w-14 rounded-xl text-lg"
+							/>
+						</div>
+					) : null}
+				</div>
+
+				<div className="flex flex-1 flex-col px-1 pt-4">
+					<p className="text-xl font-black leading-[1.05] tracking-[-0.03em] text-slate-950 sm:text-2xl">
+						{item.title}
+					</p>
+					{hasSubtitle ? (
+						<p className="mt-2 text-sm leading-relaxed text-slate-600">
+							{item.subtitle}
+						</p>
+					) : null}
+
+					{item.fields.length ? (
+						<div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+							{item.fields.map((field) => (
+								<div
+									key={`${item.id}-${field.label}`}
+									className="rounded-2xl border border-slate-100 bg-slate-50 px-3 py-2"
+								>
+									<p className="text-[11px] font-black uppercase tracking-[0.12em] text-slate-500">
+										{field.label}
+									</p>
+									<p className="mt-1 font-semibold text-slate-900">
+										{field.value || "-"}
+									</p>
+								</div>
+							))}
+						</div>
+					) : null}
+
+					{item.actions?.length ? (
+						<div className="mt-auto flex flex-wrap gap-2 pt-5">
+							{item.actions.map((action) => (
+								<Link
+									key={`${item.id}-${action.label}`}
+									href={action.href}
+									className={`inline-flex min-h-11 flex-1 items-center justify-center rounded-full px-4 py-2.5 text-sm font-black uppercase tracking-[0.08em] transition ${getActionClasses(
+										action.variant,
+									)}`}
+								>
+									{action.label}
+								</Link>
+							))}
+						</div>
+					) : null}
+				</div>
+			</m.div>
+		);
 	}
 
 	return (

@@ -6,7 +6,7 @@ export default async function CommercialCatalogPage() {
 
 	return (
 		<CatalogProductsExplorer
-			title="Catalogo"
+			title="Catálogo"
 			subtitle="Consulta la oferta profesional disponible para tu cartera"
 			products={products}
 			detailBasePath="/commercials/catalog"
