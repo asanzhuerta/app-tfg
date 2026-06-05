@@ -1,10 +1,13 @@
 import { redirect } from "next/navigation";
 import PageTransition from "@/app/components/animations/PageTransition";
 import HeaderTitle from "@/app/components/basics/HeaderTitle";
+import ClientTierBadgeCard from "@/app/components/clients/ClientTierBadgeCard";
 import RoleSidebar from "@/app/components/navigation/RoleSidebar";
 import type { RoleSidebarRole } from "@/app/components/navigation/role-sidebar-items";
 import UserProfileCard from "@/app/components/users/UserProfileCard";
 import { requireUserSession } from "@/lib/auth/require-session";
+import { getClientTierOverview } from "@/lib/typeorm/services/clients/client-tier";
+import { listPromotionsForUser } from "@/lib/typeorm/services/communications/communications";
 import { getUserById } from "@/lib/typeorm/services/users/user";
 
 export default async function ProfilePage() {
@@ -16,6 +19,16 @@ export default async function ProfilePage() {
 	}
 
 	const role = user.role.code as RoleSidebarRole;
+	const [clientTierOverview, clientPromotions] =
+		role === "client"
+			? await Promise.all([
+					getClientTierOverview(session.user.id),
+					listPromotionsForUser({
+						userId: session.user.id,
+						role: "client",
+					}),
+				])
+			: [null, []];
 
 	return (
 		<main className="app-bg min-h-[100svh] w-full text-slate-800">
@@ -38,13 +51,22 @@ export default async function ProfilePage() {
 						<PageTransition>
 							<section className="mx-auto mt-4 w-full max-w-4xl">
 								<div className="glass-card overflow-hidden rounded-[28px] border border-white/30 p-4 shadow-xl sm:p-6">
-									<div className="mb-5">
-										<h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-											Mi perfil
-										</h1>
-										<p className="mt-1 text-sm text-slate-600 sm:text-base">
-											Consulta y edita tu informacion personal.
-										</p>
+									<div className="mb-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,340px)] lg:items-start">
+										<div>
+											<h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+												Mi perfil
+											</h1>
+											<p className="mt-1 text-sm text-slate-600 sm:text-base">
+												Consulta y edita tu informacion personal.
+											</p>
+										</div>
+										{clientTierOverview ? (
+											<ClientTierBadgeCard
+												tier={clientTierOverview}
+												activePromotionsCount={clientPromotions.length}
+												compact
+											/>
+										) : null}
 									</div>
 
 									<UserProfileCard
