@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import PageTransition from "./components/animations/PageTransition";
+import HeaderTitle from "./components/basics/HeaderTitle";
 
 const workflowItems = [
 	"Cliente profesional",
@@ -21,41 +21,12 @@ export default function Home() {
 			<div className="fixed inset-0 -z-10 bg-gradient-to-br from-white/80 via-white/35 to-slate-950/35" />
 
 			<section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-5 sm:px-8 lg:px-10">
-				<header className="flex items-center justify-between gap-4 rounded-[2rem] border border-white/60 bg-white/58 px-4 py-3 shadow-[0_20px_80px_rgba(15,23,42,0.10)] backdrop-blur-xl">
-					<div className="flex items-center gap-3">
-						<div className="grid h-12 w-12 place-items-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-slate-950/10 ring-1 ring-slate-200/80">
-							<Image
-								src="/icons/icon-192.png"
-								alt="Kinestilistas"
-								width={42}
-								height={42}
-								className="h-10 w-10 object-contain"
-								priority
-							/>
-						</div>
-						<div>
-							<p className="text-sm font-black uppercase tracking-[0.22em]">
-								Kinestilistas
-							</p>
-							<p className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-slate-500">
-								Alta peluqueria & estetica
-							</p>
-						</div>
-					</div>
-
-					<Link
-						href="/login"
-						onClick={() => setLeaving(true)}
-						className="hidden rounded-full bg-slate-950 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800 sm:inline-flex"
-					>
-						Entrar
-					</Link>
-				</header>
+				<HeaderTitle title="Kinestilistas" />
 
 				<PageTransition
 					isLeaving={leaving}
 					durationMs={420}
-					className="grid flex-1 items-center gap-9 pt-20 pb-8 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_420px] lg:py-10"
+					className="grid flex-1 items-center gap-9 pt-12 pb-8 sm:pt-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:py-10"
 				>
 					<div className="max-w-3xl">
 						<h1 className="text-balance text-5xl font-black leading-[0.94] tracking-[-0.07em] text-slate-950 sm:text-6xl lg:text-7xl">

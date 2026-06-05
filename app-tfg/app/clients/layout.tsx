@@ -26,7 +26,7 @@ export default async function ClientLayout({
 						userEmail={user?.email ?? session.user.email}
 						userImageUrl={user?.profile_image_url ?? session.user.image}
 					/>
-					<div className="min-w-0 flex-1 px-6 pt-20 pb-8 md:pb-10 lg:pt-4">
+					<div className="min-w-0 flex-1 px-6 pt-4 pb-8 md:pb-10">
 						<ShellHeader />
 						<section className="flex-1 overflow-y-auto">
 							<PageTransition>{children}</PageTransition>

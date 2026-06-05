@@ -147,7 +147,7 @@ export default function RoleSidebar({
 			<button
 				type="button"
 				data-sidebar-motion="true"
-				className={`fixed left-4 top-4 z-[70] rounded-full border border-white/50 bg-white/90 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-900 shadow-xl backdrop-blur transition-[opacity,transform] duration-200 ease-out lg:hidden ${
+				className={`fixed left-4 top-[calc(env(safe-area-inset-top)+0.75rem)] z-[80] rounded-full border border-white/60 bg-white/72 px-3.5 py-2.5 text-[0.68rem] font-black uppercase tracking-[0.22em] text-slate-950 shadow-xl shadow-slate-950/10 backdrop-blur-xl transition-[opacity,transform,background-color] duration-200 ease-out hover:bg-white lg:hidden ${
 					isMobileMounted
 						? "pointer-events-none -translate-y-2 scale-95 opacity-0"
 						: "translate-y-0 scale-100 opacity-100"
@@ -156,7 +156,6 @@ export default function RoleSidebar({
 				aria-label="Abrir menu de navegacion"
 				aria-expanded={isMobileOpen}
 				aria-controls="role-sidebar"
-				aria-hidden={isMobileMounted}
 				tabIndex={isMobileMounted ? -1 : undefined}
 			>
 				Menu
@@ -172,7 +171,6 @@ export default function RoleSidebar({
 				}`}
 				onClick={closeMobileSidebar}
 				aria-label="Cerrar menu"
-				aria-hidden={!isMobileOpen}
 				tabIndex={isMobileOpen ? undefined : -1}
 			/>
 
