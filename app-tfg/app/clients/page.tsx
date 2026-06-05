@@ -2,8 +2,13 @@ import AssistantCard from "../components/AssistantCard";
 import NavCard from "../components/NavCard";
 import PageTransition from "../components/animations/PageTransition";
 import ClientDeliveryEstimateCard from "../components/clients/ClientDeliveryEstimateCard";
+import ClientTierBadgeCard from "../components/clients/ClientTierBadgeCard";
 import { requireClientSession } from "@/lib/auth/require-session";
-import { listNotificationsForUser } from "@/lib/typeorm/services/communications/communications";
+import {
+	listNotificationsForUser,
+	listPromotionsForUser,
+} from "@/lib/typeorm/services/communications/communications";
+import { getClientTierOverview } from "@/lib/typeorm/services/clients/client-tier";
 import {
 	AgendaIcon,
 	AppointmentIcon,
@@ -64,15 +69,27 @@ const navItems = [
 
 export default async function ClientsHome() {
 	const session = await requireClientSession();
-	const notifications = await listNotificationsForUser(session.user.id);
+	const [notifications, promotions, tierOverview] = await Promise.all([
+		listNotificationsForUser(session.user.id),
+		listPromotionsForUser({
+			userId: session.user.id,
+			role: "client",
+		}),
+		getClientTierOverview(session.user.id),
+	]);
 	const unreadNotificationsCount = notifications.filter(
 		(notification) => !notification.read_at,
 	).length;
 
 	return (
 		<PageTransition>
-			<div className="mb-6">
+			<div className="mb-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(300px,380px)] lg:items-stretch">
 				<AssistantCard />
+				<ClientTierBadgeCard
+					tier={tierOverview}
+					activePromotionsCount={promotions.length}
+					compact
+				/>
 			</div>
 
 			<div className="mb-6">

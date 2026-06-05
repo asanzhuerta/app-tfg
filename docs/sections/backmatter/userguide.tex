@@ -37,6 +37,8 @@ Si se desea ejecutar la aplicación en local para evaluación, deben seguirse lo
 
 En el flujo de autenticación, el sistema distingue entre credenciales incorrectas y bloqueos temporales por demasiados intentos, de modo que el usuario recibe un mensaje específico cuando el acceso queda temporalmente limitado.
 
+Una vez dentro de la aplicación, cada rol dispone de una barra lateral izquierda con las opciones disponibles para su perfil. En escritorio la barra se muestra como panel lateral, identifica el rol activo mediante los textos \textit{PROFESIONAL}, \textit{COMERCIAL} o \textit{ADMINISTRADOR}, e incorpora el logo de la aplicación. La barra puede plegarse para dejar solo los iconos y sustituye a la antigua navegación inferior. En móvil se abre desde el botón \textit{Menu}, se cierra al elegir una opción o al pulsar fuera del panel, y mantiene las mismas rutas principales que la versión de escritorio.
+
 \subsection{Uso como administrador}
 
 El panel de administración concentra actualmente cinco áreas principales:
@@ -120,6 +122,8 @@ Si no existe reparto para ese día, o si la visita ha quedado fuera de la franja
 
 Desde \texttt{/clients/orders}, el cliente puede consultar pedidos en distintos estados, abrir su detalle y seguir la trazabilidad mínima de reparto y cobro. Desde el catálogo, puede navegar por productos activos, aplicar filtros y abrir la ficha completa de cada referencia. Esa ficha reúne información técnica, recursos de apoyo y, cuando corresponde, accesos directos a cartas de color relacionadas.
 
+En el panel principal de cliente y en \texttt{/profile}, el sistema muestra el rango comercial asignado al salón: \textit{Plata}, \textit{Oro} o \textit{Platino}. Este badge resume las ventajas asociadas al segmento y enlaza con las promociones activas disponibles para el cliente. Si todavía no existe una asignación de rango, se muestra un estado informativo sin rango asignado.
+
 Desde \texttt{/clients/salon-clients}, el cliente profesional puede crear fichas de clientes finales del salón, revisar su historial técnico y abrir el detalle de cada una. En dicho detalle puede actualizar la ficha base, registrar nuevos servicios con fecha, tipo de tratamiento, resumen del resultado, fórmula, notas técnicas y productos utilizados, seleccionar la tonalidad concreta cuando un tinte o producto de coloración enlaza referencias cromáticas, subir varias imagenes del resultado final, guardar plantillas reutilizables a partir del formulario actual, aplicar esas plantillas para acelerar nuevos registros, editar o eliminar servicios ya existentes y filtrar el historial por texto, tipo o fecha. Quedan además visibles las sugerencias de producto derivadas del historial acumulado y, para cada servicio, un borrador técnico editable de correo que puede copiarse o abrirse en el gestor de correo del dispositivo.
 
 \subsection{Perfil y datos personales}
@@ -128,7 +132,7 @@ Todos los roles pueden acceder a \texttt{/profile} para editar sus datos persona
 
 \begin{itemize}
     \item modificar nombre, correo, empresa y teléfono;
-    \item subir o reemplazar la imagen de perfil;
+    \item subir o reemplazar la imagen de perfil, que también se muestra en la navegación lateral;
     \item cambiar la contraseña cumpliendo las reglas de validación;
     \item en el caso del cliente, editar la información de su ficha y confirmar la ubicación exacta del establecimiento sobre mapa.
 \end{itemize}
