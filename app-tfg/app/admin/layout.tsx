@@ -24,7 +24,7 @@ export default async function AdminLayout({
 						userEmail={user?.email ?? session.user.email}
 						userImageUrl={user?.profile_image_url ?? session.user.image}
 					/>
-					<section className="min-w-0 flex-1 px-4 pt-20 pb-8 md:px-6 md:pb-10 lg:pt-4">
+					<section className="min-w-0 flex-1 px-4 pt-4 pb-8 md:px-6 md:pb-10">
 						<ShellHeader />
 						{children}
 					</section>
