@@ -101,6 +101,13 @@ body {
 		scroll-behavior: auto !important;
 		transition-duration: 0.01ms !important;
 	}
+
+	[data-sidebar-motion],
+	[data-sidebar-motion] *,
+	[data-sidebar-motion]::before,
+	[data-sidebar-motion]::after {
+		transition-duration: var(--sidebar-motion-duration, 320ms) !important;
+	}
 }
 
 /* -------------------------------------------------------------------------- */
