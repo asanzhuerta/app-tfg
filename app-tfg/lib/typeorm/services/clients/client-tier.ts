@@ -99,7 +99,7 @@ export async function getClientTierOverview(
 		assignedSegments.map((segment) => normalizeSegmentCode(segment.code)),
 	);
 	const tierCode =
-		TIER_PRIORITY.find((candidate) => assignedCodes.has(candidate)) ?? "none";
+		TIER_PRIORITY.find((candidate) => assignedCodes.has(candidate)) ?? "silver";
 
 	return {
 		code: tierCode,

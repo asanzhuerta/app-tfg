@@ -4,6 +4,8 @@ import { CustomerSegment } from "@/lib/typeorm/entities/CustomerSegment";
 import { ClientCustomerSegment } from "@/lib/typeorm/entities/ClientCustomerSegment";
 import { getClientTierOverview } from "@/lib/typeorm/services/clients/client-tier";
 
+const TIER_CODES = ["silver", "gold", "platinum"] as const;
+
 function assertCondition(condition: unknown, message: string): asserts condition {
 	if (!condition) {
 		throw new Error(message);
@@ -22,9 +24,36 @@ async function main() {
 			code: "platinum",
 		},
 	});
+	const silver = await dataSource.getRepository(CustomerSegment).findOne({
+		where: {
+			code: "silver",
+		},
+	});
+	const clientsWithoutTier = await dataSource
+		.getRepository(Client)
+		.createQueryBuilder("client")
+		.where(
+			`
+			NOT EXISTS (
+				SELECT 1
+				FROM client_customer_segments assignment
+				INNER JOIN customer_segments segment
+					ON segment.id = assignment.segment_id
+				WHERE assignment.client_id = client.id
+					AND segment.code IN (:...tierCodes)
+			)
+			`,
+			{ tierCodes: TIER_CODES },
+		)
+		.getCount();
 
 	assertCondition(client, "Debe existir al menos un cliente para validar M6 tier");
+	assertCondition(silver, "Debe existir el segmento seeded silver");
 	assertCondition(platinum, "Debe existir el segmento seeded platinum");
+	assertCondition(
+		clientsWithoutTier === 0,
+		"Todos los clientes deben tener al menos un rango comercial base",
+	);
 
 	const assignmentRepo = dataSource.getRepository(ClientCustomerSegment);
 	const existingAssignment = await assignmentRepo.findOne({
@@ -62,6 +91,7 @@ async function main() {
 			"El badge debe exponer ventajas y siguiente paso",
 		);
 
+		console.log("PASS todos los clientes tienen rango comercial base");
 		console.log("PASS badge cliente detecta rango Platino");
 		console.log("PASS badge cliente conserva segmentos asignados");
 		console.log("PASS badge cliente expone ventajas comerciales");
