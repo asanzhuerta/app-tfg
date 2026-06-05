@@ -39,7 +39,7 @@ export default function CatalogProductsExplorer({
 				<div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
 					<div>
 						<p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-							M3 / Consulta de catalogo
+							M3 / Consulta de catálogo
 						</p>
 
 						<h2 className="text-3xl font-bold text-slate-900">
@@ -47,9 +47,9 @@ export default function CatalogProductsExplorer({
 						</h2>
 
 						<p className="mt-2 max-w-3xl text-sm text-slate-600">
-							Filtra por familia, linea comercial o subcategoria para localizar
+							Filtra por familia, línea comercial o subcategoría para localizar
 							productos, revisar sus formatos y abrir la ficha completa con
-							informacion tecnica y recursos de apoyo.
+							información técnica y recursos de apoyo.
 						</p>
 					</div>
 
@@ -64,25 +64,25 @@ export default function CatalogProductsExplorer({
 							<span className="font-semibold text-slate-900">
 								{categoriesCount}
 							</span>{" "}
-							categorias
+							categorías
 						</div>
 						<div className="rounded-full border border-slate-200 bg-white px-4 py-2">
 							<span className="font-semibold text-slate-900">
 								{linesCount}
 							</span>{" "}
-							lineas
+							líneas
 						</div>
 						<div className="rounded-full border border-slate-200 bg-white px-4 py-2">
 							<span className="font-semibold text-slate-900">
 								{subcategoriesCount}
 							</span>{" "}
-							subcategorias
+							subcategorías
 						</div>
 						<div className="rounded-full border border-slate-200 bg-white px-4 py-2">
 							<span className="font-semibold text-slate-900">
 								{productsWithTechnicalInfo}
 							</span>{" "}
-							con ficha tecnica
+							con ficha técnica
 						</div>
 					</div>
 				</div>
@@ -91,7 +91,7 @@ export default function CatalogProductsExplorer({
 			<EntityTable
 				items={mapCatalogProductsToEntityTableItems(products, detailBasePath)}
 				config={{
-					categoryLabel: "Categoria",
+					categoryLabel: "Categoría",
 					showImageFilter: true,
 					defaultSortField: "title",
 					defaultSortDirection: "asc",
@@ -101,12 +101,12 @@ export default function CatalogProductsExplorer({
 					extraFilters: [
 						{
 							key: "productLine",
-							label: "Linea comercial",
+							label: "Línea comercial",
 							allLabel: "Todas",
 						},
 						{
 							key: "subcategory",
-							label: "Subcategoria",
+							label: "Subcategoría",
 							allLabel: "Todas",
 						},
 					],

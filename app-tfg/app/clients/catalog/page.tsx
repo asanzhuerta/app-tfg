@@ -6,8 +6,8 @@ export default async function ClientCatalogPage() {
 
 	return (
 		<CatalogProductsExplorer
-			title="Catalogo"
-			subtitle="Explora productos, formatos y documentacion tecnica"
+			title="Catálogo"
+			subtitle="Explora productos, formatos y documentación técnica"
 			products={products}
 			detailBasePath="/clients/catalog"
 		/>
