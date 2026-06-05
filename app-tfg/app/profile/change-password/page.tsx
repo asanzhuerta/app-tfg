@@ -5,7 +5,7 @@ import PasswordFieldWithStrength from "@/app/components/users/PasswordFieldWithS
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
 
-// Pagina para cambiar la contrasena propia
+// Página para cambiar la contraseña propia
 export default async function ChangePasswordPage() {
 	const session = await auth();
 
@@ -15,7 +15,7 @@ export default async function ChangePasswordPage() {
 
 	return (
 		<>
-			<HeaderTitle title="Cambiar contrasena" />
+			<HeaderTitle title="Cambiar contraseña" />
 
 			<div className="mx-auto mt-6 w-full max-w-2xl">
 				<SafeForm
@@ -29,7 +29,7 @@ export default async function ChangePasswordPage() {
 								htmlFor="current-password"
 								className="mb-1 block text-sm font-medium text-white"
 							>
-								Contrasena actual
+								Contraseña actual
 							</label>
 							<input
 								id="current-password"
@@ -43,18 +43,18 @@ export default async function ChangePasswordPage() {
 
 						<PasswordFieldWithStrength
 							name="new_password"
-							label="Nueva contrasena"
-							placeholder="Nueva contrasena"
+							label="Nueva contraseña"
+							placeholder="Nueva contraseña"
 							required
 							showConfirm
 							confirmName="confirm_new_password"
-							confirmLabel="Confirmar nueva contrasena"
+							confirmLabel="Confirmar nueva contraseña"
 						/>
 					</div>
 
 					<div className="mt-6">
 						<SubmitButton className="rounded-xl bg-cyan-600 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-700">
-							Cambiar contrasena
+							Cambiar contraseña
 						</SubmitButton>
 					</div>
 				</SafeForm>

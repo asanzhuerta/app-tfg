@@ -317,7 +317,7 @@ export default function OrderDetailView({
 							</div>
 							<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
 								<p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-									Lineas
+									Líneas
 								</p>
 								<p className="mt-2 text-lg font-semibold text-slate-900">
 									{order.line_count}
@@ -325,7 +325,7 @@ export default function OrderDetailView({
 							</div>
 							<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2">
 								<p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-									Ultima actualizacion
+									Última actualización
 								</p>
 								<p className="mt-2 text-sm font-medium text-slate-900">
 									{formatDateTime(order.updated_at)}

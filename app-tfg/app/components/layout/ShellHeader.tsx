@@ -34,7 +34,7 @@ export default function ShellHeader({ className = "" }: ShellHeaderProps) {
 						Kinestilistas
 					</h1>
 					<p className="mt-1 text-xs uppercase tracking-[0.18em] text-black/80 sm:text-[15px]">
-						Alta Peluqueria &amp; Estetica
+						Alta Peluquería &amp; Estética
 					</p>
 				</div>
 

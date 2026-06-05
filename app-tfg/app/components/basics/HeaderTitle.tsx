@@ -11,7 +11,7 @@ type HeaderTitleProps = {
 
 export default function HeaderTitle({
 	title,
-	subtitle = "Alta Peluqueria & Estetica",
+	subtitle = "Alta Peluquería & Estética",
 	noGlass = false,
 }: HeaderTitleProps) {
 	const isRegisteredInShellHeader = usePageHeaderRegistration({ title, subtitle });

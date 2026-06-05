@@ -191,15 +191,15 @@ export default function AdminRegisterUserPage() {
 					<input
 						name="phone"
 						type="tel"
-						placeholder="Telefono"
+						placeholder="Teléfono"
 						autoComplete="tel"
 						className="w-full rounded-lg border border-gray-300 px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-black"
 					/>
 
 					<PasswordFieldWithStrength
 						name="password"
-						label="Contrasena"
-						placeholder="Contrasena"
+						label="Contraseña"
+						placeholder="Contraseña"
 						required
 						showConfirm
 						confirmName="confirm_password"

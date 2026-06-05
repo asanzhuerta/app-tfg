@@ -153,7 +153,7 @@ export default function RoleSidebar({
 						: "translate-y-0 scale-100 opacity-100"
 				}`}
 				onClick={openMobileSidebar}
-				aria-label="Abrir menu de navegacion"
+				aria-label="Abrir menú de navegación"
 				aria-expanded={isMobileOpen}
 				aria-controls="role-sidebar"
 				tabIndex={isMobileMounted ? -1 : undefined}
@@ -170,7 +170,7 @@ export default function RoleSidebar({
 						: "pointer-events-none opacity-0"
 				}`}
 				onClick={closeMobileSidebar}
-				aria-label="Cerrar menu"
+				aria-label="Cerrar menú"
 				tabIndex={isMobileOpen ? undefined : -1}
 			/>
 
@@ -178,7 +178,7 @@ export default function RoleSidebar({
 				id="role-sidebar"
 				data-sidebar-motion="true"
 				style={sidebarStyle}
-				aria-label="Menu principal por rol"
+				aria-label="Menú principal por rol"
 				className={`group fixed inset-y-0 left-0 z-[60] flex w-80 flex-col border-r border-white/40 bg-white/90 shadow-2xl backdrop-blur-xl transition-[opacity,transform,width] duration-[320ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform lg:sticky lg:top-0 lg:z-30 lg:h-screen lg:w-[var(--role-sidebar-width)] lg:shrink-0 ${
 					isMobileMounted ? "visible" : "invisible lg:visible"
 				} ${
@@ -229,7 +229,7 @@ export default function RoleSidebar({
 							type="button"
 							className="absolute right-3 top-1/2 hidden h-9 w-9 -translate-y-1/2 scale-90 items-center justify-center rounded-full border border-slate-200 bg-white/75 p-0 text-xs font-bold text-slate-700 opacity-0 shadow-sm transition-[opacity,transform,background-color,color] duration-200 hover:bg-slate-950 hover:text-white focus-visible:scale-100 focus-visible:opacity-100 lg:inline-flex lg:group-hover:scale-100 lg:group-hover:opacity-100"
 							onClick={() => setIsExpanded((value) => !value)}
-							aria-label={isExpanded ? "Plegar menu" : "Desplegar menu"}
+							aria-label={isExpanded ? "Plegar menú" : "Desplegar menú"}
 						>
 							{isExpanded ? "<" : ">"}
 						</button>
@@ -237,7 +237,7 @@ export default function RoleSidebar({
 							type="button"
 							className="rounded-full border border-slate-200 bg-white/75 px-3 py-2 text-xs font-bold text-slate-700 shadow-sm lg:hidden"
 							onClick={closeMobileSidebar}
-							aria-label="Cerrar menu"
+							aria-label="Cerrar menú"
 						>
 							X
 						</button>
@@ -274,7 +274,7 @@ export default function RoleSidebar({
 				</div>
 
 				<nav
-					aria-label="Navegacion principal"
+					aria-label="Navegación principal"
 					className="role-sidebar-scroll min-h-0 flex-1 space-y-5 overflow-y-auto px-3 py-4"
 				>
 					{sections.map((section) => (
@@ -350,7 +350,7 @@ export default function RoleSidebar({
 									: "max-w-48 translate-x-0 opacity-100 lg:max-w-0 lg:-translate-x-2 lg:opacity-0"
 							}`}
 						>
-							Cerrar sesion
+							Cerrar sesión
 						</span>
 					</button>
 				</div>

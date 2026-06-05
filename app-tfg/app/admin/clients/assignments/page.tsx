@@ -468,7 +468,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 									Comercial asignado
 								</h2>
 								<p className="mt-1 text-sm text-slate-600">
-									Esta asignacion define la cartera del comercial y la base para
+									Esta asignación define la cartera del comercial y la base para
 									sus visitas y futuras rutas.
 								</p>
 							</div>
@@ -482,7 +482,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 										{selectedClient.name}
 									</div>
 									<div className="mt-2 text-sm text-slate-600">
-										{selectedClient.address || "Direccion sin definir"}
+										{selectedClient.address || "Dirección sin definir"}
 										{selectedClient.city ? ` · ${selectedClient.city}` : ""}
 										{selectedClient.province
 											? ` · ${selectedClient.province}`

@@ -254,9 +254,9 @@ export default function EntityTableFilters({
 									<option value="primaryDate">
 										{config?.primaryDateLabel ?? "Fecha"}
 									</option>
-									<option value="title">Titulo</option>
-									<option value="subtitle">Subtitulo</option>
-									<option value="category">Categoria</option>
+									<option value="title">Título</option>
+									<option value="subtitle">Subtítulo</option>
+									<option value="category">Categoría</option>
 									<option value="status">Estado</option>
 								</select>
 							</div>
@@ -266,7 +266,7 @@ export default function EntityTableFilters({
 									htmlFor="entity-table-sort-direction"
 									className="mb-1 block text-sm font-semibold text-slate-700"
 								>
-									Direccion
+									Dirección
 								</label>
 								<select
 									id="entity-table-sort-direction"
