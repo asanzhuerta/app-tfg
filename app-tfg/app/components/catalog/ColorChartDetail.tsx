@@ -170,7 +170,7 @@ export default function ColorChartDetail({
 											alt={`${reference.code} ${reference.name}`}
 											fill
 											className="object-contain bg-white"
-											sizes="(max-width: 1280px) 50vw, 320px"
+											sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 320px"
 										/>
 									) : (
 										<div className="flex h-full items-center justify-center px-6 text-center text-sm text-slate-500">

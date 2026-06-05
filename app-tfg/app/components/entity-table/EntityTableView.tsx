@@ -154,6 +154,8 @@ function EntityCard({
 								imagePositionClass="object-center"
 								imagePaddingClass="p-0"
 								imageBackgroundClass="bg-white"
+								imageIntrinsicPixels={640}
+								imageSizes="(max-width: 640px) 70vw, (max-width: 1280px) 28vw, 260px"
 								className="h-full w-full rounded-[1.2rem] text-5xl"
 							/>
 						</div>
@@ -169,6 +171,8 @@ function EntityCard({
 										imageFit="contain"
 										imagePaddingClass="p-0"
 										imageBackgroundClass="bg-white"
+										imageIntrinsicPixels={192}
+										imageSizes="96px"
 										className="h-16 w-full rounded-xl text-sm"
 									/>
 								</div>
@@ -267,6 +271,8 @@ function EntityCard({
 									imagePositionClass="object-center"
 									imagePaddingClass="p-0"
 									imageBackgroundClass="bg-white"
+									imageIntrinsicPixels={384}
+									imageSizes="50vw"
 									className="h-full w-full rounded-2xl text-4xl"
 								/>
 							</div>
@@ -295,6 +301,8 @@ function EntityCard({
 											imageFit="contain"
 											imagePaddingClass="p-0"
 											imageBackgroundClass="bg-white"
+											imageIntrinsicPixels={192}
+											imageSizes="50vw"
 											className="h-full w-full rounded-2xl text-2xl"
 										/>
 									</div>
@@ -354,6 +362,8 @@ function EntityCard({
 								imagePositionClass="object-center"
 								imagePaddingClass="p-0"
 								imageBackgroundClass="bg-white"
+								imageIntrinsicPixels={384}
+								imageSizes="144px"
 								className="h-full min-h-[14rem] w-full rounded-2xl text-4xl xl:min-h-[16rem]"
 							/>
 						</div>
@@ -422,6 +432,8 @@ function EntityCard({
 										imageFit="contain"
 										imagePaddingClass="p-0"
 										imageBackgroundClass="bg-white"
+										imageIntrinsicPixels={192}
+										imageSizes="96px"
 										className="h-full w-full rounded-xl text-2xl sm:rounded-2xl"
 									/>
 								</div>

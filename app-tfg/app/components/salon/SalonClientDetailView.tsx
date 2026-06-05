@@ -1333,7 +1333,7 @@ export default function SalonClientDetailView({
 																alt={`Resultado final ${index + 1}`}
 																fill
 																className="object-cover"
-																sizes="(max-width: 1280px) 50vw, 240px"
+																sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 240px"
 															/>
 														</div>
 														<div className="flex items-center justify-between gap-3 px-4 py-3">
@@ -1831,7 +1831,7 @@ export default function SalonClientDetailView({
 																	alt={`Resultado final ${index + 1}`}
 																	fill
 																	className="object-cover"
-																	sizes="(max-width: 1280px) 50vw, 240px"
+																	sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 240px"
 																/>
 															</div>
 														</div>
