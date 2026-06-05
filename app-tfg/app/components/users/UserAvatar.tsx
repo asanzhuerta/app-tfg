@@ -13,6 +13,8 @@ type UserAvatarProps = {
 	imagePaddingClass?: string;
 	imagePositionClass?: string;
 	imageBackgroundClass?: string;
+	imageSizes?: string;
+	imageIntrinsicPixels?: number;
 	className?: string;
 };
 
@@ -55,6 +57,8 @@ export default function UserAvatar({
 	imagePaddingClass = "p-2",
 	imagePositionClass = "object-center",
 	imageBackgroundClass = "bg-white",
+	imageSizes,
+	imageIntrinsicPixels,
 	className = "",
 }: UserAvatarProps) {
 	const userInitial = getUserInitial(name);
@@ -113,6 +117,7 @@ export default function UserAvatar({
 		imageFit === "contain"
 			? `h-full w-full object-contain ${imagePositionClass} ${imagePaddingClass}`
 			: `h-full w-full object-cover ${imagePositionClass}`;
+	const requestedImagePixels = imageIntrinsicPixels ?? avatarSize.pixels;
 
 	return (
 		<div
@@ -122,8 +127,9 @@ export default function UserAvatar({
 				<Image
 					src={imageUrl ?? ""}
 					alt="Foto de perfil"
-					width={avatarSize.pixels}
-					height={avatarSize.pixels}
+					width={requestedImagePixels}
+					height={requestedImagePixels}
+					sizes={imageSizes ?? `${avatarSize.pixels}px`}
 					className={imageClassName}
 					unoptimized={false}
 				/>

@@ -39,6 +39,12 @@ La aplicación incorpora estados de carga por segmento mediante ficheros \path{l
 
 Estos estados no modifican las reglas de negocio ni introducen nuevas entidades persistentes. Su finalidad es mejorar la experiencia de navegación: en lugar de esperar ante una transición vacía, el usuario visualiza una estructura esqueleto coherente con la página que se está cargando. La implementación se centraliza en \path{app/components/loading/RouteLoadingState.tsx}, reutilizado por las distintas rutas para mantener consistencia visual y evitar duplicación de marcado.
 
+\subsection{Optimización responsive de imágenes}
+
+Las imágenes principales del catálogo, las cartas de color y las galerías técnicas se renderizan con \texttt{next/image}, declarando tamaños responsive mediante el atributo \texttt{sizes} cuando la imagen puede ocupar anchos distintos según el dispositivo \citep{nextjsimage2026}. Esta decisión evita solicitar imágenes más grandes de lo necesario en móvil y reduce el riesgo de que las tarjetas de producto muestren recursos poco nítidos al estirar una imagen optimizada para avatar.
+
+Para mantener la reutilización existente, el componente \path{app/components/users/UserAvatar.tsx} acepta ahora parámetros de tamaño intrínseco y \texttt{sizes}. Los avatares personales conservan tamaños pequeños, mientras que las tarjetas de producto pueden pedir una imagen de mayor resolución acorde con el espacio real que ocupan.
+
 \subsection{Herramientas de trabajo}
 
 Durante el desarrollo del proyecto se han utilizado principalmente:
