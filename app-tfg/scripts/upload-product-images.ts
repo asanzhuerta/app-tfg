@@ -35,17 +35,36 @@ type CliOptions = {
 
 type ProductMatch = Pick<
 	Product,
-	"id" | "name" | "reference" | "image_url"
+	"id" | "name" | "reference" | "format" | "image_url"
 >;
+
+type MatchReason =
+	| "reference"
+	| "name"
+	| "tokens"
+	| "reference+format"
+	| "name+format"
+	| "tokens+format";
 
 type ScoredProduct = {
 	product: ProductMatch;
 	score: number;
-	reason: "reference" | "name" | "tokens";
+	reason: MatchReason;
 };
 
 function isScoredProduct(value: ScoredProduct | null): value is ScoredProduct {
 	return value !== null;
+}
+
+type DuplicateTargetError = {
+	product: ProductMatch | undefined;
+	imageNames: string[];
+};
+
+function isDuplicateTargetError(
+	value: DuplicateTargetError | undefined,
+): value is DuplicateTargetError {
+	return value !== undefined;
 }
 
 function parseArgs(argv: string[]): CliOptions {
@@ -173,6 +192,53 @@ function getFileSearchText(fileName: string) {
 	return getFileTokens(fileName).join(" ");
 }
 
+function isNumberToken(value: string) {
+	return /^\d+$/.test(value);
+}
+
+function extractFormatHintFromTokens(tokens: string[]) {
+	for (let index = 0; index < tokens.length; index += 1) {
+		if (tokens[index] !== "ml") {
+			continue;
+		}
+
+		if (
+			index >= 3 &&
+			isNumberToken(tokens[index - 3]) &&
+			tokens[index - 2] === "x" &&
+			isNumberToken(tokens[index - 1])
+		) {
+			return `${tokens[index - 3]} x ${tokens[index - 1]} ml`;
+		}
+
+		if (
+			index >= 2 &&
+			isNumberToken(tokens[index - 2]) &&
+			/^\d{3}$/.test(tokens[index - 1])
+		) {
+			return `${tokens[index - 2]}${tokens[index - 1]} ml`;
+		}
+
+		if (index >= 1 && isNumberToken(tokens[index - 1])) {
+			return `${tokens[index - 1]} ml`;
+		}
+	}
+
+	return null;
+}
+
+function getFileFormatHint(fileName: string) {
+	return extractFormatHintFromTokens(getFileTokens(fileName));
+}
+
+function normalizeProductFormat(format: string | null) {
+	if (!format) {
+		return null;
+	}
+
+	return extractFormatHintFromTokens(tokenize(format));
+}
+
 function hasTokensInOrder(fileTokens: string[], productTokens: string[]) {
 	let cursor = 0;
 
@@ -235,10 +301,17 @@ function resolveMatches(
 	reason: ScoredProduct["reason"] | null;
 	error: string | null;
 } {
-	const scoredProducts = products
-		.map((product) => scoreProductMatch(fileName, product))
-		.filter(isScoredProduct)
-		.toSorted((a, b) => b.score - a.score);
+	const scoredProducts: ScoredProduct[] = [];
+
+	for (const product of products) {
+		const scoredProduct = scoreProductMatch(fileName, product);
+
+		if (isScoredProduct(scoredProduct)) {
+			scoredProducts.push(scoredProduct);
+		}
+	}
+
+	scoredProducts.sort((a, b) => b.score - a.score);
 
 	if (scoredProducts.length === 0) {
 		return {
@@ -266,6 +339,36 @@ function resolveMatches(
 						`${scoredProduct.product.name} (${scoredProduct.product.reference})`,
 				)
 				.join(", ")}`,
+		};
+	}
+
+	const formatHint = getFileFormatHint(fileName);
+
+	if (formatHint && topProducts.length > 1) {
+		const formatMatches = topProducts.filter(
+			(scoredProduct) =>
+				normalizeProductFormat(scoredProduct.product.format) === formatHint,
+		);
+
+		if (formatMatches.length === 0) {
+			return {
+				matches: [],
+				reason: null,
+				error: `Formato "${formatHint}" no existe para "${fileName}". Candidatos: ${topProducts
+					.map(
+						(scoredProduct) =>
+							`${scoredProduct.product.name} (${scoredProduct.product.reference}, ${
+								scoredProduct.product.format ?? "sin formato"
+							})`,
+					)
+					.join(", ")}`,
+			};
+		}
+
+		return {
+			matches: formatMatches.map((scoredProduct) => scoredProduct.product),
+			reason: `${formatMatches[0].reason}+format` as MatchReason,
+			error: null,
 		};
 	}
 
@@ -336,8 +439,44 @@ async function listPendingImages(sourceDir: string) {
 
 function formatProducts(products: ProductMatch[]) {
 	return products
-		.map((product) => `${product.name} [${product.reference}]`)
+		.map(
+			(product) =>
+				`${product.name} [${product.reference}${
+					product.format ? `, ${product.format}` : ""
+				}]`,
+		)
 		.join(", ");
+}
+
+function findDuplicateTargetErrors(
+	resolvedImages: Array<{
+		imageName: string;
+		matches: ProductMatch[];
+	}>,
+) {
+	const imageNamesByProductId = new Map<string, string[]>();
+	const productById = new Map<string, ProductMatch>();
+
+	for (const resolvedImage of resolvedImages) {
+		for (const product of resolvedImage.matches) {
+			productById.set(product.id, product);
+			const imageNames = imageNamesByProductId.get(product.id) ?? [];
+			imageNames.push(resolvedImage.imageName);
+			imageNamesByProductId.set(product.id, imageNames);
+		}
+	}
+
+	return new Map(
+		[...imageNamesByProductId.entries()]
+			.filter(([, imageNames]) => imageNames.length > 1)
+			.map(([productId, imageNames]) => [
+				productId,
+				{
+					product: productById.get(productId),
+					imageNames,
+				},
+			]),
+	);
 }
 
 async function main() {
@@ -352,6 +491,7 @@ async function main() {
 					id: true,
 					name: true,
 					reference: true,
+					format: true,
 					image_url: true,
 				},
 				order: {
@@ -374,13 +514,52 @@ async function main() {
 		let uploadedCount = 0;
 		let skippedCount = 0;
 		let errorCount = 0;
+		const resolvedMatchesByImage = pendingImages.map((image) => ({
+			imageName: image.name,
+			resolvedMatch: resolveMatches(image.name, products),
+		}));
+		const duplicateTargetErrors = findDuplicateTargetErrors(
+			resolvedMatchesByImage
+				.filter((resolvedImage) => !resolvedImage.resolvedMatch.error)
+				.map((resolvedImage) => ({
+					imageName: resolvedImage.imageName,
+					matches: resolvedImage.resolvedMatch.matches,
+				})),
+		);
 
 		for (const image of pendingImages) {
-			const resolvedMatch = resolveMatches(image.name, products);
+			const resolvedMatch = resolvedMatchesByImage.find(
+				(resolvedImage) => resolvedImage.imageName === image.name,
+			)?.resolvedMatch;
+
+			if (!resolvedMatch) {
+				errorCount += 1;
+				console.log(`[ERROR] No se pudo resolver ${image.name}`);
+				continue;
+			}
 
 			if (resolvedMatch.error) {
 				errorCount += 1;
 				console.log(`[ERROR] ${resolvedMatch.error}`);
+				continue;
+			}
+
+			const duplicatedTargets = resolvedMatch.matches
+				.map((product) => duplicateTargetErrors.get(product.id))
+				.filter(isDuplicateTargetError);
+
+			if (duplicatedTargets.length > 0) {
+				errorCount += 1;
+				console.log(
+					`[ERROR] ${image.name} apunta a un producto que tambien aparece en otros archivos: ${duplicatedTargets
+						.map((target) => {
+							const productLabel = target.product
+								? formatProducts([target.product])
+								: "producto desconocido";
+							return `${productLabel} <= ${target.imageNames.join(", ")}`;
+						})
+						.join(" | ")}`,
+				);
 				continue;
 			}
 
