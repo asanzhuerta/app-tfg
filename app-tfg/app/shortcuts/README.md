@@ -2,10 +2,8 @@
 
 Rutas auxiliares enlazadas desde accesos directos del manifest PWA.
 
-## Funcion
+## Funci?n
 
-Redirigir a zonas frecuentes como catalogo, pedidos, rutas o panel principal.
+Redirigir a zonas frecuentes como cat?logo, pedidos, rutas o panel principal.
 
-## Por que existe
-
-Permite que una app instalada como PWA tenga accesos rapidos utiles sin duplicar pantallas reales.
+Permite que una app instalada como PWA tenga accesos rapidos ?tiles sin duplicar pantallas reales.

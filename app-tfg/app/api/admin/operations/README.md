@@ -1,7 +1,7 @@
-# API operaciones admin
+# API operaci?nes admin
 
-Endpoints de operaciones y reportes.
+Endpoints de operaci?nes y reportes.
 
-## Funcion
+## Funci?n
 
 Consultar estado operativo y generar reportes administrativos.

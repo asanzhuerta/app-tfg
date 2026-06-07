@@ -2,6 +2,6 @@
 
 Revision de solicitudes de acceso.
 
-## Funcion
+## Funci?n
 
 Aprobar o rechazar altas solicitadas desde la pantalla publica de registro.

@@ -2,6 +2,6 @@
 
 Gestion y detalle de visitas.
 
-## Funcion
+## Funci?n
 
 Planificar, consultar y actualizar visitas a clientes.

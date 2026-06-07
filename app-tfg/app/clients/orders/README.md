@@ -2,6 +2,6 @@
 
 Historial, detalle y borradores de pedido para cliente.
 
-## Funcion
+## Funci?n
 
-Permitir revisar pedidos y trabajar con el flujo de compra desde el salon.
+Permitir revisar pedidos y trabajar con el flujo de compra desde el sal?n.

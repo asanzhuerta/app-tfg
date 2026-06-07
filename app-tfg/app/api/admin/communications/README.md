@@ -1,7 +1,7 @@
-# API comunicaciones admin
+# API comunicaci?nes admin
 
-Endpoints administrativos de comunicaciones.
+Endpoints administrativos de comunicaci?nes.
 
-## Funcion
+## Funci?n
 
-Gestionar promociones, formaciones, avisos y rangos/segmentos.
+Gestionar promoci?nes, formaci?nes, avisos y rangos/segmentos.

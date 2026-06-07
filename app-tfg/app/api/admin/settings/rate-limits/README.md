@@ -1,7 +1,7 @@
 # API rate limits
 
-Endpoint de configuracion de limites.
+Endpoint de configuraci?n de limites.
 
-## Funcion
+## Funci?n
 
 Consultar o modificar reglas de limitacion de peticiones.

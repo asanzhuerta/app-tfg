@@ -2,6 +2,6 @@
 
 Endpoints usados por el rol cliente.
 
-## Funcion
+## Funci?n
 
-Dar soporte a pedidos, fichas tecnicas, salon clients, geocodificacion y estimaciones de reparto.
+Dar soporte a pedidos, fichas t?cnicas, sal?n clients, geocodificacion y estimaci?nes de reparto.

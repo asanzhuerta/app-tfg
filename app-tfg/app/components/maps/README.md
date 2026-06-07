@@ -1,11 +1,9 @@
 # Mapas
 
-Componentes relacionados con mapa, rutas y geolocalizacion.
+Componentes relacionados con mapa, rutas y geolocalizaci?n.
 
-## Funcion
+## Funci?n
 
-Representar posiciones, visitas, rutas comerciales y estimaciones visuales.
+Representar posiciones, visitas, rutas comerciales y estimaci?nes visuales.
 
-## Por que existe
-
-El mapa requiere librerias y configuracion especifica. Separarlo evita mezclar Leaflet/OSRM con otros componentes.
+El mapa requiere librerias y configuraci?n espec?fica. Separarlo evita mezclar Leaflet/OSRM con otros componentes.

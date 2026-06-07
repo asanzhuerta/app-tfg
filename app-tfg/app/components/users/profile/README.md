@@ -2,6 +2,6 @@
 
 Subcomponentes del formulario de perfil.
 
-## Funcion
+## Funci?n
 
 Separar identidad, imagen, datos profesionales, detalles y cambio de contraseña.

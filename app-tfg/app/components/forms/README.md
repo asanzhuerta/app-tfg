@@ -2,10 +2,8 @@
 
 Piezas reutilizables para formularios y campos.
 
-## Funcion
+## Funci?n
 
-Estandarizar entradas, selects, validaciones visuales y estructuras de formulario.
+Estandarizar entradas, selects, validaci?nes visuales y estructuras de formulario.
 
-## Por que existe
-
-Los formularios aparecen en usuarios, catalogo, perfil, comunicaciones y pedidos. Centralizar patrones evita inconsistencias.
+Los formularios aparecen en usuarios, cat?logo, perfil, comunicaci?nes y pedidos. Centralizar patrones evita inconsistencias.

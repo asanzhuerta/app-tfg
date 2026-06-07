@@ -2,6 +2,6 @@
 
 Clientes asignados al comercial.
 
-## Funcion
+## Funci?n
 
 Consultar fichas, datos operativos, visitas y contexto comercial.

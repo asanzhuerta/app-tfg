@@ -1,7 +1,7 @@
 # Comunicaciones admin
 
-Gestion de promociones, avisos, formaciones y rangos.
+Gestion de promoci?nes, avisos, formaci?nes y rangos.
 
-## Funcion
+## Funci?n
 
-Crear contenidos comunicativos y segmentarlos por cliente, rango o linea comercial.
+Crear contenidos comunicativos y segmentarlos por cliente, rango o l?nea comercial.

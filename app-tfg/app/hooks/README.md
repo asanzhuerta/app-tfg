@@ -2,10 +2,8 @@
 
 Hooks React reutilizables.
 
-## Funcion
+## Funci?n
 
-Encapsular logica de cliente: consumo de API, estados locales, efectos de interfaz o comportamiento transversal.
+Encapsular l?gica de cliente: consumo de API, estados locales, efectos de interfaz o comportamiento transversal.
 
-## Por que existe
-
-Los hooks mantienen componentes mas legibles y permiten reutilizar logica sin crear dependencias innecesarias entre pantallas.
+Los hooks mantienen componentes m?s legibles y permiten reutilizar l?gica sin crear dependencias innecesarias entre pantallas.

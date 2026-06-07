@@ -2,10 +2,8 @@
 
 Valores constantes usados por la capa de presentacion.
 
-## Funcion
+## Funci?n
 
-Guardar textos, configuraciones o valores reutilizables que no pertenecen a la BBDD ni a un servicio de dominio.
-
-## Por que existe
+Guardar textos, configuraci?nes o valores reutilizables que no pertenecen a la BBDD ni a un servicio de dominio.
 
 Separar constantes evita literales repetidos y facilita cambios globales de UI.

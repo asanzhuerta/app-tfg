@@ -2,6 +2,6 @@
 
 Endpoints de rutas comerciales.
 
-## Funcion
+## Funci?n
 
 Calcular previsualizaciones y datos de ruta diaria.

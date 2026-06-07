@@ -1,7 +1,7 @@
-# API categorias
+# API categor?as
 
-CRUD de categorias de producto.
+CRUD de categor?as de producto.
 
-## Funcion
+## Funci?n
 
-Gestionar familias principales del catalogo.
+Gestionar familias principales del cat?logo.

@@ -2,6 +2,6 @@
 
 Endpoint de propuestas a proveedor.
 
-## Funcion
+## Funci?n
 
-Preparar el terreno para reposicion automatizada y pedidos a proveedor.
+Preparar el terreno para reposici?n automatizada y pedidos a proveedor.

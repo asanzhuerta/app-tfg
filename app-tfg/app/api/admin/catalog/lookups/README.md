@@ -1,7 +1,7 @@
-# API lookups catalogo
+# API lookups cat?logo
 
-Endpoint de opciones auxiliares del catalogo.
+Endpoint de opciones auxiliares del cat?logo.
 
-## Funcion
+## Funci?n
 
 Devolver datos para selects y formularios administrativos.

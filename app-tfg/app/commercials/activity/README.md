@@ -2,6 +2,6 @@
 
 Pantalla de seguimiento de actividad del comercial.
 
-## Funcion
+## Funci?n
 
-Mostrar informacion operativa y actividad reciente vinculada a su trabajo diario.
+Mostrar informaci?n operativa y actividad reciente vinculada a su trabajo diario.

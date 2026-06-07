@@ -2,10 +2,8 @@
 
 Rutas protegidas para salones y clientes profesionales.
 
-## Funcion
+## Funci?n
 
-Dar acceso a panel cliente, perfil, catalogo, coloracion, pedidos, promociones, formaciones, notificaciones y fichas tecnicas del salon.
+Dar acceso a panel cliente, perfil, cat?logo, coloraci?n, pedidos, promoci?nes, formaci?nes, notificaciones y fichas t?cnicas del sal?n.
 
-## Por que existe
-
-El cliente usa la app para operar su salon y consultar recursos, no para administrar el sistema. Esta carpeta mantiene esa experiencia separada.
+El cliente usa la app para operar su sal?n y consultar recursos, no para administrar el sistema. Esta carpeta mantiene esa experiencia separada.

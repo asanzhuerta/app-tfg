@@ -2,6 +2,6 @@
 
 Atajo PWA hacia el panel principal.
 
-## Funcion
+## Funci?n
 
 Enviar al usuario a su dashboard segun rol.

@@ -1,11 +1,9 @@
-# Componentes de salon
+# Componentes de sal?n
 
-UI para fichas tecnicas, clientes internos del salon, servicios, plantillas e imagenes de resultado.
+UI para fichas t?cnicas, clientes internos del sal?n, servicios, plantillas e im?genes de resultado.
 
-## Funcion
+## Funci?n
 
 Gestionar el bloque M5 desde la perspectiva del cliente profesional.
 
-## Por que existe
-
-Las fichas tecnicas tienen modelo visual y funcional propio: historiales, formulas, tonos, productos usados y resultado final.
+Las fichas t?cnicas tienen modelo visual y funci?nal propio: historiales, formulas, tonos, productos usados y resultado final.

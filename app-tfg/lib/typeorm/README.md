@@ -1,18 +1,16 @@
 # TypeORM
 
-Capa de persistencia de la aplicacion.
+Capa de persistencia de la aplicaci?n.
 
-## Que contiene
+## Qu? contiene
 
 - `entities/`: entidades mapeadas a tablas PostgreSQL.
-- `services/`: consultas y operaciones de dominio sobre la BBDD.
+- `services/`: consultas y operaci?nes de dominio sobre la BBDD.
 - `constants/`: valores auxiliares de persistencia.
-- `data-source*.ts`: configuracion de conexion.
+- `data-source*.ts`: configuraci?n de conexion.
 
-## Funcion
+## Funci?n
 
 Centralizar el acceso a PostgreSQL mediante TypeORM.
 
-## Por que existe
-
-Permite que API, paginas server-side y scripts usen una misma capa de datos tipada.
+Permite que API, p?ginas server-side y scripts usen una misma capa de datos tipada.

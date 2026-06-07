@@ -1,11 +1,9 @@
 # Login
 
-Pantalla publica de inicio de sesion.
+Pantalla publica de inicio de sesi?n.
 
-## Funcion
+## Funci?n
 
-Validar credenciales, abrir sesion con Auth.js y redirigir al panel correspondiente segun rol.
-
-## Por que existe
+Validar credenciales, abrir sesi?n con Auth.js y redirigir al panel correspondiente segun rol.
 
 Es el punto de entrada principal para usuarios registrados y separa el acceso seguro de la landing publica.

@@ -2,6 +2,6 @@
 
 Endpoint para insertar visitas en rutas comerciales.
 
-## Funcion
+## Funci?n
 
-Permitir que administracion complete o ajuste planificaciones.
+Permitir que administraci?n complete o ajuste planificaciones.

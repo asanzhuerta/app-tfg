@@ -2,6 +2,6 @@
 
 Endpoints administrativos de usuarios.
 
-## Funcion
+## Funci?n
 
 Consultar, editar estado, rol, contraseña o baja de usuarios.

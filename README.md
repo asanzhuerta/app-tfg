@@ -1,34 +1,32 @@
 # Kinestilistas
 
-Aplicacion web B2B desarrollada como Trabajo Fin de Grado para centralizar la operativa entre una distribuidora de productos profesionales de peluqueria, sus comerciales y los salones cliente.
+Aplicaci?n web B2B desarrollada como Trabajo Fin de Grado para centralizar la operativa entre una distribuidora de productos profesionales de peluquer?a, sus comerciales y los salones cliente.
 
-El repositorio agrupa codigo, documentacion academica, base de datos local y material de apoyo usado durante el desarrollo.
+El repositorio agrupa la aplicaci?n principal, la documentaci?n acad?mica, la configuraci?n de despliegue local y los recursos versionados necesarios para revisar el proyecto.
 
-## Que contiene este repositorio
+## Qu? contiene este repositorio
 
-- `app-tfg/`: aplicacion principal en Next.js, con frontend por roles, API interna, autenticacion, migraciones y scripts de validacion.
-- `docs/`: memoria del TFG en LaTeX, figuras, diagramas, bibliografia y secciones redactadas.
-- `db/`: configuracion auxiliar de base de datos local para Docker y scripts SQL de apoyo.
-- `examples/`: ficheros de referencia, imagenes de producto, colecciones Postman y material de prueba no productivo.
-- `docker-compose.yml`: servicio local de PostgreSQL usado por la aplicacion.
+- `app-tfg/`: aplicaci?n principal en Next.js, con frontend por roles, API interna, autenticaci?n, migraciones y scripts de validaci?n.
+- `docs/`: memoria del TFG en LaTeX, figuras, diagramas, bibliograf?a y secciones redactadas.
+- `docker-compose.yml`: servicio local de PostgreSQL usado por la aplicaci?n.
 
-## Estado funcional
+## Estado funci?nal
 
-La aplicacion ya cubre los bloques operativos principales del TFG:
+La aplicaci?n ya cubre los bloques operativos principales del TFG:
 
-- `M1`: autenticacion, registro administrado, roles, usuarios, solicitudes, perfil y trazabilidad basica de accesos.
-- `M2`: clientes, asignaciones comercial-cliente, visitas, geolocalizacion, rutas, configuracion diaria y estimacion de reparto.
-- `M3`: catalogo, categorias, lineas, subcategorias, productos, recursos tecnicos, cartas de color y referencias cromaticas.
-- `M4`: pedidos, borradores, confirmacion, historial, reparto integrado, validacion QR y seguimiento operativo.
-- `M5`: fichas tecnicas de salon, servicios, plantillas, productos usados, tonos de coloracion e imagenes de resultado.
-- `M6`: comunicaciones, promociones, rangos de cliente, descuentos segmentados, avisos y formaciones.
-- `M7`: soporte, auditoria, rate limiting, operaciones, reportes e integraciones preparadas para automatizaciones futuras.
+- `M1`: autenticaci?n, registro administrado, roles, usuarios, solicitudes, perfil y trazabilidad b?sica de accesos.
+- `M2`: clientes, asignaciones comercial-cliente, visitas, geolocalizaci?n, rutas, configuraci?n diaria y estimaci?n de reparto.
+- `M3`: cat?logo, categor?as, l?neas, subcategor?as, productos, recursos t?cnicos, cartas de color y referencias crom?ticas.
+- `M4`: pedidos, borradores, confirmación, historial, reparto integrado, validaci?n QR y seguimiento operativo.
+- `M5`: fichas t?cnicas de sal?n, servicios, plantillas, productos usados, tonos de coloraci?n e im?genes de resultado.
+- `M6`: comunicaci?nes, promoci?nes, rangos de cliente, descuentos segmentados, avisos y formaci?nes.
+- `M7`: soporte, auditor?a, rate limiting, operaci?nes, reportes e integraci?nes preparadas para automatizaciones futuras.
 
-## Roles de la aplicacion
+## Roles de la aplicaci?n
 
-- `admin`: administra usuarios, clientes, asignaciones, catalogo, comunicaciones, auditoria, soporte, operaciones e integraciones.
-- `commercial`: consulta clientes asignados, rutas, visitas, pedidos, catalogo, coloracion, promociones y formaciones.
-- `client`: gestiona perfil, pedidos, catalogo, coloracion, promociones, formaciones y fichas tecnicas de su salon.
+- `admin`: administra usuarios, clientes, asignaciones, cat?logo, comunicaci?nes, auditor?a, soporte, operaci?nes e integraci?nes.
+- `commercial`: consulta clientes asignados, rutas, visitas, pedidos, cat?logo, coloraci?n, promoci?nes y formaci?nes.
+- `client`: gesti?na perfil, pedidos, cat?logo, coloraci?n, promoci?nes, formaci?nes y fichas t?cnicas de su sal?n.
 
 ## Stack principal
 
@@ -44,7 +42,7 @@ La aplicacion ya cubre los bloques operativos principales del TFG:
 
 ## Puesta en marcha local
 
-1. Levantar PostgreSQL desde la raiz:
+1. Levantar PostgreSQL desde la ra?z:
 
 ```bash
 docker compose up -d
@@ -79,7 +77,7 @@ npm run migration:run
 npm run dev
 ```
 
-La aplicacion queda disponible normalmente en `http://localhost:3000`.
+La aplicaci?n queda disponible normalmente en `http://localhost:3000`.
 
 ## Scripts habituales
 
@@ -94,9 +92,9 @@ npm run m7:closeout
 npm run catalog:upload-product-images -- --dry-run
 ```
 
-## Criterio de organizacion
+## Criterio de organizaci?n
 
-Cada carpeta relevante del repositorio incluye un `README.md` propio para explicar su contenido, su funcion y por que se mantiene separada. Se excluyen carpetas generadas o de dependencias como `.git`, `.next`, `node_modules` y artefactos temporales.
+Cada carpeta versionada relevante incluye un `README.md` propio para explicar su contenido y su funci?n dentro de la aplicaci?n.
 
 ## Autor
 

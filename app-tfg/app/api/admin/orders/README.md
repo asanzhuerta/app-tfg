@@ -2,6 +2,6 @@
 
 Endpoints administrativos de pedidos.
 
-## Funcion
+## Funci?n
 
-Consultar detalle y estado de pedidos desde administracion.
+Consultar detalle y estado de pedidos desde administraci?n.

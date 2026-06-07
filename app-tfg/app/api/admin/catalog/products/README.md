@@ -2,6 +2,6 @@
 
 CRUD de productos.
 
-## Funcion
+## Funci?n
 
-Crear, consultar, actualizar y filtrar productos del catalogo.
+Crear, consultar, actualizar y filtrar productos del cat?logo.

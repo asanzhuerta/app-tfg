@@ -1,11 +1,9 @@
 # Soporte
 
-Logica relacionada con estado de soporte, diagnostico y operaciones auxiliares.
+Logica relacionada con estado de soporte, diagnostico y operaci?nes auxiliares.
 
-## Funcion
+## Funci?n
 
-Apoyar pantallas y endpoints de soporte del modulo M7.
+Apoyar pantallas y endpoints de soporte del m?dulo M7.
 
-## Por que existe
-
-El soporte operativo no pertenece al catalogo ni a pedidos; necesita su propia frontera para crecer sin mezclar dominios.
+El soporte operativo no pertenece al cat?logo ni a pedidos; necesita su propia frontera para crecer sin mezclar dominios.

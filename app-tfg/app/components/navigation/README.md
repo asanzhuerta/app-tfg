@@ -1,11 +1,9 @@
 # Navegacion
 
-Sidebar, menus y configuracion de navegacion por rol.
+Sidebar, menus y configuraci?n de navegaci?n por rol.
 
-## Funcion
+## Funci?n
 
 Mostrar las opciones disponibles para admin, comercial y cliente, incluyendo estados contraido/desplegado.
 
-## Por que existe
-
-La navegacion depende del rol y de la estructura modular de la app. Centralizarla facilita cambios globales.
+La navegaci?n depende del rol y de la estructura modular de la app. Centralizarla facilita cambios globales.

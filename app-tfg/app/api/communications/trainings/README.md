@@ -1,7 +1,7 @@
-# API formaciones
+# API formaci?nes
 
-Endpoints de formaciones.
+Endpoints de formaci?nes.
 
-## Funcion
+## Funci?n
 
-Consultar contenidos formativos y gestionar inscripciones.
+Consultar contenidos formativos y gesti?nar inscripciones.

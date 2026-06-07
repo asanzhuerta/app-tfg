@@ -1,7 +1,7 @@
-# API reporte operaciones
+# API reporte operaci?nes
 
 Endpoint de generacion de reportes.
 
-## Funcion
+## Funci?n
 
 Devolver datos agregados para seguimiento administrativo.

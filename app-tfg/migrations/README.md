@@ -2,13 +2,11 @@
 
 Carpeta de migraciones de base de datos.
 
-## Funcion
+## Funci?n
 
 Versionar la evolucion del esquema y datos estructurales de PostgreSQL.
 
-## Por que existe
-
-El modelo de datos debe poder reproducirse en local, demo o produccion sin ejecutar cambios manuales.
+El modelo de datos debe poder reproducirse en local, demo o producci?n sin ejecutar cambios manuales.
 
 ## Regla del proyecto
 

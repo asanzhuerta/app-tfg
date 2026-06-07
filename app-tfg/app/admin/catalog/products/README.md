@@ -1,7 +1,7 @@
 # Admin productos
 
-CRUD de productos del catalogo.
+CRUD de productos del cat?logo.
 
-## Funcion
+## Funci?n
 
-Editar referencias, precios base, formatos, imagenes, recursos y relaciones de catalogo.
+Editar referencias, precios base, formatos, im?genes, recursos y relaciones de cat?logo.

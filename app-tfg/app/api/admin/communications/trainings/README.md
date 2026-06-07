@@ -1,7 +1,7 @@
-# API formaciones admin
+# API formaci?nes admin
 
-CRUD de formaciones.
+CRUD de formaci?nes.
 
-## Funcion
+## Funci?n
 
 Publicar contenidos formativos para clientes y comerciales.

@@ -1,7 +1,7 @@
 # API admin
 
-Endpoints protegidos para administracion.
+Endpoints protegidos para administraci?n.
 
-## Funcion
+## Funci?n
 
-Exponer operaciones CRUD, auditoria, catalogo, usuarios, clientes, comunicaciones, operaciones e integraciones.
+Exponer operaci?nes CRUD, auditor?a, cat?logo, usuarios, clientes, comunicaci?nes, operaci?nes e integraci?nes.

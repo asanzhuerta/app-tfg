@@ -2,6 +2,6 @@
 
 Endpoints de notificaciones.
 
-## Funcion
+## Funci?n
 
-Consultar y marcar comunicaciones internas como leidas o atendidas.
+Consultar y marcar comunicaci?nes internas como leidas o atendidas.

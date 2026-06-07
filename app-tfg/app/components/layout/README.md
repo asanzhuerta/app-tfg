@@ -2,10 +2,8 @@
 
 Componentes estructurales de pagina.
 
-## Funcion
+## Funci?n
 
 Definir cabeceras, contenedores, shell visual y composicion comun de pantallas autenticadas.
-
-## Por que existe
 
 Mantener layout comun facilita que todos los roles compartan una misma base visual sin copiar estructura.
