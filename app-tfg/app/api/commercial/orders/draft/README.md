@@ -2,6 +2,6 @@
 
 Endpoint de borrador de pedido para comercial.
 
-## Funci?n
+## Función
 
 Preparar pedidos de clientes desde la vista comercial.

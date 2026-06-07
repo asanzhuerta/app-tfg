@@ -1,7 +1,7 @@
-# Gestion de usuarios
+# Gestión de usuarios
 
 Rutas de usuarios, altas y solicitudes.
 
-## Funci?n
+## Función
 
 Administrar usuarios registrados, crear altas directas y revisar solicitudes de acceso.

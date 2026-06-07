@@ -1,9 +1,9 @@
-# Componentes b?sicos
+# Componentes básicos
 
-Piezas historicas o simples de interfaz.
+Piezas históricas o simples de interfaz.
 
-## Funci?n
+## Función
 
-Guardar componentes reutilizables de bajo nivel que todavia aparecen en algunas pantallas o sirven como base para layouts.
+Guardar componentes reutilizables de bajo nivel que todavía aparecen en algunas pantallas o sirven como base para layouts.
 
-Permite conservar compatibilidad durante la evolucion visual de la app sin mezclar estos elementos con componentes de dominio.
+Permite conservar compatibilidad durante la evolución visual de la app sin mezclar estos elementos con componentes de dominio.

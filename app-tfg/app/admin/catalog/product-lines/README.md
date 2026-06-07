@@ -1,7 +1,7 @@
-# Admin l?neas comerciales
+# Admin líneas comerciales
 
-CRUD y vista jerarquica de l?neas comerciales.
+CRUD y vista jerárquica de líneas comerciales.
 
-## Funci?n
+## Función
 
-Gestionar marcas/l?neas del cat?logo y sus subcategor?as asociadas.
+Gestionar marcas/líneas del catálogo y sus subcategorías asociadas.

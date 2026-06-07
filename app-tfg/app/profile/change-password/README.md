@@ -2,6 +2,6 @@
 
 Pantalla de cambio de contraseña del perfil.
 
-## Funci?n
+## Función
 
 Permitir al usuario actualizar su credencial desde una ruta autenticada.

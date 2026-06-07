@@ -1,7 +1,7 @@
-# Cat?logo cliente
+# Catálogo cliente
 
 Consulta de productos activos para cliente.
 
-## Funci?n
+## Función
 
-Permitir buscar, filtrar y consultar detalle t?cnico de productos.
+Permitir buscar, filtrar y consultar detalle técnico de productos.

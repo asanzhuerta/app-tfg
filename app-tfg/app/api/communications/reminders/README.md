@@ -2,6 +2,6 @@
 
 Endpoints de recordatorios.
 
-## Funci?n
+## Función
 
-Consultar o gesti?nar avisos temporales internos.
+Consultar o gestionar avisos temporales internos.

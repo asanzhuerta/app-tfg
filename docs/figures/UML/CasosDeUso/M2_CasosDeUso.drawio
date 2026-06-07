@@ -101,4 +101,107 @@
             </root>
         </mxGraphModel>
     </diagram>
+    <diagram name="M2 - Casos final visitas y avisos" id="m2-casos-final-visitas-avisos">
+        <mxGraphModel dx="820" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="820" pageHeight="720" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="m2-final-box" value="&lt;h1&gt;M2. Gestión comercial, visitas y avisos&lt;/h1&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;spacing=0;align=center;strokeColor=#111827;fillColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="190" y="40" width="500" height="560" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-admin" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="210" width="50" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-comercial" value="Comercial" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="230" width="50" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-cliente" value="Cliente" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="390" width="50" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-uc-planificar" value="Planificar ruta diaria" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111827;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="100" width="210" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-uc-crear" value="Crear visita comercial" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111827;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="160" width="210" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-uc-notificar-cliente" value="Notificar visita al cliente" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111827;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="220" width="210" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-uc-aplazar" value="Aplazar visita por horario" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111827;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="280" width="210" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-uc-avisar-comercial" value="Avisar visitas aplazadas al comercial" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111827;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="285" y="340" width="270" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-uc-reubicar" value="Reubicar visita aplazada" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111827;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="400" width="210" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-uc-recordar" value="Recordar visita del día al cliente" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111827;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="285" y="460" width="270" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-uc-eta" value="Consultar ETA de reparto" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111827;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="520" width="210" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-note" value="Los avisos se persisten en app_notifications de M6 usando source_type/source_id para enlazar con la visita comercial." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontColor=#1f2937;" parent="1" vertex="1">
+                    <mxGeometry x="210" y="620" width="460" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e1" style="edgeStyle=none;html=1;" parent="1" source="m2-final-comercial" target="m2-final-uc-planificar" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e2" style="edgeStyle=none;html=1;" parent="1" source="m2-final-comercial" target="m2-final-uc-crear" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e3" style="edgeStyle=none;html=1;" parent="1" source="m2-final-admin" target="m2-final-uc-crear" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e4" style="endArrow=classic;dashed=1;html=1;dashPattern=1 3;endFill=1;" parent="1" source="m2-final-uc-crear" target="m2-final-uc-notificar-cliente" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e4-label" value="&lt;&lt;include&gt;&gt;" style="edgeLabel;html=1;fontSize=8;align=center;verticalAlign=middle;resizable=0;points=[];" parent="m2-final-e4" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-10" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m2-final-e5" style="edgeStyle=none;html=1;" parent="1" source="m2-final-cliente" target="m2-final-uc-notificar-cliente" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e6" style="endArrow=classic;dashed=1;html=1;dashPattern=1 3;endFill=1;" parent="1" source="m2-final-uc-planificar" target="m2-final-uc-aplazar" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e6-label" value="&lt;&lt;extend&gt;&gt;" style="edgeLabel;html=1;fontSize=8;align=center;verticalAlign=middle;resizable=0;points=[];" parent="m2-final-e6" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-10" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m2-final-e7" style="endArrow=classic;dashed=1;html=1;dashPattern=1 3;endFill=1;" parent="1" source="m2-final-uc-aplazar" target="m2-final-uc-avisar-comercial" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e7-label" value="&lt;&lt;include&gt;&gt;" style="edgeLabel;html=1;fontSize=8;align=center;verticalAlign=middle;resizable=0;points=[];" parent="m2-final-e7" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-10" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m2-final-e8" style="edgeStyle=none;html=1;" parent="1" source="m2-final-comercial" target="m2-final-uc-avisar-comercial" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e9" style="edgeStyle=none;html=1;" parent="1" source="m2-final-comercial" target="m2-final-uc-reubicar" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e10" style="endArrow=classic;dashed=1;html=1;dashPattern=1 3;endFill=1;" parent="1" source="m2-final-uc-reubicar" target="m2-final-uc-notificar-cliente" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e10-label" value="&lt;&lt;include&gt;&gt;" style="edgeLabel;html=1;fontSize=8;align=center;verticalAlign=middle;resizable=0;points=[];" parent="m2-final-e10" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-10" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m2-final-e11" style="edgeStyle=none;html=1;" parent="1" source="m2-final-cliente" target="m2-final-uc-recordar" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m2-final-e12" style="edgeStyle=none;html=1;" parent="1" source="m2-final-cliente" target="m2-final-uc-eta" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>

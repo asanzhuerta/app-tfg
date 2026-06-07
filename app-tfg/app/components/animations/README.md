@@ -2,8 +2,8 @@
 
 Componentes y utilidades visuales para transiciones.
 
-## Funci?n
+## Función
 
 Unificar comportamientos animados de entrada, cambio de estado o carga.
 
-La app usa movimiento para mejorar percepcion de fluidez. Mantenerlo aqu? evita animaciones dispersas y repetidas.
+La app usa movimiento para mejorar percepción de fluidez. Mantenerlo aquí evita animaciones dispersas y repetidas.

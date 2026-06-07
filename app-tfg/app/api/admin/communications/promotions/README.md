@@ -1,7 +1,7 @@
-# API promoci?nes admin
+# API promociones admin
 
-CRUD de promoci?nes.
+CRUD de promociones.
 
-## Funci?n
+## Función
 
-Crear y mantener descuentos segmentados por cliente, rango, producto o l?nea.
+Crear y mantener descuentos segmentados por cliente, rango, producto o línea.

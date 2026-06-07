@@ -1,9 +1,9 @@
 # Layout y cabeceras
 
-Componentes estructurales de pagina.
+Componentes estructurales de página.
 
-## Funci?n
+## Función
 
-Definir cabeceras, contenedores, shell visual y composicion comun de pantallas autenticadas.
+Definir cabeceras, contenedores, shell visual y composicion común de pantallas autenticadas.
 
-Mantener layout comun facilita que todos los roles compartan una misma base visual sin copiar estructura.
+Mantener layout común facilita que todos los roles compartan una misma base visual sin copiar estructura.

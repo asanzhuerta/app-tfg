@@ -2,6 +2,6 @@
 
 Persistencia relacionada con seguridad.
 
-## Funci?n
+## Función
 
-Guardar o consultar datos de auditor?a, limites y trazabilidad.
+Guardar o consultar datos de auditoría, límites y trazabilidad.

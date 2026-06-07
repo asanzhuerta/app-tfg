@@ -44,9 +44,9 @@ La aplicación utiliza actualmente:
 \subsubsection*{Herramientas auxiliares}
 
 \begin{itemize}
-    \item \texttt{Visual Studio Code} para edicion y depuracion;
+    \item \texttt{Visual Studio Code} para edición y depuracion;
     \item \texttt{MiKTeX} y \texttt{latexmk} para compilar la memoria;
-    \item \texttt{Port Forwarding} de \texttt{Visual Studio Code}, basado en \texttt{Microsoft Dev Tunnels}, para pruebas desde dispositivos físicos sobre una URL publica reutilizable.
+    \item \texttt{Port Forwarding} de \texttt{Visual Studio Code}, basado en \texttt{Microsoft Dev Tunnels}, para pruebas desde dispositivos físicos sobre una URL pública reutilizable.
 \end{itemize}
 
 En fases anteriores se utilizo también \texttt{Cloudflare Tunnel} para este mismo propósito, pero en la iteración actual resulta más comodo trabajar con la solución integrada en \texttt{Visual Studio Code}, ya que no exige una herramienta adicional, se integra sin coste extra en el flujo habitual de desarrollo y facilita conservar una URL estable de pruebas para la PWA instalada en móvil.
@@ -55,7 +55,7 @@ En fases anteriores se utilizo también \texttt{Cloudflare Tunnel} para este mis
 
 \subsubsection*{Base de datos}
 
-El servicio \texttt{PostgreSQL} se define en \texttt{docker-compose.yml} en la raiz del repositorio. Para arrancarlo:
+El servicio \texttt{PostgreSQL} se define en \texttt{docker-compose.yml} en la raíz del repositorio. Para arrancarlo:
 
 \begin{lstlisting}[language=bash]
 docker compose up -d
@@ -81,7 +81,7 @@ DATABASE_URL=postgres://kin:kin@localhost:5432/kin
 AUTH_SECRET=valor-seguro
 \end{lstlisting}
 
-Variables opcionales según integracion:
+Variables opcionales según integración:
 
 \begin{itemize}
     \item \texttt{CLOUDINARY\_*} para la subida de imágenes de perfil y de catálogo.
@@ -117,11 +117,11 @@ npm run m4:closeout
 npm run m4:ui-check
 \end{lstlisting}
 
-\textcolor{red}{El proyecto no dispone todavía de una bateria completa de tests funcionales automatizados}, de modo que estas comprobaciones deben acompasarse con validación manual de los flujos por rol.
+\textcolor{red}{El proyecto no dispone todavía de una batería completa de tests funcionales automatizados}, de modo que estas comprobaciones deben acompasarse con validación manual de los flujos por rol.
 
 \subsection{Documentación técnica}
 
-La memoria del TFG se mantiene en \texttt{docs/}. Su compilacion puede realizarse mediante:
+La memoria del TFG se mantiene en \texttt{docs/}. Su compilación puede realizarse mediante:
 
 \begin{lstlisting}[language=bash]
 latexmk -pdf -shell-escape main.tex

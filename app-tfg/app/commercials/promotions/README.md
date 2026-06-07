@@ -2,6 +2,6 @@
 
 Promociones visibles para el comercial.
 
-## Funci?n
+## Función
 
 Consultar descuentos activos y ventajas que puede comunicar a clientes.

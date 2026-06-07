@@ -1,7 +1,7 @@
 # Servicios auth
 
-Operaciones de persistencia relacionadas con autenticaci?n.
+Operaciones de persistencia relacionadas con autenticación.
 
-## Funci?n
+## Función
 
 Buscar usuarios, registrar accesos y mantener datos necesarios para login.

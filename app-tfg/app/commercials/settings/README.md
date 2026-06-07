@@ -1,7 +1,7 @@
 # Ajustes comercial
 
-Configuracion operativa del comercial.
+Configuración operativa del comercial.
 
-## Funci?n
+## Función
 
-Definir par?metros de jornada, punto de salida y duraciones base.
+Definir parámetros de jornada, punto de salida y duraciones base.

@@ -2,6 +2,6 @@
 
 Atajo PWA hacia pedidos.
 
-## Funci?n
+## Función
 
-Abrir el ?rea de pedidos adecuada segun rol autenticado.
+Abrir el área de pedidos adecuada según rol autenticado.

@@ -1,4 +1,4 @@
-A continuación se recogen las instrucciones necesarias para evolucionar el software. Este manual esta dirigido a desarrolladores que necesiten extender o modificar la aplicación sin perder coherencia con la arquitectura y el alcance actual del proyecto.
+A continuación se recogen las instrucciones necesarias para evolucionar el software. Este manual está dirigido a desarrolladores que necesiten extender o modificar la aplicación sin perder coherencia con la arquitectura y el alcance actual del proyecto.
 
 \section{Introducción}
 
@@ -9,7 +9,7 @@ El proyecto se desarrolla en un único repositorio con dos bloques claramente di
     \item \texttt{docs/}, que contiene la memoria técnica.
 \end{itemize}
 
-El estado actual del desarrollo cubre de forma operativa los módulos \texttt{M1}, \texttt{M2}, \texttt{M3}, \texttt{M4}, bloques funcionales de \texttt{M5} y \texttt{M6}, y una capa transversal de \texttt{M7} para auditoría, configuración global de rate limiting, integraciones de soporte, operación empresarial persistente y soporte técnico/PWA. Por tanto, cualquier cambio debería respetar especialmente la compatibilidad con los flujos de autenticación, perfiles, clientes, visitas, rutas, catálogo, pedidos, reparto, cobro mínimo, comunicaciones internas, seguimiento técnico del salón y registro de integraciones/propuestas a proveedor.
+El estado actual del desarrollo cubre de forma operativa los módulos \texttt{M1}, \texttt{M2}, \texttt{M3}, \texttt{M4}, bloques funcionales de \texttt{M5} y \texttt{M6}, y una capa transversal de \texttt{M7} para auditoría, configuración global de rate limiting, integraciones de soporte, operación empresarial persistente y soporte técnico/PWA. Por tanto, cualquier cambio debería respetar especialmente la compatibilidad con los flujos de autenticación, perfiles, clientes, visitas, rutas, catálogo, pedidos, reparto, cobro mínimo, comunicaciones internas y multicanal, seguimiento técnico del salón y registro de integraciones/propuestas a proveedor.
 
 %\section{Requisitos de desarrollo}
 \input{./sections/backmatter/developerguide/requirements}
@@ -54,7 +54,7 @@ Los puntos de entrada más sensibles estan centralizados en dos archivos:
     \item \texttt{proxy.ts}: control de acceso por rol, compatibilidad mínima de navegador y rate limiting sobre la API.
 \end{itemize}
 
-Si se incorpora una nueva ruta privada o un nuevo endpoint sensible, debe revisarse su encaje en estos dos puntos. Esto evita que aparezcan flujos accesibles sin protección o inconsistencias entre la navegacion y la autorización real.
+Si se incorpora una nueva ruta privada o un nuevo endpoint sensible, debe revisarse su encaje en estos dos puntos. Esto evita que aparezcan flujos accesibles sin protección o inconsistencias entre la navegación y la autorización real.
 
 Además, las políticas de rate limiting ya no son completamente estáticas: una parte de su configuración puede modificarse desde administración, se persiste en base de datos y se resume mediante diagnóstico operativo. Cualquier cambio en este ámbito debe comprobar tanto el catálogo de políticas base como la lógica de sobrescritura persistida.
 
@@ -75,7 +75,7 @@ Las pautas recomendadas son:
     \item conservar la trazabilidad entre requisito funcional, entidad y migración.
 \end{itemize}
 
-Actualmente el modelo persistente ya incluye usuarios, auditoría, clientes, comerciales, asignaciones, visitas, rutas, catálogo, coloración, pedidos, líneas de pedido, estados de negocio y configuración global de rate limiting. No conviene documentar nuevas entidades como implementadas si no existen realmente en esta capa.
+Actualmente el modelo persistente ya incluye usuarios, auditoría, clientes, comerciales, asignaciones, visitas, rutas, catálogo, coloración, pedidos, líneas de pedido, estados de negocio, configuración global de rate limiting y suscripciones Web Push de usuario. No conviene documentar nuevas entidades como implementadas si no existen realmente en esta capa.
 
 \subsection{Integraciones externas}
 
@@ -86,10 +86,12 @@ El proyecto ya interactúa con varios servicios externos:
     \item \texttt{Nominatim} para geocodificación de direcciones;
     \item \texttt{OSRM} para geometría de rutas;
     \item \texttt{QuickChart} para representación del QR de pedido;
+    \item SMTP transaccional para correo electrónico de notificaciones cuando se configuran \texttt{SMTP\_HOST}, \texttt{SMTP\_PORT}, \texttt{SMTP\_USER}, \texttt{SMTP\_PASSWORD} y \texttt{SMTP\_FROM};
+    \item Web Push mediante claves VAPID \texttt{VAPID\_PUBLIC\_KEY}, \texttt{VAPID\_PRIVATE\_KEY} y \texttt{VAPID\_SUBJECT};
     \item el navegador del usuario para geolocalización actual y, en ciertos dispositivos, captura de imagen para lectura de QR.
 \end{itemize}
 
-Al tocar estas integraciones conviene mantener siempre una ruta de degradacion razonable. El código actual ya contempla varios ejemplos: avatar con \textit{fallback}, punto de salida guardado si no hay geolocalización actual, ETA anulada si el reparto no es coherente y lectura manual del QR cuando el dispositivo no ofrece soporte suficiente.
+Al tocar estas integraciones conviene mantener siempre una ruta de degradación razonable. El código actual ya contempla varios ejemplos: avatar con \textit{fallback}, punto de salida guardado si no hay geolocalización actual, ETA anulada si el reparto no es coherente, lectura manual del QR cuando el dispositivo no ofrece soporte suficiente y conservación de la notificación interna aunque SMTP, VAPID o una suscripción push no estén disponibles.
 
 \subsection{Validación de cambios}
 
@@ -113,11 +115,12 @@ Además, debe comprobarse manualmente el flujo afectado usando el rol correcto. 
 \begin{itemize}
     \item login, logout y redirecciones por rol;
     \item alta y revisión de solicitudes;
-    \item edicion de perfil y cambio de contraseña;
+    \item edición de perfil y cambio de contraseña;
     \item clientes, geolocalización y asignaciones;
-    \item visitas, ruta diaria y ETA para cliente;
+    \item visitas, ruta diaria, aplazamientos automáticos, avisos de reubicación y ETA para cliente;
     \item mantenimiento de catálogo y coloración;
     \item pedidos, entrega con QR y cobro mínimo.
+    \item promociones, formaciones, \texttt{deliveryChannels}, suscripción Push PWA y degradación a notificación interna.
 \end{itemize}
 
 \subsection{Evolución técnica recomendada}
@@ -125,7 +128,7 @@ Además, debe comprobarse manualmente el flujo afectado usando el rol correcto. 
 La arquitectura actual es suficiente para el alcance implementado, pero existen tres mejoras claras de medio plazo:
 
 \begin{itemize}
-    \item reforzar la agrupacion por \textit{feature} en las áreas comercial, catálogo y pedidos para reducir dispersion entre hooks, contratos, servicios y componentes;
+    \item reforzar la agrupacion por \textit{feature} en las áreas comercial, catálogo y pedidos para reducir dispersión entre hooks, contratos, servicios y componentes;
     \item \textcolor{red}{ampliar la automatización de pruebas más allá de las comprobaciones estáticas y los smokes actuales;}
     \item profundizar en la capa PWA y en la observabilidad operativa antes de abordar módulos funcionales de mayor volumen.
 \end{itemize}
@@ -135,11 +138,11 @@ La arquitectura actual es suficiente para el alcance implementado, pero existen 
 La secuencia de construcción local recomendada es la siguiente:
 
 \begin{enumerate}
-    \item levantar PostgreSQL con Docker desde la raiz del repositorio;
+    \item levantar PostgreSQL con Docker desde la raíz del repositorio;
     \item instalar dependencias dentro de \texttt{app-tfg/};
     \item definir \texttt{DATABASE\_URL} y \texttt{AUTH\_SECRET} en \texttt{.env.local};
     \item ejecutar las migraciones;
-    \item arrancar el servidor de desarrollo o generar una compilacion de producción.
+    \item arrancar el servidor de desarrollo o generar una compilación de producción.
 \end{enumerate}
 
 Comandos principales:
@@ -152,7 +155,7 @@ npm run migration:run
 npm run dev
 \end{lstlisting}
 
-Para una comprobacion equivalente a producción:
+Para una comprobación equivalente a producción:
 
 \begin{lstlisting}[language=bash]
 npm run build

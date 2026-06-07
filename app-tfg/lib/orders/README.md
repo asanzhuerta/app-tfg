@@ -1,9 +1,9 @@
 # Dominio de pedidos
 
-Logica de pedidos, borradores, descuentos, estado y trazabilidad.
+Lógica de pedidos, borradores, descuentos, estado y trazabilidad.
 
-## Funci?n
+## Función
 
-Apoyar creacion, confirmación, historial, detalle, promoci?nes aplicables y validaci?n de entrega.
+Apoyar creación, confirmación, historial, detalle, promociones aplicables y validación de entrega.
 
 Pedidos es un flujo transversal a cliente, comercial y admin. Mantenerlo en `lib/orders` separa reglas de negocio de componentes.

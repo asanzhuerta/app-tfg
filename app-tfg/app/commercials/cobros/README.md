@@ -2,6 +2,6 @@
 
 Pantalla preparada para seguimiento de cobros.
 
-## Funci?n
+## Función
 
 Reservar el espacio operativo para control comercial de cobros y estados.

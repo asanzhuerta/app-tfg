@@ -1,7 +1,7 @@
 # API recursos de apoyo
 
-CRUD de recursos t?cnicos.
+CRUD de recursos técnicos.
 
-## Funci?n
+## Función
 
-Gestionar documentaci?n o enlaces asociados a cat?logo.
+Gestionar documentación o enlaces asociados a catálogo.

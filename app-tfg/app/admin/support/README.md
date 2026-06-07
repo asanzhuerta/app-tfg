@@ -1,7 +1,7 @@
 # Soporte admin
 
-Panel de soporte t?cnico-operativo.
+Panel de soporte técnico-operativo.
 
-## Funci?n
+## Función
 
-Mostrar estado del sistema y herramientas basicas para diagnostico.
+Mostrar estado del sistema y herramientas basicas para diagnóstico.

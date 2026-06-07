@@ -46,7 +46,7 @@ En el estado actual del proyecto, los servicios externos relevantes son:
     \item \texttt{QuickChart}, para generar la imagen QR asociada a los pedidos.
 \end{itemize}
 
-De ellos, solo \texttt{Cloudinary} requiere credenciales obligatorias para los flujos de subida. Las demas integraciones pueden mantenerse con sus endpoints publicos por defecto o sustituirse mediante configuración.
+De ellos, solo \texttt{Cloudinary} requiere credenciales obligatorias para los flujos de subida. Las demás integraciones pueden mantenerse con sus endpoints públicos por defecto o sustituirse mediante configuración.
 
 \subsection{Inventario de componentes}
 
@@ -119,15 +119,15 @@ Tras el despliegue conviene validar, al menos, los siguientes puntos:
 
 \begin{itemize}
     \item acceso a la página de login;
-    \item construcción correcta de sesión y navegacion por rol;
+    \item construcción correcta de sesión y navegación por rol;
     \item conexión efectiva con la base de datos;
     \item lectura de clientes, visitas, catálogo y pedidos;
     \item carga del \texttt{manifest} y del \textit{service worker};
-    \item subida de imágenes a \texttt{Cloudinary}, si la integracion esta habilitada;
+    \item subida de imágenes a \texttt{Cloudinary}, si la integración está habilitada;
     \item geocodificación y ruta, si el entorno dispone de conectividad hacia \texttt{Nominatim} y \texttt{OSRM}.
 \end{itemize}
 
-Además de la comprobacion manual, el repositorio ya incluye una bateria técnica reproducible basada en:
+Además de la comprobación manual, el repositorio ya incluye una batería técnica reproducible basada en:
 
 \begin{lstlisting}[language=bash]
 npm run lint
@@ -145,11 +145,11 @@ npm run m5:salon-visual-smoke
 En el alcance actual del proyecto, el mantenimiento preventivo se concentra en cinco frentes:
 
 \begin{itemize}
-    \item monitorizar la disponibilidad de \texttt{PostgreSQL} y la ejecucion correcta de migraciones;
+    \item monitorizar la disponibilidad de \texttt{PostgreSQL} y la ejecución correcta de migraciones;
     \item revisar los errores de autenticación, sesión y rate limiting en los logs de aplicación;
     \item vigilar las credenciales y cuotas de \texttt{Cloudinary};
     \item comprobar el comportamiento de \texttt{Nominatim}, \texttt{OSRM} y \texttt{QuickChart} cuando haya incidencia de red o cambios de proveedor;
-    \item depurar periodicamente imágenes obsoletas o reemplazadas en \texttt{Cloudinary}.
+    \item depurar periódicamente imágenes obsoletas o reemplazadas en \texttt{Cloudinary}.
 \end{itemize}
 
 También conviene tener en cuenta varias degradaciones controladas ya presentes en el código:
@@ -158,7 +158,7 @@ También conviene tener en cuenta varias degradaciones controladas ya presentes 
     \item si una imagen remota falla, la interfaz recurre a \textit{fallbacks} visuales;
     \item si no puede calcularse una ETA de reparto coherente, el cliente no recibe una hora inventada;
     \item si el dispositivo no puede leer el QR desde la captura, el flujo de entrega permite seguir introduciendo el valor manualmente;
-    \item si un servicio geográfico externo falla, la aplicación mantiene el resto de la operativa siempre que la acción no dependa estrictamente de esa integracion.
+    \item si un servicio geográfico externo falla, la aplicación mantiene el resto de la operativa siempre que la acción no dependa estrictamente de esa integración.
 \end{itemize}
 
 Esta combinación de dependencias externas acotadas, persistencia relacional centralizada y validación técnica repetible resulta suficiente para el estado actual del sistema y para el alcance realmente implementado hasta la fecha.

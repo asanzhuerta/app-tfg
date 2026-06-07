@@ -1,7 +1,7 @@
 # API ETA cliente
 
-Endpoint de estimaci?n de reparto.
+Endpoint de estimación de reparto.
 
-## Funci?n
+## Función
 
-Mostrar al cliente informaci?n aproximada de llegada o estado de ruta.
+Mostrar al cliente información aproximada de llegada o estado de ruta.

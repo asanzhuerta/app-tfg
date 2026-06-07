@@ -1,9 +1,9 @@
 # API interna
 
-Route Handlers de Next.js usados por la aplicaci?n.
+Route Handlers de Next.js usados por la aplicación.
 
-## Funci?n
+## Función
 
-Exponer endpoints internos para autenticaci?n, perfil, cat?logo, usuarios, clientes, pedidos, visitas, comunicaci?nes, auditor?a e integraci?nes.
+Exponer endpoints internos para autenticación, perfil, catálogo, usuarios, clientes, pedidos, visitas, comunicaciones, auditoría e integraciones.
 
-La aplicaci?n funci?na como monolito full-stack. Mantener la API dentro de `app/api` permite compartir dominio, contratos y seguridad con el frontend sin crear un backend separado.
+La aplicación funciona como monolito full-stack. Mantener la API dentro de `app/api` permite compartir dominio, contratos y seguridad con el frontend sin crear un backend separado.

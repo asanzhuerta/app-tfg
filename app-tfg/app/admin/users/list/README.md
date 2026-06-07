@@ -2,6 +2,6 @@
 
 Vista administrativa de usuarios.
 
-## Funci?n
+## Función
 
 Consultar cuentas, estados, roles y detalle de usuarios registrados.

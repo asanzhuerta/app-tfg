@@ -10,10 +10,10 @@
         <mxCell id="browser" value="Navegador / PWA&lt;br/&gt;React, formularios, mapas y capturas" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#e6f0ff;strokeColor=#8ba3ba;fontColor=#203040;fontSize=18;spacing=8;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="70" y="300" width="300" height="150" as="geometry" />
         </mxCell>
-        <mxCell id="next" value="Aplicacion Next.js&lt;br/&gt;App Router + Server Components + Route Handlers" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;fontColor=#203040;fontSize=21;spacing=8;align=center;verticalAlign=middle;" parent="1" vertex="1">
+        <mxCell id="next" value="Aplicación Next.js&lt;br/&gt;App Router + Server Components + Route Handlers" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;fontColor=#203040;fontSize=21;spacing=8;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="520" y="210" width="420" height="210" as="geometry" />
         </mxCell>
-        <mxCell id="auth" value="Auth.js + proxy.ts&lt;br/&gt;Sesion, roles, rate limiting y navegador soportado" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#e9f8ef;strokeColor=#8ba3ba;fontColor=#203040;fontSize=18;spacing=8;align=center;verticalAlign=middle;" parent="1" vertex="1">
+        <mxCell id="auth" value="Auth.js + proxy.ts&lt;br/&gt;Sesión, roles, rate limiting y navegador soportado" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#e9f8ef;strokeColor=#8ba3ba;fontColor=#203040;fontSize=18;spacing=8;align=center;verticalAlign=middle;" parent="1" vertex="1">
           <mxGeometry x="520" y="510" width="420" height="150" as="geometry" />
         </mxCell>
         <mxCell id="db" value="PostgreSQL&lt;br/&gt;TypeORM + migraciones" style="shape=cylinder3d;boundedLbl=1;backgroundOutline=1;size=15;rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#e2f5ff;strokeColor=#8ba3ba;fontColor=#203040;fontSize=18;spacing=8;align=center;verticalAlign=middle;" parent="1" vertex="1">
@@ -34,7 +34,7 @@
         <mxCell id="edge-1" value="proteccion" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#8ba3ba;fontColor=#65758b;fontSize=14;" parent="1" source="next" target="auth" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="edge-2" value="usuario/sesion" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#8ba3ba;fontColor=#65758b;fontSize=14;" parent="1" source="auth" target="db" edge="1">
+        <mxCell id="edge-2" value="usuario/sesión" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#8ba3ba;fontColor=#65758b;fontSize=14;" parent="1" source="auth" target="db" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="edge-3" value="repositorios" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#8ba3ba;fontColor=#65758b;fontSize=14;" parent="1" source="next" target="db" edge="1">

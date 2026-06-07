@@ -1,9 +1,9 @@
-# Geocodificacion
+# Geocodificación
 
-Integracion con proveedores de geocodificacion.
+Integración con proveedores de geocodificación.
 
-## Funci?n
+## Función
 
 Convertir direcciones de clientes en coordenadas y normalizar resultados.
 
-El m?dulo de rutas depende de coordenadas fiables. Aislar esta l?gica permite cambiar proveedor o ajustar reglas sin tocar la UI.
+El módulo de rutas depende de coordenadas fiables. Aislar esta lógica permite cambiar proveedor o ajustar reglas sin tocar la UI.

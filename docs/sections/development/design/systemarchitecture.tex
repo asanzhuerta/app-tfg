@@ -28,7 +28,7 @@ Los contenedores logicos que forman la solución son los siguientes:
     \label{fig:system-containers}
 \end{figure}
 
-La aplicación resuelve además varias responsabilidades transversales desde una capa comun:
+La aplicación resuelve además varias responsabilidades transversales desde una capa común:
 
 \begin{itemize}
     \item autenticación y sesión con \texttt{Auth.js},
@@ -69,7 +69,7 @@ La estructura del código combina una organización por capas técnicas con subd
 El flujo interno de una operación sensible sigue de forma general los siguientes pasos:
 
 \begin{enumerate}
-    \item La peticion llega a \texttt{proxy.ts}, donde se aplica control de navegador, autenticación base y rate limiting.
+    \item La petición llega a \texttt{proxy.ts}, donde se aplica control de navegador, autenticación base y rate limiting.
     \item La página o el endpoint correspondiente obtiene la sesión y comprueba el rol requerido.
     \item El \textit{Route Handler} delega la lógica de negocio en servicios o helpers de \texttt{lib/}.
     \item Si se requiere persistencia, la operación utiliza \texttt{TypeORM} sobre entidades y repositorios.
@@ -93,5 +93,5 @@ La arquitectura actual no separa los módulos como aplicaciones distintas, pero 
 
 La arquitectura de carpetas actual es adecuada para el alcance ya construido, porque separa claramente vistas por rol, componentes reutilizables, integraciones externas, persistencia y migraciones.
 
-No obstante, el crecimiento conjunto de los módulos comercial, catálogo y pedidos ya apunta a una evolución deseable: reforzar la agrupacion por \textit{feature} para reducir la dispersion entre componentes, hooks, contratos y servicios relacionados con una misma capacidad de negocio.
+No obstante, el crecimiento conjunto de los módulos comercial, catálogo y pedidos ya apunta a una evolución deseable: reforzar la agrupacion por \textit{feature} para reducir la dispersión entre componentes, hooks, contratos y servicios relacionados con una misma capacidad de negocio.
 

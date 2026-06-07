@@ -1,9 +1,9 @@
-# Componentes de comunicaci?nes
+# Componentes de comunicaciones
 
-UI para promoci?nes, avisos, formaci?nes y segmentos/rangos.
+UI para promociones, avisos, formaciones y segmentos/rangos.
 
-## Funci?n
+## Función
 
-Gestionar comunicaci?nes desde administraci?n y mostrar contenidos activos a cliente/comercial.
+Gestionar comunicaciones desde administración y mostrar contenidos activos a cliente/comercial.
 
-El m?dulo M6 tiene reglas propias de segmentacion, vigencia y estado. Esta carpeta agrupa esa experiencia.
+El módulo M6 tiene reglas propias de segmentacion, vigencia y estado. Esta carpeta agrupa esa experiencia.

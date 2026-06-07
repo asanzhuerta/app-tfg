@@ -671,4 +671,249 @@
             </root>
         </mxGraphModel>
     </diagram>
+    <diagram name="M6 - Modelo final BD" id="m6-modelo-final-bd">
+        <mxGraphModel dx="1720" dy="1040" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1720" pageHeight="1040" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="m6-final-title" value="M6 - Modelo final de datos" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="30" width="1000" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-subtitle" value="Marketing y comunicaciones: segmentos, promociones, formaciones, notificaciones, recordatorios y suscripciones push." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="70" width="1120" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-legend" value="Verde = clave primaria. Rojo = clave foranea. Amarillo = entidad externa referenciada desde otro módulo." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="30" width="460" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-users" value="users (M1)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="130" width="260" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-users-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-users" vertex="1">
+                    <mxGeometry y="30" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-users-f2" value="email, name, role_id, status_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-users" vertex="1">
+                    <mxGeometry y="52" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-clients" value="clients (M2)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="130" width="260" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-clients-f1" value="id : UUID PK/FK users" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-clients" vertex="1">
+                    <mxGeometry y="30" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-clients-f2" value="name, address, geodata" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-clients" vertex="1">
+                    <mxGeometry y="52" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-visits" value="commercial_visits (M2)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="130" width="280" height="118" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-visits-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-visits" vertex="1">
+                    <mxGeometry y="30" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-visits-f2" value="client_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-visits" vertex="1">
+                    <mxGeometry y="52" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-visits-f3" value="commercial_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-visits" vertex="1">
+                    <mxGeometry y="74" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-visits-f4" value="scheduled_for_date, status_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-visits" vertex="1">
+                    <mxGeometry y="96" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-integrations" value="external_integrations (M7)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="990" y="130" width="280" height="118" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-integrations-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-integrations" vertex="1">
+                    <mxGeometry y="30" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-integrations-f2" value="name : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-integrations" vertex="1">
+                    <mxGeometry y="52" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-integrations-f3" value="integration_type : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-integrations" vertex="1">
+                    <mxGeometry y="74" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-integrations-f4" value="status, config" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-integrations" vertex="1">
+                    <mxGeometry y="96" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-segments" value="customer_segments" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="330" width="260" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-segments-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-segments" vertex="1">
+                    <mxGeometry y="30" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-segments-f2" value="code : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-segments" vertex="1">
+                    <mxGeometry y="52" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-segments-f3" value="name, description" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-segments" vertex="1">
+                    <mxGeometry y="74" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-segments-f4" value="criteria" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-segments" vertex="1">
+                    <mxGeometry y="96" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-segments-f5" value="created_at, updated_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-segments" vertex="1">
+                    <mxGeometry y="118" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-client-segments" value="client_customer_segments" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="330" width="260" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-client-segments-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-client-segments" vertex="1">
+                    <mxGeometry y="30" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-client-segments-f2" value="client_id : UUID FK clients" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-client-segments" vertex="1">
+                    <mxGeometry y="52" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-client-segments-f3" value="segment_id : UUID FK customer_segments" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-client-segments" vertex="1">
+                    <mxGeometry y="74" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-client-segments-f4" value="assigned_by_user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-client-segments" vertex="1">
+                    <mxGeometry y="96" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-client-segments-f5" value="notes, created_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-client-segments" vertex="1">
+                    <mxGeometry y="118" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-promotions" value="promotions" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="330" width="280" height="162" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-promotions-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-promotions" vertex="1">
+                    <mxGeometry y="30" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-promotions-f2" value="product_id : UUID FK products" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-promotions" vertex="1">
+                    <mxGeometry y="52" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-promotions-f3" value="product_line_id : UUID FK product_lines" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-promotions" vertex="1">
+                    <mxGeometry y="74" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-promotions-f4" value="client_id : UUID FK clients" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-promotions" vertex="1">
+                    <mxGeometry y="96" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-promotions-f5" value="customer_segment_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-promotions" vertex="1">
+                    <mxGeometry y="118" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-promotions-f6" value="title, status, dates, benefit" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-promotions" vertex="1">
+                    <mxGeometry y="140" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-trainings" value="training_events" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="990" y="330" width="280" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-trainings-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-trainings" vertex="1">
+                    <mxGeometry y="30" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-trainings-f2" value="title, description" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-trainings" vertex="1">
+                    <mxGeometry y="52" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-trainings-f3" value="starts_at, location, modality" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-trainings" vertex="1">
+                    <mxGeometry y="74" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-trainings-f4" value="status, capacity" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-trainings" vertex="1">
+                    <mxGeometry y="96" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-trainings-f5" value="created_at, updated_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-trainings" vertex="1">
+                    <mxGeometry y="118" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-enrollments" value="training_enrollments" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="640" width="260" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-enrollments-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-enrollments" vertex="1">
+                    <mxGeometry y="30" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-enrollments-f2" value="training_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-enrollments" vertex="1">
+                    <mxGeometry y="52" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-enrollments-f3" value="user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-enrollments" vertex="1">
+                    <mxGeometry y="74" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-enrollments-f4" value="status, notes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-enrollments" vertex="1">
+                    <mxGeometry y="96" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-enrollments-f5" value="registered_at, updated_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-enrollments" vertex="1">
+                    <mxGeometry y="118" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-notifications" value="app_notifications" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="640" width="260" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-notifications-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-notifications" vertex="1">
+                    <mxGeometry y="30" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-notifications-f2" value="recipient_user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-notifications" vertex="1">
+                    <mxGeometry y="52" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-notifications-f3" value="title, body, notification_type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-notifications" vertex="1">
+                    <mxGeometry y="74" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-notifications-f4" value="channel, source_type, source_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-notifications" vertex="1">
+                    <mxGeometry y="96" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-notifications-f5" value="read_at, created_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-notifications" vertex="1">
+                    <mxGeometry y="118" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-reminders" value="app_reminders" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="640" width="260" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-reminders-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-reminders" vertex="1">
+                    <mxGeometry y="30" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-reminders-f2" value="user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-reminders" vertex="1">
+                    <mxGeometry y="52" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-reminders-f3" value="title, body" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-reminders" vertex="1">
+                    <mxGeometry y="74" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-reminders-f4" value="scheduled_at, status" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-reminders" vertex="1">
+                    <mxGeometry y="96" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-reminders-f5" value="created_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-reminders" vertex="1">
+                    <mxGeometry y="118" width="260" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-push" value="user_push_subscriptions" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="990" y="640" width="280" height="162" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-push-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-push" vertex="1">
+                    <mxGeometry y="30" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-push-f2" value="user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-push" vertex="1">
+                    <mxGeometry y="52" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-push-f3" value="endpoint : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-push" vertex="1">
+                    <mxGeometry y="74" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-push-f4" value="p256dh, auth" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-push" vertex="1">
+                    <mxGeometry y="96" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-push-f5" value="expiration_time, user_agent" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-push" vertex="1">
+                    <mxGeometry y="118" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-push-f6" value="last_used_at, revoked_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m6-final-push" vertex="1">
+                    <mxGeometry y="140" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-note" value="Las notificaciones de visitas de M2 reutilizan app_notifications. Email y Web Push son entregas derivadas: no duplican la notificación interna." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1f2937;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="920" width="620" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r1" style="edgeStyle=none;html=1;" parent="1" source="m6-final-notifications" target="m6-final-users" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r2" style="edgeStyle=none;html=1;" parent="1" source="m6-final-reminders" target="m6-final-users" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r3" style="edgeStyle=none;html=1;" parent="1" source="m6-final-push" target="m6-final-users" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r4" style="edgeStyle=none;html=1;" parent="1" source="m6-final-client-segments" target="m6-final-clients" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r5" style="edgeStyle=none;html=1;" parent="1" source="m6-final-client-segments" target="m6-final-segments" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r6" style="edgeStyle=none;html=1;" parent="1" source="m6-final-promotions" target="m6-final-segments" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r7" style="edgeStyle=none;html=1;" parent="1" source="m6-final-enrollments" target="m6-final-trainings" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r8" style="edgeStyle=none;html=1;" parent="1" source="m6-final-notifications" target="m6-final-visits" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6-final-r9" style="edgeStyle=none;html=1;" parent="1" source="m6-final-notifications" target="m6-final-integrations" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>

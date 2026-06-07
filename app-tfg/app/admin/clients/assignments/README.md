@@ -1,7 +1,7 @@
 # Asignaciones de clientes
 
-Pantalla de asignaci?n comercial-cliente.
+Pantalla de asignación comercial-cliente.
 
-## Funci?n
+## Función
 
 Vincular clientes profesionales con comerciales responsables y revisar asignaciones activas.

@@ -251,4 +251,273 @@
             </root>
         </mxGraphModel>
     </diagram>
+    <diagram name="M3 - Modelo final BD" id="m3-modelo-final-bd">
+        <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1750" pageHeight="1250" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="m3-final-title" value="M3 - Modelo final de datos" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="30" width="1050" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-subtitle" value="Catálogo, jerarquia comercial, recursos de soporte y referencias de color aptas para pedido." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="70" width="1050" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-legend" value="Verde = clave primaria. Rojo = clave foranea. Amarillo = entidad externa referenciada desde otro módulo." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="30" width="470" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-categories" value="product_categories" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="120" width="270" height="118" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-categories-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-categories" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-categories-f2" value="name : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-categories" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-categories-f3" value="description : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-categories" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-categories-f4" value="display_order : INTEGER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-categories" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-lines" value="product_lines" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="120" width="270" height="162" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-lines-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-lines" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-lines-f2" value="name : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-lines" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-lines-f3" value="description : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-lines" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-lines-f4" value="product_category_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-lines" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-lines-f5" value="image_url : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-lines" vertex="1">
+                    <mxGeometry y="118" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-lines-f6" value="display_order : INTEGER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-lines" vertex="1">
+                    <mxGeometry y="140" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories" value="product_subcategories" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="120" width="270" height="206" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-subcategories" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories-f2" value="product_line_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-subcategories" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories-f3" value="name : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-subcategories" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories-f4" value="description : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-subcategories" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories-f5" value="parent_subcategory_id : UUID FK self" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-subcategories" vertex="1">
+                    <mxGeometry y="118" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories-f6" value="image_url : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-subcategories" vertex="1">
+                    <mxGeometry y="140" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories-f7" value="display_order : INTEGER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-subcategories" vertex="1">
+                    <mxGeometry y="162" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-subcategories-f8" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-subcategories" vertex="1">
+                    <mxGeometry y="184" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products" value="products" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="370" width="270" height="338" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f2" value="name : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f3" value="reference : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f4" value="description : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f5" value="product_category_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="118" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f6" value="product_line_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="140" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f7" value="product_subcategory_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="162" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f8" value="image_url : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="184" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f9" value="format, packing : TEXT/INTEGER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="206" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f10" value="technical_info : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="228" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f11" value="status_id : SMALLINT FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="250" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f12" value="base_price : NUMERIC(12,2)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="272" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f13" value="supplier : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="294" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-products-f14" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-products" vertex="1">
+                    <mxGeometry y="316" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-statuses" value="product_statuses" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="370" width="270" height="96" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-statuses-f1" value="id : SMALLINT PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-statuses" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-statuses-f2" value="code : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-statuses" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-product-statuses-f3" value="name : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-product-statuses" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resource-types" value="support_resource_types" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="370" width="270" height="96" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resource-types-f1" value="id : SMALLINT PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resource-types" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resource-types-f2" value="code : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resource-types" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resource-types-f3" value="name : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resource-types" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources" value="support_resources" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="620" width="270" height="206" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resources" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources-f2" value="title : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resources" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources-f3" value="description : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resources" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources-f4" value="resource_type_id : SMALLINT FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resources" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources-f5" value="resource_url : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resources" vertex="1">
+                    <mxGeometry y="118" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources-f6" value="product_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resources" vertex="1">
+                    <mxGeometry y="140" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources-f7" value="product_line_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resources" vertex="1">
+                    <mxGeometry y="162" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-support-resources-f8" value="created_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-support-resources" vertex="1">
+                    <mxGeometry y="184" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-charts" value="color_charts" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="620" width="270" height="162" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-charts-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-charts" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-charts-f2" value="name : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-charts" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-charts-f3" value="description : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-charts" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-charts-f4" value="product_line_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-charts" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-charts-f5" value="image_url : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-charts" vertex="1">
+                    <mxGeometry y="118" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-charts-f6" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-charts" vertex="1">
+                    <mxGeometry y="140" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references" value="color_references" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="620" width="270" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f2" value="color_chart_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f3" value="product_id : UUID FK NULL" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f4" value="code : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f5" value="name : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="118" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f6" value="description : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="140" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f7" value="image_url, thumb_image_url : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="162" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f8" value="erp_reference : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="184" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f9" value="is_orderable : BOOLEAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="206" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-color-references-f10" value="display_order : INTEGER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m3-final-color-references" vertex="1">
+                    <mxGeometry y="228" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-1" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-product-lines" target="m3-final-product-categories" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-2" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-product-subcategories" target="m3-final-product-lines" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-3" value="parent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-product-subcategories" target="m3-final-product-subcategories" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-4" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-products" target="m3-final-product-categories" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-5" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-products" target="m3-final-product-lines" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-6" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-products" target="m3-final-product-subcategories" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-7" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-products" target="m3-final-product-statuses" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-8" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-support-resources" target="m3-final-support-resource-types" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-9" value="N:1 opcional" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-support-resources" target="m3-final-products" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-10" value="N:1 opcional" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-support-resources" target="m3-final-product-lines" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-11" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-color-charts" target="m3-final-product-lines" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-12" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-color-references" target="m3-final-color-charts" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3-final-rel-13" value="N:1 opcional" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m3-final-color-references" target="m3-final-products" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>

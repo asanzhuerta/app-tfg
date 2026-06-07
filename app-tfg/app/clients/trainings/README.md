@@ -2,6 +2,6 @@
 
 Formaciones disponibles para cliente.
 
-## Funci?n
+## Función
 
-Mostrar contenidos formativos publicados por administraci?n.
+Mostrar contenidos formativos publicados por administración.

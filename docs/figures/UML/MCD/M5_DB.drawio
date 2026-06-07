@@ -391,4 +391,285 @@
             </root>
         </mxGraphModel>
     </diagram>
+    <diagram name="M5 - Modelo final BD" id="m5-modelo-final-bd">
+        <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1950" pageHeight="1450" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="m5-final-title" value="M5 - Modelo final de datos" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="30" width="1240" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-subtitle" value="Fichas técnicas de salon, servicios, plantillas, consumos, imágenes y sugerencias." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="70" width="1120" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-legend" value="Verde = clave primaria. Rojo = clave foranea. Amarillo = entidad externa referenciada desde otro módulo." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="1380" y="30" width="470" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-clients-m2" value="clients (M2)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="120" width="255" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-clients-m2-f1" value="id : UUID PK/FK users" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-clients-m2" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-clients-m2-f2" value="name, address, geodata" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-clients-m2" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-users-m1" value="users (M1)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="120" width="255" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-users-m1-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-users-m1" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-users-m1-f2" value="email, name, role_id, status_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-users-m1" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-products-m3" value="products (M3)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="120" width="255" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-products-m3-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-products-m3" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-products-m3-f2" value="reference, name, base_price" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-products-m3" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-color-references-m3" value="color_references (M3)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="970" y="120" width="255" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-color-references-m3-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-color-references-m3" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-color-references-m3-f2" value="code, name, erp_reference" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-color-references-m3" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-clients" value="salon_clients" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="370" width="255" height="162" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-clients-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-clients" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-clients-f2" value="client_id : UUID FK clients" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-clients" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-clients-f3" value="name : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-clients" vertex="1">
+                    <mxGeometry y="74" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-clients-f4" value="phone, email : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-clients" vertex="1">
+                    <mxGeometry y="96" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-clients-f5" value="notes : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-clients" vertex="1">
+                    <mxGeometry y="118" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-clients-f6" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-clients" vertex="1">
+                    <mxGeometry y="140" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services" value="salon_services" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="370" width="255" height="206" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-services" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services-f2" value="salon_client_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-services" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services-f3" value="client_id : UUID FK clients" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-services" vertex="1">
+                    <mxGeometry y="74" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services-f4" value="recorded_by_user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-services" vertex="1">
+                    <mxGeometry y="96" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services-f5" value="service_date : DATE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-services" vertex="1">
+                    <mxGeometry y="118" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services-f6" value="service_type : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-services" vertex="1">
+                    <mxGeometry y="140" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services-f7" value="notes, result : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-services" vertex="1">
+                    <mxGeometry y="162" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-services-f8" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-services" vertex="1">
+                    <mxGeometry y="184" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-technical-sheets" value="salon_service_technical_sheets" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="370" width="255" height="162" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-technical-sheets-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-technical-sheets" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-technical-sheets-f2" value="service_id : UUID FK UNIQUE" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-technical-sheets" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-technical-sheets-f3" value="technical_description : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-technical-sheets" vertex="1">
+                    <mxGeometry y="74" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-technical-sheets-f4" value="formula : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-technical-sheets" vertex="1">
+                    <mxGeometry y="96" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-technical-sheets-f5" value="technical_notes : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-technical-sheets" vertex="1">
+                    <mxGeometry y="118" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-technical-sheets-f6" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-technical-sheets" vertex="1">
+                    <mxGeometry y="140" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-product-usages" value="salon_service_product_usages" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="970" y="370" width="255" height="184" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-product-usages-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-product-usages" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-product-usages-f2" value="service_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-product-usages" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-product-usages-f3" value="product_id : UUID FK products" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-product-usages" vertex="1">
+                    <mxGeometry y="74" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-product-usages-f4" value="color_reference_id : UUID FK NULL" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-product-usages" vertex="1">
+                    <mxGeometry y="96" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-product-usages-f5" value="quantity_used : NUMERIC(10,2)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-product-usages" vertex="1">
+                    <mxGeometry y="118" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-product-usages-f6" value="notes : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-product-usages" vertex="1">
+                    <mxGeometry y="140" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-product-usages-f7" value="created_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-product-usages" vertex="1">
+                    <mxGeometry y="162" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-result-images" value="salon_service_result_images" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="620" width="255" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-result-images-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-result-images" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-result-images-f2" value="service_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-result-images" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-result-images-f3" value="image_url : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-result-images" vertex="1">
+                    <mxGeometry y="74" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-result-images-f4" value="display_order : INTEGER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-result-images" vertex="1">
+                    <mxGeometry y="96" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-result-images-f5" value="created_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-result-images" vertex="1">
+                    <mxGeometry y="118" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-templates" value="salon_service_templates" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="620" width="255" height="184" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-templates-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-templates" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-templates-f2" value="client_id : UUID FK clients" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-templates" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-templates-f3" value="created_by_user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-templates" vertex="1">
+                    <mxGeometry y="74" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-templates-f4" value="name, service_type : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-templates" vertex="1">
+                    <mxGeometry y="96" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-templates-f5" value="notes, result : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-templates" vertex="1">
+                    <mxGeometry y="118" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-templates-f6" value="technical_description, formula, technical_notes : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-templates" vertex="1">
+                    <mxGeometry y="140" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-templates-f7" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-templates" vertex="1">
+                    <mxGeometry y="162" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-template-product-usages" value="salon_service_template_product_usages" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="620" width="255" height="184" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-template-product-usages-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-template-product-usages" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-template-product-usages-f2" value="template_id : UUID FK templates" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-template-product-usages" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-template-product-usages-f3" value="product_id : UUID FK products" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-template-product-usages" vertex="1">
+                    <mxGeometry y="74" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-template-product-usages-f4" value="color_reference_id : UUID FK NULL" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-template-product-usages" vertex="1">
+                    <mxGeometry y="96" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-template-product-usages-f5" value="quantity_used : NUMERIC(10,2)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-template-product-usages" vertex="1">
+                    <mxGeometry y="118" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-template-product-usages-f6" value="notes : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-template-product-usages" vertex="1">
+                    <mxGeometry y="140" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-service-template-product-usages-f7" value="created_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-service-template-product-usages" vertex="1">
+                    <mxGeometry y="162" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-product-suggestions" value="salon_product_suggestions" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="970" y="620" width="255" height="162" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-product-suggestions-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-product-suggestions" vertex="1">
+                    <mxGeometry y="30" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-product-suggestions-f2" value="salon_client_id : UUID FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-product-suggestions" vertex="1">
+                    <mxGeometry y="52" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-product-suggestions-f3" value="product_id : UUID FK products" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-product-suggestions" vertex="1">
+                    <mxGeometry y="74" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-product-suggestions-f4" value="reason : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-product-suggestions" vertex="1">
+                    <mxGeometry y="96" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-product-suggestions-f5" value="generated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-product-suggestions" vertex="1">
+                    <mxGeometry y="118" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-salon-product-suggestions-f6" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m5-final-salon-product-suggestions" vertex="1">
+                    <mxGeometry y="140" width="255" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-1" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-clients" target="m5-final-clients-m2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-2" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-services" target="m5-final-salon-clients" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-3" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-services" target="m5-final-clients-m2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-4" value="recorded" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-services" target="m5-final-users-m1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-5" value="1:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-technical-sheets" target="m5-final-salon-services" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-6" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-product-usages" target="m5-final-salon-services" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-7" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-product-usages" target="m5-final-products-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-8" value="N:1 opcional" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-product-usages" target="m5-final-color-references-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-9" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-result-images" target="m5-final-salon-services" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-10" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-templates" target="m5-final-clients-m2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-11" value="created" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-templates" target="m5-final-users-m1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-12" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-template-product-usages" target="m5-final-salon-service-templates" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-13" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-template-product-usages" target="m5-final-products-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-14" value="N:1 opcional" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-service-template-product-usages" target="m5-final-color-references-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-15" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-product-suggestions" target="m5-final-salon-clients" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5-final-rel-16" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m5-final-salon-product-suggestions" target="m5-final-products-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>

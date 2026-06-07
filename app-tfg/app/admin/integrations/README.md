@@ -1,7 +1,7 @@
 # Integraciones admin
 
-Vista de estado y preparacion de integraci?nes externas.
+Vista de estado y preparación de integraciones externas.
 
-## Funci?n
+## Función
 
 Centralizar el punto de entrada para servicios como FactuSOL, n8n u otros conectores futuros.

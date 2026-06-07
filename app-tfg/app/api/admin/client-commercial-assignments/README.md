@@ -2,6 +2,6 @@
 
 Endpoint de asignaciones.
 
-## Funci?n
+## Función
 
 Crear o consultar relaciones entre clientes y comerciales.

@@ -1,6 +1,6 @@
 A continuación se detallan los requisitos funcionales identificados para el sistema.  Los requisitos funcionales describen los servicios que el sistema debe proporcionar  y el comportamiento esperado ante determinadas situaciones de uso  \cite[Chap.~4.1.1, pp.~85--87]{sommerville}.
 
-La identificación de los requisitos funcionales se ha realizado mediante identificadores únicos que permiten su referencia y trazabilidad a lo largo del documento. Esta práctica sigue las recomendaciones del estándar ISO/IEC/IEEE 29148 para la ingeniería de requisitos, que establece que cada requisito debe contar con un identificador único que facilite su seguimiento y gestión dentro de la especificación \cite{ieee29148}.
+La identificación de los requisitos funcionales se ha realizado mediante identificadores únicos que permiten su referencia y trazabilidad a lo largo del documento. Esta práctica sigue las recomendaciones del estándar ISO/IEC/IEEE 29148 para la ingeniería de requisitos, que establece que cada requisito debe contar con un identificador único que facilite su seguimiento y gestión dentro de la específicación \cite{ieee29148}.
 
 
 % ------------------------------------------------------------------------------
@@ -115,6 +115,9 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
     \item El sistema debe permitir registrar observaciones, resultados y cambios de estado asociados a cada visita realizada.
     \item El sistema debe considerar la hora exacta de la visita como una información dinámica derivada de la planificación diaria, en lugar de como un dato fijo almacenado en la propia visita.
     \item Si la franja horaria permitida para visitar a un cliente ya se ha superado, el sistema debe poder aplazar la visita para su posterior replanificación.
+    \item El sistema debe avisar al cliente profesional cuando se cree una nueva visita o cuando una visita previamente aplazada se reubique en una nueva fecha.
+    \item El sistema debe avisar al comercial cuando una o varias visitas queden aplazadas automáticamente por haber superado la fecha prevista o la ventana horaria permitida del cliente, facilitando su posterior reubicación.
+    \item El sistema debe generar un recordatorio interno para el cliente cuando tenga una visita planificada para el día actual, evitando duplicados para la misma visita y fecha.
 \end{itemize}
 
 \vspace{-0.75em}
@@ -166,7 +169,7 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
 \begin{itemize}
     \item El sistema debe permitir clasificar los productos en categorías, líneas comerciales y subcategorías jerárquicas.
     \item El sistema debe permitir localizar productos mediante mecanismos de búsqueda o filtrado basados en dicha clasificación.
-    \item El sistema debe permitir localizar referencias cromáticas dentro de las cartas de color mediante código, nombre o navegacion estructurada.
+    \item El sistema debe permitir localizar referencias cromáticas dentro de las cartas de color mediante código, nombre o navegación estructurada.
 \end{itemize}
 
 \vspace{-0.75em}
@@ -176,7 +179,7 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
 \begin{itemize}
     \item El sistema debe permitir consultar cartas de color asociadas a las líneas de coloración disponibles.
     \item El sistema debe permitir visualizar las referencias de color organizadas según su nomenclatura comercial y su orden de presentacion.
-    \item El sistema debe facilitar la localizacion rapida de tonos o referencias concretas dentro de cada carta de color.
+    \item El sistema debe facilitar la localización rápida de tonos o referencias concretas dentro de cada carta de color.
     \item El sistema debe permitir, cuando proceda, asociar referencias de color a productos pedibles del catálogo.
 \end{itemize}
 
@@ -187,7 +190,7 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
 \begin{itemize}
     \item El sistema debe permitir al distribuidor administrador gestionar categorías, líneas comerciales, subcategorías, productos, recursos de apoyo, cartas de color y referencias cromáticas.
     \item El administrador debe poder añadir, modificar o desactivar productos dentro del sistema.
-    \item El sistema debe permitir actualizar la información asociada a los productos, incluyendo imágenes, descripciones, datos técnicos y materiales de apoyo.
+    \item El sistema debe permitir actualizar la información asociada a los productos, incluyendo imágenes, descripciónes, datos técnicos y materiales de apoyo.
     \item El sistema debe permitir subir y reemplazar imágenes de catálogo en almacenamiento externo controlado.
     \item El sistema debe permitir definir si una referencia de color es pedible y, en su caso, vincularla al producto correspondiente.
 \end{itemize}
@@ -201,7 +204,7 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
 \vspace{-1em}
 
 \begin{itemize}
-    \item El sistema debe permitir la creacion y gestión de pedidos de productos por parte de clientes profesionales o agentes comerciales autorizados.
+    \item El sistema debe permitir la creación y gestión de pedidos de productos por parte de clientes profesionales o agentes comerciales autorizados.
     \item El sistema debe permitir crear, recuperar y seguir editando borradores de pedido antes de su confirmación.
     \item El sistema debe permitir seleccionar productos del catálogo, cantidades y, cuando proceda, referencias cromáticas asociadas a cada línea.
     \item El sistema debe calcular y persistir el importe total del pedido a partir de sus líneas.
@@ -230,7 +233,7 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
 \begin{itemize}
     \item El sistema debe permitir registrar el cobro asociado a un pedido entregado.
     \item El sistema debe permitir distinguir, al menos, entre pedidos con cobro \texttt{pending} y pedidos con cobro \texttt{paid}.
-    \item El sistema debe permitir registrar metodo de cobro, fecha y notas asociadas al cambio de estado de cobro.
+    \item El sistema debe permitir registrar método de cobro, fecha y notas asociadas al cambio de estado de cobro.
     \item El sistema debe permitir revertir un pedido a \texttt{pending} cuando la regla de negocio vigente lo permita y la consistencia del flujo se mantenga.
     \item \textcolor{red}{El sistema no cubre en esta iteración pagos parciales, facturación ni conciliación avanzada.}
 \end{itemize}
@@ -374,7 +377,10 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
     \item Las notificaciones deberán mostrarse dentro de la aplicación y permitir marcar su estado de lectura.
     \item El sistema debe mostrar un indicador de avisos pendientes en los paneles de inicio de los roles que reciben comunicaciones internas.
     \item El sistema debe permitir crear recordatorios personales con fecha programada y estado de seguimiento.
-    \item \textcolor{red}{La integración con servicios externos de mensajería, correo electrónico o \textit{WhatsApp} queda fuera del alcance implementado en esta iteración.}
+    \item El sistema debe permitir que el administrador seleccione canales de entrega para promociones y formaciones, manteniendo siempre el canal interno y pudiendo añadir correo electrónico y Web Push cuando estén configurados.
+    \item El sistema debe permitir a clientes y comerciales activar o desactivar suscripciones Web Push desde la pantalla de avisos, siempre que el navegador y la PWA lo permitan.
+    \item El sistema debe degradar de forma controlada cuando el correo SMTP, las claves VAPID o la suscripción push del usuario no estén disponibles, conservando al menos la notificación interna.
+    \item \textcolor{red}{La integración con \textit{WhatsApp} u otros canales de mensajería no implementados queda fuera del alcance actual.}
 \end{itemize}
 
 \vspace{-0.75em}
@@ -404,6 +410,7 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
     \item El panel de administración debe permitir gestionar los elementos principales del sistema, tales como usuarios, clientes, catálogo de productos, promociones, pedidos globales, auditoría y configuraciones generales o transversales.
     \item El sistema debe permitir consultar un resumen operativo de las capacidades transversales de \texttt{M7}, agregando auditoría, rate limiting, integraciones y soporte técnico.
     \item El sistema debe permitir exportar dicho resumen operativo en formato \texttt{CSV} como evidencia de revisión y mantenimiento del módulo.
+    \item El sistema debe agrupar las opciones administrativas de configuración en un mismo bloque de navegación, evitando que integraciones, soporte, operación y ajustes transversales queden dispersos.
     \item El sistema debe permitir realizar tareas de mantenimiento y actualización de la información almacenada en la plataforma.
 \end{itemize}
 
@@ -428,9 +435,10 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
     \item \textcolor{red}{Entre dichas integraciones podrán contemplarse servicios de mensajería, sistemas de gestión empresarial o flujos de automatización externos como \texttt{n8n}.}
     \item El sistema debe permitir exportar o intercambiar información con dichos sistemas cuando sea necesario.
     \item En la versión implementada, el sistema ya utiliza servicios externos de soporte para almacenamiento de imágenes, geocodificación, cálculo de rutas y representación del QR operativo de pedido.
+    \item En la versión implementada, el sistema registra también los canales SMTP transaccional y Web Push PWA como integraciones externas de mensajería utilizadas por las notificaciones multicanal de \texttt{M6}.
     \item El administrador debe poder consultar un inventario operativo de integraciones, incluyendo proveedor, estado, configuración relevante, uso dentro de la aplicación y mecanismo de degradación previsto.
     \item El sistema debe degradar de forma controlada cuando una de estas integraciones no pueda responder o no esté disponible temporalmente.
-    \item \textcolor{red}{La conexión directa con proveedores externos de mensajería, automatización empresarial o ERP real queda como evolución posterior sobre el inventario y las entidades persistidas.}
+    \item \textcolor{red}{La conexión directa con proveedores externos de mensajería no implementados, automatización empresarial o ERP real queda como evolución posterior sobre el inventario y las entidades persistidas.}
 \end{itemize}
 
 \vspace{-0.75em}
@@ -489,6 +497,7 @@ La identificación de los requisitos funcionales se ha realizado mediante identi
     \item El sistema debe detectar navegadores por debajo del soporte mínimo definido y redirigir a una página informativa.
     \item El sistema debe exponer un manifiesto web e iconos de instalación para facilitar su uso como aplicación instalable en dispositivos compatibles.
     \item El sistema debe registrar una capa básica de \textit{service worker} para mejorar la experiencia de uso cuando la conectividad falle de forma puntual.
+    \item El \textit{service worker} debe poder recibir eventos Web Push y abrir la ruta de avisos correspondiente cuando el usuario pulse la notificación del sistema.
     \item El administrador debe poder consultar un inventario operativo de soporte técnico, incluyendo navegador mínimo, PWA, \textit{service worker}, evidencias de configuración y comportamiento de degradación.
 \end{itemize}
 

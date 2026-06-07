@@ -68,7 +68,7 @@ Los datos asociados a un estado de solicitud incluyen:
 
 \subsubsection*{Origen de solicitud de registro}
 
-El sistema debe gestionar un catálogo controlado de origenes de solicitud para distinguir como se ha generado cada peticion de alta.
+El sistema debe gestionar un catálogo controlado de origenes de solicitud para distinguir como se ha generado cada petición de alta.
 
 Los datos asociados a un origen de solicitud incluyen:
 
@@ -270,6 +270,8 @@ Los datos asociados a una visita comercial incluyen:
 
 La hora concreta de atención no se almacena como un campo fijo de la visita, sino que se deriva diariamente a partir del algoritmo de planificación, la configuración del comercial y la franja horaria admitida por el cliente.
 
+Las notificaciones operativas asociadas a una visita se apoyan en las entidades de comunicación de \texttt{M6}. No se crea una tabla específica por cada aviso de visita: el origen se identifica mediante el tipo de notificación y el identificador de la visita comercial cuando procede.
+
 \subsubsection*{Estado de visita comercial}
 
 El sistema debe gestionar un catálogo controlado de estados de visita comercial para representar situaciones como planificada, aplazada, completada o cancelada.
@@ -412,7 +414,7 @@ Los datos asociados a una línea comercial incluyen:
 
 \subsubsection*{Subcategoría de producto}
 
-El sistema debe almacenar una clasificación intermedia y jerarquica dentro de cada línea comercial para organizar mejor el catálogo y facilitar su navegacion.
+El sistema debe almacenar una clasificación intermedia y jerárquica dentro de cada línea comercial para organizar mejor el catálogo y facilitar su navegación.
 
 Los datos asociados a una subcategoría de producto incluyen:
 
@@ -424,7 +426,7 @@ Los datos asociados a una subcategoría de producto incluyen:
     \item Subcategoría padre, cuando exista una jerarquía.
     \item Imagen o recurso grafico representativo, cuando exista.
     \item Orden o posición de visualización.
-    \item Fecha de creacion del registro.
+    \item Fecha de creación del registro.
     \item Fecha de última actualización de la subcategoría.
 \end{itemize}
 
@@ -511,7 +513,7 @@ Los datos asociados a un tipo de recurso incluyen:
 
 \subsubsection*{Pedido}
 
-El sistema debe almacenar la información general asociada a cada pedido realizado por un cliente profesional o por un usuario autorizado en su nombre. Esta información permite identificar el pedido, conocer su situación dentro del flujo comercial y relacionarlo tanto con su ciclo logistico como con su situación mínima de cobro.
+El sistema debe almacenar la información general asociada a cada pedido realizado por un cliente profesional o por un usuario autorizado en su nombre. Esta información permite identificar el pedido, conocer su situación dentro del flujo comercial y relacionarlo tanto con su ciclo logístico como con su situación mínima de cobro.
 
 Los datos asociados a un pedido incluyen:
 
@@ -522,19 +524,19 @@ Los datos asociados a un pedido incluyen:
     \item Estado del pedido.
     \item Estado de cobro del pedido.
     \item Visita de reparto vinculada, cuando exista.
-    \item Metodo de cobro, cuando se haya registrado.
+    \item Método de cobro, cuando se haya registrado.
     \item Notas de cobro, cuando se hayan registrado.
     \item Fecha del cobro, cuando exista.
     \item Usuario que marco el cobro, cuando exista.
     \item Importe total del pedido.
     \item Observaciones asociadas al pedido.
-    \item Fecha de creacion del pedido.
+    \item Fecha de creación del pedido.
     \item Fecha de última actualización del pedido.
 \end{itemize}
 
 \subsubsection*{Línea de pedido}
 
-El sistema debe almacenar el detalle de los productos incluidos en cada pedido. Esta información permite conocer que productos se han solicitado, en que cantidades y con que instantanea comercial se consolidaron en el momento del pedido.
+El sistema debe almacenar el detalle de los productos incluidos en cada pedido. Esta información permite conocer que productos se han solicitado, en que cantidades y con que instantánea comercial se consolidaron en el momento del pedido.
 
 Los datos asociados a una línea de pedido incluyen:
 
@@ -542,7 +544,7 @@ Los datos asociados a una línea de pedido incluyen:
     \item Identificador de la línea de pedido.
     \item Pedido asociado.
     \item Producto incluido en la línea.
-    \item Referencia cromatica asociada, cuando proceda.
+    \item Referencia cromática asociada, cuando proceda.
     \item Cantidad solicitada.
     \item Precio unitario consolidado en el momento del pedido.
     \item Porcentaje de descuento aplicado a la línea.
@@ -577,7 +579,7 @@ Los datos asociados a un estado de cobro incluyen:
 
 \subsubsection*{Visita comercial de reparto vinculada}
 
-La implementación actual reutiliza la entidad de visita comercial del módulo \texttt{M2} para modelar la fase logistica del pedido. Cuando un pedido queda asociado a un reparto, la relación se almacena mediante una visita comercial de tipo entrega o reparto.
+La implementación actual reutiliza la entidad de visita comercial del módulo \texttt{M2} para modelar la fase logística del pedido. Cuando un pedido queda asociado a un reparto, la relación se almacena mediante una visita comercial de tipo entrega o reparto.
 
 Los datos relevantes de esa visita vinculada incluyen:
 
@@ -591,7 +593,7 @@ Los datos relevantes de esa visita vinculada incluyen:
     \item Observaciones o resultado asociados a la visita.
 \end{itemize}
 
-En la implementación actual no existe una entidad de cobro independiente ni una entidad de entrega separada del subsistema de visitas comerciales. El seguimiento mínimo del cobro se resuelve sobre el propio pedido y la fase logistica reutiliza visitas comerciales de tipo reparto.
+En la implementación actual no existe una entidad de cobro independiente ni una entidad de entrega separada del subsistema de visitas comerciales. El seguimiento mínimo del cobro se resuelve sobre el propio pedido y la fase logística reutiliza visitas comerciales de tipo reparto.
 % ------------------------------------------------------------------------------
 \subsection{RI-M5}
 % ------------------------------------------------------------------------------
@@ -765,6 +767,26 @@ Para cada notificación el sistema debe registrar:
     \item Fecha de lectura, cuando corresponda.
 \end{itemize}
 
+El canal persistido en la notificación interna identifica la entrada principal dentro de la aplicación. Cuando el usuario o el administrador habilitan canales externos, el sistema puede derivar el mismo aviso hacia correo electrónico o Web Push sin duplicar la entidad de notificación interna.
+
+\subsubsection*{Suscripción push de usuario}
+
+El sistema debe almacenar las suscripciones Web Push activadas por clientes y comerciales desde la PWA o desde un navegador compatible. Esta información permite enviar notificaciones del sistema al dispositivo cuando el usuario haya concedido permiso.
+
+Para cada suscripción push el sistema debe registrar:
+
+\begin{itemize}
+    \item Identificador de la suscripción.
+    \item Usuario propietario de la suscripción.
+    \item Endpoint Web Push único proporcionado por el navegador.
+    \item Claves públicas \texttt{p256dh} y \texttt{auth} necesarias para cifrar la notificación.
+    \item Fecha de expiración comunicada por el navegador, cuando exista.
+    \item Agente de usuario del dispositivo o navegador.
+    \item Fecha de último uso de la suscripción.
+    \item Fecha de revocación, cuando el usuario desactive el canal o el proveedor indique que la suscripción ya no es válida.
+    \item Fechas de creación y última actualización.
+\end{itemize}
+
 \subsubsection*{Recordatorio}
 
 El sistema debe permitir almacenar recordatorios asociados a eventos o acciones relevantes del sistema, como visitas comerciales programadas o fechas de entrega de pedidos.
@@ -851,7 +873,7 @@ Para cada integración externa el sistema debe registrar:
     \item Fecha de última actualización de la integración.
 \end{itemize}
 
-En el incremento actual de \texttt{M7}, la aplicación persiste ya un registro básico de integraciones externas y operaciones de intercambio. Esta información se consulta desde \path{/admin/enterprise-operations} y permite diferenciar el inventario técnico calculado de los servicios de soporte respecto al registro empresarial de integraciones, estados, configuraciones y ejecuciones. \textcolor{red}{La integración con Factusol mediante \texttt{n8n} queda registrada como punto preparado, aunque su automatización completa depende de credenciales y configuración real del cliente.}
+En el incremento actual de \texttt{M7}, la aplicación persiste ya un registro básico de integraciones externas y operaciones de intercambio. Esta información se consulta desde \path{/admin/enterprise-operations} y permite diferenciar el inventario técnico calculado de los servicios de soporte respecto al registro empresarial de integraciones, estados, configuraciones y ejecuciones. Dentro de este inventario se registran también las integraciones \textit{SMTP transaccional} y \textit{Web Push PWA}, utilizadas por el sistema de notificaciones multicanal de \texttt{M6}. \textcolor{red}{La integración con Factusol mediante \texttt{n8n} queda registrada como punto preparado, aunque su automatización completa depende de credenciales y configuración real del cliente.}
 
 De forma análoga, el inventario de soporte técnico incorporado en \path{/admin/support} no crea una entidad persistente propia. Su información se deriva de elementos ya existentes en el proyecto, como \path{proxy.ts}, \path{app/manifest.ts}, \path{public/sw.js}, los iconos PWA y componentes transversales de experiencia de usuario. Por tanto, actúa como una vista de observabilidad administrativa y no como una tabla adicional del modelo de datos.
 

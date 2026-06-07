@@ -1,9 +1,9 @@
 # Tabla generica de entidades
 
-Sistema reutilizable de listados, filtros, b?squeda, ordenacion y tarjetas.
+Sistema reutilizable de listados, filtros, búsqueda, ordenacion y tarjetas.
 
-## Funci?n
+## Función
 
-Renderizar entidades distintas con una configuraci?n comun: usuarios, productos, clientes, referencias o recursos.
+Renderizar entidades distintas con una configuración común: usuarios, productos, clientes, referencias o recursos.
 
-La app contiene muchas tablas/listados. Este componente reduce duplicacion y mantiene filtros persistentes y tarjetas coherentes.
+La app contiene muchas tablas/listados. Este componente reduce duplicación y mantiene filtros persistentes y tarjetas coherentes.

@@ -2,15 +2,15 @@
 
 Carpeta principal de Next.js App Router.
 
-## Qu? contiene
+## Qué contiene
 
-- Rutas de pagina por rol.
+- Rutas de página por rol.
 - Layouts y pantallas publicas.
 - Route Handlers bajo `api/`.
 - Componentes compartidos bajo `components/`.
 
-## Funci?n
+## Función
 
-Representar la estructura navegable de la aplicaci?n y conectar cada ?rea funci?nal con sus componentes y servicios.
+Representar la estructura navegable de la aplicación y conectar cada área funcional con sus componentes y servicios.
 
 Next.js usa esta carpeta como punto de entrada para rutas, layouts, metadata y endpoints server-side.

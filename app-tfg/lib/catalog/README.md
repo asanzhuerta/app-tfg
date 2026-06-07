@@ -1,9 +1,9 @@
-# Dominio de cat?logo
+# Dominio de catálogo
 
-Logica compartida para cat?logo, productos, coloraci?n y recursos t?cnicos.
+Lógica compartida para catálogo, productos, coloración y recursos técnicos.
 
-## Funci?n
+## Función
 
-Apoyar consultas, serializacion, filtros, im?genes y relaciones de productos.
+Apoyar consultas, serializacion, filtros, imágenes y relaciones de productos.
 
-El cat?logo se usa en varios roles y en scripts de carga. Centralizar su l?gica evita duplicados.
+El catálogo se usa en varios roles y en scripts de carga. Centralizar su lógica evita duplicados.

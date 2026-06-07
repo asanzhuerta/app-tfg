@@ -1,7 +1,7 @@
 # Admin referencias de color
 
-CRUD de tonos o referencias crom?ticas.
+CRUD de tonos o referencias cromáticas.
 
-## Funci?n
+## Función
 
-Gestionar c?digos, nombres, im?genes y relacion con cartas de color.
+Gestionar códigos, nombres, imágenes y relación con cartas de color.

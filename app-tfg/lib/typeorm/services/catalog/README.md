@@ -1,7 +1,7 @@
-# Servicios cat?logo
+# Servicios catálogo
 
-Consultas y operaci?nes de cat?logo.
+Consultas y operaciones de catálogo.
 
-## Funci?n
+## Función
 
-Gestionar productos, categor?as, l?neas, subcategor?as, cartas, referencias y recursos.
+Gestionar productos, categorías, líneas, subcategorías, cartas, referencias y recursos.

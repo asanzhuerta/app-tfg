@@ -1,7 +1,7 @@
-# API subida de imagen cat?logo
+# API subida de imagen catálogo
 
-Endpoint de subida de im?genes de cat?logo.
+Endpoint de subida de imágenes de catálogo.
 
-## Funci?n
+## Función
 
-Subir im?genes a Cloudinary desde formularios administrativos.
+Subir imágenes a Cloudinary desde formularios administrativos.

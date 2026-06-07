@@ -1,6 +1,6 @@
 # M4 Demo Script
 
-> Ultima actualizacion: `2026-06-01`
+> Última actualización: `2026-06-01`
 > Objetivo: defender `M4 - Pedidos, entregas y cobros` en `2-3` minutos sin improvisar.
 
 ## Credenciales
@@ -13,7 +13,7 @@
 
 Cliente de referencia:
 
-- `Salon de belleza Lucy`
+- `Salón de belleza Lucy`
 
 Pedidos utiles:
 
@@ -37,14 +37,14 @@ Visitas utiles:
 1. `2bfecabf-6992-4c72-89c0-485555e53ff7`
    Tipo: `delivery`
    Estado: `completed`
-   Cliente: `Salon de belleza Lucy`
+   Cliente: `Salón de belleza Lucy`
    Pedidos vinculados: `1`
    Nota: `M4 demo delivered pending visit`
 
 2. `0a650fea-1ab3-4353-9e78-2d3ea26b4f60`
    Tipo: `delivery`
    Estado: `planned`
-   Cliente: `Salon de belleza Lucy`
+   Cliente: `Salón de belleza Lucy`
    Pedidos vinculados: `1`
 
 3. `531f20a0-6bf2-455e-b4e6-424bceb04a14`
@@ -104,8 +104,8 @@ Que ensenar:
 
 Que decir:
 
-- "Una vez entregado, el pedido pasa al flujo minimo de cobro."
-- "Desde esta pantalla el comercial puede registrar metodo, fecha y notas."
+- "Una vez entregado, el pedido pasa al flujo mínimo de cobro."
+- "Desde esta pantalla el comercial puede registrar método, fecha y notas."
 
 ### 4. Admin - trazabilidad global
 
@@ -118,7 +118,7 @@ Que ensenar:
 - Estado del pedido.
 - Estado del cobro.
 - Cliente.
-- Lineas del pedido.
+- Líneas del pedido.
 - Visita vinculada.
 
 Que decir:
@@ -139,14 +139,14 @@ Que decir:
 
 ## Frases utiles para la defensa
 
-- "M4 cubre el flujo pedido -> reparto -> entrega -> cobro minimo."
-- "No estoy cubriendo pagos parciales, facturacion ni conciliacion avanzada; eso queda fuera de alcance."
-- "La aplicacion ya soporta los roles implicados y la trazabilidad entre pedido, visita de reparto y cobro."
+- "M4 cubre el flujo pedido -> reparto -> entrega -> cobro mínimo."
+- "No estoy cubriendo pagos parciales, facturación ni conciliación avanzada; eso queda fuera de alcance."
+- "La aplicación ya soporta los roles implicados y la trazabilidad entre pedido, visita de reparto y cobro."
 
 ## Riesgos conocidos antes de la defensa
 
 - `next build --webpack` ya pasa en local sin depender de `Google Fonts`.
-- El alcance de cobros sigue siendo minimo: no cubre pagos parciales, facturacion ni conciliacion avanzada.
+- El alcance de cobros sigue siendo mínimo: no cubre pagos parciales, facturación ni conciliación avanzada.
 
 ## Nota operativa
 

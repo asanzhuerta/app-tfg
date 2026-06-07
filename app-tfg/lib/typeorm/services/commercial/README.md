@@ -2,6 +2,6 @@
 
 Operaciones de datos para comerciales.
 
-## Funci?n
+## Función
 
-Gestionar visitas, rutas, clientes asignados y configuraci?n comercial.
+Gestionar visitas, rutas, clientes asignados y configuración comercial.

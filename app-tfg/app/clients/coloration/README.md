@@ -1,7 +1,7 @@
-# Coloraci?n cliente
+# Coloración cliente
 
 Consulta de cartas y tonos de color.
 
-## Funci?n
+## Función
 
-Permitir navegar por l?neas, cartas y referencias crom?ticas disponibles.
+Permitir navegar por líneas, cartas y referencias cromáticas disponibles.

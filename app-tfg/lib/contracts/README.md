@@ -1,8 +1,8 @@
 # Contratos compartidos
 
-Tipos, DTOs y validaci?nes de entrada/salida compartidos entre API, servicios y componentes.
+Tipos, DTOs y validaciones de entrada/salida compartidos entre API, servicios y componentes.
 
-## Funci?n
+## Función
 
 Definir la forma esperada de los datos cuando se crean o actualizan entidades.
 

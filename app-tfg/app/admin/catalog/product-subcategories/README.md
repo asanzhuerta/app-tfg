@@ -1,7 +1,7 @@
-# Admin subcategor?as
+# Admin subcategorías
 
-CRUD de subcategor?as de producto.
+CRUD de subcategorías de producto.
 
-## Funci?n
+## Función
 
-Clasificar productos dentro de una l?nea comercial concreta.
+Clasificar productos dentro de una línea comercial concreta.

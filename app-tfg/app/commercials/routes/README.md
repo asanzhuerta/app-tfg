@@ -1,7 +1,7 @@
 # Rutas comercial
 
-Mapa y planificaci?n de ruta diaria.
+Mapa y planificación de ruta diaria.
 
-## Funci?n
+## Función
 
 Mostrar visitas, orden recomendado y contexto de desplazamiento.

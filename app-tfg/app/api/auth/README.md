@@ -1,7 +1,7 @@
 # API auth
 
-Endpoints de autenticaci?n.
+Endpoints de autenticación.
 
-## Funci?n
+## Función
 
 Gestionar NextAuth, logout y solicitudes publicas de registro.

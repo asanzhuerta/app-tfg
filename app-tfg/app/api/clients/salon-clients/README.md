@@ -1,7 +1,7 @@
-# API clientes del sal?n
+# API clientes del salón
 
-Endpoints de fichas t?cnicas de sal?n.
+Endpoints de fichas técnicas de salón.
 
-## Funci?n
+## Función
 
-Gestionar clientes internos, servicios y datos t?cnicos.
+Gestionar clientes internos, servicios y datos técnicos.

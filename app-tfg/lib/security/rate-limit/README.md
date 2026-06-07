@@ -1,7 +1,7 @@
 # Rate limiting
 
-Implementacion de limites de peticion.
+Implementación de límites de petición.
 
-## Funci?n
+## Función
 
 Proteger endpoints sensibles frente a abuso o errores de cliente.

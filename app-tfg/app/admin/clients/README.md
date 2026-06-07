@@ -1,7 +1,7 @@
 # Clientes admin
 
-Gestion de clientes profesionales y asignaciones comerciales.
+Gestión de clientes profesionales y asignaciones comerciales.
 
-## Funci?n
+## Función
 
 Consultar clientes, editar datos operativos y asignar comerciales responsables.

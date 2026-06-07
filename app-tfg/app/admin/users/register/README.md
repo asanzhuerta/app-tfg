@@ -1,7 +1,7 @@
 # Alta de usuarios
 
-Formulario de creacion directa de usuarios.
+Formulario de creación directa de usuarios.
 
-## Funci?n
+## Función
 
-Permitir a administraci?n crear cuentas sin pasar por solicitud publica.
+Permitir a administración crear cuentas sin pasar por solicitud pública.

@@ -1,7 +1,7 @@
-# API subcategor?as
+# API subcategorías
 
-CRUD de subcategor?as.
+CRUD de subcategorías.
 
-## Funci?n
+## Función
 
-Gestionar clasificacion interna de productos por l?nea.
+Gestionar clasificacion interna de productos por línea.

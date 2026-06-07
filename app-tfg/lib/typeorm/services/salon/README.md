@@ -1,7 +1,7 @@
-# Servicios sal?n
+# Servicios salón
 
-Persistencia de fichas t?cnicas de sal?n.
+Persistencia de fichas técnicas de salón.
 
-## Funci?n
+## Función
 
-Gestionar clientes internos, servicios, plantillas, productos usados e im?genes de resultado.
+Gestionar clientes internos, servicios, plantillas, productos usados e imágenes de resultado.

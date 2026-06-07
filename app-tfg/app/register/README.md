@@ -1,9 +1,9 @@
 # Solicitud de acceso
 
-Pantalla publica para solicitar alta en la aplicaci?n.
+Pantalla pública para solicitar alta en la aplicación.
 
-## Funci?n
+## Función
 
-Recoger datos iniciales de un sal?n o usuario que quiere acceso y crear una solicitud revisable por administraci?n.
+Recoger datos iniciales de un salón o usuario que quiere acceso y crear una solicitud revisable por administración.
 
-El sistema no permite autoalta libre; el alta debe quedar controlada por administraci?n para mantener seguridad y calidad de datos.
+El sistema no permite autoalta libre; el alta debe quedar controlada por administración para mantener seguridad y calidad de datos.

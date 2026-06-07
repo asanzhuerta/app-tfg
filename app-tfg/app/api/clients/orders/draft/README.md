@@ -2,6 +2,6 @@
 
 Endpoint de borrador de pedido para cliente.
 
-## Funci?n
+## Función
 
-Crear y mantener l?neas de pedido antes de confirmar.
+Crear y mantener líneas de pedido antes de confirmar.

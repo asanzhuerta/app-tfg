@@ -1,7 +1,7 @@
-# API cat?logo admin
+# API catálogo admin
 
-Endpoints administrativos de cat?logo.
+Endpoints administrativos de catálogo.
 
-## Funci?n
+## Función
 
-Dar soporte al CRUD de productos, categor?as, l?neas, subcategor?as, cartas, referencias e im?genes.
+Dar soporte al CRUD de productos, categorías, líneas, subcategorías, cartas, referencias e imágenes.

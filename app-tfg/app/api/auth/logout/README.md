@@ -1,7 +1,7 @@
 # API logout
 
-Endpoint de cierre de sesi?n.
+Endpoint de cierre de sesión.
 
-## Funci?n
+## Función
 
-Revocar la sesi?n y registrar la salida del usuario.
+Revocar la sesión y registrar la salida del usuario.

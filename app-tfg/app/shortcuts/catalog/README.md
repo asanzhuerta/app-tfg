@@ -1,7 +1,7 @@
-# Atajo cat?logo
+# Atajo catálogo
 
-Atajo PWA hacia el cat?logo correspondiente al rol.
+Atajo PWA hacia el catálogo correspondiente al rol.
 
-## Funci?n
+## Función
 
-Redirigir rapidamente al cat?logo cuando la app esta instalada.
+Redirigir rápidamente al catálogo cuando la app está instalada.

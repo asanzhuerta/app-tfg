@@ -2,6 +2,6 @@
 
 Endpoints de pedidos del comercial.
 
-## Funci?n
+## Función
 
-Crear, consultar y gesti?nar pedidos vinculados a sus clientes.
+Crear, consultar y gestionar pedidos vinculados a sus clientes.

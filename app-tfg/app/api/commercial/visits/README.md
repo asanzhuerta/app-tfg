@@ -2,6 +2,6 @@
 
 Endpoints de visitas del comercial.
 
-## Funci?n
+## Función
 
 Crear, consultar y actualizar visitas a clientes asignados.

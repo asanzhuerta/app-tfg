@@ -2,6 +2,6 @@
 
 Endpoints administrativos de clientes.
 
-## Funci?n
+## Función
 
 Consultar, editar y preparar datos operativos de clientes profesionales.

@@ -2,6 +2,6 @@
 
 CRUD de cartas de color.
 
-## Funci?n
+## Función
 
-Crear, editar y listar cartas crom?ticas asociadas a l?neas comerciales.
+Crear, editar y listar cartas cromáticas asociadas a líneas comerciales.

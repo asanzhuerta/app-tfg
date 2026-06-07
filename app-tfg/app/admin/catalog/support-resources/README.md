@@ -1,7 +1,7 @@
 # Admin recursos de apoyo
 
-CRUD de documentaci?n y recursos t?cnicos.
+CRUD de documentación y recursos técnicos.
 
-## Funci?n
+## Función
 
-Asociar archivos, enlaces o recursos de soporte a productos o l?neas comerciales.
+Asociar archivos, enlaces o recursos de soporte a productos o líneas comerciales.

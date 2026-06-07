@@ -1,7 +1,7 @@
-# Auditoria admin
+# Auditoría admin
 
-Pantallas de accesos, acciones y sesi?nes.
+Pantallas de accesos, acciones y sesiones.
 
-## Funci?n
+## Función
 
-Permitir revisar trazabilidad operativa y exportar informaci?n de auditor?a.
+Permitir revisar trazabilidad operativa y exportar información de auditoría.

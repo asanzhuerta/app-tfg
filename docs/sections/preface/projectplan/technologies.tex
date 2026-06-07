@@ -1,4 +1,4 @@
-La selección tecnologica del proyecto se ha realizado atendiendo a tres criterios principales: la necesidad de construir una aplicación web full-stack mantenible, la conveniencia de reutilizar una única base de código para cliente y servidor y la necesidad de integrar servicios externos de soporte para mapas, geocodificación, imágenes y representación de QR.
+La selección tecnológica del proyecto se ha realizado atendiendo a tres criterios principales: la necesidad de construir una aplicación web full-stack mantenible, la conveniencia de reutilizar una única base de código para cliente y servidor y la necesidad de integrar servicios externos de soporte para mapas, geocodificación, imágenes y representación de QR.
 
 \subsection{Tecnologías de desarrollo web}
 
@@ -8,7 +8,7 @@ Para la capa visual se emplea \textbf{Tailwind CSS}, que permite construir inter
 
 \subsection{Persistencia y acceso a datos}
 
-La persistencia de datos se resuelve con \textbf{PostgreSQL}, elegido por su robustez como base de datos relacional y por su adecuación para modelar usuarios, clientes, catálogo, visitas, pedidos y estados de negocio enlazados entre si \citep{postgresdocs2026}. Sobre ella se utiliza \textbf{TypeORM} como capa ORM, con entidades tipadas y migraciones versionadas que permiten evolucionar el esquema sin perder trazabilidad \citep{typeormentities2026,typeormmigrations2026}.
+La persistencia de datos se resuelve con \textbf{PostgreSQL}, elegido por su robustez como base de datos relacional y por su adecuación para modelar usuarios, clientes, catálogo, visitas, pedidos y estados de negocio enlazados entre sí \citep{postgresdocs2026}. Sobre ella se utiliza \textbf{TypeORM} como capa ORM, con entidades tipadas y migraciones versionadas que permiten evolucionar el esquema sin perder trazabilidad \citep{typeormentities2026,typeormmigrations2026}.
 
 Este enfoque encaja especialmente bien con el proyecto, ya que la aplicación necesita integridad referencial, control de estados y reconstruccion repetible del esquema en distintos entornos.
 
@@ -59,7 +59,7 @@ Los accesos directos del manifiesto no sustituyen al control de autorización. C
 
 El \textit{service worker} evita cachear rutas de API y zonas privadas como pedidos, rutas, perfiles o administración. Ante una caída de red, las navegaciones protegidas se degradan hacia \path{/offline}, manteniendo una experiencia informativa sin presentar datos operativos posiblemente obsoletos.
 
-\textcolor{red}{No se trata todavía de una PWA avanzada con sincronización offline completa}, pero si de una base coherente con el uso móvil previsto para la aplicación.
+\textcolor{red}{No se trata todavía de una PWA avanzada con sincronización offline completa}, pero sí de una base coherente con el uso móvil previsto para la aplicación.
 
 La estabilidad del enlace de pruebas externas también influye en esta experiencia. Poder reutilizar una URL persistente del túnel de desarrollo simplifica la instalación continuada de la PWA en dispositivos móviles, ya que el acceso habitual puede mantenerse sobre el mismo origen durante las sesiones de prueba.
 
@@ -67,4 +67,4 @@ La estabilidad del enlace de pruebas externas también influye en esta experienc
 
 La memoria del proyecto se mantiene en \textbf{LaTeX}, por su adecuación para documentos académicos extensos y por la facilidad con la que gestiona referencias cruzadas, tablas, figuras y bibliografía. Para diagramas y apoyo visual se han utilizado herramientas como \textbf{Draw.io} e \textbf{Inkscape}.
 
-En conjunto, la pila tecnologica elegida permite sostener una aplicación web moderna, modular y evolutiva, manteniendo una relación directa entre requisitos, implementación y despliegue.
+En conjunto, la pila tecnológica elegida permite sostener una aplicación web moderna, modular y evolutiva, manteniendo una relación directa entre requisitos, implementación y despliegue.

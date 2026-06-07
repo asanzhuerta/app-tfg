@@ -1,7 +1,7 @@
 # Notificaciones
 
-Logica compartida de notificaciones.
+Lógica compartida de notificaciones.
 
-## Funci?n
+## Función
 
 Preparar mensajes, suscripciones y soporte para avisos internos o push.

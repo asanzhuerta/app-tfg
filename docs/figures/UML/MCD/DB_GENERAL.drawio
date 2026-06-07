@@ -2001,4 +2001,165 @@
             </root>
         </mxGraphModel>
     </diagram>
+    <diagram name="BD general - Modelo final por módulos" id="db-general-modelo-final-bd">
+        <mxGraphModel dx="1600" dy="860" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="860" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="db-final-title" value="BD general - Modelo final por módulos" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="30" width="1100" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-subtitle" value="Resumen consolidado de entidades persistentes reales por módulo y dependencias principales." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="70" width="1050" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m1" value="M1 - Usuarios y seguridad" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="145" width="310" height="118" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m1-f1" value="users, roles, user_status" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m1" vertex="1">
+                    <mxGeometry y="30" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m1-f2" value="user_requests y estados" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m1" vertex="1">
+                    <mxGeometry y="52" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m1-f3" value="user_access_log" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m1" vertex="1">
+                    <mxGeometry y="74" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m1-f4" value="user_management_log" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m1" vertex="1">
+                    <mxGeometry y="96" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m2" value="M2 - Clientes y visitas" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="440" y="145" width="310" height="118" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m2-f1" value="clients, commercials" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m2" vertex="1">
+                    <mxGeometry y="30" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m2-f2" value="client_commercial_assignments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m2" vertex="1">
+                    <mxGeometry y="52" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m2-f3" value="commercial_visits, routes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m2" vertex="1">
+                    <mxGeometry y="74" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m2-f4" value="visit_status, visit_types" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m2" vertex="1">
+                    <mxGeometry y="96" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m3" value="M3 - Catálogo" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="820" y="145" width="310" height="118" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m3-f1" value="product_categories" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m3" vertex="1">
+                    <mxGeometry y="30" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m3-f2" value="product_lines, subcategories" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m3" vertex="1">
+                    <mxGeometry y="52" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m3-f3" value="products, support_resources" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m3" vertex="1">
+                    <mxGeometry y="74" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m3-f4" value="color_charts, color_references" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m3" vertex="1">
+                    <mxGeometry y="96" width="310" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m4" value="M4 - Pedidos" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="145" width="330" height="118" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m4-f1" value="orders, order_lines" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m4" vertex="1">
+                    <mxGeometry y="30" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m4-f2" value="order_statuses" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m4" vertex="1">
+                    <mxGeometry y="52" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m4-f3" value="order_payment_statuses" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m4" vertex="1">
+                    <mxGeometry y="74" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m4-f4" value="referencias a clientes, visitas y catálogo" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m4" vertex="1">
+                    <mxGeometry y="96" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m5" value="M5 - Salón" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="250" y="430" width="330" height="118" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m5-f1" value="salon_clients, salon_services" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m5" vertex="1">
+                    <mxGeometry y="30" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m5-f2" value="technical_sheets, product_usages" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m5" vertex="1">
+                    <mxGeometry y="52" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m5-f3" value="service_templates" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m5" vertex="1">
+                    <mxGeometry y="74" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m5-f4" value="result_images, suggestions" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m5" vertex="1">
+                    <mxGeometry y="96" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m6" value="M6 - Comunicaciones" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="430" width="330" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m6-f1" value="customer_segments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m6" vertex="1">
+                    <mxGeometry y="30" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m6-f2" value="promotions" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m6" vertex="1">
+                    <mxGeometry y="52" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m6-f3" value="training_events, enrollments" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m6" vertex="1">
+                    <mxGeometry y="74" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m6-f4" value="app_notifications, reminders" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m6" vertex="1">
+                    <mxGeometry y="96" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m6-f5" value="user_push_subscriptions" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m6" vertex="1">
+                    <mxGeometry y="118" width="330" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m7" value="M7 - Administración técnica" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="1070" y="430" width="360" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m7-f1" value="app_rate_limit_policies" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m7" vertex="1">
+                    <mxGeometry y="30" width="360" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m7-f2" value="system_configurations" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m7" vertex="1">
+                    <mxGeometry y="52" width="360" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m7-f3" value="external_integrations" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m7" vertex="1">
+                    <mxGeometry y="74" width="360" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m7-f4" value="integration_operations" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m7" vertex="1">
+                    <mxGeometry y="96" width="360" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-m7-f5" value="supplier_order_proposals y líneas" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="db-final-m7" vertex="1">
+                    <mxGeometry y="118" width="360" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-note-1" value="users es la identidad transversal. M2 extiende usuarios para clientes y comerciales. M4, M5, M6 y M7 reutilizan clientes, usuarios y catálogo mediante claves foráneas." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1f2937;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="735" width="760" height="62" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-note-2" value="Las integraciones SMTP y Web Push se registran en M7, mientras que las suscripciones de dispositivo pertenecen a M6 porque dependen del usuario receptor de avisos." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1f2937;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="735" width="650" height="62" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r1" style="edgeStyle=none;html=1;" parent="1" source="db-final-m2" target="db-final-m1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r2" style="edgeStyle=none;html=1;" parent="1" source="db-final-m4" target="db-final-m2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r3" style="edgeStyle=none;html=1;" parent="1" source="db-final-m4" target="db-final-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r4" style="edgeStyle=none;html=1;" parent="1" source="db-final-m5" target="db-final-m2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r5" style="edgeStyle=none;html=1;" parent="1" source="db-final-m5" target="db-final-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r6" style="edgeStyle=none;html=1;" parent="1" source="db-final-m6" target="db-final-m1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r7" style="edgeStyle=none;html=1;" parent="1" source="db-final-m6" target="db-final-m2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r8" style="edgeStyle=none;html=1;" parent="1" source="db-final-m6" target="db-final-m7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r9" style="edgeStyle=none;html=1;" parent="1" source="db-final-m7" target="db-final-m1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-final-r10" style="edgeStyle=none;html=1;" parent="1" source="db-final-m7" target="db-final-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>

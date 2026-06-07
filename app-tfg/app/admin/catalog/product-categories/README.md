@@ -1,7 +1,7 @@
-# Admin categor?as de producto
+# Admin categorías de producto
 
-CRUD de familias principales del cat?logo.
+CRUD de familias principales del catálogo.
 
-## Funci?n
+## Función
 
-Organizar productos por categoria base, como coloraci?n o cuidado capilar.
+Organizar productos por categoría base, como coloración o cuidado capilar.

@@ -509,4 +509,186 @@
             </root>
         </mxGraphModel>
     </diagram>
+    <diagram name="M4 - Modelo final BD" id="m4-modelo-final-bd">
+        <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1050" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="m4-final-title" value="M4 - Modelo final de datos" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="30" width="1050" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-subtitle" value="Pedidos, borradores/confirmación, visita de entrega, QR y seguimiento de pago." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="70" width="1050" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-legend" value="Verde = clave primaria. Rojo = clave foranea. Amarillo = entidad externa referenciada desde otro módulo." style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f8f9fa;strokeColor=#d0d7de;fontSize=11;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="1160" y="30" width="470" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-clients-m2" value="clients (M2)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="120" width="270" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-clients-m2-f1" value="id : UUID PK/FK users" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-clients-m2" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-clients-m2-f2" value="name, address, geodata" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-clients-m2" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-users-m1" value="users (M1)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="120" width="270" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-users-m1-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-users-m1" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-users-m1-f2" value="email, name, role_id, status_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-users-m1" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-commercial-visits-m2" value="commercial_visits (M2)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="120" width="270" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-commercial-visits-m2-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-commercial-visits-m2" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-commercial-visits-m2-f2" value="client_id, commercial_id, scheduled_for_date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-commercial-visits-m2" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-products-m3" value="products (M3)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="370" width="270" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-products-m3-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-products-m3" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-products-m3-f2" value="reference, name, base_price" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-products-m3" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-color-references-m3" value="color_references (M3)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="370" width="270" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-color-references-m3-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-color-references-m3" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-color-references-m3-f2" value="code, name, erp_reference" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-color-references-m3" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders" value="orders" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="370" width="270" height="294" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f2" value="client_id : UUID FK clients" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f3" value="created_by_user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f4" value="status_id : SMALLINT FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f5" value="delivery_visit_id : UUID FK visits NULL" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="118" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f6" value="payment_status_id : SMALLINT FK" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="140" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f7" value="payment_method, payment_notes : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="162" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f8" value="paid_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="184" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f9" value="paid_by_user_id : UUID FK users" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="206" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f10" value="total_amount : NUMERIC(12,2)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="228" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f11" value="notes : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="250" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-orders-f12" value="created_at, updated_at : TIMESTAMPTZ" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-orders" vertex="1">
+                    <mxGeometry y="272" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines" value="order_lines" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="620" width="270" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f1" value="id : UUID PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f2" value="order_id : UUID FK orders" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f3" value="product_id : UUID FK products" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f4" value="color_reference_id : UUID FK NULL" style="text;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="96" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f5" value="quantity : INTEGER" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="118" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f6" value="unit_price_snapshot : NUMERIC(12,2)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="140" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f7" value="discount_percentage : NUMERIC(5,2)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="162" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f8" value="line_total : NUMERIC(12,2)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="184" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f9" value="order_reference_snapshot : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="206" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-lines-f10" value="variant_code/name_snapshot : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-lines" vertex="1">
+                    <mxGeometry y="228" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-statuses" value="order_statuses" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="620" width="270" height="96" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-statuses-f1" value="id : SMALLINT PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-statuses" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-statuses-f2" value="code : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-statuses" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-statuses-f3" value="name : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-statuses" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-payment-statuses" value="order_payment_statuses" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="620" width="270" height="96" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-payment-statuses-f1" value="id : SMALLINT PK" style="text;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-payment-statuses" vertex="1">
+                    <mxGeometry y="30" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-payment-statuses-f2" value="code : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-payment-statuses" vertex="1">
+                    <mxGeometry y="52" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-order-payment-statuses-f3" value="name : TEXT UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=6;spacingRight=6;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontSize=11;" parent="m4-final-order-payment-statuses" vertex="1">
+                    <mxGeometry y="74" width="270" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-rel-1" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m4-final-orders" target="m4-final-clients-m2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-rel-2" value="created/paid" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m4-final-orders" target="m4-final-users-m1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-rel-3" value="delivery" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m4-final-orders" target="m4-final-commercial-visits-m2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-rel-4" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m4-final-orders" target="m4-final-order-statuses" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-rel-5" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m4-final-orders" target="m4-final-order-payment-statuses" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-rel-6" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m4-final-order-lines" target="m4-final-orders" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-rel-7" value="N:1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m4-final-order-lines" target="m4-final-products-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="m4-final-rel-8" value="N:1 opcional" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;fontSize=10;" parent="1" source="m4-final-order-lines" target="m4-final-color-references-m3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>

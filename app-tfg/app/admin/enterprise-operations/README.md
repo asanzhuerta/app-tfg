@@ -1,7 +1,7 @@
 # Operaciones empresariales
 
-Pantallas de soporte a operaci?nes e integraci?nes de negocio.
+Pantallas de soporte a operaciones e integraciones de negocio.
 
-## Funci?n
+## Función
 
-Preparar propuestas, operaci?nes y estados que serviran para automatizaciones externas.
+Preparar propuestas, operaciones y estados que serviran para automatizaciones externas.

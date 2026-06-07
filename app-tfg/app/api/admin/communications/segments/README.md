@@ -2,6 +2,6 @@
 
 CRUD de segmentos comerciales.
 
-## Funci?n
+## Función
 
 Gestionar rangos como Plata, Oro o Platino.

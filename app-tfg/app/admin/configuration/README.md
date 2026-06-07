@@ -1,7 +1,7 @@
-# Configuracion admin
+# Configuración admin
 
-Area reservada para configuraci?n avanzada.
+área reservada para configuración avanzada.
 
-## Funci?n
+## Función
 
-Agrupar ajustes administrativos que no encajan en una entidad funci?nal concreta.
+Agrupar ajustes administrativos que no encajan en una entidad funcional concreta.

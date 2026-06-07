@@ -1,7 +1,7 @@
 # API solicitud de registro
 
-Endpoint publico de solicitud de alta.
+Endpoint público de solicitud de alta.
 
-## Funci?n
+## Función
 
-Guardar solicitudes pendientes para revision administrativa.
+Guardar solicitudes pendientes para revisión administrativa.

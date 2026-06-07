@@ -2,6 +2,6 @@
 
 Formaciones visibles para comercial.
 
-## Funci?n
+## Función
 
-Mostrar contenidos formativos ?tiles para ventas y asesoramiento.
+Mostrar contenidos formativos útiles para ventas y asesoramiento.

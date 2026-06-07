@@ -1,9 +1,9 @@
 # Servicios TypeORM
 
-Consultas y operaci?nes de negocio sobre entidades.
+Consultas y operaciones de negocio sobre entidades.
 
-## Funci?n
+## Función
 
-Encapsular lectura, creacion, actualizacion y borrado de datos para cada m?dulo.
+Encapsular lectura, creación, actualización y borrado de datos para cada módulo.
 
-Evita que componentes y API handlers escriban consultas complejas directamente. Esto mantiene el dominio m?s mantenible.
+Evita que componentes y API handlers escriban consultas complejas directamente. Esto mantiene el dominio más mantenible.

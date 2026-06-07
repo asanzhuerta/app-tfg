@@ -1,7 +1,7 @@
-# API l?neas comerciales
+# API líneas comerciales
 
-CRUD de l?neas comerciales.
+CRUD de líneas comerciales.
 
-## Funci?n
+## Función
 
-Gestionar l?neas y su relacion con categor?as.
+Gestionar líneas y su relación con categorías.

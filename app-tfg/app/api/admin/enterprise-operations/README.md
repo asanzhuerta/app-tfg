@@ -1,7 +1,7 @@
-# API operaci?nes empresariales
+# API operaciones empresariales
 
-Endpoints de operaci?nes e integraci?nes empresariales.
+Endpoints de operaciones e integraciones empresariales.
 
-## Funci?n
+## Función
 
 Preparar datos para propuestas, proveedores y automatizaciones futuras.

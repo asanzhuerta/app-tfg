@@ -2,6 +2,6 @@
 
 Endpoint de perfil comercial.
 
-## Funci?n
+## Función
 
-Consultar y actualizar configuraci?n operativa del comercial.
+Consultar y actualizar configuración operativa del comercial.

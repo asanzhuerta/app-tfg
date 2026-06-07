@@ -1,7 +1,7 @@
 # Ajustes admin
 
-Configuracion de par?metros del sistema.
+Configuración de parámetros del sistema.
 
-## Funci?n
+## Función
 
 Gestionar opciones administrativas como rate limiting u otros ajustes transversales.

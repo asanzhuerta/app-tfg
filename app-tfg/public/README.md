@@ -1,16 +1,16 @@
-# Assets p?blicos
+# Assets públicos
 
 Recursos servidos directamente por Next.js.
 
-## Qu? contiene
+## Qué contiene
 
-- `bgs/`: fondos visuales de landing, login y ?reas por rol.
+- `bgs/`: fondos visuales de landing, login y áreas por rol.
 - `icons/`: iconos, logo y recursos PWA.
-- `manifest.webmanifest`: configuraci?n PWA.
+- `manifest.webmanifest`: configuración PWA.
 - `sw.js`: service worker.
 
-## Funci?n
+## Función
 
-Guardar recursos est?ticos que deben estar disponibles por URL publica.
+Guardar recursos estáticos que deben estar disponibles por URL pública.
 
-Next.js sirve esta carpeta desde la ra?z del sitio. Por eso solo deben vivir aqu? assets finales, no recursos de prueba.
+Next.js sirve esta carpeta desde la raíz del sitio. Por eso solo deben vivir aqué assets finales, no recursos de prueba.

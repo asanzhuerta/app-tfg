@@ -2,6 +2,6 @@
 
 Endpoints de suscripcion push.
 
-## Funci?n
+## Función
 
 Preparar registro de dispositivos para notificaciones PWA.

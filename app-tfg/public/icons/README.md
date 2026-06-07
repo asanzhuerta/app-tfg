@@ -1,8 +1,8 @@
-# Iconos p?blicos
+# Iconos públicos
 
 Logos, iconos PWA y recursos graficos pequenos.
 
-## Funci?n
+## Función
 
 Servir iconos usados por sidebar, manifest, splash screens o identidad visual de la app.
 

@@ -1,7 +1,7 @@
 # API rangos cliente
 
-Endpoints de relacion cliente-rango.
+Endpoints de relación cliente-rango.
 
-## Funci?n
+## Función
 
-Gestionar clasificacion comercial de clientes para ventajas y promoci?nes.
+Gestionar clasificacion comercial de clientes para ventajas y promociones.

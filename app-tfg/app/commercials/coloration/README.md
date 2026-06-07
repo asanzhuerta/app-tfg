@@ -1,7 +1,7 @@
-# Coloraci?n comercial
+# Coloración comercial
 
-Consulta de coloraci?n para comercial.
+Consulta de coloración para comercial.
 
-## Funci?n
+## Función
 
-Explorar cartas y tonos durante asesoramiento o preparacion de pedidos.
+Explorar cartas y tonos durante asesoramiento o preparación de pedidos.

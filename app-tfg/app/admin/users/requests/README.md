@@ -1,7 +1,7 @@
 # Solicitudes de usuario
 
-Revision de solicitudes de acceso.
+Revisión de solicitudes de acceso.
 
-## Funci?n
+## Función
 
-Aprobar o rechazar altas solicitadas desde la pantalla publica de registro.
+Aprobar o rechazar altas solicitadas desde la pantalla pública de registro.

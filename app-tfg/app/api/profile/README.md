@@ -1,7 +1,7 @@
 # API profile
 
-Endpoints de perfil comun.
+Endpoints de perfil común.
 
-## Funci?n
+## Función
 
-Leer y actualizar datos personales, imagen de perfil e informaci?n asociada al usuario.
+Leer y actualizar datos personales, imagen de perfil e información asociada al usuario.

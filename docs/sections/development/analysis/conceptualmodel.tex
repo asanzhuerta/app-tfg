@@ -1,6 +1,6 @@
 A partir de los requisitos de información definidos en la \autoref{sec:InformationRequirements}, se ha elaborado el modelo conceptual de datos correspondiente. Este modelo describe las principales entidades de información que intervienen en el sistema, sus atributos y las relaciones más relevantes entre ellas.
 
-Para mejorar la legibilidad, el modelo conceptual se presenta por módulos. En cada módulo se recogen las clases del dominio ya existentes en la implementación o, \textcolor{red}{cuando el módulo no esta construido todavía, las clases previstas a nivel analitico}.
+Para mejorar la legibilidad, el modelo conceptual se presenta por módulos. En cada módulo se recogen las clases del dominio ya existentes en la implementación o, \textcolor{red}{cuando el módulo no está construido todavía, las clases previstas a nivel analítico}.
 
 \begin{figure}[H]
       \centering
@@ -10,7 +10,7 @@ Para mejorar la legibilidad, el modelo conceptual se presenta por módulos. En c
                   \textcolor{red}{Espacio reservado para incorporar el modelo conceptual global de datos definitivo.}
             \end{minipage}%
       }
-      \caption{\textcolor{red}{Modelo conceptual global de datos pendiente de incorporacion}}
+      \caption{\textcolor{red}{Modelo conceptual global de datos pendiente de incorporación}}
       \label{fig:global-conceptual-model}
 \end{figure}
 
@@ -45,7 +45,7 @@ La clase \textit{Usuario} representa a cada persona o entidad con acceso al sist
 
 \begin{itemize}
       \item El email debe ser único dentro del sistema.
-      \item Todo usuario debe tener un rol valido y un estado valido.
+      \item Todo usuario debe tener un rol válido y un estado válido.
       \item Solo los usuarios activos y autorizados pueden autenticarse.
       \item Si el usuario representa a un cliente profesional, debe existir coherencia con la entidad \textit{Cliente} del módulo \texttt{M2}.
 \end{itemize}
@@ -80,7 +80,7 @@ La clase \textit{Solicitud de registro} representa las peticiones de alta que de
       \item \textit{requested\_at}, \textit{reviewed\_at}: fechas de solicitud y revisión.
       \item \textit{reviewed\_by}: usuario administrador revisor.
       \item \textit{rejection\_reason}: motivo de rechazo, cuando exista.
-      \item \textit{created\_user}: usuario generado tras aprobacion, cuando corresponda.
+      \item \textit{created\_user}: usuario generado tras aprobación, cuando corresponda.
 \end{itemize}
 
 \subsubsection{Clase Registro de administración de usuarios}
@@ -128,7 +128,7 @@ Además de las clases principales ya descritas, la implementación actual normal
 \begin{itemize}
       \item \textit{Estado de usuario}: catálogo de estados permitidos para una cuenta.
       \item \textit{Estado de solicitud de registro}: catálogo del ciclo de revisión de una alta.
-      \item \textit{Origen de solicitud de registro}: procedencia funcional de la peticion de alta.
+      \item \textit{Origen de solicitud de registro}: procedencia funcional de la petición de alta.
       \item \textit{Tipo de acción administrativa}: clasificación de operaciones sobre cuentas.
       \item \textit{Tipo de evento de acceso}: clasificación de eventos de autenticación y sesión.
       \item \textit{Tipo de resultado de acceso}: clasificación de resultados exitosos, fallidos o revocados.
@@ -149,7 +149,7 @@ La clase \textit{Cliente} representa a cada salón profesional atendido por el d
 
 \begin{itemize}
       \item \textit{id}, \textit{name}, \textit{contact\_name}, \textit{tax\_id}: identificación comercial del cliente.
-      \item \textit{address}, \textit{city}, \textit{postal\_code}, \textit{province}: localizacion postal.
+      \item \textit{address}, \textit{city}, \textit{postal\_code}, \textit{province}: localización postal.
       \item \textit{linked\_user}: usuario asociado.
       \item \textit{lat}, \textit{lng}: coordenadas confirmadas.
       \item \textit{visit\_window\_start\_time}, \textit{visit\_window\_end\_time}: franja horaria valida para visitas.
@@ -204,6 +204,8 @@ La clase \textit{Visita comercial} representa la unidad operativa básica de cam
       \item \textit{notes}, \textit{result}: observaciones y cierre operativo.
 \end{itemize}
 
+Las visitas comerciales pueden originar notificaciones de \texttt{M6} cuando se crean, se reubican, quedan aplazadas automáticamente por horario o corresponden al día actual. Esta trazabilidad se modela mediante la relación lógica entre \textit{Notificación} y \textit{Visita comercial}, usando \textit{source\_type} y \textit{source\_id}, sin duplicar la entidad de visita.
+
 \subsubsection{Clase Ruta comercial}
 
 La clase \textit{Ruta comercial} representa una composicion persistida de visitas para una jornada concreta.
@@ -216,7 +218,7 @@ La clase \textit{Ruta comercial} representa una composicion persistida de visita
       \item \textit{route\_date}: fecha de la ruta.
       \item \textit{name}: descripción o nombre visible.
       \item \textit{status}: estado de la ruta.
-      \item \textit{created\_at}: fecha de creacion.
+      \item \textit{created\_at}: fecha de creación.
 \end{itemize}
 
 \subsubsection{Clase Visita en ruta}
@@ -429,13 +431,13 @@ La clase \textit{Línea de pedido} representa cada producto incluido en un pedid
       \item \textit{id}: identificador de la línea.
       \item \textit{order}: pedido asociado.
       \item \textit{product}: producto incluido.
-      \item \textit{color\_reference}: referencia cromatica asociada, cuando proceda.
+      \item \textit{color\_reference}: referencia cromática asociada, cuando proceda.
       \item \textit{quantity}: cantidad solicitada.
       \item \textit{unit\_price\_snapshot}: precio unitario consolidado.
       \item \textit{discount\_percentage}: descuento aplicado.
       \item \textit{line\_total}: importe total de la línea.
       \item \textit{order\_reference\_snapshot}: referencia comercial consolidada.
-      \item \textit{variant\_code\_snapshot}, \textit{variant\_name\_snapshot}: instantanea de variante.
+      \item \textit{variant\_code\_snapshot}, \textit{variant\_name\_snapshot}: instantánea de variante.
 \end{itemize}
 
 \subsubsection{Clase Estado de pedido}
@@ -464,7 +466,7 @@ La clase \textit{Estado de cobro del pedido} representa el catálogo mínimo de 
 
 \subsubsection{Relación con Visita comercial}
 
-La fase logistica del pedido no se modela como una entidad independiente. En la implementación actual reutiliza la clase \textit{Visita comercial} del módulo \texttt{M2} cuando la visita tiene tipología de reparto. Esta relación permite:
+La fase logística del pedido no se modela como una entidad independiente. En la implementación actual reutiliza la clase \textit{Visita comercial} del módulo \texttt{M2} cuando la visita tiene tipología de reparto. Esta relación permite:
 
 \begin{itemize}
       \item agrupar pedidos confirmados en una visita de tipo \texttt{delivery};
@@ -892,7 +894,51 @@ La clase \textit{Notificación} representa los avisos o mensajes generados por e
       \item \textbf{RT-N3 — Coherencia de lectura}
             Si la notificación está marcada como leída, debe existir una fecha de lectura asociada.
       \item \textbf{RT-N4 — Canal válido de notificación}
-            \textcolor{red}{En la implementación actual el canal persistido es \texttt{in\_app}; otros canales quedan como evolución futura.}
+            El canal persistido principal es \texttt{in\_app}. Los canales externos \texttt{email} y \texttt{push} se gestionan como canales de entrega derivados, de forma que un fallo de SMTP, VAPID o suscripción no elimina la notificación interna.
+
+\end{itemize}
+
+\subsubsection{Clase Suscripción push de usuario}
+
+La clase \textit{Suscripción push de usuario} representa la autorización técnica concedida por un cliente o comercial para recibir notificaciones Web Push en un dispositivo o PWA compatible.
+
+\textbf{Atributos}
+
+\begin{itemize}
+
+      \item \textit{id}
+            Identificador único de la suscripción.
+      \item \textit{user}
+            Usuario propietario de la suscripción.
+      \item \textit{endpoint}
+            Endpoint Web Push único proporcionado por el navegador.
+      \item \textit{p256dh}
+            Clave pública de cifrado de la suscripción.
+      \item \textit{auth}
+            Secreto de autenticación de la suscripción.
+      \item \textit{expiration\_time}
+            Fecha de expiración comunicada por el navegador, cuando exista.
+      \item \textit{user\_agent}
+            Identificación del navegador o dispositivo.
+      \item \textit{last\_used\_at}
+            Fecha del último uso correcto de la suscripción.
+      \item \textit{revoked\_at}
+            Fecha de revocación, cuando el usuario desactiva el canal o el proveedor indica que la suscripción ya no es válida.
+      \item \textit{created\_at}, \textit{updated\_at}
+            Fechas de creación y última actualización.
+
+\end{itemize}
+
+\textbf{Restricciones textuales}
+
+\begin{itemize}
+
+      \item \textbf{RT-PS1 — Usuario obligatorio}
+            Toda suscripción push debe estar asociada a un usuario existente.
+      \item \textbf{RT-PS2 — Endpoint único}
+            El endpoint de una suscripción push debe ser único dentro del sistema.
+      \item \textbf{RT-PS3 — Revocación controlada}
+            Una suscripción revocada no debe utilizarse para nuevos envíos.
 
 \end{itemize}
 
@@ -1071,7 +1117,7 @@ La clase \textit{Configuración del sistema} representa los parámetros generale
 
 \subsubsection{Clase Integración externa}
 
-La clase \textit{Integración externa} representa las conexiones con herramientas o servicios externos utilizados por el distribuidor, como sistemas de mensajería, plataformas de navegación o sistemas de gestión empresarial.
+La clase \textit{Integración externa} representa las conexiones con herramientas o servicios externos utilizados por el distribuidor, como sistemas de mensajería, plataformas de navegación o sistemas de gestión empresarial. En la implementación actual se emplea también para registrar los canales \textit{SMTP transaccional} y \textit{Web Push PWA} que dan soporte a las notificaciones multicanal de \texttt{M6}.
 
 \textbf{Atributos}
 

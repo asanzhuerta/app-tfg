@@ -1,9 +1,9 @@
-# Componentes de administraci?n de cat?logo
+# Componentes de administración de catálogo
 
-Interfaces especificas para crear, editar y organizar entidades del cat?logo.
+Interfaces específicas para crear, editar y organizar entidades del catálogo.
 
-## Funci?n
+## Función
 
-Gestionar categor?as, l?neas, subcategor?as, productos, recursos, cartas de color y referencias.
+Gestionar categorías, líneas, subcategorías, productos, recursos, cartas de color y referencias.
 
-La administraci?n del cat?logo requiere formularios y jerarquias que no pertenecen a la experiencia de consulta de cliente/comercial.
+La administración del catálogo requiere formularios y jerarquñas que no pertenecen a la experiencia de consulta de cliente/comercial.

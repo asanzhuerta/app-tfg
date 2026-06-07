@@ -2,8 +2,8 @@
 
 Migraciones reales ejecutadas por TypeORM.
 
-## Funci?n
+## Función
 
-Crear y modificar tablas, indices, relaciones, datos semilla y ajustes necesarios por m?dulo.
+Crear y modificar tablas, indices, relaciones, datos semilla y ajustes necesarios por módulo.
 
-Mantener las migraciones separadas permite revisar la evolucion historica de la base de datos y ejecutar `npm run migration:run` de forma controlada.
+Mantener las migraciones separadas permite revisar la evolución histórica de la base de datos y ejecutar `npm run migration:run` de forma controlada.

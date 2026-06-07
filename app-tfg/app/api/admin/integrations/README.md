@@ -1,7 +1,7 @@
-# API integraci?nes admin
+# API integraciones admin
 
-Endpoints de estado de integraci?nes.
+Endpoints de estado de integraciones.
 
-## Funci?n
+## Función
 
-Exponer informaci?n de conectividad o preparacion de servicios externos.
+Exponer información de conectividad o preparación de servicios externos.

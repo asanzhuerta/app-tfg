@@ -1,7 +1,7 @@
 # API plantillas de servicio
 
-Endpoints de plantillas t?cnicas.
+Endpoints de plantillas técnicas.
 
-## Funci?n
+## Función
 
-Guardar y reutilizar configuraci?nes frecuentes de servicios de sal?n.
+Guardar y reutilizar configuraciones frecuentes de servicios de salón.

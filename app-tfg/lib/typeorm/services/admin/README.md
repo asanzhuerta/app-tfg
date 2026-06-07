@@ -1,7 +1,7 @@
 # Servicios admin
 
-Consultas y operaci?nes administrativas.
+Consultas y operaciones administrativas.
 
-## Funci?n
+## Función
 
-Dar soporte a auditor?a, operaci?nes, ajustes y paneles de administraci?n.
+Dar soporte a auditoría, operaciones, ajustes y paneles de administración.

@@ -1,9 +1,9 @@
 # Integraciones
 
-Preparacion de conectores y estados de integraci?n con servicios externos.
+Preparación de conectores y estados de integración con servicios externos.
 
-## Funci?n
+## Función
 
-Centralizar l?gica vinculada a automatizaciones, sistem?s externos y futuros flujos como FactuSOL/n8n.
+Centralizar lógica vinculada a automatizaciones, sistemás externos y futuros flujos como FactuSOL/n8n.
 
-El m?dulo M7 aspira a integrar procesos externos. Esta carpeta reserva ese dominio sin mezclarlo con operaci?nes internas.
+El módulo M7 aspira a integrar procesos externos. Esta carpeta reserva ese dominio sin mezclarlo con operaciones internas.

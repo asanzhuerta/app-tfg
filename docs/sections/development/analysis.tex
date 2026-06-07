@@ -10,7 +10,7 @@ Este capítulo cubre el análisis del sistema de información a desarrollar, hac
 
 \section{Modelo de Interfaz de Usuario}
 \label{sec:uiModel}
-La interfaz finalmente implementada responde a una aplicación web responsive orientada a tres perfiles principales: administrador, comercial y cliente profesional. En lugar de una única vista comun para todos los usuarios, el sistema deriva a cada rol hacia un espacio operativo propio tras el inicio de sesión, conservando componentes compartidos como cabeceras, tarjetas de resumen, listados, formularios y vistas de detalle.
+La interfaz finalmente implementada responde a una aplicación web responsive orientada a tres perfiles principales: administrador, comercial y cliente profesional. En lugar de una única vista común para todos los usuarios, el sistema deriva a cada rol hacia un espacio operativo propio tras el inicio de sesión, conservando componentes compartidos como cabeceras, tarjetas de resumen, listados, formularios y vistas de detalle.
 
 La construcción visual del sistema ha seguido una aproximación iterativa: primero se definieron pantallas operativas mínimas para cubrir los módulos \texttt{M1} a \texttt{M4}, y posteriormente se refinaron los flujos de trabajo más sensibles, especialmente los relacionados con detalle de visitas, preparación de pedidos, confirmación de entregas y seguimiento de cobros. Por ello, el modelo de interfaz presentado a continuación debe interpretarse como un wireframe funcional de baja fidelidad derivado de la interfaz realmente desplegada.
 
@@ -42,7 +42,7 @@ La Figura~\ref{fig:UIWireframes} resume tres patrones de pantalla que se repiten
             \rule{\textwidth}{0.4pt}\\[-0.1em]
             Cabecera con título, resumen y acciones principales\\
             Selector de cliente cuando el rol es comercial\\
-            Líneas de pedido con producto, referencia cromatica opcional y cantidad\\
+            Líneas de pedido con producto, referencia cromática opcional y cantidad\\
             Acciones de borrador / confirmación\\
             Historial de pedidos en la misma vista o en panel inferior\\
             Acceso al detalle completo del pedido
@@ -69,24 +69,24 @@ La Figura~\ref{fig:UIWireframes} resume tres patrones de pantalla que se repiten
 Estos wireframes sintetizan decisiones de diseño que se mantienen en toda la aplicación:
 
 \begin{itemize}
-    \item prioridad del uso móvil para comerciales y clientes, con navegacion lateral desplegable, identificacion visual del rol y vistas compactas;
+    \item prioridad del uso móvil para comerciales y clientes, con navegación lateral desplegable, identificacion visual del rol y vistas compactas;
     \item acceso rápido a operaciones frecuentes desde la pantalla principal de cada rol;
     \item separación clara entre listados, detalle y acciones de actualización;
     \item uso de estados visuales, tarjetas resumen y bloques plegables para reducir ruido en vistas con mucha información operativa.
 \end{itemize}
 
-\subsection{Modelo de navegacion}
+\subsection{Modelo de navegación}
 
-La navegacion real del sistema parte de una entrada comun en \texttt{/login}. Tras autenticarse, cada usuario es redirigido a la raiz funcional de su rol, desde donde accede a sus módulos disponibles. La Figura~\ref{fig:NavigationModel} resume este comportamiento.
+La navegación real del sistema parte de una entrada común en \texttt{/login}. Tras autenticarse, cada usuario es redirigido a la raíz funcional de su rol, desde donde accede a sus módulos disponibles. La Figura~\ref{fig:NavigationModel} resume este comportamiento.
 
 \begin{figure}[H]
     \centering
     \renewcommand{\arraystretch}{1.25}
     \begin{tabularx}{\textwidth}{|p{0.17\textwidth}|X|}
         \hline
-        \textbf{Rol / punto de entrada} & \textbf{Secuencia principal de navegacion implementada} \\
+        \textbf{Rol / punto de entrada} & \textbf{Secuencia principal de navegación implementada} \\
         \hline
-        Acceso comun & \texttt{/login} $\rightarrow$ redirección a \texttt{/admin}, \texttt{/commercials} o \texttt{/clients} según el rol autenticado. \\
+        Acceso común & \texttt{/login} $\rightarrow$ redirección a \texttt{/admin}, \texttt{/commercials} o \texttt{/clients} según el rol autenticado. \\
         \hline
         Administrador & \texttt{/admin} $\rightarrow$ usuarios, solicitudes, clientes, auditoría, catálogo, pedidos globales, operación \texttt{M7}, integraciones, soporte técnico y \texttt{/admin/settings}. Desde estos espacios se accede a listados, detalle, formularios de alta y vistas transversales de estado. \\
         \hline
@@ -97,11 +97,11 @@ La navegacion real del sistema parte de una entrada comun en \texttt{/login}. Tr
         Flujos transversales & \texttt{/profile} y \texttt{/profile/change-password} quedan disponibles como espacios comunes de perfil. El sistema contempla además \texttt{/register}, \texttt{/unsupported-browser}, páginas de error y rutas API protegidas asociadas a cada área funcional. \\
         \hline
     \end{tabularx}
-    \caption{Modelo de navegacion simplificado a partir de las rutas implementadas}
+    \caption{Modelo de navegación simplificado a partir de las rutas implementadas}
     \label{fig:NavigationModel}
 \end{figure}
 
-Desde el punto de vista funcional, esta navegacion presenta varias propiedades relevantes para el análisis:
+Desde el punto de vista funcional, esta navegación presenta varias propiedades relevantes para el análisis:
 
 \begin{itemize}
     \item el administrador concentra las tareas de gobierno del sistema y de mantenimiento de datos maestros;
@@ -184,7 +184,7 @@ Las siguientes capturas proceden de la aplicación ejecutada en entorno local y 
     \label{fig:ui-real-client-modules}
 \end{figure}
 
-Como evidencia visual especifica del modulo \texttt{M6}, se han incorporado tambien capturas del centro administrativo de comunicaciones y de las vistas finales usadas por cliente y comercial. Estas pantallas muestran la publicacion de promociones, el acceso a formaciones, las notificaciones internas, el indicador de avisos pendientes desde los paneles de rol y la conexion operativa entre promociones activas y pedidos con descuento aplicado.
+Como evidencia visual específica del módulo \texttt{M6}, se han incorporado también capturas del centro administrativo de comunicaciones y de las vistas finales usadas por cliente y comercial. Estas pantallas muestran la publicación de promociones, el acceso a formaciones, las notificaciones internas, el indicador de avisos pendientes desde los paneles de rol y la conexión operativa entre promociones activas y pedidos con descuento aplicado.
 
 \begin{figure}[H]
     \centering
@@ -205,7 +205,7 @@ Como evidencia visual especifica del modulo \texttt{M6}, se han incorporado tamb
         \includegraphics[width=\textwidth]{./figures/Capturas/m6-commercial-promotions.png}
         \caption{Promociones comercial}
     \end{subfigure}
-    \caption{Capturas reales del modulo M6 por perfil de usuario}
+    \caption{Capturas reales del módulo M6 por perfil de usuario}
     \label{fig:ui-real-m6-role-summary}
 \end{figure}
 
@@ -228,7 +228,7 @@ Como evidencia visual especifica del modulo \texttt{M6}, se han incorporado tamb
         \includegraphics[width=\textwidth]{./figures/Capturas/m6-client-notifications.png}
         \caption{Avisos}
     \end{subfigure}
-    \caption{Capturas reales de promociones, formaciones y avisos del modulo M6}
+    \caption{Capturas reales de promociones, formaciones y avisos del módulo M6}
     \label{fig:ui-real-m6-user-flows}
 \end{figure}
 

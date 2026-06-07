@@ -2,6 +2,6 @@
 
 Endpoint para crear usuarios desde admin.
 
-## Funci?n
+## Función
 
 Registrar cuentas administradas con rol y datos iniciales.

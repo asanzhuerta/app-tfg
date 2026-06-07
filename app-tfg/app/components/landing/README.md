@@ -1,9 +1,9 @@
-# Landing publica
+# Landing pública
 
-Componentes de la pagina inicial publica.
+Componentes de la página inicial pública.
 
-## Funci?n
+## Función
 
 Presentar la plataforma, explicar el enfoque operativo y enlazar con login o solicitud de acceso.
 
-La landing no requiere autenticaci?n y debe tener identidad visual propia, separada de los paneles por rol.
+La landing no requiere autenticación y debe tener identidad visual propia, separada de los paneles por rol.

@@ -1,7 +1,7 @@
-# API promoci?nes
+# API promociones
 
-Endpoint de promoci?nes activas.
+Endpoint de promociones activas.
 
-## Funci?n
+## Función
 
-Devolver promoci?nes aplicables al usuario autenticado.
+Devolver promociones aplicables al usuario autenticado.

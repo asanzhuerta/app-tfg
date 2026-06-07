@@ -1,7 +1,7 @@
 # Visitas comercial
 
-Gestion y detalle de visitas.
+Gestión y detalle de visitas.
 
-## Funci?n
+## Función
 
 Planificar, consultar y actualizar visitas a clientes.

@@ -2,8 +2,8 @@
 
 Funciones auxiliares reutilizables que no pertenecen a un dominio concreto.
 
-## Funci?n
+## Función
 
-Centralizar helpers de formato, fechas, normalizacion o transformaci?nes pequenas.
+Centralizar helpers de formato, fechas, normalizacion o transformaciones pequeñas.
 
-Mantiene el c?digo comun en un lugar unico sin convertirlo en dependencia circular entre dominios.
+Mantiene el código común en un lugar único sin convertirlo en dependencia circular entre dominios.

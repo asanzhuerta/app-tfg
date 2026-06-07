@@ -2,6 +2,6 @@
 
 Endpoint de subida de imagen de perfil.
 
-## Funci?n
+## Función
 
-Subir, reemplazar y validar im?genes de perfil con Cloudinary.
+Subir, reemplazar y validar imágenes de perfil con Cloudinary.

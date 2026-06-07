@@ -2,6 +2,6 @@
 
 Operaciones persistentes de pedidos.
 
-## Funci?n
+## Función
 
-Gestionar borradores, l?neas, confirmaciones, historial y estados.
+Gestionar borradores, líneas, confirmaciones, historial y estados.

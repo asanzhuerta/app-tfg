@@ -1,28 +1,28 @@
 # App TFG
 
-Aplicaci?n principal de Kinestilistas. Esta carpeta contiene el producto software desarrollado para el TFG: interfaz, API, autenticaci?n, persistencia, migraciones, assets p?blicos y scripts de comprobaci?n.
+Aplicación principal de Kinestilistas. Esta carpeta contiene el producto software desarrollado para el TFG: interfaz, API, autenticación, persistencia, migraciones, assets públicos y scripts de comprobación.
 
-## Funci?n de esta carpeta
+## Función de esta carpeta
 
-- Centralizar el c?digo ejecutable de la aplicaci?n.
-- Separar la app de la memoria LaTeX, la configuraci?n de Docker.
+- Centralizar el código ejecutable de la aplicación.
+- Separar la app de la memoria LaTeX, la configuración de Docker.
 - Mantener una estructura compatible con Next.js App Router y TypeORM.
 
 ## Estructura principal
 
-- `app/`: rutas, layouts, p?ginas, API handlers y componentes de UI.
-- `lib/`: l?gica de dominio, contratos, servicios, seguridad, integraci?nes y acceso a datos.
+- `app/`: rutas, layouts, páginas, API handlers y componentes de UI.
+- `lib/`: lógica de dominio, contratos, servicios, seguridad, integraciones y acceso a datos.
 - `migrations/`: migraciones versionadas de TypeORM.
-- `public/`: im?genes, iconos, fondos y manifest PWA.
-- `scripts/`: scripts de smoke test, carga de im?genes y t?reas auxiliares.
+- `public/`: imágenes, iconos, fondos y manifest PWA.
+- `scripts/`: scripts de smoke test, carga de imágenes y tareas auxiliares.
 
 ## Archivos de entrada relevantes
 
-- `auth.ts`: configuraci?n de Auth.js, credenciales, sesi?nes y trazabilidad de acceso.
-- `proxy.ts`: middleware de protecci?n de rutas, compatibilidad de navegador y rate limiting.
-- `next.config.ts`: configuraci?n de Next.js.
+- `auth.ts`: configuración de Auth.js, credenciales, sesiones y trazabilidad de acceso.
+- `proxy.ts`: middleware de protección de rutas, compatibilidad de navegador y rate limiting.
+- `next.config.ts`: configuración de Next.js.
 - `package.json`: scripts, dependencias y comandos de desarrollo.
-- `tsconfig.typeorm.json`: configuraci?n TypeScript espec?fica para TypeORM y migraciones.
+- `tsconfig.typeorm.json`: configuración TypeScript específica para TypeORM y migraciones.
 
 ## Scripts recomendados
 
@@ -31,7 +31,7 @@ npm run typecheck
 npm run lint
 npm run build
 npm run migration:run
-npm run m5:sal?n-visual-smoke
+npm run m5:salon-visual-smoke
 npm run m6:closeout
 npm run m7:closeout
 npm run catalog:upload-product-images -- --dry-run

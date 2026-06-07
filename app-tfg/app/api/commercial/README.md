@@ -2,6 +2,6 @@
 
 Endpoints usados por el rol comercial.
 
-## Funci?n
+## Función
 
 Gestionar clientes asignados, visitas, rutas, perfil comercial y pedidos comerciales.

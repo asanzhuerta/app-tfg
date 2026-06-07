@@ -1,7 +1,7 @@
-# API operaci?nes empresariales
+# API operaciones empresariales
 
-Endpoint de operaci?nes.
+Endpoint de operaciones.
 
-## Funci?n
+## Función
 
-Consultar o preparar registros operativos vinculados a integraci?nes.
+Consultar o preparar registros operativos vinculados a integraciones.

@@ -2,6 +2,6 @@
 
 Endpoints administrativos de visitas.
 
-## Funci?n
+## Función
 
 Consultar y modificar visitas comerciales desde backoffice.

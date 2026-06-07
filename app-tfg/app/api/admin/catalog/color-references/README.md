@@ -1,7 +1,7 @@
 # API referencias de color
 
-CRUD de referencias crom?ticas desde admin.
+CRUD de referencias cromáticas desde admin.
 
-## Funci?n
+## Función
 
 Crear, consultar y actualizar tonos vinculados a cartas.

@@ -2,6 +2,6 @@
 
 Vista de avisos y notificaciones para cliente.
 
-## Funci?n
+## Función
 
-Mostrar comunicaci?nes relevantes para el sal?n autenticado.
+Mostrar comunicaciones relevantes para el salón autenticado.
