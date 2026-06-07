@@ -1,4 +1,3 @@
-import AssistantCard from "../components/AssistantCard";
 import NavCard from "../components/NavCard";
 import PageTransition from "../components/animations/PageTransition";
 import ClientDeliveryEstimateCard from "../components/clients/ClientDeliveryEstimateCard";
@@ -69,10 +68,6 @@ export default async function ClientsHome() {
 
 	return (
 		<PageTransition>
-			<div className="mb-5 flex justify-end">
-				<AssistantCard compact />
-			</div>
-
 			<div className="mb-6">
 				<ClientDeliveryEstimateCard />
 			</div>
