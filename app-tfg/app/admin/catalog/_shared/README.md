@@ -1,7 +1,7 @@
 # Shared catalog admin
 
-Componentes y configuraciones compartidas por formularios de catalogo admin.
+Componentes y configuraci?nes compartidas por formularios de cat?logo admin.
 
-## Funcion
+## Funci?n
 
-Evitar duplicacion entre altas y ediciones de productos, lineas, categorias y recursos.
+Evitar duplicacion entre altas y ediciones de productos, l?neas, categor?as y recursos.

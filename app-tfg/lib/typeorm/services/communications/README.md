@@ -1,7 +1,7 @@
-# Servicios comunicaciones
+# Servicios comunicaci?nes
 
-Operaciones de promociones, avisos y formaciones.
+Operaciones de promoci?nes, avisos y formaci?nes.
 
-## Funcion
+## Funci?n
 
-Crear, consultar y segmentar comunicaciones del modulo M6.
+Crear, consultar y segmentar comunicaci?nes del m?dulo M6.

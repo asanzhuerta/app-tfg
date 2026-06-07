@@ -2,6 +2,6 @@
 
 Endpoints de pedidos para cliente.
 
-## Funcion
+## Funci?n
 
-Gestionar borradores, historial y detalle de pedidos del salon.
+Gestionar borradores, historial y detalle de pedidos del sal?n.

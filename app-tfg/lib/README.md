@@ -1,11 +1,9 @@
 # Libreria interna
 
-Codigo de dominio, infraestructura y utilidades compartidas por paginas, API handlers y scripts.
+Codigo de dominio, infraestructura y utilidades compartidas por p?ginas, API handlers y scripts.
 
-## Funcion
+## Funci?n
 
-Mantener la logica no visual fuera de `app/`: seguridad, contratos, servicios, integraciones, cache, autenticacion y persistencia.
+Mantener la l?gica no visual fuera de `app/`: seguridad, contratos, servicios, integraci?nes, cache, autenticaci?n y persistencia.
 
-## Por que existe
-
-Separar `lib/` de la capa de UI permite reutilizar logica entre servidor, API y scripts sin acoplarla a componentes React.
+Separar `lib/` de la capa de UI permite reutilizar l?gica entre servidor, API y scripts sin acoplarla a componentes React.

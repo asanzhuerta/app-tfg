@@ -2,6 +2,6 @@
 
 Configuracion operativa del comercial.
 
-## Funcion
+## Funci?n
 
-Definir parametros de jornada, punto de salida y duraciones base.
+Definir par?metros de jornada, punto de salida y duraciones base.

@@ -2,6 +2,6 @@
 
 Endpoints de comerciales.
 
-## Funcion
+## Funci?n
 
 Listar o consultar usuarios comerciales disponibles para asignaciones y rutas.

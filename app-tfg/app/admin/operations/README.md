@@ -1,7 +1,7 @@
 # Operaciones admin
 
-Panel operativo de administracion.
+Panel operativo de administraci?n.
 
-## Funcion
+## Funci?n
 
 Mostrar indicadores, reportes y acciones de seguimiento global del sistema.

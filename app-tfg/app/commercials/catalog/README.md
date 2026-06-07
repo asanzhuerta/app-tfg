@@ -1,7 +1,7 @@
-# Catalogo comercial
+# Cat?logo comercial
 
-Consulta de catalogo para comercial.
+Consulta de cat?logo para comercial.
 
-## Funcion
+## Funci?n
 
 Ayudar al comercial a localizar productos y recursos durante visitas o pedidos.

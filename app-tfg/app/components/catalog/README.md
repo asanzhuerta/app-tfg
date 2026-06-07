@@ -1,11 +1,9 @@
-# Componentes de catalogo
+# Componentes de cat?logo
 
-UI de consulta de productos, cartas de color, referencias cromaticas y detalle de producto.
+UI de consulta de productos, cartas de color, referencias crom?ticas y detalle de producto.
 
-## Funcion
+## Funci?n
 
-Permitir explorar catalogo y coloracion desde cliente, comercial y admin usando una experiencia comun.
+Permitir explorar cat?logo y coloraci?n desde cliente, comercial y admin usando una experiencia comun.
 
-## Por que existe
-
-El catalogo es transversal a varios roles. Esta carpeta evita duplicar filtros, tarjetas, detalles y mapeos visuales.
+El cat?logo es transversal a varios roles. Esta carpeta evita duplicar filtros, tarjetas, detalles y mapeos visuales.

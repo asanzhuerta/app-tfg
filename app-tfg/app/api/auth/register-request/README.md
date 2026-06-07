@@ -2,6 +2,6 @@
 
 Endpoint publico de solicitud de alta.
 
-## Funcion
+## Funci?n
 
 Guardar solicitudes pendientes para revision administrativa.

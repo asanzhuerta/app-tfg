@@ -2,6 +2,6 @@
 
 Vista de clientes registrados.
 
-## Funcion
+## Funci?n
 
 Consultar, filtrar y entrar al detalle operativo de cada cliente profesional.

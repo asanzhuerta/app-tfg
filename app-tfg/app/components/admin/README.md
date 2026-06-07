@@ -1,11 +1,9 @@
 # Componentes admin
 
-Componentes especificos del area de administracion.
+Componentes especificos del ?rea de administraci?n.
 
-## Funcion
+## Funci?n
 
-Representar paneles, reportes, operaciones e interfaces de gestion que solo usa el rol administrador.
+Representar paneles, reportes, operaci?nes e interfaces de gesti?n que solo usa el rol administrador.
 
-## Por que existe
-
-Separar componentes admin evita contaminar la UI de cliente o comercial con logica de backoffice.
+Separar componentes admin evita contaminar la UI de cliente o comercial con l?gica de backoffice.

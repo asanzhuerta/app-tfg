@@ -2,6 +2,6 @@
 
 Endpoints de relacion cliente-rango.
 
-## Funcion
+## Funci?n
 
-Gestionar clasificacion comercial de clientes para ventajas y promociones.
+Gestionar clasificacion comercial de clientes para ventajas y promoci?nes.

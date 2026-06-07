@@ -2,6 +2,6 @@
 
 Endpoints de perfil comun.
 
-## Funcion
+## Funci?n
 
-Leer y actualizar datos personales, imagen de perfil e informacion asociada al usuario.
+Leer y actualizar datos personales, imagen de perfil e informaci?n asociada al usuario.

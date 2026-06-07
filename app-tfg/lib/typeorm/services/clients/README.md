@@ -2,6 +2,6 @@
 
 Operaciones de datos de clientes.
 
-## Funcion
+## Funci?n
 
-Consultar clientes, asignaciones, rangos, datos comerciales y estimaciones.
+Consultar clientes, asignaciones, rangos, datos comerciales y estimaci?nes.

@@ -1,11 +1,9 @@
 # Componentes de cliente
 
-Componentes visuales ligados al area cliente.
+Componentes visuales ligados al ?rea cliente.
 
-## Funcion
+## Funci?n
 
-Mostrar ETA, rango comercial, ventajas, informacion profesional y estados relevantes para salones.
-
-## Por que existe
+Mostrar ETA, rango comercial, ventajas, informaci?n profesional y estados relevantes para salones.
 
 El cliente tiene necesidades operativas distintas al comercial y al admin; estos componentes encapsulan esa mirada.

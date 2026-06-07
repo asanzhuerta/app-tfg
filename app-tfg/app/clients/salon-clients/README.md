@@ -1,7 +1,7 @@
-# Clientes del salon
+# Clientes del sal?n
 
-Gestion de clientes internos del salon.
+Gestion de clientes internos del sal?n.
 
-## Funcion
+## Funci?n
 
-Registrar fichas tecnicas, servicios, plantillas e imagenes de resultado.
+Registrar fichas t?cnicas, servicios, plantillas e im?genes de resultado.

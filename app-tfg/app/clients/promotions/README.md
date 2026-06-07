@@ -2,6 +2,6 @@
 
 Promociones aplicables al cliente.
 
-## Funcion
+## Funci?n
 
-Mostrar ventajas activas segun rango, cliente o linea comercial.
+Mostrar ventajas activas segun rango, cliente o l?nea comercial.

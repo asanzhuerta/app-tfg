@@ -1,7 +1,7 @@
-# API imagenes de resultado
+# API im?genes de resultado
 
-Endpoint de imagenes finales de servicios.
+Endpoint de im?genes finales de servicios.
 
-## Funcion
+## Funci?n
 
-Subir o eliminar imagenes de resultado tecnico en Cloudinary.
+Subir o eliminar im?genes de resultado t?cnico en Cloudinary.

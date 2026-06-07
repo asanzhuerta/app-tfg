@@ -2,6 +2,6 @@
 
 Endpoints relacionados con la cuenta del usuario.
 
-## Funcion
+## Funci?n
 
 Gestionar acciones personales como cambio de contraseña.

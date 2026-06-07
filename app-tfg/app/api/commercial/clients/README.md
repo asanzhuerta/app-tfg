@@ -2,6 +2,6 @@
 
 Endpoints de clientes asignados al comercial.
 
-## Funcion
+## Funci?n
 
 Consultar fichas y detalle operativo desde el rol comercial.

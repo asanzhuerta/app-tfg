@@ -1,7 +1,7 @@
 # Pedidos comercial
 
-Pedidos creados o gestionados por el comercial.
+Pedidos creados o gesti?nados por el comercial.
 
-## Funcion
+## Funci?n
 
 Preparar y consultar pedidos vinculados a clientes asignados.

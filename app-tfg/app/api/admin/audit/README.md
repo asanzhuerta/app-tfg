@@ -1,7 +1,7 @@
-# API auditoria admin
+# API auditor?a admin
 
-Endpoints de auditoria.
+Endpoints de auditor?a.
 
-## Funcion
+## Funci?n
 
-Exponer accesos, acciones, sesiones y exportaciones CSV.
+Exponer accesos, acciones, sesi?nes y exportaciones CSV.

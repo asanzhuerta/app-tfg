@@ -1,17 +1,15 @@
-# Fondos publicos
+# Fondos p?blicos
 
-Imagenes de fondo usadas por landing, login y paneles por rol.
+Imágenes de fondo usadas por landing, login y paneles por rol.
 
-## Funcion
+## Funci?n
 
-Dar identidad visual diferenciada a las experiencias de acceso, cliente, comercial y administracion.
+Dar identidad visual diferenciada a las experiencias de acceso, cliente, comercial y administraci?n.
 
-## Por que existe
-
-Los fondos se sirven publicamente desde Next.js y deben tener nombres estables para que los componentes puedan referenciarlos sin depender de rutas externas.
+Los fondos se sirven p?blicamente desde Next.js y deben tener nombres estables para que los componentes puedan referenciarlos sin depender de rutas externas.
 
 ## Reglas de uso
 
-- Mantener imagenes optimizadas para web.
+- Mantener im?genes optimizadas para web.
 - Evitar degradados embebidos si el componente ya controla capas visuales.
-- No usar esta carpeta para imagenes de productos ni recursos de prueba; esos flujos van por Cloudinary o `examples/`.
+- No usar esta carpeta para im?genes de productos ni recursos de prueba; esos flujos van por Cloudinary.

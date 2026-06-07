@@ -1,7 +1,7 @@
 # API ajustes admin
 
-Endpoints de configuracion.
+Endpoints de configuraci?n.
 
-## Funcion
+## Funci?n
 
-Gestionar parametros como rate limits y estados asociados.
+Gestionar par?metros como rate limits y estados asociados.

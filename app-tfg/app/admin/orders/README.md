@@ -2,6 +2,6 @@
 
 Vista administrativa de pedidos.
 
-## Funcion
+## Funci?n
 
-Consultar pedidos, estados, detalle y trazabilidad desde la perspectiva de administracion.
+Consultar pedidos, estados, detalle y trazabilidad desde la perspectiva de administraci?n.

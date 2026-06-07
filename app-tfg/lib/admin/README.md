@@ -1,11 +1,9 @@
 # Dominio admin
 
-Logica auxiliar relacionada con operaciones administrativas.
+Logica auxiliar relacionada con operaci?nes administrativas.
 
-## Funcion
+## Funci?n
 
-Agrupar funciones usadas por paneles de administracion, operaciones, auditoria o gestion del sistema.
+Agrupar funci?nes usadas por paneles de administraci?n, operaci?nes, auditor?a o gesti?n del sistema.
 
-## Por que existe
-
-El rol admin concentra capacidades transversales que no pertenecen a un unico modulo visual.
+El rol admin concentra capacidades transversales que no pertenecen a un unico m?dulo visual.

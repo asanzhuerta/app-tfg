@@ -1,7 +1,7 @@
-# Catalogo admin
+# Cat?logo admin
 
-Gestion administrativa del catalogo.
+Gestion administrativa del cat?logo.
 
-## Funcion
+## Funci?n
 
-Administrar productos, categorias, lineas, subcategorias, recursos, cartas y referencias de color.
+Administrar productos, categor?as, l?neas, subcategor?as, recursos, cartas y referencias de color.

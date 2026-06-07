@@ -1,7 +1,7 @@
 # API rutas comerciales admin
 
-Endpoints de gestion de rutas desde administracion.
+Endpoints de gesti?n de rutas desde administraci?n.
 
-## Funcion
+## Funci?n
 
-Consultar rutas y anadir visitas cuando administracion interviene en planificacion.
+Consultar rutas y anadir visitas cuando administraci?n interviene en planificaci?n.

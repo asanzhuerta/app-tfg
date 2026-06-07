@@ -1,7 +1,7 @@
 # API communications
 
-Endpoints de comunicaciones.
+Endpoints de comunicaci?nes.
 
-## Funcion
+## Funci?n
 
-Exponer promociones, avisos, recordatorios, formaciones, notificaciones y suscripciones push.
+Exponer promoci?nes, avisos, recordatorios, formaci?nes, notificaciones y suscripciones push.

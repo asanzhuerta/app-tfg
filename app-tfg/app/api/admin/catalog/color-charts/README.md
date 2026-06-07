@@ -2,6 +2,6 @@
 
 CRUD de cartas de color desde admin.
 
-## Funcion
+## Funci?n
 
-Crear, consultar y actualizar cartas cromaticas.
+Crear, consultar y actualizar cartas crom?ticas.

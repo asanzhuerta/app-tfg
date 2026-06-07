@@ -1,7 +1,7 @@
 # Notificaciones comercial
 
-Avisos y comunicaciones para comercial.
+Avisos y comunicaci?nes para comercial.
 
-## Funcion
+## Funci?n
 
 Mostrar mensajes relevantes para su actividad diaria.

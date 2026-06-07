@@ -1,11 +1,9 @@
-# Autenticacion y sesion
+# Autenticacion y sesi?n
 
 Helpers relacionados con Auth.js, usuario actual y permisos.
 
-## Funcion
+## Funci?n
 
-Resolver sesiones, roles, usuario autenticado y comprobaciones de acceso.
+Resolver sesi?nes, roles, usuario autenticado y comprobaciones de acceso.
 
-## Por que existe
-
-La autenticacion se usa en layouts, API y paginas protegidas. Separarla reduce duplicacion y mejora trazabilidad.
+La autenticaci?n se usa en layouts, API y p?ginas protegidas. Separarla reduce duplicacion y mejora trazabilidad.

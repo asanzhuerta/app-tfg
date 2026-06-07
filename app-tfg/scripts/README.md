@@ -1,19 +1,17 @@
-# Scripts de la aplicacion
+# Scripts de la aplicaci?n
 
-Scripts Node/TypeScript usados para validaciones, smoke tests, mantenimiento y cargas auxiliares.
+Scripts Node/TypeScript usados para validaci?nes, smoke tests, mantenimiento y cargas auxiliares.
 
-## Funcion
+## Funci?n
 
-Automatizar comprobaciones por modulo, carga de imagenes de catalogo, limpieza de fixtures y tareas operativas.
+Automatizar comprobaciones por m?dulo, carga de im?genes de cat?logo, limpieza de fixtures y t?reas operativas.
 
-## Por que existe
-
-El proyecto necesita validar flujos sin depender siempre de la interfaz. Mantener scripts aqui permite ejecutarlos con el mismo entorno de la app.
+El proyecto necesita validar flujos sin depender siempre de la interfaz. Mantener scripts aqu? permite ejecutarlos con el mismo entorno de la app.
 
 ## Scripts destacados
 
-- `upload-product-images.ts`: sube imagenes de `examples/Uploads de prueba APP/PRODUCTOS` a Cloudinary y actualiza `products.image_url`.
-- `m5-*smoke.ts`: comprueba funcionalidades de fichas tecnicas y resultado visual.
-- `m6-*smoke.ts`: comprueba comunicaciones, promociones y rangos.
-- `m7-*smoke.ts`: comprueba auditoria, soporte, operaciones, rate limiting e integraciones.
+- `upload-product-images.ts`: sube im?genes de cat?logo a Cloudinary y actualiza `products.image_url`.
+- `m5-*smoke.ts`: comprueba funci?nalidades de fichas t?cnicas y resultado visual.
+- `m6-*smoke.ts`: comprueba comunicaci?nes, promoci?nes y rangos.
+- `m7-*smoke.ts`: comprueba auditor?a, soporte, operaci?nes, rate limiting e integraci?nes.
 - `load-env.cjs`: carga variables de entorno para scripts fuera de Next.js.

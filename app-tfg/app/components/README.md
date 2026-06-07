@@ -1,11 +1,9 @@
 # Componentes de UI
 
-Componentes reutilizables de la aplicacion.
+Componentes reutilizables de la aplicaci?n.
 
-## Funcion
+## Funci?n
 
-Centralizar piezas visuales y de interaccion compartidas entre roles: tablas, formularios, navegacion, catalogo, pedidos, mapas, usuarios y comunicaciones.
-
-## Por que existe
+Centralizar piezas visuales y de interaccion compartidas entre roles: tablas, formularios, navegaci?n, cat?logo, pedidos, mapas, usuarios y comunicaci?nes.
 
 Evita duplicar interfaces por rol y ayuda a mantener consistencia visual en toda la app.

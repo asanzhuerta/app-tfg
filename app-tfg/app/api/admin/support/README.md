@@ -2,6 +2,6 @@
 
 Endpoints de soporte.
 
-## Funcion
+## Funci?n
 
-Exponer informacion de estado o diagnostico del sistema.
+Exponer informaci?n de estado o diagnostico del sistema.

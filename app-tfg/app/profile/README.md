@@ -2,10 +2,8 @@
 
 Ruta comun de perfil para todos los roles.
 
-## Funcion
+## Funci?n
 
-Permitir consultar y editar datos personales, imagen de perfil, informacion profesional y cambio de contraseña.
-
-## Por que existe
+Permitir consultar y editar datos personales, imagen de perfil, informaci?n profesional y cambio de contraseña.
 
 El perfil es transversal a admin, comercial y cliente. Mantenerlo como ruta comun reduce duplicacion.

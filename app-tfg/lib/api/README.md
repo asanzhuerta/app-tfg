@@ -2,10 +2,8 @@
 
 Utilidades para Route Handlers y respuestas de servidor.
 
-## Funcion
+## Funci?n
 
 Centralizar control de acceso, manejo de errores, parseo de peticiones y respuestas comunes.
 
-## Por que existe
-
-Los endpoints comparten patrones de seguridad y validacion. Esta carpeta evita repetirlos en cada ruta API.
+Los endpoints comparten patrones de seguridad y validaci?n. Esta carpeta evita repetirlos en cada ruta API.

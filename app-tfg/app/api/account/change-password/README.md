@@ -2,6 +2,6 @@
 
 Route Handler para actualizar contraseña.
 
-## Funcion
+## Funci?n
 
 Validar usuario autenticado, comprobar datos y persistir la nueva credencial.

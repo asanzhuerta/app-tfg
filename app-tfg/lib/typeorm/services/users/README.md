@@ -2,6 +2,6 @@
 
 Operaciones de usuarios y solicitudes.
 
-## Funcion
+## Funci?n
 
 Gestionar altas, estados, roles, solicitudes y datos de cuenta.

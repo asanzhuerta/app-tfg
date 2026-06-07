@@ -2,6 +2,6 @@
 
 Componentes y utilidades compartidos por pantallas de usuarios.
 
-## Funcion
+## Funci?n
 
-Reutilizar formularios, mapeos o controles comunes en gestion de usuarios.
+Reutilizar formularios, mapeos o controles comunes en gesti?n de usuarios.

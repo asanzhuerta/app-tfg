@@ -2,6 +2,6 @@
 
 Implementacion de limites de peticion.
 
-## Funcion
+## Funci?n
 
 Proteger endpoints sensibles frente a abuso o errores de cliente.

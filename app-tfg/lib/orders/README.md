@@ -2,10 +2,8 @@
 
 Logica de pedidos, borradores, descuentos, estado y trazabilidad.
 
-## Funcion
+## Funci?n
 
-Apoyar creacion, confirmacion, historial, detalle, promociones aplicables y validacion de entrega.
-
-## Por que existe
+Apoyar creacion, confirmación, historial, detalle, promoci?nes aplicables y validaci?n de entrega.
 
 Pedidos es un flujo transversal a cliente, comercial y admin. Mantenerlo en `lib/orders` separa reglas de negocio de componentes.

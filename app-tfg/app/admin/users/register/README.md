@@ -2,6 +2,6 @@
 
 Formulario de creacion directa de usuarios.
 
-## Funcion
+## Funci?n
 
-Permitir a administracion crear cuentas sin pasar por solicitud publica.
+Permitir a administraci?n crear cuentas sin pasar por solicitud publica.

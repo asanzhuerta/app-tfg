@@ -2,6 +2,6 @@
 
 Atajo PWA hacia rutas.
 
-## Funcion
+## Funci?n
 
 Abrir rapidamente la vista de rutas para usuarios que la tengan disponible.
