@@ -1,5 +1,6 @@
 import { requireClientSession } from "@/lib/auth/require-session";
 import PageTransition from "../components/animations/PageTransition";
+import ClientLandingAssistantSlot from "../components/clients/ClientLandingAssistantSlot";
 import ShellHeader from "../components/layout/ShellHeader";
 import { PageHeaderProvider } from "../components/layout/PageHeaderContext";
 import RoleSidebar from "../components/navigation/RoleSidebar";
@@ -25,7 +26,10 @@ export default async function ClientLayout({
 						userImageUrl={user?.profile_image_url ?? session.user.image}
 					/>
 					<div className="min-w-0 flex-1 px-6 pt-4 pb-8 md:pb-10">
-						<ShellHeader />
+						<div className="relative">
+							<ShellHeader />
+							<ClientLandingAssistantSlot />
+						</div>
 						<section className="flex-1 overflow-y-auto">
 							<PageTransition>{children}</PageTransition>
 						</section>
