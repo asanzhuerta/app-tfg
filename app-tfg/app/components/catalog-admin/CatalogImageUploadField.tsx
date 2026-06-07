@@ -68,7 +68,7 @@ export default function CatalogImageUploadField({
 							/>
 						) : (
 							<p className="px-4 text-center text-sm text-slate-500">
-								No hay imagen cargada todavia.
+								No hay imagen cargada todavía.
 							</p>
 						)}
 					</div>
@@ -104,7 +104,7 @@ export default function CatalogImageUploadField({
 							<p className="text-sm text-slate-600">{statusText}</p>
 						) : (
 							<p className="text-sm text-slate-500">
-								La imagen se almacenara en Cloudinary para usarla en la app.
+								La imagen se almacámara en Cloudinary para usarla en la app.
 							</p>
 						)}
 

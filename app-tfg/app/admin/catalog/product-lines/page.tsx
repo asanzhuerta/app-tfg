@@ -74,8 +74,8 @@ export default async function AdminProductLinesPage({ searchParams }: Props) {
 	return (
 		<div className="space-y-6">
 			<H1Title
-				title="Categorias y lineas comerciales"
-				subtitle="Gestiona la jerarquia principal del catalogo y accede al detalle filtrado de sus productos"
+				title="Categorías y líneas comerciales"
+				subtitle="Gestiona la jerarquia principal del catálogo y accede al detalle filtrado de sus productos"
 			/>
 
 			<CatalogHierarchyWorkspace

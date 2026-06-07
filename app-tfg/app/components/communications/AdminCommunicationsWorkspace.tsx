@@ -3,6 +3,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiClientError, requestJson } from "@/lib/api/client";
+import type { NotificationDeliveryChannel } from "@/lib/contracts/communications";
 import type {
 	ClientOptionView,
 	ClientSegmentAssignmentView,
@@ -14,6 +15,9 @@ import type {
 } from "./communication-view-types";
 
 type AdminTab = "promotions" | "trainings" | "segments" | "assignments";
+type DeliveryFormState = {
+	deliveryChannels: NotificationDeliveryChannel[];
+};
 
 type Props = {
 	segments: SegmentView[];
@@ -31,6 +35,7 @@ const tabs: Array<{ key: AdminTab; label: string }> = [
 	{ key: "segments", label: "Rangos" },
 	{ key: "assignments", label: "Asignaciones" },
 ];
+const defaultDeliveryChannels: NotificationDeliveryChannel[] = ["in_app"];
 
 const emptyPromotionForm = {
 	title: "",
@@ -44,6 +49,7 @@ const emptyPromotionForm = {
 	productLineId: "",
 	clientId: "",
 	customerSegmentId: "",
+	deliveryChannels: [...defaultDeliveryChannels],
 };
 
 const emptyTrainingForm = {
@@ -55,6 +61,7 @@ const emptyTrainingForm = {
 	content: "",
 	status: "draft",
 	capacity: "",
+	deliveryChannels: [...defaultDeliveryChannels],
 };
 
 const emptySegmentForm = {
@@ -124,6 +131,36 @@ function StatusBadge({ status }: { status: string }) {
 			{status}
 		</span>
 	);
+}
+
+function hasDeliveryChannel(
+	form: DeliveryFormState,
+	channel: NotificationDeliveryChannel,
+) {
+	return form.deliveryChannels.includes(channel);
+}
+
+function updateDeliveryChannels(
+	currentChannels: NotificationDeliveryChannel[],
+	channel: NotificationDeliveryChannel,
+	checked: boolean,
+) {
+	if (channel === "in_app") {
+		return ["in_app"] as NotificationDeliveryChannel[];
+	}
+
+	const nextChannels = new Set<NotificationDeliveryChannel>([
+		"in_app",
+		...currentChannels,
+	]);
+
+	if (checked) {
+		nextChannels.add(channel);
+	} else {
+		nextChannels.delete(channel);
+	}
+
+	return [...nextChannels];
 }
 
 export default function AdminCommunicationsWorkspace({
@@ -292,6 +329,7 @@ export default function AdminCommunicationsWorkspace({
 			productLineId: promotion.productLineId ?? "",
 			clientId: promotion.clientId ?? "",
 			customerSegmentId: promotion.customerSegmentId ?? "",
+			deliveryChannels: [...defaultDeliveryChannels],
 		});
 	}
 
@@ -309,6 +347,7 @@ export default function AdminCommunicationsWorkspace({
 			content: training.content ?? "",
 			status: training.status,
 			capacity: training.capacity ? String(training.capacity) : "",
+			deliveryChannels: [...defaultDeliveryChannels],
 		});
 	}
 
@@ -944,6 +983,58 @@ export default function AdminCommunicationsWorkspace({
 								))}
 							</select>
 						</div>
+						<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+							<p className="text-sm font-semibold text-slate-900">
+								Canales de aviso
+							</p>
+							<div className="mt-3 grid gap-2 sm:grid-cols-3">
+								<label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+									<input
+										type="checkbox"
+										checked
+										disabled
+										className="h-4 w-4 rounded border-slate-300"
+									/>
+									Interna
+								</label>
+								<label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+									<input
+										type="checkbox"
+										checked={hasDeliveryChannel(promotionForm, "email")}
+										onChange={(event) =>
+											setPromotionForm((current) => ({
+												...current,
+												deliveryChannels: updateDeliveryChannels(
+													current.deliveryChannels,
+													"email",
+													event.target.checked,
+												),
+											}))
+										}
+										className="h-4 w-4 rounded border-slate-300"
+									/>
+									Correo electronico
+								</label>
+								<label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+									<input
+										type="checkbox"
+										checked={hasDeliveryChannel(promotionForm, "push")}
+										onChange={(event) =>
+											setPromotionForm((current) => ({
+												...current,
+												deliveryChannels: updateDeliveryChannels(
+													current.deliveryChannels,
+													"push",
+													event.target.checked,
+												),
+											}))
+										}
+										className="h-4 w-4 rounded border-slate-300"
+									/>
+									Push PWA
+								</label>
+							</div>
+						</div>
 						<div className="flex flex-wrap gap-2">
 							<button
 								type="submit"
@@ -1068,7 +1159,7 @@ export default function AdminCommunicationsWorkspace({
 									{editingTrainingId ? "Editar formación" : "Nueva formación"}
 								</h2>
 								<p className="text-sm text-slate-500">
-									Publica sesiones presenciales, online o mixtas.
+									Pública sesiones presenciales, online o mixtas.
 								</p>
 							</div>
 							<button
@@ -1181,6 +1272,58 @@ export default function AdminCommunicationsWorkspace({
 							}
 							className="min-h-20 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
 						/>
+						<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+							<p className="text-sm font-semibold text-slate-900">
+								Canales de aviso
+							</p>
+							<div className="mt-3 grid gap-2 sm:grid-cols-3">
+								<label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+									<input
+										type="checkbox"
+										checked
+										disabled
+										className="h-4 w-4 rounded border-slate-300"
+									/>
+									Interna
+								</label>
+								<label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+									<input
+										type="checkbox"
+										checked={hasDeliveryChannel(trainingForm, "email")}
+										onChange={(event) =>
+											setTrainingForm((current) => ({
+												...current,
+												deliveryChannels: updateDeliveryChannels(
+													current.deliveryChannels,
+													"email",
+													event.target.checked,
+												),
+											}))
+										}
+										className="h-4 w-4 rounded border-slate-300"
+									/>
+									Correo electronico
+								</label>
+								<label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
+									<input
+										type="checkbox"
+										checked={hasDeliveryChannel(trainingForm, "push")}
+										onChange={(event) =>
+											setTrainingForm((current) => ({
+												...current,
+												deliveryChannels: updateDeliveryChannels(
+													current.deliveryChannels,
+													"push",
+													event.target.checked,
+												),
+											}))
+										}
+										className="h-4 w-4 rounded border-slate-300"
+									/>
+									Push PWA
+								</label>
+							</div>
+						</div>
 						<div className="flex flex-wrap gap-2">
 							<button
 								type="submit"

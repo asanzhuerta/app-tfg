@@ -53,7 +53,7 @@ function pickStrictestPolicy(policies: RateLimitPolicyDiagnostic[]) {
 	const activePolicies = policies.filter((policy) => policy.enabled);
 
 	if (activePolicies.length === 0) {
-		return "Sin politicas activas";
+		return "Sin políticas activas";
 	}
 
 	return activePolicies.reduce((strictest, policy) =>
@@ -65,7 +65,7 @@ function pickShortestWindowPolicy(policies: RateLimitPolicyDiagnostic[]) {
 	const activePolicies = policies.filter((policy) => policy.enabled);
 
 	if (activePolicies.length === 0) {
-		return "Sin politicas activas";
+		return "Sin políticas activas";
 	}
 
 	return activePolicies.reduce((shortest, policy) =>

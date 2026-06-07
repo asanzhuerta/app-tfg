@@ -41,6 +41,6 @@ export async function POST(request: Request) {
 		);
 	} catch (error) {
 		console.error("[admin/commercial-routes/add-visit][POST] error:", error);
-		return jsonFromError(error, "Error al anadir la visita a la ruta");
+		return jsonFromError(error, "Error al añadir la visita a la ruta");
 	}
 }

@@ -12,7 +12,7 @@ import { geocodeFreeTextAddress } from "@/lib/geocoding/geocode-address";
 import { getClientById } from "@/lib/typeorm/services/commercial/client";
 
 // GET /api/clients/[id]/geocode?q=address
-// Busca coordenadas sugeridas para una direccion del cliente antes de guardarla en su ficha.
+// Busca coordenadas sugeridas para una dirección del cliente antes de guardarla en su ficha.
 export async function GET(request: Request, context: RouteContext) {
 	try {
 		const session = (await auth()) as SessionLike;

@@ -632,7 +632,7 @@ export default function OrderWorkspace({
 							</h2>
 							<p className="text-sm text-slate-600">
 								Aqui puedes revisar primero todo lo pendiente, filtrar por
-								cliente o estado y abrir la creacion de nuevos pedidos solo
+								cliente o estado y abrir la creación de nuevos pedidos solo
 								cuando lo necesites.
 							</p>
 						</div>
@@ -765,7 +765,7 @@ export default function OrderWorkspace({
 									{draftDiscountSummary.hasDiscounts ? (
 										<div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700">
 											<p className="font-semibold">
-												Promocion aplicable detectada
+												Promoción aplicable detectada
 											</p>
 											<p className="mt-1">
 												Se han descontado{" "}
@@ -776,8 +776,8 @@ export default function OrderWorkspace({
 												</span>{" "}
 												en {draftDiscountSummary.discountedLineCount}{" "}
 												{draftDiscountSummary.discountedLineCount === 1
-													? "linea"
-													: "lineas"}{" "}
+													? "línea"
+													: "líneas"}{" "}
 												del borrador.
 											</p>
 										</div>

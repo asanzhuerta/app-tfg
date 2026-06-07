@@ -33,7 +33,7 @@ async function main() {
 	);
 	assertCondition(
 		report.rowCount >= report.summary.total * 3,
-		"El informe operativo M7 no contiene metricas suficientes",
+		"El informe operativo M7 no contiene métricas suficientes",
 	);
 
 	for (const expectedSlug of [

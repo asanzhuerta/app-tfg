@@ -58,12 +58,12 @@ export default function TrainingEventsWorkspace({
 				method: "POST",
 				headers: { "content-type": "application/json" },
 				body: JSON.stringify({}),
-				fallbackMessage: "No se pudo completar la inscripcion",
+				fallbackMessage: "No se pudo completar la inscripción",
 			});
-			setMessage("Inscripcion registrada correctamente");
+			setMessage("Inscripción registrada correctamente");
 			router.refresh();
 		} catch (error) {
-			setError(getErrorMessage(error, "No se pudo completar la inscripcion"));
+			setError(getErrorMessage(error, "No se pudo completar la inscripción"));
 		} finally {
 			setPendingId(null);
 		}
@@ -77,12 +77,12 @@ export default function TrainingEventsWorkspace({
 		try {
 			await requestJson(`/api/communications/trainings/${trainingId}/enrollment`, {
 				method: "DELETE",
-				fallbackMessage: "No se pudo cancelar la inscripcion",
+				fallbackMessage: "No se pudo cancelar la inscripción",
 			});
-			setMessage("Inscripcion cancelada");
+			setMessage("Inscripción cancelada");
 			router.refresh();
 		} catch (error) {
-			setError(getErrorMessage(error, "No se pudo cancelar la inscripcion"));
+			setError(getErrorMessage(error, "No se pudo cancelar la inscripción"));
 		} finally {
 			setPendingId(null);
 		}
@@ -103,7 +103,7 @@ export default function TrainingEventsWorkspace({
 
 			<section className="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur">
 				<p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-					M6 / Formacion
+					M6 / Formación
 				</p>
 				<h2 className="mt-2 text-2xl font-bold text-slate-900">
 					Sesiones publicadas
@@ -171,7 +171,7 @@ export default function TrainingEventsWorkspace({
 											disabled={pendingId === training.id}
 											className="rounded-xl border border-rose-200 px-4 py-2 text-sm font-medium text-rose-700 disabled:opacity-60"
 										>
-											Cancelar inscripcion
+											Cancelar inscripción
 										</button>
 									) : (
 										<button

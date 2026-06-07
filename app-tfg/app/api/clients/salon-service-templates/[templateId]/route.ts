@@ -31,6 +31,6 @@ export async function DELETE(_: Request, context: TemplateRouteContext) {
 			"[clients/salon-service-templates/[templateId]][DELETE] error:",
 			error,
 		);
-		return jsonFromError(error, "Error al eliminar la plantilla tecnica");
+		return jsonFromError(error, "Error al eliminar la plantilla técnica");
 	}
 }

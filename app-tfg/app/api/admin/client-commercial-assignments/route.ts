@@ -18,7 +18,7 @@ import {
 
 // GET /api/admin/client-commercial-assignments?clientId=...
 // GET /api/admin/client-commercial-assignments?commercialId=...
-// Consulta asignaciones activas o historicas entre clientes y comerciales segun el filtro indicado.
+// Consulta asignaciones activas o históricas entre clientes y comerciales según el filtro indicado.
 export async function GET(request: Request) {
 	const user = await requireRoleUser("admin");
 
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
 }
 
 // POST /api/admin/client-commercial-assignments
-// Crea o reasigna la vinculacion entre un cliente y un comercial desde administracion.
+// Crea o reasigna la vinculación entre un cliente y un comercial desde administración.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 
@@ -99,6 +99,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(assignment, { status: 201 });
 	} catch (error) {
 		console.error("[admin/client-commercial-assignments][POST] error:", error);
-		return jsonFromError(error, "Error al guardar la asignacion comercial");
+		return jsonFromError(error, "Error al guardar la asignación comercial");
 	}
 }

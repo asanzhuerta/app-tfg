@@ -8,14 +8,14 @@ import CatalogAdminForm from "@/app/components/catalog-admin/CatalogAdminForm";
 export default function NewProductCategoryPage() {
 	return (
 		<CatalogAdminCreateShell
-			title="Nueva categoria"
-			subtitle="Crea una familia principal para ordenar el catalogo profesional."
+			title="Nueva categoría"
+			subtitle="Crea una familia principal para ordenar el catálogo profesional."
 			backHref="/admin/catalog/product-lines"
-			backLabel="categorias y lineas"
+			backLabel="categorías y líneas"
 		>
 			<CatalogAdminForm
-				entityLabel="categoria"
-				entityLabelPlural="las categorias del catalogo"
+				entityLabel="categoría"
+				entityLabelPlural="las categorías del catálogo"
 				basePath="/admin/catalog/product-lines"
 				apiBasePath="/api/admin/catalog/product-categories"
 				initialValues={getProductCategoryInitialValues()}

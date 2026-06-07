@@ -98,18 +98,18 @@ export function listSupportCapabilityItems(now = new Date()) {
 				category: "Compatibilidad",
 				status: "ready",
 				description:
-					"Filtro centralizado en proxy.ts que detecta navegadores por debajo del soporte minimo de Next.js usado por la aplicacion.",
+					"Filtro centralizado en proxy.ts que detecta navegadores por debajo del soporte mínimo de Next.js usado por la aplicación.",
 				operationalUse:
-					"Protege rutas de aplicacion antes de cargar pantallas privadas, reduciendo errores por APIs modernas no disponibles.",
+					"Protege rutas de aplicación antes de cargar pantallas privadas, reduciendo errores por APIs modernas no disponibles.",
 				degradationBehavior:
-					"Si el navegador no cumple el minimo, redirige a /unsupported-browser con una explicacion y alternativas de acceso.",
+					"Si el navegador no cumple el mínimo, redirige a /unsupported-browser con una explicacion y alternativas de acceso.",
 				evidence: [
 					{
 						label: "Ruta informativa",
 						value: "/unsupported-browser",
 					},
 					{
-						label: "Minimos aceptados",
+						label: "Mínimos aceptados",
 						value: MINIMUM_BROWSER_SUPPORT.join(", "),
 					},
 					{
@@ -127,11 +127,11 @@ export function listSupportCapabilityItems(now = new Date()) {
 				category: "PWA",
 				status: requiredPwaIconsReady ? "ready" : "warning",
 				description:
-					"Manifiesto generado desde app/manifest.ts para exponer nombre, iconos, modo standalone y orientacion movil.",
+					"Manifiesto generado desde app/manifest.ts para exponer nombre, iconos, modo standalone y orientacion móvil.",
 				operationalUse:
 					"Permite instalar KinEstilistas en dispositivos compatibles y conserva una identidad visual coherente.",
 				degradationBehavior:
-					"Si falta algun icono, la aplicacion sigue funcionando en navegador, pero la instalacion puede perder calidad visual.",
+					"Si falta algun icono, la aplicación sigue funcionando en navegador, pero la instalacion puede perder calidad visual.",
 				evidence: [
 					{
 						label: "Endpoint",
@@ -160,17 +160,17 @@ export function listSupportCapabilityItems(now = new Date()) {
 		buildItem(
 			{
 				slug: "service-worker-cache",
-				title: "Service worker basico",
+				title: "Service worker básico",
 				category: "PWA",
 				status: serviceWorkerExists
 					? resolveServiceWorkerStatus(swContent)
 					: "missing",
 				description:
-					"Service worker registrado desde el layout raiz para cachear el shell minimo, iconos, manifiesto y una pantalla offline segura.",
+					"Service worker registrado desde el layout raiz para cachear el shell mínimo, iconos, manifiesto y una pantalla offline segura.",
 				operationalUse:
 					"Mejora la tolerancia ante cortes breves de conectividad sin cachear respuestas privadas de API, pedidos, rutas o perfiles.",
 				degradationBehavior:
-					"Si el service worker no se registra, la aplicacion opera en modo web normal sin cache offline de soporte.",
+					"Si el service worker no se registra, la aplicación opera en modo web normal sin cache offline de soporte.",
 				evidence: [
 					{
 						label: "Fichero",
@@ -203,11 +203,11 @@ export function listSupportCapabilityItems(now = new Date()) {
 				category: "Experiencia",
 				status: "ready",
 				description:
-					"Componente SafeForm reutilizado en formularios criticos para impedir envios nativos accidentales antes de que React hidrate.",
+					"Componente SafeForm reutilizado en formularios críticos para impedir envíos nativos accidentales antes de que React hidrate.",
 				operationalUse:
-					"Reduce fallos de UX en login, registro y formularios administrativos cuando la pagina aun esta terminando de cargar.",
+					"Reduce fallos de UX en login, registro y formularios administrativos cuando la página aún está terminando de cargar.",
 				degradationBehavior:
-					"Si JavaScript tarda en estar listo, el formulario evita una navegacion GET accidental y mantiene al usuario en contexto.",
+					"Si JavaScript tarda en estar listo, el formulario evita una navegación GET accidental y mantiene al usuario en contexto.",
 				evidence: [
 					{
 						label: "Componente",

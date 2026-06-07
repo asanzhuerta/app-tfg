@@ -31,7 +31,7 @@ export default async function EditSupportResourcePage({ params }: Props) {
 	return (
 		<CatalogAdminEditShell
 			title="Editar recurso de apoyo"
-			subtitle={`Actualiza el contexto y la documentacion de ${supportResource.title}.`}
+			subtitle={`Actualiza el contexto y la documentación de ${supportResource.title}.`}
 			backHref="/admin/catalog/support-resources"
 			backLabel="recursos de apoyo"
 		>

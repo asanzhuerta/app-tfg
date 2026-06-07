@@ -9,7 +9,7 @@ import {
 
 const navItems = [
 	{
-		title: "Categorias y lineas",
+		title: "Categorías y líneas",
 		icon: <CatalogIcon className="h-6 w-6" />,
 		href: "/admin/catalog/product-lines",
 	},

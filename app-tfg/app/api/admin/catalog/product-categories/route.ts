@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 		return NextResponse.json(productCategories, { status: 200 });
 	} catch (error) {
 		console.error("[admin/catalog/product-categories][GET] error:", error);
-		return jsonFromError(error, "Error al listar las categorias");
+		return jsonFromError(error, "Error al listar las categorías");
 	}
 }
 
@@ -51,6 +51,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(createdCategory, { status: 201 });
 	} catch (error) {
 		console.error("[admin/catalog/product-categories][POST] error:", error);
-		return jsonFromError(error, "Error al crear la categoria");
+		return jsonFromError(error, "Error al crear la categoría");
 	}
 }

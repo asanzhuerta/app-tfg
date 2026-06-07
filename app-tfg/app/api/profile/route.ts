@@ -31,7 +31,7 @@ export async function PATCH(request: Request) {
 	}
 
 	if (!sessionUser.id) {
-		return jsonError("Sesion invalida", 401, "INVALID_SESSION");
+		return jsonError("Sesión invalida", 401, "INVALID_SESSION");
 	}
 
 	try {
@@ -78,7 +78,7 @@ export async function PATCH(request: Request) {
 		if (!isValidEmail(email)) {
 			return NextResponse.json(
 				{
-					message: "El correo electronico no es valido",
+					message: "El correo electronico no es válido",
 					code: "INVALID_EMAIL_FORMAT",
 				},
 				{ status: 400 },
@@ -89,7 +89,7 @@ export async function PATCH(request: Request) {
 			if (password !== confirmPassword) {
 				return NextResponse.json(
 					{
-						message: "Las contrasenas no coinciden",
+						message: "Las contraseñas no coinciden",
 						code: "PASSWORD_MATCH",
 					},
 					{ status: 400 },
@@ -206,7 +206,7 @@ export async function PATCH(request: Request) {
 		return NextResponse.json(
 			{
 				message: password
-					? "Perfil, correo y contrasena actualizados correctamente"
+					? "Perfil, correo y contraseña actualizados correctamente"
 					: "Perfil y correo actualizados correctamente",
 			},
 			{ status: 200 },

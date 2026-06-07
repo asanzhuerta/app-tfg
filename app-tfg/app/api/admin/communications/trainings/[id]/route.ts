@@ -27,13 +27,13 @@ export async function GET(_: Request, context: RouteContext) {
 		const trainingEvent = await getTrainingEventById(id);
 
 		if (!trainingEvent) {
-			return notFoundError("Formacion no encontrada", "TRAINING_NOT_FOUND");
+			return notFoundError("Formación no encontrada", "TRAINING_NOT_FOUND");
 		}
 
 		return NextResponse.json(trainingEvent, { status: 200 });
 	} catch (error) {
 		console.error("[admin/communications/trainings/[id]][GET] error:", error);
-		return jsonFromError(error, "Error al obtener formacion");
+		return jsonFromError(error, "Error al obtener formación");
 	}
 }
 
@@ -55,7 +55,7 @@ export async function PATCH(request: Request, context: RouteContext) {
 		return NextResponse.json(trainingEvent, { status: 200 });
 	} catch (error) {
 		console.error("[admin/communications/trainings/[id]][PATCH] error:", error);
-		return jsonFromError(error, "Error al actualizar formacion");
+		return jsonFromError(error, "Error al actualizar formación");
 	}
 }
 
@@ -73,6 +73,6 @@ export async function DELETE(_: Request, context: RouteContext) {
 		return NextResponse.json(deleted, { status: 200 });
 	} catch (error) {
 		console.error("[admin/communications/trainings/[id]][DELETE] error:", error);
-		return jsonFromError(error, "Error al eliminar formacion");
+		return jsonFromError(error, "Error al eliminar formación");
 	}
 }

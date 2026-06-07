@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 		return NextResponse.json(productLines, { status: 200 });
 	} catch (error) {
 		console.error("[admin/catalog/product-lines][GET] error:", error);
-		return jsonFromError(error, "Error al listar las lineas comerciales");
+		return jsonFromError(error, "Error al listar las líneas comerciales");
 	}
 }
 
@@ -52,6 +52,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(createdProductLine, { status: 201 });
 	} catch (error) {
 		console.error("[admin/catalog/product-lines][POST] error:", error);
-		return jsonFromError(error, "Error al crear la linea comercial");
+		return jsonFromError(error, "Error al crear la línea comercial");
 	}
 }

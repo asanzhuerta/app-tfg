@@ -137,12 +137,12 @@ function toIso(value: Date | string | null | undefined) {
 function getIntegrationTypeLabel(type: ExternalIntegrationType) {
 	const labels: Record<ExternalIntegrationType, string> = {
 		storage: "Almacenamiento",
-		geocoding: "Geocodificacion",
+		geocoding: "Geocodificación",
 		routing: "Rutas",
 		qr: "QR",
-		erp: "ERP / facturacion",
+		erp: "ERP / facturación",
 		messaging: "Mensajeria",
-		automation: "Automatizacion",
+		automation: "Automatización",
 		other: "Otra",
 	};
 
@@ -163,8 +163,8 @@ function getIntegrationStatusLabel(status: ExternalIntegrationStatus) {
 function getOperationTypeLabel(type: IntegrationOperationType) {
 	const labels: Record<IntegrationOperationType, string> = {
 		import: "Importacion",
-		export: "Exportacion",
-		sync: "Sincronizacion",
+		export: "Exportación",
+		sync: "Sincronización",
 		webhook: "Webhook",
 		manual: "Manual",
 	};
@@ -237,7 +237,7 @@ function mapIntegrationOperation(
 	return {
 		id: operation.id,
 		integrationId: operation.integration_id,
-		integrationName: operation.integration?.name ?? "Integracion externa",
+		integrationName: operation.integration?.name ?? "Integración externa",
 		operationType: operation.operation_type,
 		operationTypeLabel: getOperationTypeLabel(operation.operation_type),
 		dataType: operation.data_type,
@@ -428,7 +428,7 @@ export async function createIntegrationOperation(input: {
 }) {
 	if (!input.integrationId) {
 		throw new EnterpriseOperationsServiceError(
-			"La integracion es obligatoria",
+			"La integración es obligatoria",
 			400,
 			"INTEGRATION_REQUIRED",
 		);
@@ -438,7 +438,7 @@ export async function createIntegrationOperation(input: {
 
 	if (!isOneOf(operationType, OPERATION_TYPES)) {
 		throw new EnterpriseOperationsServiceError(
-			"El tipo de operacion no es valido",
+			"El tipo de operación no es válido",
 			400,
 			"INVALID_OPERATION_TYPE",
 		);
@@ -448,7 +448,7 @@ export async function createIntegrationOperation(input: {
 
 	if (!isOneOf(operationStatus, OPERATION_STATUSES)) {
 		throw new EnterpriseOperationsServiceError(
-			"El estado de la operacion no es valido",
+			"El estado de la operación no es válido",
 			400,
 			"INVALID_OPERATION_STATUS",
 		);
@@ -481,7 +481,7 @@ export async function createIntegrationOperation(input: {
 
 		if (!integration) {
 			throw new EnterpriseOperationsServiceError(
-				"Integracion no encontrada",
+				"Integración no encontrada",
 				404,
 				"INTEGRATION_NOT_FOUND",
 			);
@@ -525,13 +525,13 @@ export async function generateSupplierOrderProposal(input: {
 	const quantity = parsePositiveInteger(input.quantity, "La cantidad", 1);
 	const reason =
 		normalizeText(input.reason, "El motivo", { maxLength: 160 }) ??
-		"reposicion_manual";
+		"reposición_manual";
 	const notes = normalizeText(input.notes, "Las notas", { maxLength: 500 });
 	const status = input.status || "generated";
 
 	if (!isOneOf(status, PROPOSAL_STATUSES)) {
 		throw new EnterpriseOperationsServiceError(
-			"El estado de la propuesta no es valido",
+			"El estado de la propuesta no es válido",
 			400,
 			"INVALID_PROPOSAL_STATUS",
 		);

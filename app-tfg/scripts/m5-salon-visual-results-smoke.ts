@@ -54,7 +54,7 @@ async function main() {
 
 	assertCondition(
 		colorProduct,
-		"No hay productos de coloracion con tonalidad vinculada para ejecutar la prueba visual de M5",
+		"No hay productos de coloración con tonalidad vinculada para ejecutar la prueba visual de M5",
 	);
 
 	const candidate = await findCandidateClientUser();
@@ -81,10 +81,10 @@ async function main() {
 			createdSalonClient.id,
 			{
 				serviceDate: "2026-06-03",
-				serviceType: "Coloracion tecnica",
+				serviceType: "Coloración técnica",
 				result: "Rubio beige uniforme",
 				notes: `${tag} service`,
-				technicalDescription: "Aplicacion por secciones con saturacion completa",
+				technicalDescription: "Aplicación por secciones con saturacion completa",
 				formula: "Tono principal + oxidante + matiz",
 				technicalNotes: "Control visual cada 10 minutos",
 				productUsages: [
@@ -92,7 +92,7 @@ async function main() {
 						productId: colorProduct.productId,
 						colorReferenceId: colorProduct.colorReferenceId,
 						quantityUsed: 1.25,
-						notes: "Aplicacion en raiz y barrido a medios",
+						notes: "Aplicación en raiz y barrido a medios",
 					},
 				],
 				resultImages,
@@ -101,7 +101,7 @@ async function main() {
 
 		const createdService = detail.services.find(
 			(service) =>
-				service.service_type === "Coloracion tecnica" &&
+				service.service_type === "Coloración técnica" &&
 				service.notes === `${tag} service`,
 		);
 
@@ -117,9 +117,9 @@ async function main() {
 		);
 		assertCondition(
 			createdService.result_images.length === 2,
-			"El servicio no conserva las dos imagenes de resultado final",
+			"El servicio no conserva las dos imágenes de resultado final",
 		);
-		console.log("PASS servicio visual creado con tonalidad e imagenes");
+		console.log("PASS servicio visual creado con tonalidad e imágenes");
 
 		const updatedDetail = await updateSalonServiceForClientUser(
 			candidate.userId,
@@ -127,7 +127,7 @@ async function main() {
 			{
 				serviceId: createdService.id,
 				serviceDate: "2026-06-03",
-				serviceType: "Coloracion tecnica",
+				serviceType: "Coloración técnica",
 				result: "Rubio beige corregido",
 				notes: `${tag} service updated`,
 				technicalDescription: "Repaso de matiz en zonas sensibles",
@@ -152,12 +152,12 @@ async function main() {
 		assertCondition(
 			updatedService?.result_images.length === 1 &&
 				updatedService.result_images[0]?.image_url === resultImages[1],
-			"La actualizacion del servicio no ha conservado la galeria esperada",
+			"La actualización del servicio no ha conservado la galeria esperada",
 		);
 		assertCondition(
 			updatedService.product_usages[0]?.color_reference_code ===
 				colorProduct.colorReferenceCode,
-			"La actualizacion del servicio ha perdido la tonalidad del producto",
+			"La actualización del servicio ha perdido la tonalidad del producto",
 		);
 		console.log("PASS servicio visual actualizado con galeria reducida");
 
@@ -203,10 +203,10 @@ async function main() {
 
 void main()
 	.then(() => {
-		console.log("M5 salon visual smoke OK");
+		console.log("M5 salón visual smoke OK");
 	})
 	.catch((error) => {
-		console.error("M5 salon visual smoke FAILED");
+		console.error("M5 salón visual smoke FAILED");
 		console.error(error);
 		process.exitCode = 1;
 	});

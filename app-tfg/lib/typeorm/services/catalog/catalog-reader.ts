@@ -70,7 +70,7 @@ async function getActiveCatalogProductDetailUncached(productId: string) {
 					resourceUrl: resource.resource_url,
 					resourceTypeName: resource.resourceType?.name ?? null,
 					scopeLabel:
-						resource.product_id === product.id ? "Producto" : "Linea",
+						resource.product_id === product.id ? "Producto" : "Línea",
 				},
 			]),
 		).values(),

@@ -21,17 +21,17 @@ const CONSTRAINT_ERRORS: Record<
 	{ message: string; code: string; status?: number }
 > = {
 	UQ_product_categories_name: {
-		message: "Ya existe una categoria con ese nombre",
+		message: "Ya existe una categoría con ese nombre",
 		code: "DUPLICATE_PRODUCT_CATEGORY_NAME",
 		status: 409,
 	},
 	UQ_product_lines_name: {
-		message: "Ya existe una linea comercial con ese nombre",
+		message: "Ya existe una línea comercial con ese nombre",
 		code: "DUPLICATE_PRODUCT_LINE_NAME",
 		status: 409,
 	},
 	product_subcategories_product_line_id_name_unique: {
-		message: "Ya existe una subcategoria con ese nombre dentro de la linea indicada",
+		message: "Ya existe una subcategoría con ese nombre dentro de la línea indicada",
 		code: "DUPLICATE_PRODUCT_SUBCATEGORY_NAME",
 		status: 409,
 	},
@@ -41,7 +41,7 @@ const CONSTRAINT_ERRORS: Record<
 		status: 409,
 	},
 	color_references_color_chart_id_code_unique: {
-		message: "Ya existe una referencia con ese codigo en la carta indicada",
+		message: "Ya existe una referencia con ese código en la carta indicada",
 		code: "DUPLICATE_COLOR_REFERENCE_CODE",
 		status: 409,
 	},
@@ -115,7 +115,7 @@ export function rethrowCatalogPersistenceError(
 
 	if (driverError?.code === "23514") {
 		throw new CatalogServiceError(
-			"Los datos del catalogo no cumplen las reglas de negocio esperadas",
+			"Los datos del catálogo no cumplen las reglas de negocio esperadas",
 			400,
 			"INVALID_CATALOG_CONSTRAINT",
 		);
@@ -134,7 +134,7 @@ export async function requireProductCategory(
 
 	if (!category) {
 		throw new CatalogServiceError(
-			"Categoria de producto no encontrada",
+			"Categoría de producto no encontrada",
 			404,
 			"PRODUCT_CATEGORY_NOT_FOUND",
 		);
@@ -153,7 +153,7 @@ export async function requireProductLine(manager: EntityManager, id: string) {
 
 	if (!productLine) {
 		throw new CatalogServiceError(
-			"Linea comercial no encontrada",
+			"Línea comercial no encontrada",
 			404,
 			"PRODUCT_LINE_NOT_FOUND",
 		);
@@ -171,7 +171,7 @@ export async function requireProductLineForCategory(
 
 	if (productLine.product_category_id !== productCategoryId) {
 		throw new CatalogServiceError(
-			"La linea comercial no pertenece a la categoria indicada",
+			"La línea comercial no pertenece a la categoría indicada",
 			400,
 			"PRODUCT_LINE_CATEGORY_MISMATCH",
 		);
@@ -195,7 +195,7 @@ export async function requireProductSubcategory(
 
 	if (!productSubcategory) {
 		throw new CatalogServiceError(
-			"Subcategoria de producto no encontrada",
+			"Subcategoría de producto no encontrada",
 			404,
 			"PRODUCT_SUBCATEGORY_NOT_FOUND",
 		);
@@ -216,7 +216,7 @@ export async function requireProductSubcategoryForLine(
 
 	if (productSubcategory.product_line_id !== productLineId) {
 		throw new CatalogServiceError(
-			"La subcategoria no pertenece a la linea comercial indicada",
+			"La subcategoría no pertenece a la línea comercial indicada",
 			400,
 			"PRODUCT_SUBCATEGORY_LINE_MISMATCH",
 		);
@@ -315,7 +315,7 @@ export async function ensureSupportResourceContext(
 ) {
 	if (!input.productId && !input.productLineId) {
 		throw new CatalogServiceError(
-			"El recurso debe estar asociado a un producto o a una linea comercial",
+			"El recurso debe estar asociado a un producto o a una línea comercial",
 			400,
 			"SUPPORT_RESOURCE_CONTEXT_REQUIRED",
 		);
@@ -334,7 +334,7 @@ export async function ensureSupportResourceContext(
 		product.product_line_id !== productLine.id
 	) {
 		throw new CatalogServiceError(
-			"El producto no pertenece a la linea comercial indicada para el recurso",
+			"El producto no pertenece a la línea comercial indicada para el recurso",
 			400,
 			"SUPPORT_RESOURCE_CONTEXT_MISMATCH",
 		);

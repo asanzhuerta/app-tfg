@@ -19,7 +19,7 @@ export default async function ClientNotificationsPage() {
 	return (
 		<NotificationsWorkspace
 			title="Avisos"
-			subtitle="Notificaciones y recordatorios del salon"
+			subtitle="Notificaciones y recordatorios del salón"
 			backHref="/clients"
 			initialNotifications={notifications.map(serializeNotification)}
 			initialReminders={reminders.map(serializeReminder)}

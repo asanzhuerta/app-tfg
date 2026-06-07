@@ -50,6 +50,7 @@ import { TrainingEvent } from "./entities/TrainingEvent";
 import { TrainingEnrollment } from "./entities/TrainingEnrollment";
 import { AppNotification } from "./entities/AppNotification";
 import { AppReminder } from "./entities/AppReminder";
+import { UserPushSubscription } from "./entities/UserPushSubscription";
 import { SystemConfiguration } from "./entities/SystemConfiguration";
 import { ExternalIntegration } from "./entities/ExternalIntegration";
 import { IntegrationOperation } from "./entities/IntegrationOperation";
@@ -106,6 +107,7 @@ export const entities = [
 	TrainingEnrollment,
 	AppNotification,
 	AppReminder,
+	UserPushSubscription,
 	SystemConfiguration,
 	ExternalIntegration,
 	IntegrationOperation,

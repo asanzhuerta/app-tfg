@@ -22,7 +22,7 @@ type Props = {
 	config?: EntityTableConfig;
 };
 
-// Devuelve las clases visuales del boton segun el tipo de accion.
+// Devuelve las clases visuales del boton según el tipo de accion.
 function getActionClasses(variant?: "primary" | "secondary" | "warning") {
 	if (variant === "warning") {
 		return "bg-amber-100 text-amber-700 hover:bg-amber-200";
@@ -35,7 +35,7 @@ function getActionClasses(variant?: "primary" | "secondary" | "warning") {
 	return "bg-slate-950 text-white shadow-lg shadow-slate-950/15 hover:bg-slate-800";
 }
 
-// Tarjeta reutilizable que representa un unico elemento del listado.
+// Tarjeta reutilizable que representa un único elemento del listado.
 function EntityCard({
 	item,
 	shouldReduceMotion,

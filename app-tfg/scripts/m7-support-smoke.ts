@@ -43,7 +43,7 @@ function main() {
 		);
 		assertCondition(
 			item.operationalUse.length > 0 && item.degradationBehavior.length > 0,
-			`La capacidad ${item.slug} no documenta uso o degradacion`,
+			`La capacidad ${item.slug} no documenta uso o degradación`,
 		);
 	}
 
@@ -57,7 +57,7 @@ function main() {
 	);
 
 	console.log("PASS inventario M7 contiene capacidades de soporte esperadas");
-	console.log("PASS cada capacidad expone estado, evidencias y degradacion");
+	console.log("PASS cada capacidad expone estado, evidencias y degradación");
 	console.log("PASS resumen de soporte de M7 consistente");
 }
 

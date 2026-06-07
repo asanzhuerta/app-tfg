@@ -1,12 +1,12 @@
 // -----------------------------------------------------------------------------
-// GEOCODIFICACION DE DIRECCIONES
+// GEOCODIFICACIÓN DE DIRECCIONES
 // -----------------------------------------------------------------------------
 // Helper desacoplado para convertir direcciones textuales en coordenadas.
-// Mantiene una estrategia de busqueda progresiva para tolerar:
+// Mantiene una estrategia de búsqueda progresiva para tolerar:
 // - abreviaturas de vias
-// - codigos postales restrictivos
+// - códigos postales restrictivos
 // - numeros de portal no reconocidos por el proveedor
-// - necesidad de pasar de busqueda estructurada a libre
+// - necesidad de pasar de búsqueda estructurada a libre
 // -----------------------------------------------------------------------------
 import { normalizeText } from "@/lib/utils/text";
 
@@ -174,7 +174,7 @@ function getGeocodingConfig(input: { country?: string | null }): GeocodingConfig
 
 	if (provider && provider !== "nominatim") {
 		throw new GeocodingError(
-			"Proveedor de geocodificacion no soportado",
+			"Proveedor de geocodificación no soportado",
 			400,
 			"UNSUPPORTED_GEOCODING_PROVIDER",
 		);
@@ -226,7 +226,7 @@ async function fetchNominatimSearch(
 
 		if (response.status === 429) {
 			throw new GeocodingError(
-				"El servicio de geocodificacion ha bloqueado temporalmente las peticiones por exceso de uso.",
+				"El servicio de geocodificación ha bloqueado temporalmente las peticiones por exceso de uso.",
 				429,
 				"GEOCODING_RATE_LIMIT",
 				true,
@@ -235,7 +235,7 @@ async function fetchNominatimSearch(
 
 		if (response.status >= 500) {
 			throw new GeocodingError(
-				"El servicio de geocodificacion no esta disponible temporalmente.",
+				"El servicio de geocodificación no esta disponible temporalmente.",
 				response.status,
 				"GEOCODING_PROVIDER_UNAVAILABLE",
 				true,
@@ -243,7 +243,7 @@ async function fetchNominatimSearch(
 		}
 
 		throw new GeocodingError(
-			`No se pudo geocodificar la direccion. HTTP ${response.status} ${response.statusText}`,
+			`No se pudo geocodificar la dirección. HTTP ${response.status} ${response.statusText}`,
 			response.status,
 			"GEOCODING_HTTP_ERROR",
 		);
@@ -259,7 +259,7 @@ async function fetchNominatimSearch(
 			bodyPreview: rawText.slice(0, 300),
 		});
 		throw new GeocodingError(
-			"Respuesta invalida del servicio de geocodificacion",
+			"Respuesta invalida del servicio de geocodificación",
 			502,
 			"INVALID_GEOCODING_RESPONSE",
 			true,

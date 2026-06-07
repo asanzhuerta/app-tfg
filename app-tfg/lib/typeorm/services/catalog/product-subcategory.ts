@@ -39,7 +39,7 @@ async function ensureValidParentSubcategory(input: {
 		parentSubcategory.id === input.currentSubcategoryId
 	) {
 		throw new CatalogServiceError(
-			"Una subcategoria no puede depender de si misma",
+			"Una subcategoría no puede depender de si misma",
 			400,
 			"PRODUCT_SUBCATEGORY_SELF_PARENT",
 		);
@@ -56,7 +56,7 @@ async function ensureValidParentSubcategory(input: {
 	while (currentParentId) {
 		if (currentParentId === input.currentSubcategoryId) {
 			throw new CatalogServiceError(
-				"No se puede crear una jerarquia circular entre subcategorias",
+				"No se puede crear una jerarquia circular entre subcategorías",
 				400,
 				"PRODUCT_SUBCATEGORY_CYCLIC_PARENT",
 			);
@@ -187,7 +187,7 @@ export async function createProductSubcategory(
 	} catch (error) {
 		rethrowCatalogPersistenceError(
 			error,
-			"No se pudo crear la subcategoria",
+			"No se pudo crear la subcategoría",
 			"PRODUCT_SUBCATEGORY_CREATE_FAILED",
 		);
 	}
@@ -208,7 +208,7 @@ export async function updateProductSubcategory(
 
 			if (!productSubcategory) {
 				throw new CatalogServiceError(
-					"Subcategoria no encontrada",
+					"Subcategoría no encontrada",
 					404,
 					"PRODUCT_SUBCATEGORY_NOT_FOUND",
 				);
@@ -234,7 +234,7 @@ export async function updateProductSubcategory(
 
 					if (linkedProductsCount > 0) {
 						throw new CatalogServiceError(
-							"No se puede cambiar la linea de una subcategoria que ya tiene productos asociados",
+							"No se puede cambiar la línea de una subcategoría que ya tiene productos asociados",
 							400,
 							"PRODUCT_SUBCATEGORY_LINE_CHANGE_WITH_PRODUCTS",
 						);
@@ -248,7 +248,7 @@ export async function updateProductSubcategory(
 
 					if (linkedChildrenCount > 0) {
 						throw new CatalogServiceError(
-							"No se puede cambiar la linea de una subcategoria que ya tiene subcategorias hijas",
+							"No se puede cambiar la línea de una subcategoría que ya tiene subcategorías hijas",
 							400,
 							"PRODUCT_SUBCATEGORY_LINE_CHANGE_WITH_CHILDREN",
 						);
@@ -259,7 +259,7 @@ export async function updateProductSubcategory(
 						normalized.parentSubcategoryId === undefined
 					) {
 						throw new CatalogServiceError(
-							"No se puede cambiar la linea de una subcategoria hija sin desvincularla antes de su padre",
+							"No se puede cambiar la línea de una subcategoría hija sin desvincularla antes de su padre",
 							400,
 							"PRODUCT_SUBCATEGORY_LINE_CHANGE_WITH_PARENT",
 						);
@@ -329,7 +329,7 @@ export async function updateProductSubcategory(
 	} catch (error) {
 		rethrowCatalogPersistenceError(
 			error,
-			"No se pudo actualizar la subcategoria",
+			"No se pudo actualizar la subcategoría",
 			"PRODUCT_SUBCATEGORY_UPDATE_FAILED",
 		);
 	}

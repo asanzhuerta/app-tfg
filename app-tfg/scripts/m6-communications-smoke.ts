@@ -135,7 +135,7 @@ async function main() {
 		});
 		assertCondition(
 			updatedSegment?.name === `Segmento ${tag} editado`,
-			"La edicion del segmento no devuelve el nombre esperado",
+			"La edición del segmento no devuelve el nombre esperado",
 		);
 		console.log("PASS segmento editado");
 
@@ -143,15 +143,15 @@ async function main() {
 			clientId: context.client.id,
 			segmentId: segment.id,
 			assignedByUserId: context.adminUser?.id ?? null,
-			notes: `Asignacion temporal ${tag}`,
+			notes: `Asignación temporal ${tag}`,
 		});
-		assertCondition(assignment?.id, "No se ha creado la asignacion temporal");
+		assertCondition(assignment?.id, "No se ha creado la asignación temporal");
 		created.assignmentId = assignment.id;
 		console.log(`PASS cliente asignado a segmento (${context.client.name})`);
 
 		const promotion = await createPromotion({
-			title: `Promocion ${tag}`,
-			description: "Promocion temporal segmentada para smoke de M6",
+			title: `Promoción ${tag}`,
+			description: "Promoción temporal segmentada para smoke de M6",
 			promotionType: "descuento",
 			benefit: "Beneficio temporal",
 			startDate: toDateOnly(today),
@@ -161,10 +161,10 @@ async function main() {
 			createdByUserId: context.adminUser?.id ?? null,
 		});
 
-		assertCondition(promotion?.id, "No se ha creado la promocion temporal");
+		assertCondition(promotion?.id, "No se ha creado la promoción temporal");
 		created.promotionId = promotion.id;
 		createdSourceIds.push(promotion.id);
-		console.log("PASS promocion segmentada creada");
+		console.log("PASS promoción segmentada creada");
 
 		const clientPromotions = await listPromotionsForUser({
 			userId: context.client.id,
@@ -172,7 +172,7 @@ async function main() {
 		});
 		assertCondition(
 			clientPromotions.some((current) => current.id === promotion.id),
-			"El cliente asignado no ve la promocion segmentada",
+			"El cliente asignado no ve la promoción segmentada",
 		);
 
 		const commercialPromotions = await listPromotionsForUser({
@@ -181,7 +181,7 @@ async function main() {
 		});
 		assertCondition(
 			commercialPromotions.some((current) => current.id === promotion.id),
-			"El comercial activo no ve la promocion publicada",
+			"El comercial activo no ve la promoción publicada",
 		);
 
 		if (context.otherClient) {
@@ -191,10 +191,10 @@ async function main() {
 			});
 			assertCondition(
 				!otherClientPromotions.some((current) => current.id === promotion.id),
-				"Un cliente no asignado al segmento ve la promocion segmentada",
+				"Un cliente no asignado al segmento ve la promoción segmentada",
 			);
 		}
-		console.log("PASS visibilidad de promocion por rol y segmento");
+		console.log("PASS visibilidad de promoción por rol y segmento");
 
 		const promotionNotifications = await ds.getRepository(AppNotification).find({
 			where: {
@@ -207,14 +207,14 @@ async function main() {
 			promotionNotifications.some(
 				(notification) => notification.recipient_user_id === context.client.id,
 			),
-			"La promocion segmentada no ha notificado al cliente asignado",
+			"La promoción segmentada no ha notificado al cliente asignado",
 		);
 		assertCondition(
 			promotionNotifications.some(
 				(notification) =>
 					notification.recipient_user_id === context.commercialUser.id,
 			),
-			"La promocion segmentada no ha notificado al comercial activo",
+			"La promoción segmentada no ha notificado al comercial activo",
 		);
 
 		if (context.otherClient) {
@@ -223,25 +223,25 @@ async function main() {
 					(notification) =>
 						notification.recipient_user_id === context.otherClient?.id,
 				),
-				"La promocion segmentada ha notificado a un cliente no asignado",
+				"La promoción segmentada ha notificado a un cliente no asignado",
 			);
 		}
-		console.log("PASS notificaciones de promocion segmentadas");
+		console.log("PASS notificaciones de promoción segmentadas");
 
 		const updatedPromotion = await updatePromotion({
 			promotionId: promotion.id,
-			title: `Promocion ${tag} editada`,
+			title: `Promoción ${tag} editada`,
 			status: "archived",
 		});
 		assertCondition(
 			updatedPromotion?.status === "archived",
-			"La actualizacion de la promocion no cambia el estado esperado",
+			"La actualización de la promoción no cambia el estado esperado",
 		);
-		console.log("PASS promocion editada y archivada");
+		console.log("PASS promoción editada y archivada");
 
 		const training = await createTrainingEvent({
-			title: `Formacion ${tag}`,
-			description: "Formacion temporal para smoke de M6",
+			title: `Formación ${tag}`,
+			description: "Formación temporal para smoke de M6",
 			startsAt: futureTrainingDate.toISOString(),
 			location: "Online",
 			modality: "online",
@@ -251,21 +251,21 @@ async function main() {
 			createdByUserId: context.adminUser?.id ?? null,
 		});
 
-		assertCondition(training?.id, "No se ha creado la formacion temporal");
+		assertCondition(training?.id, "No se ha creado la formación temporal");
 		created.trainingId = training.id;
 		createdSourceIds.push(training.id);
-		console.log("PASS formacion publicada creada");
+		console.log("PASS formación publicada creada");
 
 		const enrollment = await enrollTrainingEvent({
 			userId: context.client.id,
 			trainingEventId: training.id,
-			notes: `Inscripcion temporal ${tag}`,
+			notes: `Inscripción temporal ${tag}`,
 		});
 		assertCondition(
 			enrollment?.status === "registered",
-			"La inscripcion no queda en estado registered",
+			"La inscripción no queda en estado registered",
 		);
-		console.log("PASS inscripcion registrada");
+		console.log("PASS inscripción registrada");
 
 		const cancelledEnrollment = await cancelTrainingEnrollment({
 			userId: context.client.id,
@@ -273,9 +273,9 @@ async function main() {
 		});
 		assertCondition(
 			cancelledEnrollment.status === "cancelled",
-			"La cancelacion de inscripcion no queda en estado cancelled",
+			"La cancelación de inscripción no queda en estado cancelled",
 		);
-		console.log("PASS inscripcion cancelada");
+		console.log("PASS inscripción cancelada");
 
 		const reminder = await createReminderForUser(context.client.id, {
 			title: `Recordatorio ${tag}`,
@@ -299,7 +299,7 @@ async function main() {
 		created.promotionId = null;
 		await deleteTrainingEvent(training.id);
 		created.trainingId = null;
-		console.log("PASS promocion y formacion eliminadas");
+		console.log("PASS promoción y formación eliminadas");
 	} finally {
 		if (created.reminderId) {
 			await ds.getRepository(AppReminder).delete(created.reminderId);
@@ -331,9 +331,9 @@ async function main() {
 
 	const leftovers = await Promise.all([
 		ds.getRepository(CustomerSegment).count({ where: { code: tag } }),
-		ds.getRepository(Promotion).count({ where: { title: `Promocion ${tag}` } }),
+		ds.getRepository(Promotion).count({ where: { title: `Promoción ${tag}` } }),
 		ds.getRepository(TrainingEvent).count({
-			where: { title: `Formacion ${tag}` },
+			where: { title: `Formación ${tag}` },
 		}),
 		ds.getRepository(AppReminder).count({
 			where: { title: `Recordatorio ${tag}` },

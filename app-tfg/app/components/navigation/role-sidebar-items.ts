@@ -48,7 +48,7 @@ export const roleSidebarLabels: Record<
 	},
 	client: {
 		title: "Cliente",
-		subtitle: "Salon profesional",
+		subtitle: "Salón profesional",
 		homeHref: "/clients",
 	},
 };
@@ -81,9 +81,9 @@ export const roleSidebarSections: Record<
 			],
 		},
 		{
-			title: "Catalogo",
+			title: "Catálogo",
 			items: [
-				{ title: "Catalogo", href: "/admin/catalog", icon: "catalog" },
+				{ title: "Catálogo", href: "/admin/catalog", icon: "catalog" },
 				{
 					title: "Cartas color",
 					href: "/admin/catalog/color-charts",
@@ -92,7 +92,7 @@ export const roleSidebarSections: Record<
 			],
 		},
 		{
-			title: "Operacion",
+			title: "Operación",
 			items: [
 				{ title: "Pedidos", href: "/admin/orders", icon: "orders" },
 				{
@@ -100,20 +100,18 @@ export const roleSidebarSections: Record<
 					href: "/admin/communications",
 					icon: "chat",
 				},
-				{ title: "Auditoria", href: "/admin/audit", icon: "reports" },
-				{ title: "Operacion M7", href: "/admin/operations", icon: "reports" },
+				{ title: "Auditoría", href: "/admin/audit", icon: "reports" },
+				{ title: "Operación M7", href: "/admin/operations", icon: "reports" },
 				{
 					title: "Operaciones empresa",
 					href: "/admin/enterprise-operations",
 					icon: "reports",
 				},
 				{
-					title: "Integraciones",
-					href: "/admin/integrations",
+					title: "Configuración",
+					href: "/admin/configuration",
 					icon: "settings",
 				},
-				{ title: "Soporte", href: "/admin/support", icon: "settings" },
-				{ title: "Ajustes", href: "/admin/settings", icon: "settings" },
 			],
 		},
 	],
@@ -126,7 +124,7 @@ export const roleSidebarSections: Record<
 			],
 		},
 		{
-			title: "Gestion comercial",
+			title: "Gestión comercial",
 			items: [
 				{ title: "Clientes", href: "/commercials/clients", icon: "clients" },
 				{ title: "Rutas", href: "/commercials/routes", icon: "route" },
@@ -141,9 +139,9 @@ export const roleSidebarSections: Record<
 		{
 			title: "Ventas",
 			items: [
-				{ title: "Catalogo", href: "/commercials/catalog", icon: "catalog" },
+				{ title: "Catálogo", href: "/commercials/catalog", icon: "catalog" },
 				{
-					title: "Coloracion",
+					title: "Coloración",
 					href: "/commercials/coloration",
 					icon: "color",
 				},
@@ -152,7 +150,7 @@ export const roleSidebarSections: Record<
 			],
 		},
 		{
-			title: "Comunicacion",
+			title: "Comunicación",
 			items: [
 				{
 					title: "Promociones",
@@ -184,11 +182,11 @@ export const roleSidebarSections: Record<
 		{
 			title: "Trabajo diario",
 			items: [
-				{ title: "Catalogo", href: "/clients/catalog", icon: "catalog" },
-				{ title: "Coloracion", href: "/clients/coloration", icon: "color" },
+				{ title: "Catálogo", href: "/clients/catalog", icon: "catalog" },
+				{ title: "Coloración", href: "/clients/coloration", icon: "color" },
 				{ title: "Pedidos", href: "/clients/orders", icon: "orders" },
 				{
-					title: "Fichas salon",
+					title: "Fichas salón",
 					href: "/clients/salon-clients",
 					icon: "clients",
 				},

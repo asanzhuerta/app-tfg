@@ -10,7 +10,7 @@ type Props = {
 	params: Promise<{ id: string }>;
 };
 
-// Pagina de confirmacion para la desactivacion de un usuario.
+// Página de confirmación para la desactivacion de un usuario.
 export default async function RemoveUserPage({ params }: Props) {
 	const [session, { id }] = await Promise.all([requireAdminSession(), params]);
 	const user = await getUserById(id);
@@ -53,7 +53,7 @@ export default async function RemoveUserPage({ params }: Props) {
 
 					{isSelf ? (
 						<div className="mt-6 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-200">
-							No puedes desactivar tu propio usuario mientras tienes la sesion
+							No puedes desactivar tu propio usuario mientras tienes la sesión
 							iniciada.
 						</div>
 					) : null}

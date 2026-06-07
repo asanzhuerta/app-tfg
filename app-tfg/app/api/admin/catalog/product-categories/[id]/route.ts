@@ -28,13 +28,13 @@ export async function GET(_: Request, context: RouteContext) {
 		const productCategory = await getProductCategoryById(id);
 
 		if (!productCategory) {
-			return notFoundError("Categoria no encontrada", "PRODUCT_CATEGORY_NOT_FOUND");
+			return notFoundError("Categoría no encontrada", "PRODUCT_CATEGORY_NOT_FOUND");
 		}
 
 		return NextResponse.json(productCategory, { status: 200 });
 	} catch (error) {
 		console.error("[admin/catalog/product-categories/[id]][GET] error:", error);
-		return jsonFromError(error, "Error al obtener la categoria");
+		return jsonFromError(error, "Error al obtener la categoría");
 	}
 }
 
@@ -59,6 +59,6 @@ export async function PATCH(request: Request, context: RouteContext) {
 			"[admin/catalog/product-categories/[id]][PATCH] error:",
 			error,
 		);
-		return jsonFromError(error, "Error al actualizar la categoria");
+		return jsonFromError(error, "Error al actualizar la categoría");
 	}
 }

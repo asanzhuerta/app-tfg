@@ -28,22 +28,22 @@ function main() {
 	]) {
 		assertCondition(
 			slugs.has(expectedSlug),
-			`Falta la integracion esperada ${expectedSlug}`,
+			`Falta la integración esperada ${expectedSlug}`,
 		);
 	}
 
 	for (const item of items) {
 		assertCondition(
 			item.statusLabel.length > 0,
-			`La integracion ${item.slug} no tiene etiqueta de estado`,
+			`La integración ${item.slug} no tiene etiqueta de estado`,
 		);
 		assertCondition(
 			item.configuration.length > 0,
-			`La integracion ${item.slug} no expone configuracion`,
+			`La integración ${item.slug} no expone configuración`,
 		);
 		assertCondition(
 			item.operationalUse.length > 0 && item.fallbackBehavior.length > 0,
-			`La integracion ${item.slug} no documenta uso o degradacion`,
+			`La integración ${item.slug} no documenta uso o degradación`,
 		);
 	}
 
@@ -58,7 +58,7 @@ function main() {
 	);
 
 	console.log("PASS inventario M7 contiene integraciones esperadas");
-	console.log("PASS cada integracion expone estado, configuracion y fallback");
+	console.log("PASS cada integración expone estado, configuración y fallback");
 	console.log("PASS resumen operativo de M7 consistente");
 }
 

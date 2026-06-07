@@ -27,7 +27,7 @@ export async function GET(_: Request, context: RouteContext) {
 
 		if (!productSubcategory) {
 			return notFoundError(
-				"Subcategoria no encontrada",
+				"Subcategoría no encontrada",
 				"PRODUCT_SUBCATEGORY_NOT_FOUND",
 			);
 		}
@@ -35,7 +35,7 @@ export async function GET(_: Request, context: RouteContext) {
 		return NextResponse.json(productSubcategory, { status: 200 });
 	} catch (error) {
 		console.error("[admin/catalog/product-subcategories/[id]][GET] error:", error);
-		return jsonFromError(error, "Error al obtener la subcategoria");
+		return jsonFromError(error, "Error al obtener la subcategoría");
 	}
 }
 
@@ -60,6 +60,6 @@ export async function PATCH(request: Request, context: RouteContext) {
 			"[admin/catalog/product-subcategories/[id]][PATCH] error:",
 			error,
 		);
-		return jsonFromError(error, "Error al actualizar la subcategoria");
+		return jsonFromError(error, "Error al actualizar la subcategoría");
 	}
 }

@@ -15,7 +15,7 @@ import {
 } from "@/lib/typeorm/services/commercial/client";
 
 // GET /api/admin/clients
-// Lista todos los clientes del sistema para las pantallas de administracion.
+// Lista todos los clientes del sistema para las pantallas de administración.
 export async function GET() {
 	const user = await requireRoleUser("admin");
 
@@ -33,7 +33,7 @@ export async function GET() {
 }
 
 // POST /api/admin/clients
-// Crea un nuevo cliente desde administracion y devuelve la ficha creada.
+// Crea un nuevo cliente desde administración y devuelve la ficha creada.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 

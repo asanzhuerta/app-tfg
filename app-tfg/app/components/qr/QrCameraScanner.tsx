@@ -85,7 +85,7 @@ export default function QrCameraScanner({
 
 				if (!detectedValue) {
 					setStatusMessage(
-						"No se detecto ningun QR en la imagen. Prueba con mas luz o acercando mejor el codigo.",
+						"No se detecto ningun QR en la imagen. Prueba con mas luz o acercando mejor el código.",
 					);
 					return;
 				}
@@ -142,7 +142,7 @@ export default function QrCameraScanner({
 					<div>
 						<h2 className="text-lg font-semibold">Escanear QR del paquete</h2>
 						<p className="mt-1 text-sm text-slate-300">
-							Se abrira la camara nativa del movil para capturar el QR del
+							Se abrira la camara nativa del móvil para capturar el QR del
 							paquete.
 						</p>
 					</div>
@@ -163,12 +163,12 @@ export default function QrCameraScanner({
 						</div>
 						<p className="mt-4 text-sm leading-6 text-slate-300">
 							Encuadra el QR con buena luz. Cuando vuelvas a la app, intentaremos
-							leerlo automaticamente.
+							leerlo automáticamente.
 						</p>
 						{!isSupported ? (
 							<p className="mt-3 text-sm text-amber-300">
 								Si tu navegador no permite leer el QR al volver, sigue
-								disponible la opcion de pegar el codigo manualmente.
+								disponible la opcion de pegar el código manualmente.
 							</p>
 						) : null}
 					</div>

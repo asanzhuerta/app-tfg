@@ -33,18 +33,18 @@ export default function AdminSupportPage() {
 						M7 - Soporte transversal
 					</p>
 					<h1 className="text-3xl font-bold text-slate-900">
-						Soporte tecnico y compatibilidad
+						Soporte técnico y compatibilidad
 					</h1>
 					<p className="mt-2 max-w-3xl text-sm text-slate-600">
 						Inventario administrativo de capacidades que mantienen la
-						aplicacion usable en navegadores modernos, dispositivos moviles y
+						aplicación usable en navegadores modernos, dispositivos móviles y
 						escenarios de conectividad irregular.
 					</p>
 					<Link
-						href="/admin"
+						href="/admin/configuration"
 						className="mt-4 inline-flex w-fit rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-white"
 					>
-						Volver al panel
+						Volver a configuración
 					</Link>
 				</section>
 
@@ -82,11 +82,11 @@ export default function AdminSupportPage() {
 								Estado de soporte
 							</h2>
 							<p className="mt-1 text-sm text-slate-600">
-								Ultima lectura: {formatDateTime(summary.lastCheckedAt)}
+								Última lectura: {formatDateTime(summary.lastCheckedAt)}
 							</p>
 						</div>
 						<p className="text-xs text-slate-500">
-							Datos calculados desde configuracion Next.js, activos publicos y
+							Datos calculados desde configuración Next.js, activos públicos y
 							componentes transversales.
 						</p>
 					</div>
@@ -128,7 +128,7 @@ export default function AdminSupportPage() {
 									</div>
 									<div className="rounded-2xl bg-slate-50 px-4 py-3">
 										<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-											Degradacion controlada
+											Degradación controlada
 										</p>
 										<p className="mt-1 text-sm text-slate-700">
 											{capability.degradationBehavior}

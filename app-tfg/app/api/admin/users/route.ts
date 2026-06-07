@@ -15,7 +15,7 @@ import {
 } from "@/lib/typeorm/services/users/user";
 
 // GET /api/admin/users
-// Lista usuarios del sistema, con soporte opcional de paginacion y busqueda.
+// Lista usuarios del sistema, con soporte opcional de paginación y búsqueda.
 export async function GET(request: Request) {
 	const user = await requireRoleUser("admin");
 
@@ -51,7 +51,7 @@ export async function GET(request: Request) {
 }
 
 // POST /api/admin/users
-// Crea un nuevo usuario directamente desde administracion usando un roleId explicito.
+// Crea un nuevo usuario directamente desde administración usando un roleId explicito.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 

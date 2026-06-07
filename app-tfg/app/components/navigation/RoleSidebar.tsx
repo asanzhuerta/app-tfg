@@ -73,6 +73,17 @@ function isActiveHref(pathname: string, href: string) {
 		return true;
 	}
 
+	if (
+		href === "/admin/configuration" &&
+		["/admin/integrations", "/admin/support", "/admin/settings"].some(
+			(adminConfigurationHref) =>
+				pathname === adminConfigurationHref ||
+				pathname.startsWith(`${adminConfigurationHref}/`),
+		)
+	) {
+		return true;
+	}
+
 	if (href === "/admin" || href === "/clients" || href === "/commercials") {
 		return false;
 	}
@@ -203,7 +214,7 @@ export default function RoleSidebar({
 					>
 						<button
 							type="button"
-							className="group/logo relative flex h-12 w-12 shrink-0 items-center justify-center overflow-visible rounded-2xl bg-white shadow-lg shadow-slate-950/10 ring-1 ring-slate-200 transition-[transform,box-shadow,background-color] duration-200 ease-out hover:-translate-y-0.5 hover:bg-white focus:outline-none focus-visible:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
+							className="group/logo relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white shadow-lg shadow-slate-950/10 ring-1 ring-slate-200 transition-[transform,box-shadow,background-color] duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-950 focus:outline-none focus-visible:-translate-y-0.5 focus-visible:bg-slate-950 focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
 							onClick={() => setIsExpanded((value) => !value)}
 							aria-label={isExpanded ? "Plegar menú" : "Desplegar menú"}
 							aria-expanded={isExpanded}
@@ -214,24 +225,18 @@ export default function RoleSidebar({
 								alt="KIN"
 								width={44}
 								height={44}
-								className={`relative z-10 h-11 w-11 object-contain object-center transition-[opacity,transform] duration-200 ease-out lg:group-hover/logo:opacity-70 lg:group-hover/logo:scale-95 ${
-									isExpanded
-										? "lg:group-hover/logo:translate-x-0"
-										: "lg:group-hover/logo:-translate-x-1"
-								}`}
+								className="absolute inset-0 m-auto h-11 w-11 object-contain object-center transition-[opacity,transform] duration-200 ease-out group-hover/logo:scale-90 group-hover/logo:opacity-0 group-focus-visible/logo:scale-90 group-focus-visible/logo:opacity-0"
 								sizes="44px"
 							/>
 							<span
 								aria-hidden="true"
-								className="pointer-events-none absolute -right-3 top-1/2 z-20 grid h-9 w-9 -translate-y-1/2 translate-x-1 scale-75 place-items-center rounded-full bg-slate-950 text-white opacity-0 shadow-xl shadow-slate-950/20 ring-1 ring-white/70 transition-[opacity,transform] duration-200 ease-out lg:group-hover/logo:translate-x-0 lg:group-hover/logo:scale-100 lg:group-hover/logo:opacity-100 lg:group-focus-visible/logo:translate-x-0 lg:group-focus-visible/logo:scale-100 lg:group-focus-visible/logo:opacity-100"
+								className="pointer-events-none absolute inset-0 z-10 grid scale-75 place-items-center text-white opacity-0 transition-[opacity,transform] duration-200 ease-out group-hover/logo:scale-100 group-hover/logo:opacity-100 group-focus-visible/logo:scale-100 group-focus-visible/logo:opacity-100"
 							>
 								<span
-									className={`text-lg font-black leading-none transition-transform duration-200 ${
+									className={`relative h-5 w-5 text-[0px] transition-transform duration-200 before:absolute before:left-1/2 before:top-1/2 before:block before:h-2.5 before:w-2.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-45 before:border-r-2 before:border-t-2 before:border-white before:content-[''] ${
 										isExpanded ? "rotate-180" : ""
 									}`}
-								>
-									›
-								</span>
+								/>
 							</span>
 						</button>
 						<div

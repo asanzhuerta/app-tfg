@@ -31,7 +31,7 @@ export default async function AdminOrdersPage() {
 						orders={orders}
 						mode="admin"
 						detailBasePath="/admin/orders"
-						emptyMessage="Aun no hay pedidos registrados en el sistema."
+						emptyMessage="Aún no hay pedidos registrados en el sistema."
 					/>
 				</section>
 			</div>

@@ -2,7 +2,7 @@
 import { handlers } from "@/auth";
 
 // GET /api/auth/[...nextauth]
-// Atiende las operaciones de autenticacion de NextAuth para lectura de sesion y callbacks.
+// Atiende las operaciones de autenticación de NextAuth para lectura de sesión y callbacks.
 // POST /api/auth/[...nextauth]
-// Atiende las operaciones de autenticacion de NextAuth para login, logout y callbacks.
+// Atiende las operaciones de autenticación de NextAuth para login, logout y callbacks.
 export const { GET, POST } = handlers;

@@ -16,7 +16,7 @@ export function useCommercialProfile() {
 			requestJson<CommercialProfileResponse>("/api/commercial/profile", {
 				method: "GET",
 				cache: "no-store",
-				fallbackMessage: "No se pudo cargar la configuracion comercial",
+				fallbackMessage: "No se pudo cargar la configuración comercial",
 			}),
 		);
 	}, [run]);
@@ -31,7 +31,7 @@ export function useCommercialProfile() {
 							"Content-Type": "application/json",
 						},
 						body: JSON.stringify(payload),
-						fallbackMessage: "No se pudo guardar la configuracion comercial",
+						fallbackMessage: "No se pudo guardar la configuración comercial",
 					}),
 				{ preserveData: true },
 			);

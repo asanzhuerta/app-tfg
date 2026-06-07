@@ -1,7 +1,9 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AssignDefaultSilverClientTier1780670757395 implements MigrationInterface {
-	name = "AssignDefaultSilverClientTier1780670757395";
+export class M6BackfillDefaultSilverClientTier1780855613643
+	implements MigrationInterface
+{
+	name = "M6BackfillDefaultSilverClientTier1780855613643";
 
 	public async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(`
@@ -46,6 +48,15 @@ export class AssignDefaultSilverClientTier1780670757395 implements MigrationInte
 			WHERE assignment."segment_id" = segment."id"
 				AND segment."code" = 'silver'
 				AND assignment."notes" = 'Asignacion automatica de rango base Plata'
+				AND NOT EXISTS (
+					SELECT 1
+					FROM "client_customer_segments" preserved_assignment
+					INNER JOIN "customer_segments" preserved_segment
+						ON preserved_segment."id" = preserved_assignment."segment_id"
+					WHERE preserved_assignment."client_id" = assignment."client_id"
+						AND preserved_assignment."id" <> assignment."id"
+						AND preserved_segment."code" IN ('gold', 'platinum')
+				)
 		`);
 	}
 }

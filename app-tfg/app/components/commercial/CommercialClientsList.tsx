@@ -26,7 +26,7 @@ export default function CommercialClientsList() {
 					<div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
 						<div>
 							<p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-								M2 · Gestion comercial
+								M2 · Gestión comercial
 							</p>
 
 							<h2 className="text-3xl font-bold text-slate-900">
@@ -75,7 +75,7 @@ export default function CommercialClientsList() {
 						items={tableItems}
 						config={{
 							categoryLabel: "Provincia",
-							statusLabel: "Asignacion",
+							statusLabel: "Asignación",
 							showImageFilter: true,
 							emptyMessage:
 								"No hay clientes que coincidan con los filtros actuales.",

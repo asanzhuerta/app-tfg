@@ -157,7 +157,7 @@ export default function OrderDetailView({
 		if (nextPaymentStatus.code === "paid" && !String(paymentMethod).trim()) {
 			setFeedback({
 				type: "error",
-				message: "Selecciona primero el metodo de cobro utilizado.",
+				message: "Selecciona primero el método de cobro utilizado.",
 			});
 			return;
 		}
@@ -375,7 +375,7 @@ export default function OrderDetailView({
 							</div>
 						) : (
 							<div className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-5 text-sm text-slate-600">
-								Este pedido ya esta confirmado, pero todavia no se ha vinculado
+								Este pedido ya esta confirmado, pero todavía no se ha vinculado
 								a una visita de reparto.
 							</div>
 						)}
@@ -411,7 +411,7 @@ export default function OrderDetailView({
 							<div className="space-y-4">
 								<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
 									<p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-										Codigo QR
+										Código QR
 									</p>
 									<p className="mt-2 break-all font-mono text-sm text-slate-900">
 										{buildOrderQrPayload(order.id)}
@@ -419,7 +419,7 @@ export default function OrderDetailView({
 								</div>
 
 								<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-									Usa este codigo al preparar el paquete. En el cierre del
+									Usa este código al preparar el paquete. En el cierre del
 									reparto, el comercial debe escanear o pegar el valor del QR
 									para confirmar la entrega.
 								</div>
@@ -444,7 +444,7 @@ export default function OrderDetailView({
 
 					{order.status_code !== "delivered" ? (
 						<div className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-5 text-sm text-slate-600">
-							Este pedido todavia no consta como entregado, asi que el cobro
+							Este pedido todavía no consta como entregado, as? que el cobro
 							permanece en espera.
 						</div>
 					) : (
@@ -464,7 +464,7 @@ export default function OrderDetailView({
 								</div>
 								<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
 									<p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-										Metodo
+										Método
 									</p>
 									<p className="mt-2 text-sm font-semibold text-slate-900">
 										{getOrderPaymentMethodLabel(order.payment_method)}
@@ -505,7 +505,7 @@ export default function OrderDetailView({
 												htmlFor="order-payment-method"
 												className="mb-2 block text-sm font-medium text-slate-700"
 											>
-												Metodo de cobro
+												Método de cobro
 											</label>
 											<select
 												id="order-payment-method"
@@ -538,7 +538,7 @@ export default function OrderDetailView({
 												}
 												rows={3}
 												disabled={isBusy}
-												placeholder="Metodo real usado, incidencia, comprobante o contexto adicional"
+												placeholder="Método real usado, incidencia, comprobante o contexto adicional"
 												className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-100"
 											/>
 										</div>
@@ -656,7 +656,7 @@ export default function OrderDetailView({
 									</div>
 									<div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
 										<p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-											Linea
+											Línea
 										</p>
 										<p className="mt-1 text-sm font-semibold text-slate-900">
 											{line.product_line_name || "-"}

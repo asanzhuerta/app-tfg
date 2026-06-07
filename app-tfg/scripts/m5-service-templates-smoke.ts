@@ -47,7 +47,7 @@ async function main() {
 
 	assertCondition(
 		product,
-		"No hay productos activos en catalogo para ejecutar la prueba de plantillas de M5",
+		"No hay productos activos en catálogo para ejecutar la prueba de plantillas de M5",
 	);
 
 	const candidate = await findCandidateClientUser();
@@ -62,7 +62,7 @@ async function main() {
 				serviceType: "Tratamiento reparador",
 				result: "Cabello reforzado",
 				notes: `${tag} notes`,
-				technicalDescription: "Aplicacion por secciones",
+				technicalDescription: "Aplicación por secciones",
 				formula: "Base reparadora + sellado",
 				technicalNotes: "Revisar elasticidad en mantenimiento",
 				productUsages: [
@@ -70,7 +70,7 @@ async function main() {
 						productId: product.productId,
 						colorReferenceId: product.colorReferenceId,
 						quantityUsed: 2,
-						notes: "Aplicacion uniforme",
+						notes: "Aplicación uniforme",
 					},
 				],
 			},
@@ -81,9 +81,9 @@ async function main() {
 			template.name === tag &&
 				template.product_usages.length === 1 &&
 				template.product_usages[0]?.product_id === product.productId,
-			"La plantilla creada no devuelve la informacion esperada",
+			"La plantilla creada no devuelve la información esperada",
 		);
-		console.log(`PASS plantilla tecnica creada (${candidate.clientName})`);
+		console.log(`PASS plantilla técnica creada (${candidate.clientName})`);
 
 		const templates = await listSalonServiceTemplatesForClientUser(
 			candidate.userId,

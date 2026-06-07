@@ -30,7 +30,7 @@ export default async function AdminColorChartsPage({ searchParams }: Props) {
 		<div className="space-y-6">
 			<H1Title
 				title="Cartas de color"
-				subtitle="Agrupa las cartas cromaticas por linea comercial y navega sus referencias filtradas"
+				subtitle="Agrupa las cartas cromáticas por línea comercial y navega sus referencias filtradas"
 			/>
 
 			<ColorChartHierarchyWorkspace

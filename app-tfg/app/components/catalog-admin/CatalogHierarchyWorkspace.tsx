@@ -308,13 +308,13 @@ export default function CatalogHierarchyWorkspace({
 						href="/admin/catalog/product-categories/new"
 						className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
 					>
-						Nueva categoria
+						Nueva categoría
 					</Link>
 					<Link
 						href="/admin/catalog/product-lines/new"
 						className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
 					>
-						Nueva linea comercial
+						Nueva línea comercial
 					</Link>
 				</div>
 			</div>
@@ -352,7 +352,7 @@ export default function CatalogHierarchyWorkspace({
 			<div className="space-y-4">
 				{filteredCategories.length === 0 ? (
 					<div className="rounded-2xl border border-slate-200 bg-white px-4 py-10 text-center text-slate-500 shadow-md">
-						No hay categorias que coincidan con los filtros actuales.
+						No hay categorías que coincidan con los filtros actuales.
 					</div>
 				) : null}
 
@@ -386,8 +386,8 @@ export default function CatalogHierarchyWorkspace({
 											)}`}
 										>
 											{categoryLines.length === 1
-												? "1 linea"
-												: `${categoryLines.length} lineas`}
+												? "1 línea"
+												: `${categoryLines.length} líneas`}
 										</span>
 									</div>
 
@@ -406,13 +406,13 @@ export default function CatalogHierarchyWorkspace({
 										href={`/admin/catalog/product-categories/${productCategory.id}/edit`}
 										className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
 									>
-										Editar categoria
+										Editar categoría
 									</Link>
 									<Link
 										href={`/admin/catalog/product-lines/new?productCategoryId=${productCategory.id}`}
 										className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
 									>
-										Nueva linea
+										Nueva línea
 									</Link>
 									<button
 										type="button"
@@ -420,7 +420,7 @@ export default function CatalogHierarchyWorkspace({
 										aria-expanded={isExpanded}
 										className="rounded-xl bg-slate-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
 									>
-										{isExpanded ? "Ocultar lineas" : "Ver lineas"}
+										{isExpanded ? "Ocultar líneas" : "Ver líneas"}
 									</button>
 								</div>
 							</div>
@@ -429,7 +429,7 @@ export default function CatalogHierarchyWorkspace({
 								<div className="border-t border-slate-200 bg-slate-50/60 p-4">
 									{categoryLines.length === 0 ? (
 										<div className="rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-8 text-center text-sm text-slate-500">
-											Esta categoria todavia no tiene lineas comerciales asociadas.
+											Esta categoría todavía no tiene líneas comerciales asociadas.
 										</div>
 									) : (
 										<div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
@@ -471,8 +471,8 @@ export default function CatalogHierarchyWorkspace({
 																	</span>
 																	<span className="inline-flex rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
 																		{lineSubcategories.length === 1
-																			? "1 subcategoria"
-																			: `${lineSubcategories.length} subcategorias`}
+																			? "1 subcategoría"
+																			: `${lineSubcategories.length} subcategorías`}
 																	</span>
 																</div>
 
@@ -491,13 +491,13 @@ export default function CatalogHierarchyWorkspace({
 																		href={`/admin/catalog/product-lines/${productLine.id}/edit`}
 																		className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
 																	>
-																		Editar linea
+																		Editar línea
 																	</Link>
 																	<Link
 																		href={`/admin/catalog/product-subcategories/new?productLineId=${productLine.id}`}
 																		className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
 																	>
-																		Nueva subcategoria
+																		Nueva subcategoría
 																	</Link>
 																	{lineSubcategories.length > 0 ? (
 																		<button
@@ -512,8 +512,8 @@ export default function CatalogHierarchyWorkspace({
 																			className="rounded-xl bg-slate-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
 																		>
 																			{isLineExpanded
-																				? "Ocultar subcategorias"
-																				: "Ver subcategorias"}
+																				? "Ocultar subcategorías"
+																				: "Ver subcategorías"}
 																		</button>
 																	) : null}
 																</div>

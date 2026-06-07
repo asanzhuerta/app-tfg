@@ -85,9 +85,9 @@ export default function AdminEnterpriseOperationsWorkspace({
 	);
 	const [proposalProductIds, setProposalProductIds] = useState<string[]>([]);
 	const [proposalQuantity, setProposalQuantity] = useState("1");
-	const [proposalReason, setProposalReason] = useState("reposicion_manual");
+	const [proposalReason, setProposalReason] = useState("reposición_manual");
 	const [proposalNotes, setProposalNotes] = useState(
-		"Propuesta generada desde M7 para revisar reposicion a proveedor.",
+		"Propuesta generada desde M7 para revisar reposición a proveedor.",
 	);
 	const [savingOperation, setSavingOperation] = useState(false);
 	const [generatingProposal, setGeneratingProposal] = useState(false);
@@ -100,7 +100,7 @@ export default function AdminEnterpriseOperationsWorkspace({
 			{
 				method: "GET",
 				cache: "no-store",
-				fallbackMessage: "No se pudo refrescar la operacion empresarial",
+				fallbackMessage: "No se pudo refrescar la operación empresarial",
 			},
 		);
 
@@ -129,15 +129,15 @@ export default function AdminEnterpriseOperationsWorkspace({
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(payload),
-				fallbackMessage: "No se pudo registrar la operacion",
+				fallbackMessage: "No se pudo registrar la operación",
 			});
 			await refreshSnapshot();
-			setMessage("Operacion de integracion registrada correctamente.");
+			setMessage("Operación de integración registrada correctamente.");
 		} catch (requestError) {
 			setError(
 				requestError instanceof Error
 					? requestError.message
-					: "No se pudo registrar la operacion",
+					: "No se pudo registrar la operación",
 			);
 		} finally {
 			setSavingOperation(false);
@@ -188,22 +188,22 @@ export default function AdminEnterpriseOperationsWorkspace({
 			<div className="space-y-6">
 				<H1Title
 					title="Operaciones empresariales"
-					subtitle="Configuracion, integraciones persistentes, sincronizaciones y propuestas de pedido a proveedor"
+					subtitle="Configuración, integraciones persistentes, sincronizaciones y propuestas de pedido a proveedor"
 				/>
 
 				<section className="glass-card rounded-3xl border border-white/30 bg-white/80 p-6 shadow-xl backdrop-blur">
 					<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 						<div>
 							<p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-								M7 - Administracion e integraciones
+								M7 - Administración e integraciones
 							</p>
 							<h2 className="mt-2 text-2xl font-semibold text-slate-900">
 								Registro operativo persistente
 							</h2>
 							<p className="mt-2 max-w-3xl text-sm text-slate-600">
 								Esta vista materializa el bloque empresarial del modelo
-								conceptual: parametros de configuracion, integraciones externas,
-								operaciones de intercambio y propuestas de reposicion.
+								conceptual: parámetros de configuración, integraciones externas,
+								operaciones de intercambio y propuestas de reposición.
 							</p>
 						</div>
 						<div className="flex flex-wrap gap-3">
@@ -270,16 +270,16 @@ export default function AdminEnterpriseOperationsWorkspace({
 						className="glass-card rounded-3xl border border-white/30 bg-white/80 p-6 shadow-xl backdrop-blur"
 					>
 						<h2 className="text-xl font-semibold text-slate-900">
-							Registrar operacion
+							Registrar operación
 						</h2>
 						<p className="mt-1 text-sm text-slate-600">
-							Registra una exportacion, sincronizacion o webhook vinculado a una
-							integracion externa.
+							Registra una exportación, sincronización o webhook vinculado a una
+							integración externa.
 						</p>
 
 						<div className="mt-5 grid gap-4">
 							<label className="grid gap-2 text-sm font-medium text-slate-700">
-								Integracion
+								Integración
 								<select
 									value={operationIntegrationId}
 									onChange={(event) =>
@@ -304,9 +304,9 @@ export default function AdminEnterpriseOperationsWorkspace({
 										onChange={(event) => setOperationType(event.target.value)}
 										className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400"
 									>
-										<option value="export">Exportacion</option>
+										<option value="export">Exportación</option>
 										<option value="import">Importacion</option>
-										<option value="sync">Sincronizacion</option>
+										<option value="sync">Sincronización</option>
 										<option value="webhook">Webhook</option>
 										<option value="manual">Manual</option>
 									</select>
@@ -352,7 +352,7 @@ export default function AdminEnterpriseOperationsWorkspace({
 							submittingText="Registrando..."
 							className="mt-5 bg-slate-900 font-semibold text-white shadow-sm hover:bg-slate-800"
 						>
-							Registrar operacion
+							Registrar operación
 						</SubmitButton>
 					</SafeForm>
 
@@ -365,7 +365,7 @@ export default function AdminEnterpriseOperationsWorkspace({
 						</h2>
 						<p className="mt-1 text-sm text-slate-600">
 							Crea una propuesta persistente usando productos activos del
-							catalogo. Si no seleccionas productos, usa una muestra reciente.
+							catálogo. Si no seleccionas productos, usa una muestra reciente.
 						</p>
 
 						<div className="mt-5 grid gap-4">
@@ -468,7 +468,7 @@ export default function AdminEnterpriseOperationsWorkspace({
 											</span>
 										</p>
 										<p>
-											Ultima:{" "}
+											Última:{" "}
 											<span className="font-semibold text-slate-900">
 												{formatDateTime(integration.lastOperationAt)}
 											</span>
@@ -481,7 +481,7 @@ export default function AdminEnterpriseOperationsWorkspace({
 
 					<div className="glass-card rounded-3xl border border-white/30 bg-white/80 p-6 shadow-xl backdrop-blur">
 						<h2 className="text-xl font-semibold text-slate-900">
-							Configuracion del sistema
+							Configuración del sistema
 						</h2>
 						<div className="mt-5 divide-y divide-slate-100 rounded-3xl border border-slate-200 bg-white">
 							{snapshot.configurations.map((configuration) => (
@@ -511,7 +511,7 @@ export default function AdminEnterpriseOperationsWorkspace({
 						<div className="mt-5 space-y-3">
 							{snapshot.recentOperations.length === 0 ? (
 								<p className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500">
-									Todavia no hay operaciones registradas.
+									Todavía no hay operaciones registradas.
 								</p>
 							) : null}
 							{snapshot.recentOperations.map((operation) => (
@@ -553,7 +553,7 @@ export default function AdminEnterpriseOperationsWorkspace({
 						<div className="mt-5 space-y-4">
 							{snapshot.proposals.length === 0 ? (
 								<p className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500">
-									Todavia no hay propuestas generadas.
+									Todavía no hay propuestas generadas.
 								</p>
 							) : null}
 							{snapshot.proposals.map((proposal) => (
@@ -584,7 +584,7 @@ export default function AdminEnterpriseOperationsWorkspace({
 									) : null}
 									<div className="mt-4 rounded-2xl bg-slate-50 px-4 py-3">
 										<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-											Lineas
+											Líneas
 										</p>
 										<ul className="mt-2 space-y-1 text-sm text-slate-700">
 											{proposal.lines.slice(0, 5).map((line) => (

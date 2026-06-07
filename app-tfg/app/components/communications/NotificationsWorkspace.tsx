@@ -9,6 +9,7 @@ import type {
 	NotificationView,
 	ReminderView,
 } from "./communication-view-types";
+import PushNotificationOptIn from "./PushNotificationOptIn";
 
 type Props = {
 	title: string;
@@ -36,6 +37,41 @@ function formatDateTime(value: string) {
 
 function getErrorMessage(error: unknown, fallback: string) {
 	return error instanceof ApiClientError ? error.message : fallback;
+}
+
+function getNotificationAction(
+	notification: NotificationView,
+	backHref: string,
+) {
+	const isCommercial = backHref === "/commercials";
+
+	if (
+		isCommercial &&
+		[
+			"commercial_visit_postponed",
+			"commercial_visit_created",
+			"commercial_visit_rescheduled",
+			"commercial_visit_today",
+		].includes(notification.sourceType ?? "") &&
+		notification.sourceId
+	) {
+		return {
+			href: `/commercials/visits/${notification.sourceId}`,
+			label: "Abrir visita",
+		};
+	}
+
+	if (
+		isCommercial &&
+		notification.sourceType === "commercial_visit_postponed_batch"
+	) {
+		return {
+			href: "/commercials/visits",
+			label: "Reubicar visitas",
+		};
+	}
+
+	return null;
 }
 
 export default function NotificationsWorkspace({
@@ -166,6 +202,8 @@ export default function NotificationsWorkspace({
 				</p>
 			</section>
 
+			<PushNotificationOptIn />
+
 			{message ? (
 				<div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
 					{message}
@@ -223,6 +261,17 @@ export default function NotificationsWorkspace({
 								<p className="mt-2 text-sm text-slate-600">
 									{notification.body}
 								</p>
+								{getNotificationAction(notification, backHref) ? (
+									<Link
+										href={
+											getNotificationAction(notification, backHref)?.href ??
+											backHref
+										}
+										className="mt-3 inline-flex rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-700"
+									>
+										{getNotificationAction(notification, backHref)?.label}
+									</Link>
+								) : null}
 								{!notification.readAt ? (
 									<button
 										type="button"
@@ -269,7 +318,7 @@ export default function NotificationsWorkspace({
 						/>
 						<textarea
 							required
-							placeholder="Descripcion"
+							placeholder="Descripción"
 							value={reminderForm.body}
 							onChange={(event) =>
 								setReminderForm((current) => ({

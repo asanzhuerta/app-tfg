@@ -29,6 +29,6 @@ export async function PATCH(_: Request, context: RouteContext) {
 		return NextResponse.json(notification, { status: 200 });
 	} catch (error) {
 		console.error("[communications/notifications/[id]][PATCH] error:", error);
-		return jsonFromError(error, "Error al marcar notificacion");
+		return jsonFromError(error, "Error al marcar notificación");
 	}
 }

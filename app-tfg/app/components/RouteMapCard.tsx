@@ -99,7 +99,7 @@ export default function RouteMapCard({
 			const unavailableTimer = window.setTimeout(() => {
 				setBrowserLocation({
 					status: "unavailable",
-					message: "Tu navegador no soporta geolocalizacion.",
+					message: "Tu navegador no soporta geolocalización.",
 				});
 			}, 0);
 
@@ -330,20 +330,20 @@ export default function RouteMapCard({
 
 					{timingSummary && !hasWorkdayConfig ? (
 						<div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-							Aun no has definido tu jornada base. Configurala en{" "}
+							Aún no has definido tu jornada base. Configurala en{" "}
 							<Link
 								href="/commercials/settings"
 								className="font-semibold underline underline-offset-2"
 							>
 								Ajustes
 							</Link>{" "}
-							para que el sistema calcule el tiempo maximo disponible en ruta.
+							para que el sistema calcule el tiempo máximo disponible en ruta.
 						</div>
 					) : null}
 
 					{timingSummary && hasWorkdayConfig && !hasValidWorkdayRange ? (
 						<div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-							El horario base no es valido. Revisa en Ajustes que el fin de
+							El horario base no es válido. Revisa en Ajustes que el fin de
 							jornada sea posterior al inicio para poder calcular el margen de
 							ruta.
 						</div>
@@ -353,7 +353,7 @@ export default function RouteMapCard({
 					hasValidWorkdayRange &&
 					(overbookedMinutes ?? 0) > 0 ? (
 						<div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-							La planificacion actual supera la jornada disponible desde este
+							La planificación actual supera la jornada disponible desde este
 							momento por <strong>{formatMinutes(overbookedMinutes)}</strong>.
 							Conviene reordenar o liberar paradas antes de salir a ruta.
 						</div>
@@ -384,7 +384,7 @@ export default function RouteMapCard({
 					{!preview.usingCurrentLocation && !preview.usingSavedStartFallback ? (
 						<div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
 							No hay punto de inicio disponible. Para mejorar la ruta, activa la
-							geolocalizacion o configura un punto de salida de respaldo en tu
+							geolocalización o configura un punto de salida de respaldo en tu
 							perfil.
 						</div>
 					) : null}
@@ -392,14 +392,14 @@ export default function RouteMapCard({
 					{!preview.hasConfiguredEndPoint &&
 					!(preview.startPoint && preview.endPoint) ? (
 						<div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-							Aun no tienes configurado un punto final de ruta en tu perfil.
+							Aún no tienes configurado un punto final de ruta en tu perfil.
 						</div>
 					) : null}
 
 					{waypoints.length === 0 ? (
 						<div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
 							No hay clientes asignados con coordenadas suficientes para pintar
-							la ruta todavia.
+							la ruta todavía.
 						</div>
 					) : null}
 

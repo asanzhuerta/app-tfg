@@ -157,8 +157,8 @@ function printHelp() {
 
 Opciones:
   --dry-run          Solo muestra coincidencias, no sube ni actualiza.
-  --source <ruta>    Carpeta con imagenes pendientes.
-  --processed-dir    Carpeta destino para imagenes procesadas.
+  --source <ruta>    Carpeta con imágenes pendientes.
+  --processed-dir    Carpeta destino para imágenes procesadas.
   --no-move          No mueve archivos tras actualizar.
   --skip-existing    No actualiza productos que ya tengan image_url.
 `);
@@ -510,7 +510,7 @@ async function getUniqueDestinationPath(destinationPath: string) {
 		}
 	}
 
-	throw new Error(`No se pudo generar destino unico para ${destinationPath}`);
+	throw new Error(`No se pudo generar destino único para ${destinationPath}`);
 }
 
 async function listPendingImages(sourceDir: string) {
@@ -591,7 +591,7 @@ async function main() {
 		]);
 
 		if (pendingImages.length === 0) {
-			console.log(`No hay imagenes pendientes en ${options.sourceDir}`);
+			console.log(`No hay imágenes pendientes en ${options.sourceDir}`);
 			return;
 		}
 
@@ -640,7 +640,7 @@ async function main() {
 			if (duplicatedTargets.length > 0) {
 				errorCount += 1;
 				console.log(
-					`[ERROR] ${image.name} apunta a un producto que tambien aparece en otros archivos: ${duplicatedTargets
+					`[ERROR] ${image.name} apunta a un producto que también aparece en otros archivos: ${duplicatedTargets
 						.map((target) => {
 							const productLabel = target.product
 								? formatProducts([target.product])
@@ -727,7 +727,7 @@ async function main() {
 		console.log(
 			[
 				"Resumen:",
-				`imagenes=${pendingImages.length}`,
+				`imágenes=${pendingImages.length}`,
 				`coincidencias=${matchedCount}`,
 				`actualizados=${uploadedCount}`,
 				`omitidos=${skippedCount}`,

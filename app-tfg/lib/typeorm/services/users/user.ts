@@ -245,7 +245,7 @@ export async function deactivateUser(input: DeactivateUserInput) {
 			.where("id = :id", { id: user.id })
 			.execute();
 
-		// Revoca cualquier sesion activa para que la desactivacion
+		// Revoca cualquier sesión activa para que la desactivacion
 		// tenga efecto inmediato y no dependa de la expiracion del JWT.
 		await accessLogRepo
 			.createQueryBuilder()

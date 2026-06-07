@@ -128,12 +128,12 @@ export async function isPersistedAccessSessionActive(
 		return isActiveSession;
 	} catch (error) {
 		console.error(
-			"[auth][session] no se pudo verificar la sesion persistida:",
+			"[auth][session] no se pudo verificar la sesión persistida:",
 			error,
 		);
 
-		// Ante un fallo transitorio de BD preferimos conservar la sesion actual
-		// y reintentar en la siguiente validacion, en lugar de expulsar al usuario.
+		// Ante un fallo transitorio de BD preferimos conservar la sesión actual
+		// y reintentar en la siguiente validación, en lugar de expulsar al usuario.
 		return true;
 	}
 }

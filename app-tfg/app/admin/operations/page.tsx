@@ -29,13 +29,13 @@ export default async function AdminOperationsPage() {
 						M7 - Estado operativo
 					</p>
 					<h1 className="text-3xl font-bold text-slate-900">
-						Operacion transversal
+						Operación transversal
 					</h1>
 					<p className="mt-2 max-w-3xl text-sm text-slate-600">
 						Resumen ejecutivo de las capacidades transversales de
-						administracion: auditoria, rate limiting, integraciones y soporte
-						tecnico. Sirve como punto de entrada rapido para revisar el estado
-						del modulo 7.
+						administración: auditoría, rate limiting, integraciones y soporte
+						técnico. Sirve como punto de entrada rápido para revisar el estado
+						del módulo 7.
 					</p>
 					<div className="mt-4 flex flex-wrap gap-3">
 						<Link
@@ -87,11 +87,11 @@ export default async function AdminOperationsPage() {
 								Resumen por capacidad
 							</h2>
 							<p className="mt-1 text-sm text-slate-600">
-								Ultima lectura: {formatDateTime(overview.summary.lastCheckedAt)}
+								Última lectura: {formatDateTime(overview.summary.lastCheckedAt)}
 							</p>
 						</div>
 						<p className="text-xs text-slate-500">
-							Datos agregados desde base de datos, politicas de seguridad e
+							Datos agregados desde base de datos, políticas de seguridad e
 							inventarios de soporte.
 						</p>
 					</div>

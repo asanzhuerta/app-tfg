@@ -18,8 +18,8 @@ export default async function CommercialColorationPage() {
 
 	return (
 		<ColorChartsExplorer
-			title="Coloracion"
-			subtitle="Explora cartas de color y referencias para asesoramiento tecnico"
+			title="Coloración"
+			subtitle="Explora cartas de color y referencias para asesoramiento técnico"
 			colorCharts={serializedColorCharts}
 			colorReferences={serializedColorReferences}
 			detailBasePath="/commercials/coloration"

@@ -165,7 +165,7 @@ async function loadTemplateLines() {
 
 	assertCondition(
 		order && Array.isArray(order.lines) && order.lines.length > 0,
-		"No hay un pedido base con lineas para reutilizar en la prueba de cierre de M4",
+		"No hay un pedido base con líneas para reutilizar en la prueba de cierre de M4",
 	);
 
 	return order.lines.map((line) => ({
@@ -237,7 +237,7 @@ async function main() {
 		assertCondition(
 			estimateWithoutVisit.status === "no_delivery_today" &&
 				estimateWithoutVisit.estimatedArrivalTime === null,
-			"La ETA del cliente no deberia aparecer si el pedido confirmado aun no esta vinculado a un reparto real",
+			"La ETA del cliente no debería aparecer si el pedido confirmado aún no esta vinculado a un reparto real",
 		);
 		console.log(
 			`PASS ETA oculta sin reparto vinculado (${candidate.clientName})`,
@@ -288,7 +288,7 @@ async function main() {
 		assertCondition(
 			orderAfterPostpone.order.delivery_visit_id === visitId &&
 				orderAfterPostpone.order.status_id === ORDER_STATUS_IDS.CONFIRMED,
-			"Aplazar un reparto no deberia romper el enlace del pedido ni cambiar su estado confirmado",
+			"Aplazar un reparto no debería romper el enlace del pedido ni cambiar su estado confirmado",
 		);
 
 		const estimateAfterPostpone = await getClientDeliveryEstimate(
@@ -297,7 +297,7 @@ async function main() {
 		assertCondition(
 			estimateAfterPostpone.status === "outside_visit_window" &&
 				estimateAfterPostpone.estimatedArrivalTime === null,
-			"Un reparto aplazado no deberia seguir mostrando una ETA exacta al cliente",
+			"Un reparto aplazado no debería seguir mostrando una ETA exacta al cliente",
 		);
 		console.log("PASS aplazamiento coherente con pedido enlazado y ETA anulada");
 
@@ -323,9 +323,9 @@ async function main() {
 		assertCondition(
 			estimateAfterCancelVisit.status === "no_delivery_today" &&
 				estimateAfterCancelVisit.estimatedArrivalTime === null,
-			"Tras cancelar el reparto, el cliente no deberia seguir viendo una ETA",
+			"Tras cancelar el reparto, el cliente no debería seguir viendo una ETA",
 		);
-		console.log("PASS cancelacion de reparto coherente con desvinculacion");
+		console.log("PASS cancelación de reparto coherente con desvinculación");
 
 		const otherClientOrder = await createOrderForCommercialUser(
 			candidate.commercialUserId,
@@ -496,11 +496,11 @@ async function main() {
 		);
 		assertCondition(
 			remainingLinkedOrders === 0,
-			"La visita cancelada no deberia conservar pedidos enlazados",
+			"La visita cancelada no debería conservar pedidos enlazados",
 		);
-		console.log("PASS cancelacion explicita de pedido coherente");
+		console.log("PASS cancelación explicita de pedido coherente");
 		console.log(
-			"PASS cancelacion de pedido vinculado sin dejar reparto activo huerfano",
+			"PASS cancelación de pedido vinculado sin dejar reparto activo huerfano",
 		);
 
 		const summary = await listOrdersByClientId(candidate.clientId);

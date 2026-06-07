@@ -1,7 +1,9 @@
 import { getDataSource } from "@/lib/typeorm/data-source";
+import { Client } from "@/lib/typeorm/entities/Client";
 import { ClientCustomerSegment } from "@/lib/typeorm/entities/ClientCustomerSegment";
+import { CustomerSegment } from "@/lib/typeorm/entities/CustomerSegment";
 import { User } from "@/lib/typeorm/entities/User";
-import type { DataSource } from "typeorm";
+import type { DataSource, EntityManager } from "typeorm";
 
 export type ClientTierCode = "platinum" | "gold" | "silver" | "none";
 
@@ -20,6 +22,8 @@ export type ClientTierOverview = {
 };
 
 const TIER_PRIORITY = ["platinum", "gold", "silver"] as const;
+const DEFAULT_TIER_CODE = "silver";
+const DEFAULT_TIER_ASSIGNMENT_NOTE = "Asignación automatica de rango base Plata";
 
 const TIER_DETAILS: Record<
 	ClientTierCode,
@@ -29,9 +33,9 @@ const TIER_DETAILS: Record<
 		name: "Platino",
 		description: "Eres cliente Platino",
 		benefitSummary:
-			"Puedes acceder a las promociones de mayor prioridad cuando administracion las active para tu rango.",
+			"Puedes acceder a las promociones de mayor prioridad cuando administración las active para tu rango.",
 		nextStep:
-			"Manten tu actividad comercial para conservar el acceso a las ventajas premium del distribuidor.",
+			"Mantén tu actividad comercial para conservar el acceso a las ventajas premium del distribuidor.",
 	},
 	gold: {
 		name: "Oro",
@@ -39,7 +43,7 @@ const TIER_DETAILS: Record<
 		benefitSummary:
 			"Puedes aprovechar promociones segmentadas y condiciones preferentes asignadas a clientes de uso frecuente.",
 		nextStep:
-			"Continua concentrando pedidos y actividad en la plataforma para optar al nivel Platino.",
+			"Continúa concentrando pedidos y actividad en la plataforma para optar al nivel Platino.",
 	},
 	silver: {
 		name: "Plata",
@@ -51,16 +55,74 @@ const TIER_DETAILS: Record<
 	},
 	none: {
 		name: "Sin rango",
-		description: "Aun no tienes rango comercial asignado",
+		description: "Aún no tienes rango comercial asignado",
 		benefitSummary:
-			"Administracion puede asignarte un rango Plata, Oro o Platino para activar ventajas segmentadas.",
+			"Administración puede asignarte un rango Plata, Oro o Platino para activar ventajas segmentadas.",
 		nextStep:
-			"Cuando se implemente el sistema de puntos, tu rango podra calcularse desde actividad y ventas.",
+			"Cuando se implemente el sistema de puntos, tu rango podr? calcularse desde actividad y ventas.",
 	},
 };
 
 function normalizeSegmentCode(value: string | null | undefined) {
 	return String(value ?? "").trim().toLowerCase();
+}
+
+async function ensureSilverSegment(manager: EntityManager) {
+	const repo = manager.getRepository(CustomerSegment);
+	const existing = await repo.findOne({
+		where: { code: DEFAULT_TIER_CODE },
+	});
+
+	if (existing) {
+		return existing;
+	}
+
+	return repo.save(
+		repo.create({
+			code: DEFAULT_TIER_CODE,
+			name: "Plata",
+			description: "Clientes activos con seguimiento comercial ordinario.",
+			criteria: "Rango comercial base asignado por defecto.",
+		}),
+	);
+}
+
+export async function ensureDefaultSilverClientTier(
+	manager: EntityManager,
+	clientId: string,
+) {
+	const clientExists = await manager.getRepository(Client).exists({
+		where: { id: clientId },
+	});
+
+	if (!clientExists) {
+		return null;
+	}
+
+	const hasTier = await manager
+		.getRepository(ClientCustomerSegment)
+		.createQueryBuilder("assignment")
+		.innerJoin("assignment.segment", "segment")
+		.where("assignment.client_id = :clientId", { clientId })
+		.andWhere("segment.code IN (:...tierCodes)", {
+			tierCodes: TIER_PRIORITY,
+		})
+		.getExists();
+
+	if (hasTier) {
+		return null;
+	}
+
+	const silverSegment = await ensureSilverSegment(manager);
+	const assignmentRepo = manager.getRepository(ClientCustomerSegment);
+
+	return assignmentRepo.save(
+		assignmentRepo.create({
+			client_id: clientId,
+			segment_id: silverSegment.id,
+			notes: DEFAULT_TIER_ASSIGNMENT_NOTE,
+		}),
+	);
 }
 
 async function resolveClientId(dataSource: DataSource, clientOrUserId: string) {

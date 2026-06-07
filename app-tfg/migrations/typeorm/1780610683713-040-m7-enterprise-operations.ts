@@ -144,7 +144,7 @@ export class M7EnterpriseOperations1780610683713 implements MigrationInterface {
 			VALUES
 				('operations.sync.default_mode', 'manual', 'Modo inicial de registro de exportaciones y sincronizaciones externas.'),
 				('supplier.proposals.default_quantity', '1', 'Cantidad sugerida por defecto al generar propuestas de pedido a proveedor.'),
-				('supplier.proposals.default_reason', 'reposicion_manual', 'Motivo base utilizado en propuestas creadas desde catalogo activo.')
+				('supplier.proposals.default_reason', 'reposicion_manual', 'Motivo base utilizado en propuestas creadas desde catálogo activo.')
 			ON CONFLICT ("key") DO NOTHING
 		`);
 		await queryRunner.query(`
@@ -153,7 +153,7 @@ export class M7EnterpriseOperations1780610683713 implements MigrationInterface {
 				(
 					'Cloudinary',
 					'storage',
-					'Almacenamiento de imagenes de perfil, catalogo y resultados tecnicos.',
+					'Almacenamiento de imagenes de perfil, catálogo y resultados técnicos.',
 					'operational',
 					'{"provider":"Cloudinary","scope":"media"}'::jsonb
 				),
@@ -174,14 +174,14 @@ export class M7EnterpriseOperations1780610683713 implements MigrationInterface {
 				(
 					'QuickChart QR',
 					'qr',
-					'Representacion QR para validacion operativa de pedidos.',
+					'Representacion QR para validación operativa de pedidos.',
 					'operational',
 					'{"provider":"QuickChart","scope":"orders"}'::jsonb
 				),
 				(
 					'Factusol mediante n8n',
 					'erp',
-					'Punto preparado para automatizar albaranes, facturacion y sincronizacion administrativa mediante n8n.',
+					'Punto preparado para automatizar albaranes, facturación y sincronizacion administrativa mediante n8n.',
 					'not_configured',
 					'{"orchestrator":"n8n","target":"Factusol","mode":"pending_credentials"}'::jsonb
 				)

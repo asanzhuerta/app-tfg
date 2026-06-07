@@ -30,22 +30,22 @@ export default function AdminIntegrationsPage() {
 			<div className="space-y-6">
 				<section className="glass-card rounded-3xl border border-white/30 bg-white/80 p-6 shadow-xl backdrop-blur">
 					<p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-						M7 - Administracion transversal
+						M7 - Administración transversal
 					</p>
 					<h1 className="text-3xl font-bold text-slate-900">
 						Integraciones y soporte
 					</h1>
 					<p className="mt-2 max-w-3xl text-sm text-slate-600">
 						Inventario operativo de servicios externos que sostienen los
-						modulos ya implementados. No ejecuta sincronizaciones externas:
-						expone configuracion, uso funcional y comportamiento de
-						degradacion.
+						módulos ya implementados. No ejecuta sincronizaciones externas:
+						expone configuración, uso funcional y comportamiento de
+						degradación.
 					</p>
 					<Link
-						href="/admin"
+						href="/admin/configuration"
 						className="mt-4 inline-flex w-fit rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-white"
 					>
-						Volver al panel
+						Volver a configuración
 					</Link>
 					<Link
 						href="/admin/enterprise-operations"
@@ -89,12 +89,12 @@ export default function AdminIntegrationsPage() {
 								Estado operativo
 							</h2>
 							<p className="mt-1 text-sm text-slate-600">
-								Ultima lectura: {formatDateTime(summary.lastCheckedAt)}
+								Última lectura: {formatDateTime(summary.lastCheckedAt)}
 							</p>
 						</div>
 						<p className="text-xs text-slate-500">
 							Datos calculados desde variables de entorno y proveedores usados
-							por la aplicacion.
+							por la aplicación.
 						</p>
 					</div>
 
@@ -138,7 +138,7 @@ export default function AdminIntegrationsPage() {
 									</div>
 									<div className="rounded-2xl bg-slate-50 px-4 py-3">
 										<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-											Degradacion controlada
+											Degradación controlada
 										</p>
 										<p className="mt-1 text-sm text-slate-700">
 											{integration.fallbackBehavior}

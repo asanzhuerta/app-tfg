@@ -20,12 +20,12 @@ function mapProductToItem(
 		imageUrl: product.image_url,
 		secondaryImageUrl: product.productLine?.image_url ?? null,
 		secondaryImageLabel: product.productLine?.name ?? null,
-		category: product.productCategory?.name ?? "Sin categoria",
+		category: product.productCategory?.name ?? "Sin categoría",
 		status: product.status?.name ?? "Sin estado",
 		primaryDate: toIsoString(product.created_at),
 		badges: [
 			{
-				label: product.productCategory?.name ?? "Sin categoria",
+				label: product.productCategory?.name ?? "Sin categoría",
 				className: getCategoryBadgeClass(
 					product.productCategory?.name,
 					categoryBadgeClassMap,
@@ -99,7 +99,7 @@ export default async function AdminProductsPage({ searchParams }: Props) {
 		<div className="space-y-6">
 			<H1Title
 				title="Productos"
-				subtitle="Administra articulos, referencias, precios base y documentacion tecnica"
+				subtitle="Administra articulos, referencias, precios base y documentación técnica"
 			/>
 
 			<CatalogAdminWorkspace
@@ -121,7 +121,7 @@ export default async function AdminProductsPage({ searchParams }: Props) {
 					},
 				]}
 				tableConfig={{
-					categoryLabel: "Categoria",
+					categoryLabel: "Categoría",
 					statusLabel: "Estado",
 					showImageFilter: true,
 					initialCategoryFilter: getSingleSearchParamValue(
@@ -139,18 +139,18 @@ export default async function AdminProductsPage({ searchParams }: Props) {
 					extraFilters: [
 						{
 							key: "productLine",
-							label: "Linea comercial",
+							label: "Línea comercial",
 							allLabel: "Todas",
 							dependsOn: ["category"],
 						},
 						{
 							key: "subcategory",
-							label: "Subcategoria",
+							label: "Subcategoría",
 							allLabel: "Todas",
 							dependsOn: ["category", "productLine"],
 						},
 					],
-					emptyMessage: "No hay productos registrados todavia.",
+					emptyMessage: "No hay productos registrados todavía.",
 					cardVariant: "catalog-product",
 					gridClassName:
 						"grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",

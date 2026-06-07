@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
 		if (!String(input.productId ?? "").trim()) {
 			return badRequestError(
-				"Debes indicar un producto para anadirlo al pedido en curso",
+				"Debes indicar un producto para añadirlo al pedido en curso",
 				"ORDER_DRAFT_PRODUCT_REQUIRED",
 			);
 		}
@@ -36,6 +36,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(draftOrder, { status: 200 });
 	} catch (error) {
 		console.error("[clients/orders/draft/items][POST] error:", error);
-		return jsonFromError(error, "Error al anadir la linea al pedido en curso");
+		return jsonFromError(error, "Error al añadir la línea al pedido en curso");
 	}
 }

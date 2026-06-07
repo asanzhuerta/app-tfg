@@ -74,7 +74,7 @@ function normalizeOptionalQuantityUsed(value: number | string | null | undefined
 
 	if (!Number.isFinite(parsed) || parsed <= 0) {
 		throw new SalonTechnicalServiceError(
-			"La cantidad usada debe ser un numero positivo",
+			"La cantidad usada debe ser un número positivo",
 			400,
 			"SALON_TEMPLATE_PRODUCT_USAGE_QUANTITY_INVALID",
 		);
@@ -103,7 +103,7 @@ function normalizeProductUsageInputs(
 
 		if (!productId) {
 			throw new SalonTechnicalServiceError(
-				"Cada producto de la plantilla debe indicar un producto del catalogo",
+				"Cada producto de la plantilla debe indicar un producto del catálogo",
 				400,
 				"SALON_TEMPLATE_PRODUCT_USAGE_PRODUCT_REQUIRED",
 			);
@@ -173,7 +173,7 @@ async function ensureTemplateProductUsagesAreValid(
 
 	if (products.length !== uniqueProductIds.length) {
 		throw new SalonTechnicalServiceError(
-			"Alguno de los productos indicados ya no existe en el catalogo",
+			"Alguno de los productos indicados ya no existe en el catálogo",
 			400,
 			"SALON_TEMPLATE_PRODUCT_USAGE_PRODUCT_NOT_FOUND",
 		);
@@ -337,7 +337,7 @@ async function getOwnedSalonServiceTemplate(
 
 	if (!template) {
 		throw new SalonTechnicalServiceError(
-			"La plantilla tecnica solicitada no existe",
+			"La plantilla técnica solicitada no existe",
 			404,
 			"SALON_TEMPLATE_NOT_FOUND",
 		);

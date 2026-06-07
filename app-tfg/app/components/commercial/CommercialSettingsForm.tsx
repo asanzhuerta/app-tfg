@@ -75,7 +75,7 @@ export default function CommercialSettingsForm() {
 		});
 
 		if (savedProfile) {
-			setSuccess("Configuracion guardada correctamente.");
+			setSuccess("Configuración guardada correctamente.");
 			setDraftFormState(null);
 		}
 
@@ -87,17 +87,17 @@ export default function CommercialSettingsForm() {
 			<div className="space-y-6">
 				<H1Title
 					title="Ajustes comerciales"
-					subtitle="Define la jornada base y los tiempos operativos que usara el modulo 2."
+					subtitle="Define la jornada base y los tiempos operativos que usara el módulo 2."
 				/>
 
 				<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
 					<div className="max-w-3xl space-y-3">
 						<h2 className="text-xl font-semibold text-slate-900">
-							Planificacion diaria
+							Planificación diaria
 						</h2>
 						<p className="text-sm text-slate-600">
-							Esta configuracion servira como base para calcular el tiempo
-							disponible en ruta segun tu jornada habitual.
+							Esta configuración servira como base para calcular el tiempo
+							disponible en ruta según tu jornada habitual.
 						</p>
 					</div>
 				</section>
@@ -105,7 +105,7 @@ export default function CommercialSettingsForm() {
 				{loading ? (
 					<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
 						<p className="text-sm text-slate-600">
-							Cargando configuracion comercial...
+							Cargando configuración comercial...
 						</p>
 					</section>
 				) : null}
@@ -207,7 +207,7 @@ export default function CommercialSettingsForm() {
 							</div>
 
 							<div className="md:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
-								El horario especifico de cada peluqueria se aplicara despues
+								El horario especifico de cada peluqueria se aplicara después
 								sobre esta base diaria para decidir el encaje real de visitas.
 							</div>
 
@@ -218,7 +218,7 @@ export default function CommercialSettingsForm() {
 								<p className="mt-1 text-sm text-slate-600">
 									Si no se puede usar la ubicacion actual del dispositivo, el
 									sistema recurrira al punto de salida guardado. Estas
-									direcciones se geocodifican automaticamente al guardarlas.
+									direcciones se geocodifican automáticamente al guardarlas.
 								</p>
 							</div>
 
@@ -289,7 +289,7 @@ export default function CommercialSettingsForm() {
 										}))
 									}
 									disabled={formState.returnToStart}
-									placeholder="Ej. Almacen, oficina o fin de jornada"
+									placeholder="Ej. Almación, oficina o fin de jornada"
 									className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500"
 								/>
 							</div>

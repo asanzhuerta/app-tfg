@@ -26,7 +26,7 @@ export async function GET() {
 		return NextResponse.json(templates, { status: 200 });
 	} catch (error) {
 		console.error("[clients/salon-service-templates][GET] error:", error);
-		return jsonFromError(error, "Error al obtener las plantillas tecnicas");
+		return jsonFromError(error, "Error al obtener las plantillas técnicas");
 	}
 }
 
@@ -47,6 +47,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(template, { status: 201 });
 	} catch (error) {
 		console.error("[clients/salon-service-templates][POST] error:", error);
-		return jsonFromError(error, "Error al crear la plantilla tecnica");
+		return jsonFromError(error, "Error al crear la plantilla técnica");
 	}
 }

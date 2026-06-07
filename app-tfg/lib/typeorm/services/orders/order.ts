@@ -148,7 +148,7 @@ function parseMoneyToCents(value: string | number) {
 
 	if (!Number.isFinite(parsed) || parsed < 0) {
 		throw new OrderServiceError(
-			"Importe de producto no valido",
+			"Importe de producto no válido",
 			500,
 			"INVALID_PRODUCT_PRICE",
 		);
@@ -301,7 +301,7 @@ function normalizeRequestedOrderLines(
 
 		if (!productId) {
 			throw new OrderServiceError(
-				"Cada linea del pedido debe indicar un producto",
+				"Cada línea del pedido debe indicar un producto",
 				400,
 				"ORDER_LINE_PRODUCT_REQUIRED",
 			);
@@ -309,7 +309,7 @@ function normalizeRequestedOrderLines(
 
 		if (!Number.isInteger(quantity) || quantity <= 0) {
 			throw new OrderServiceError(
-				"La cantidad de cada linea debe ser un entero positivo",
+				"La cantidad de cada línea debe ser un entero positivo",
 				400,
 				"ORDER_LINE_QUANTITY_INVALID",
 			);
@@ -437,7 +437,7 @@ function normalizeOrderStatusId(statusId: number | string | null | undefined) {
 
 	if (!Number.isInteger(parsed) || parsed <= 0) {
 		throw new OrderServiceError(
-			"Debes indicar un estado de pedido valido",
+			"Debes indicar un estado de pedido válido",
 			400,
 			"ORDER_STATUS_ID_INVALID",
 		);
@@ -453,7 +453,7 @@ function normalizeOrderPaymentStatusId(
 
 	if (!Number.isInteger(parsed) || parsed <= 0) {
 		throw new OrderServiceError(
-			"Debes indicar un estado de cobro valido",
+			"Debes indicar un estado de cobro válido",
 			400,
 			"ORDER_PAYMENT_STATUS_ID_INVALID",
 		);
@@ -471,7 +471,7 @@ function normalizeOptionalFilterId(value: number | string | null | undefined) {
 
 	if (!Number.isInteger(parsed) || parsed <= 0) {
 		throw new OrderServiceError(
-			"El filtro indicado no es valido",
+			"El filtro indicado no es válido",
 			400,
 			"ORDER_FILTER_ID_INVALID",
 		);
@@ -491,7 +491,7 @@ function normalizePaymentMethod(
 	if (!normalized) {
 		if (options.required) {
 			throw new OrderServiceError(
-				"Debes indicar el metodo de cobro del pedido",
+				"Debes indicar el método de cobro del pedido",
 				400,
 				"ORDER_PAYMENT_METHOD_REQUIRED",
 			);
@@ -502,7 +502,7 @@ function normalizePaymentMethod(
 
 	if (!ORDER_PAYMENT_METHOD_CODES.has(normalized as OrderPaymentMethodCode)) {
 		throw new OrderServiceError(
-			"El metodo de cobro indicado no es valido",
+			"El método de cobro indicado no es válido",
 			400,
 			"ORDER_PAYMENT_METHOD_INVALID",
 		);
@@ -694,7 +694,7 @@ async function updateOrderManagementRecord(
 		input.paymentNotes === undefined
 	) {
 		throw new OrderServiceError(
-			"Debes indicar al menos un cambio valido para el pedido",
+			"Debes indicar al menos un cambio válido para el pedido",
 			400,
 			"ORDER_UPDATE_EMPTY",
 		);
@@ -705,7 +705,7 @@ async function updateOrderManagementRecord(
 		(input.paymentMethod !== undefined || input.paymentNotes !== undefined)
 	) {
 		throw new OrderServiceError(
-			"Para registrar un cobro debes indicar tambien el estado de cobro",
+			"Para registrar un cobro debes indicar también el estado de cobro",
 			400,
 			"ORDER_PAYMENT_STATUS_REQUIRED",
 		);
@@ -1043,7 +1043,7 @@ async function prepareOrderLineRecords(
 
 		if (orderableVariantCount > 0 && !selectedColorReference) {
 			throw new OrderServiceError(
-				"Debes indicar el tono o referencia exacta para este producto de coloracion",
+				"Debes indicar el tono o referencia exacta para este producto de coloración",
 				400,
 				"ORDER_COLOR_REFERENCE_REQUIRED",
 			);

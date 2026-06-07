@@ -19,23 +19,23 @@ async function assertAuditExport(kind: AdminAuditExportKind, expectedHeader: str
 
 	assertCondition(
 		exportFile.content.startsWith(expectedHeader),
-		`La exportacion ${kind} no contiene la cabecera CSV esperada`,
+		`La exportación ${kind} no contiene la cabecera CSV esperada`,
 	);
 	assertCondition(
 		exportFile.contentType === "text/csv; charset=utf-8",
-		`La exportacion ${kind} no declara content type CSV`,
+		`La exportación ${kind} no declara content type CSV`,
 	);
 	assertCondition(
 		exportFile.fileName === `kinestilistas-audit-${kind}-2026-06-04.csv`,
-		`La exportacion ${kind} no genera un nombre de fichero estable`,
+		`La exportación ${kind} no genera un nombre de fichero estable`,
 	);
 	assertCondition(
 		exportFile.rowCount >= 0,
-		`La exportacion ${kind} no informa del numero de filas`,
+		`La exportación ${kind} no informa del número de filas`,
 	);
 	assertCondition(
 		exportFile.content.split("\n").length >= 1,
-		`La exportacion ${kind} debe incluir al menos la fila de cabecera`,
+		`La exportación ${kind} debe incluir al menos la fila de cabecera`,
 	);
 }
 
@@ -49,8 +49,8 @@ async function main() {
 		"id,created_at,action,target_user,performed_by,previous_status,new_status,previous_role,new_role,reason,notes",
 	);
 
-	console.log("PASS exportacion CSV de accesos M7 preparada");
-	console.log("PASS exportacion CSV de acciones administrativas M7 preparada");
+	console.log("PASS exportación CSV de accesos M7 preparada");
+	console.log("PASS exportación CSV de acciones administrativas M7 preparada");
 	console.log("PASS nombres de fichero y content type CSV consistentes");
 }
 

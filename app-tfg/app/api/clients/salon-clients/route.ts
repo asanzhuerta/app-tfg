@@ -26,7 +26,7 @@ export async function GET() {
 		return NextResponse.json(salonClients, { status: 200 });
 	} catch (error) {
 		console.error("[clients/salon-clients][GET] error:", error);
-		return jsonFromError(error, "Error al obtener las fichas tecnicas");
+		return jsonFromError(error, "Error al obtener las fichas técnicas");
 	}
 }
 
@@ -47,6 +47,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(salonClient, { status: 201 });
 	} catch (error) {
 		console.error("[clients/salon-clients][POST] error:", error);
-		return jsonFromError(error, "Error al crear la ficha tecnica");
+		return jsonFromError(error, "Error al crear la ficha técnica");
 	}
 }

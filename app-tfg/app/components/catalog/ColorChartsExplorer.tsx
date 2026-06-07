@@ -80,7 +80,7 @@ function buildProductLineItems(
 			title: productLine.name,
 			subtitle: productLine.description || "",
 			imageUrl: productLine.image_url,
-			category: productLine.productCategory?.name ?? "Sin categoria",
+			category: productLine.productCategory?.name ?? "Sin categoría",
 			primaryDate: String(9999 - (productLine.display_order ?? 0)).padStart(
 				4,
 				"0",
@@ -121,7 +121,7 @@ export default function ColorChartsExplorer({
 		[colorCharts, colorReferences],
 	);
 	const table = useEntityTable(items, {
-		categoryLabel: "Categoria",
+		categoryLabel: "Categoría",
 		showImageFilter: true,
 		defaultSortField: "title",
 		defaultSortDirection: "asc",
@@ -201,10 +201,10 @@ export default function ColorChartsExplorer({
 		[colorReferences, lineBadgeClassMap, colorChartBadgeClassMap],
 	);
 	const flatColorsTable = useEntityTable(allColorReferenceItems, {
-		categoryLabel: "Linea comercial",
+		categoryLabel: "Línea comercial",
 		defaultSortField: "primaryDate",
 		defaultSortDirection: "asc",
-		primaryDateLabel: "Codigo",
+		primaryDateLabel: "Código",
 		extraFilters: [
 			{
 				key: "colorChart",
@@ -322,10 +322,10 @@ export default function ColorChartsExplorer({
 				config={
 					showAllColors
 						? {
-								categoryLabel: "Linea comercial",
+								categoryLabel: "Línea comercial",
 								defaultSortField: "primaryDate",
 								defaultSortDirection: "asc",
-								primaryDateLabel: "Codigo",
+								primaryDateLabel: "Código",
 								extraFilters: [
 									{
 										key: "colorChart",
@@ -336,7 +336,7 @@ export default function ColorChartsExplorer({
 								],
 							}
 						: {
-								categoryLabel: "Categoria",
+								categoryLabel: "Categoría",
 								showImageFilter: true,
 								defaultSortField: "title",
 								defaultSortDirection: "asc",
@@ -358,7 +358,7 @@ export default function ColorChartsExplorer({
 			<div className="space-y-4">
 				{filteredChartGroups.length === 0 ? (
 					<div className="rounded-2xl border border-slate-200 bg-white px-4 py-10 text-center text-slate-500 shadow-md">
-						No hay lineas de coloracion que coincidan con los filtros actuales.
+						No hay líneas de coloración que coincidan con los filtros actuales.
 					</div>
 				) : null}
 
@@ -395,7 +395,7 @@ export default function ColorChartsExplorer({
 												categoryBadgeClassMap,
 											)}`}
 										>
-											{productLine.productCategory?.name ?? "Sin categoria"}
+											{productLine.productCategory?.name ?? "Sin categoría"}
 										</span>
 										<span className="inline-flex rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
 											{charts.length === 1 ? "1 carta" : `${charts.length} cartas`}
@@ -459,7 +459,7 @@ export default function ColorChartsExplorer({
 																			lineBadgeClassMap,
 																		)}`}
 																	>
-																		{colorChart.productLine?.name ?? "Sin linea"}
+																		{colorChart.productLine?.name ?? "Sin línea"}
 																	</span>
 																	<span className="inline-flex rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
 																		{chartReferences.length === 1

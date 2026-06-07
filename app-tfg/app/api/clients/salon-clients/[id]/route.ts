@@ -28,7 +28,7 @@ export async function GET(_: Request, context: RouteContext) {
 		return NextResponse.json(detail, { status: 200 });
 	} catch (error) {
 		console.error("[clients/salon-clients/[id]][GET] error:", error);
-		return jsonFromError(error, "Error al obtener la ficha tecnica");
+		return jsonFromError(error, "Error al obtener la ficha técnica");
 	}
 }
 
@@ -50,6 +50,6 @@ export async function PATCH(request: Request, context: RouteContext) {
 		return NextResponse.json(salonClient, { status: 200 });
 	} catch (error) {
 		console.error("[clients/salon-clients/[id]][PATCH] error:", error);
-		return jsonFromError(error, "Error al actualizar la ficha tecnica");
+		return jsonFromError(error, "Error al actualizar la ficha técnica");
 	}
 }

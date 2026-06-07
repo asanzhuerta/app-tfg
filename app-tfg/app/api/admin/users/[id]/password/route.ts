@@ -12,7 +12,7 @@ import { changeUserPassword } from "@/lib/typeorm/services/users/password";
 
 // PATCH /api/admin/users/[id]/password
 // PATCH /api/admin/users/[id]/password
-// Cambia la contrasena de un usuario desde administracion y registra la accion.
+// Cambia la contraseña de un usuario desde administración y registra la accion.
 export async function PATCH(request: Request, context: RouteContext) {
 	const user = await requireRoleUser("admin");
 
@@ -25,7 +25,7 @@ export async function PATCH(request: Request, context: RouteContext) {
 		const body = await readJsonBody<ChangeAdminUserPasswordBody>(request);
 
 		if (!body.newPassword || typeof body.newPassword !== "string") {
-			return badRequestError("La nueva contrasena es obligatoria");
+			return badRequestError("La nueva contraseña es obligatoria");
 		}
 
 		const result = await changeUserPassword({

@@ -27,13 +27,13 @@ export async function GET(_: Request, context: RouteContext) {
 		const promotion = await getPromotionById(id);
 
 		if (!promotion) {
-			return notFoundError("Promocion no encontrada", "PROMOTION_NOT_FOUND");
+			return notFoundError("Promoción no encontrada", "PROMOTION_NOT_FOUND");
 		}
 
 		return NextResponse.json(promotion, { status: 200 });
 	} catch (error) {
 		console.error("[admin/communications/promotions/[id]][GET] error:", error);
-		return jsonFromError(error, "Error al obtener promocion");
+		return jsonFromError(error, "Error al obtener promoción");
 	}
 }
 
@@ -55,7 +55,7 @@ export async function PATCH(request: Request, context: RouteContext) {
 		return NextResponse.json(promotion, { status: 200 });
 	} catch (error) {
 		console.error("[admin/communications/promotions/[id]][PATCH] error:", error);
-		return jsonFromError(error, "Error al actualizar promocion");
+		return jsonFromError(error, "Error al actualizar promoción");
 	}
 }
 
@@ -73,6 +73,6 @@ export async function DELETE(_: Request, context: RouteContext) {
 		return NextResponse.json(deleted, { status: 200 });
 	} catch (error) {
 		console.error("[admin/communications/promotions/[id]][DELETE] error:", error);
-		return jsonFromError(error, "Error al eliminar promocion");
+		return jsonFromError(error, "Error al eliminar promoción");
 	}
 }

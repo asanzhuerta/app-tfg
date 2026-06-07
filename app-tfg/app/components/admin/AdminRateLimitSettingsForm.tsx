@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import PageTransition from "@/app/components/animations/PageTransition";
 import SafeForm from "@/app/components/forms/SafeForm";
@@ -91,7 +92,7 @@ export default function AdminRateLimitSettingsForm() {
 						method: "GET",
 						cache: "no-store",
 						fallbackMessage:
-							"No se pudo cargar la configuracion de rate limiting",
+							"No se pudo cargar la configuración de rate limiting",
 					},
 				);
 
@@ -106,7 +107,7 @@ export default function AdminRateLimitSettingsForm() {
 					setError(
 						requestError instanceof Error
 							? requestError.message
-							: "No se pudo cargar la configuracion de rate limiting",
+							: "No se pudo cargar la configuración de rate limiting",
 					);
 				}
 			} finally {
@@ -174,18 +175,18 @@ export default function AdminRateLimitSettingsForm() {
 					},
 					body: JSON.stringify(payload),
 					fallbackMessage:
-						"No se pudo guardar la configuracion de rate limiting",
+						"No se pudo guardar la configuración de rate limiting",
 				},
 			);
 
 			setPolicies(nextPolicies);
 			setDraftPolicies(nextPolicies.map(mapPolicyToDraft));
-			setSuccess("Configuracion de rate limiting guardada correctamente.");
+			setSuccess("Configuración de rate limiting guardada correctamente.");
 		} catch (requestError) {
 			setError(
 				requestError instanceof Error
 					? requestError.message
-					: "No se pudo guardar la configuracion de rate limiting",
+					: "No se pudo guardar la configuración de rate limiting",
 			);
 		} finally {
 			setSaving(false);
@@ -197,16 +198,23 @@ export default function AdminRateLimitSettingsForm() {
 			<div className="space-y-6">
 				<H1Title
 					title="Rate limiting global"
-					subtitle="Ajusta los limites operativos de autenticacion y API para toda la aplicacion."
+					subtitle="Ajusta los límites operativos de autenticación y API para toda la aplicación."
 				/>
+
+				<Link
+					href="/admin/configuration"
+					className="inline-flex w-fit rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-white"
+				>
+					Volver a configuración
+				</Link>
 
 				<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
 					<div className="space-y-3">
 						<h2 className="text-xl font-semibold text-slate-900">
-							Politicas disponibles
+							Políticas disponibles
 						</h2>
 						<p className="text-sm text-slate-600">
-							Cada politica define cuantos intentos se permiten dentro de una
+							Cada política define cuantos intentos se permiten dentro de una
 							ventana temporal. Si desactivas una, deja de aplicarse hasta que
 							la vuelvas a activar.
 						</p>
@@ -216,7 +224,7 @@ export default function AdminRateLimitSettingsForm() {
 				{!loading ? (
 					<section className="grid gap-4 md:grid-cols-4">
 						<div className="glass-card rounded-3xl border border-white/30 bg-white/80 p-5 shadow-lg backdrop-blur">
-							<p className="text-sm text-slate-500">Politicas</p>
+							<p className="text-sm text-slate-500">Políticas</p>
 							<p className="mt-2 text-3xl font-semibold text-slate-900">
 								{summary.total}
 							</p>
@@ -245,7 +253,7 @@ export default function AdminRateLimitSettingsForm() {
 				{loading ? (
 					<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
 						<p className="text-sm text-slate-600">
-							Cargando configuracion de rate limiting...
+							Cargando configuración de rate limiting...
 						</p>
 					</section>
 				) : null}
@@ -310,7 +318,7 @@ export default function AdminRateLimitSettingsForm() {
 												/>
 												<span className="text-sm text-slate-700">
 													<span className="block font-medium text-slate-900">
-														Politica activa
+														Política activa
 													</span>
 													Si la desactivas, no se aplica ningun bloqueo para
 													este caso.
@@ -322,7 +330,7 @@ export default function AdminRateLimitSettingsForm() {
 													htmlFor={`max-requests-${policy.name}`}
 													className="mb-2 block text-sm font-medium text-slate-700"
 												>
-													Maximo de intentos
+													Máximo de intentos
 												</label>
 												<input
 													id={`max-requests-${policy.name}`}

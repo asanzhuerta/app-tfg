@@ -18,6 +18,6 @@ export async function GET() {
 		return NextResponse.json(snapshot, { status: 200 });
 	} catch (error) {
 		console.error("[admin/enterprise-operations][GET] error:", error);
-		return jsonFromError(error, "Error al obtener la operacion empresarial");
+		return jsonFromError(error, "Error al obtener la operación empresarial");
 	}
 }

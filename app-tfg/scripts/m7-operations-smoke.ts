@@ -45,7 +45,7 @@ async function main() {
 		);
 		assertCondition(
 			section.metrics.length >= 3,
-			`El bloque ${section.slug} no expone metricas suficientes`,
+			`El bloque ${section.slug} no expone métricas suficientes`,
 		);
 	}
 
@@ -60,8 +60,8 @@ async function main() {
 	);
 
 	console.log("PASS resumen M7 contiene bloques operativos esperados");
-	console.log("PASS cada bloque enlaza detalle y expone metricas");
-	console.log("PASS resumen agregado de operacion M7 consistente");
+	console.log("PASS cada bloque enlaza detalle y expone métricas");
+	console.log("PASS resumen agregado de operación M7 consistente");
 }
 
 main()

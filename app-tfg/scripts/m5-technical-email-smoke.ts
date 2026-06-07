@@ -48,7 +48,7 @@ async function main() {
 
 	assertCondition(
 		product,
-		"No hay productos activos en catalogo para ejecutar la prueba de correo tecnico de M5",
+		"No hay productos activos en catálogo para ejecutar la prueba de correo técnico de M5",
 	);
 
 	const candidate = await findCandidateClientUser();
@@ -73,10 +73,10 @@ async function main() {
 			createdSalonClient.id,
 			{
 				serviceDate: "2026-06-03",
-				serviceType: "Diagnostico capilar",
+				serviceType: "Diagnóstico capilar",
 				result: "Brillo reforzado",
 				notes: `${tag} service`,
-				technicalDescription: "Aplicacion de tratamiento reparador",
+				technicalDescription: "Aplicación de tratamiento reparador",
 				formula: "Tratamiento reparador + sellado",
 				technicalNotes: "Revisar hidratacion a las dos semanas",
 				productUsages: [
@@ -84,7 +84,7 @@ async function main() {
 						productId: product.productId,
 						colorReferenceId: product.colorReferenceId,
 						quantityUsed: 1.5,
-						notes: "Aplicacion en medios y puntas",
+						notes: "Aplicación en medios y puntas",
 					},
 				],
 			},
@@ -92,7 +92,7 @@ async function main() {
 
 		const createdService = detail.services.find(
 			(service) =>
-				service.service_type === "Diagnostico capilar" &&
+				service.service_type === "Diagnóstico capilar" &&
 				service.notes === `${tag} service`,
 		);
 
@@ -116,31 +116,31 @@ async function main() {
 
 		assertCondition(
 			draft.recipient_name === tag,
-			"El borrador tecnico no apunta al cliente del salon esperado",
+			"El borrador técnico no apunta al cliente del salón esperado",
 		);
 		assertCondition(
 			draft.recipient_email === "m5-smoke@example.com",
-			"El borrador tecnico no conserva el correo del cliente del salon",
+			"El borrador técnico no conserva el correo del cliente del salón",
 		);
 		assertCondition(
-			draft.subject.includes("Diagnostico capilar"),
-			"El asunto del borrador tecnico no incluye el tipo de servicio",
+			draft.subject.includes("Diagnóstico capilar"),
+			"El asunto del borrador técnico no incluye el tipo de servicio",
 		);
 		assertCondition(
 			draft.body.includes("Resumen del servicio") &&
 				draft.body.includes("Tratamiento reparador + sellado"),
-			"El cuerpo del borrador tecnico no incluye el resumen o la formula esperada",
+			"El cuerpo del borrador técnico no incluye el resumen o la formula esperada",
 		);
 		assertCondition(
 			draft.body.includes(product.name),
-			"El cuerpo del borrador tecnico no incluye el producto utilizado",
+			"El cuerpo del borrador técnico no incluye el producto utilizado",
 		);
 		assertCondition(
 			draft.body.includes("Sugerencias de mantenimiento"),
-			"El cuerpo del borrador tecnico no incluye el bloque de sugerencias",
+			"El cuerpo del borrador técnico no incluye el bloque de sugerencias",
 		);
 		console.log(
-			`PASS borrador tecnico generado para ${draft.recipient_name} con asunto valido`,
+			`PASS borrador técnico generado para ${draft.recipient_name} con asunto válido`,
 		);
 	} finally {
 		if (createdSalonClientId) {

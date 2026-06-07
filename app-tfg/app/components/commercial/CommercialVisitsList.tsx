@@ -564,7 +564,7 @@ export default function CommercialVisitsList() {
 				<div className="space-y-6">
 				<H1Title
 					title="Visitas comerciales"
-					subtitle="Planifica las visitas del dia y consultalas ya ordenadas segun la ruta prevista."
+					subtitle="Planifica las visitas del día y consultalas ya ordenadas según la ruta prevista."
 				/>
 
 				{formSuccess ? (
@@ -688,7 +688,7 @@ export default function CommercialVisitsList() {
 															}).format(new Date(order.created_at))}
 														</p>
 														<p className="text-xs text-slate-500">
-															{order.line_count} linea
+															{order.line_count} línea
 															{order.line_count === 1 ? "" : "s"} ·{" "}
 															{formatOrderCurrency(order.total_amount)}
 														</p>
@@ -915,7 +915,7 @@ export default function CommercialVisitsList() {
 											Crear visita
 										</h2>
 										<p className="mt-1 text-sm text-slate-600">
-											La hora aproximada se recalculara despues con la ruta del
+											La hora aproximada se recalculara después con la ruta del
 											dia.
 										</p>
 									</div>
@@ -1059,7 +1059,7 @@ export default function CommercialVisitsList() {
 																	</div>
 
 																	<p className="mt-1 text-xs text-slate-500">
-																		{order.line_count} linea
+																		{order.line_count} línea
 																		{order.line_count === 1 ? "" : "s"} · Estado{" "}
 																		{order.status_name}
 																	</p>

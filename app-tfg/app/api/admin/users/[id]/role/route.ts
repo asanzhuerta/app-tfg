@@ -15,7 +15,7 @@ import { updateUserRole } from "@/lib/typeorm/services/users/role";
 
 // PATCH /api/admin/users/[id]/role
 // PATCH /api/admin/users/[id]/role
-// Cambia el rol de un usuario desde administracion y registra la auditoria correspondiente.
+// Cambia el rol de un usuario desde administración y registra la auditoría correspondiente.
 export async function PATCH(request: Request, context: RouteContext) {
 	const user = await requireRoleUser("admin");
 

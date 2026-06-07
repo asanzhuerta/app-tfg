@@ -126,9 +126,9 @@ export function mapColorChartsToEntityTableItems(
 	return colorCharts.map((colorChart) => ({
 		id: colorChart.id,
 		title: colorChart.name,
-		subtitle: colorChart.description || "Carta cromatica lista para consulta",
+		subtitle: colorChart.description || "Carta cromática lista para consulta",
 		imageUrl: colorChart.image_url,
-		category: colorChart.productLine?.productCategory?.name ?? "Sin categoria",
+		category: colorChart.productLine?.productCategory?.name ?? "Sin categoría",
 		primaryDate: toIsoString(colorChart.created_at),
 		badges: [
 			buildBadge(
@@ -190,7 +190,7 @@ export function mapColorReferencesToEntityTableItems(
 			colorReference.image_url ??
 			colorReference.thumb_image_url ??
 			null,
-		category: colorReference.colorChart?.productLine?.name ?? "Sin linea",
+		category: colorReference.colorChart?.productLine?.name ?? "Sin línea",
 		primaryDate: buildColorReferenceSortKey(
 			colorReference.code,
 			colorReference.name,

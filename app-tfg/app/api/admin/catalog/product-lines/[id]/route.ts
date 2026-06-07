@@ -26,13 +26,13 @@ export async function GET(_: Request, context: RouteContext) {
 		const productLine = await getProductLineById(id);
 
 		if (!productLine) {
-			return notFoundError("Linea comercial no encontrada", "PRODUCT_LINE_NOT_FOUND");
+			return notFoundError("Línea comercial no encontrada", "PRODUCT_LINE_NOT_FOUND");
 		}
 
 		return NextResponse.json(productLine, { status: 200 });
 	} catch (error) {
 		console.error("[admin/catalog/product-lines/[id]][GET] error:", error);
-		return jsonFromError(error, "Error al obtener la linea comercial");
+		return jsonFromError(error, "Error al obtener la línea comercial");
 	}
 }
 
@@ -54,6 +54,6 @@ export async function PATCH(request: Request, context: RouteContext) {
 		return NextResponse.json(updatedProductLine, { status: 200 });
 	} catch (error) {
 		console.error("[admin/catalog/product-lines/[id]][PATCH] error:", error);
-		return jsonFromError(error, "Error al actualizar la linea comercial");
+		return jsonFromError(error, "Error al actualizar la línea comercial");
 	}
 }

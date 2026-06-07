@@ -79,7 +79,7 @@ export const COMMERCIAL_ROUTE_STATUS_IDS = {
 } as const;
 
 // -----------------------------------------------------------------------------
-// M3. Catalogo, productos y coloracion
+// M3. Catálogo, productos y coloración
 // -----------------------------------------------------------------------------
 
 export const PRODUCT_STATUS_IDS = {

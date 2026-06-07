@@ -69,7 +69,7 @@ export default async function CommercialPaymentsPage() {
 						orders={sortedOrders}
 						mode="commercial"
 						detailBasePath="/commercials/orders"
-						emptyMessage="Todavia no hay pedidos entregados pendientes de seguimiento de cobro."
+						emptyMessage="Todavía no hay pedidos entregados pendientes de seguimiento de cobro."
 					/>
 				</section>
 			</div>

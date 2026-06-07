@@ -73,7 +73,7 @@ export async function createProductCategory(
 	} catch (error) {
 		rethrowCatalogPersistenceError(
 			error,
-			"No se pudo crear la categoria de producto",
+			"No se pudo crear la categoría de producto",
 			"PRODUCT_CATEGORY_CREATE_FAILED",
 		);
 	}
@@ -94,7 +94,7 @@ export async function updateProductCategory(
 
 			if (!category) {
 				throw new CatalogServiceError(
-					"Categoria de producto no encontrada",
+					"Categoría de producto no encontrada",
 					404,
 					"PRODUCT_CATEGORY_NOT_FOUND",
 				);
@@ -122,7 +122,7 @@ export async function updateProductCategory(
 	} catch (error) {
 		rethrowCatalogPersistenceError(
 			error,
-			"No se pudo actualizar la categoria de producto",
+			"No se pudo actualizar la categoría de producto",
 			"PRODUCT_CATEGORY_UPDATE_FAILED",
 		);
 	}

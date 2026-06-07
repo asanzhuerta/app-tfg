@@ -241,17 +241,17 @@ export function getProductCategoryFields(): FieldDescriptor[] {
 			label: "Nombre",
 			type: "text",
 			required: true,
-			placeholder: "Coloracion, tratamiento, acabado...",
+			placeholder: "Coloración, tratamiento, acabado...",
 		},
 		{
 			name: "description",
-			label: "Descripcion",
+			label: "Descripción",
 			type: "textarea",
-			placeholder: "Describe el proposito de esta categoria",
+			placeholder: "Describe el propósito de esta categoría",
 		},
 		{
 			name: "displayOrder",
-			label: "Orden de visualizacion",
+			label: "Orden de visualización",
 			type: "number",
 			min: 0,
 		},
@@ -267,11 +267,11 @@ export function getProductLineFields(
 			label: "Nombre",
 			type: "text",
 			required: true,
-			placeholder: "Linea de color, tratamiento premium...",
+			placeholder: "Línea de color, tratamiento premium...",
 		},
 		{
 			name: "productCategoryId",
-			label: "Categoria",
+			label: "Categoría",
 			type: "select",
 			required: true,
 			options: productCategories.map((category) =>
@@ -283,19 +283,19 @@ export function getProductLineFields(
 			label: "Imagen",
 			type: "image",
 			helpText:
-				"Sube la imagen principal de la linea comercial. Se guardara en Cloudinary.",
+				"Sube la imagen principal de la línea comercial. Se guardara en Cloudinary.",
 		},
 		{
 			name: "displayOrder",
-			label: "Orden de visualizacion",
+			label: "Orden de visualización",
 			type: "number",
 			min: 0,
 		},
 		{
 			name: "description",
-			label: "Descripcion",
+			label: "Descripción",
 			type: "textarea",
-			placeholder: "Describe los productos que forman esta linea",
+			placeholder: "Describe los productos que forman esta línea",
 		},
 	];
 }
@@ -321,19 +321,19 @@ export function getProductSubcategoryFields(
 		},
 		{
 			name: "productLineId",
-			label: "Linea comercial",
+			label: "Línea comercial",
 			type: "select",
 			required: true,
 			options: productLines.map((productLine) =>
 				buildOption(
 					productLine.id,
-					`${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoria"}`,
+					`${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoría"}`,
 				),
 			),
 		},
 		{
 			name: "parentSubcategoryId",
-			label: "Subcategoria padre",
+			label: "Subcategoría padre",
 			type: "select",
 			options: productSubcategories.map((productSubcategory) => ({
 				value: productSubcategory.id,
@@ -345,24 +345,24 @@ export function getProductSubcategoryFields(
 			})),
 			filterByFieldName: "productLineId",
 			helpText:
-				"Opcional. Si esta subcategoria depende de otra dentro de la misma linea, indicalo aqui.",
+				"Opcional. Si esta subcategoría depende de otra dentro de la misma línea, indicalo aqui.",
 		},
 		{
 			name: "imageUrl",
 			label: "Imagen",
 			type: "image",
 			helpText:
-				"Sube la imagen principal de la subcategoria. Se guardara en Cloudinary.",
+				"Sube la imagen principal de la subcategoría. Se guardara en Cloudinary.",
 		},
 		{
 			name: "displayOrder",
-			label: "Orden de visualizacion",
+			label: "Orden de visualización",
 			type: "number",
 			min: 0,
 		},
 		{
 			name: "description",
-			label: "Descripcion",
+			label: "Descripción",
 			type: "textarea",
 			placeholder: "Describe el grupo de tratamientos o variantes que representa.",
 		},
@@ -381,7 +381,7 @@ export function getProductFields(input: {
 			label: "Nombre",
 			type: "text",
 			required: true,
-			placeholder: "Champu, coloracion, oxidante...",
+			placeholder: "Champu, coloración, oxidante...",
 		},
 		{
 			name: "reference",
@@ -392,7 +392,7 @@ export function getProductFields(input: {
 		},
 		{
 			name: "productCategoryId",
-			label: "Categoria",
+			label: "Categoría",
 			type: "select",
 			required: true,
 			options: input.productCategories.map((category) =>
@@ -401,28 +401,28 @@ export function getProductFields(input: {
 		},
 		{
 			name: "productLineId",
-			label: "Linea comercial",
+			label: "Línea comercial",
 			type: "select",
 			required: true,
 			options: input.productLines.map((productLine) => ({
 				value: productLine.id,
-				label: `${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoria"}`,
+				label: `${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoría"}`,
 				groupKey: productLine.productCategory?.id ?? undefined,
 			})),
 			filterByFieldName: "productCategoryId",
 		},
 		{
 			name: "productSubcategoryId",
-			label: "Subcategoria",
+			label: "Subcategoría",
 			type: "select",
 			options: input.productSubcategories.map((productSubcategory) => ({
 				value: productSubcategory.id,
-				label: `${productSubcategory.name} · ${productSubcategory.productLine?.name ?? "Sin linea"}`,
+				label: `${productSubcategory.name} · ${productSubcategory.productLine?.name ?? "Sin línea"}`,
 				groupKey: productSubcategory.product_line_id,
 			})),
 			filterByFieldName: "productLineId",
 			helpText:
-				"Opcional. Vincula el producto a una subcategoria concreta de la linea seleccionada.",
+				"Opcional. Vincula el producto a una subcategoría concreta de la línea seleccionada.",
 		},
 		{
 			name: "statusId",
@@ -469,16 +469,16 @@ export function getProductFields(input: {
 		},
 		{
 			name: "description",
-			label: "Descripcion",
+			label: "Descripción",
 			type: "textarea",
 			placeholder: "Resumen comercial del producto",
 		},
 		{
 			name: "technicalInfo",
-			label: "Informacion tecnica",
+			label: "Información técnica",
 			type: "textarea",
 			placeholder:
-				"Modo de aplicacion, rendimiento o notas tecnicas adicionales...",
+				"Modo de aplicación, rendimiento o notas técnicas adicionales...",
 		},
 	];
 }
@@ -494,7 +494,7 @@ export function getSupportResourceFields(input: {
 			label: "Titulo",
 			type: "text",
 			required: true,
-			placeholder: "Ficha tecnica oxidante 20 vol",
+			placeholder: "Ficha técnica oxidante 20 vol",
 		},
 		{
 			name: "resourceTypeId",
@@ -520,22 +520,22 @@ export function getSupportResourceFields(input: {
 				buildOption(product.id, `${product.reference} · ${product.name}`),
 			),
 			helpText:
-				"Puedes vincular el recurso a un producto concreto, a una linea o a ambos.",
+				"Puedes vincular el recurso a un producto concreto, a una línea o a ambos.",
 		},
 		{
 			name: "productLineId",
-			label: "Linea comercial asociada",
+			label: "Línea comercial asociada",
 			type: "select",
 			options: input.productLines.map((productLine) =>
 				buildOption(
 					productLine.id,
-					`${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoria"}`,
+					`${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoría"}`,
 				),
 			),
 		},
 		{
 			name: "description",
-			label: "Descripcion",
+			label: "Descripción",
 			type: "textarea",
 			placeholder: "Describe el objetivo o contenido del recurso",
 		},
@@ -555,13 +555,13 @@ export function getColorChartFields(
 		},
 		{
 			name: "productLineId",
-			label: "Linea comercial",
+			label: "Línea comercial",
 			type: "select",
 			required: true,
 			options: productLines.map((productLine) =>
 				buildOption(
 					productLine.id,
-					`${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoria"}`,
+					`${productLine.name} · ${productLine.productCategory?.name ?? "Sin categoría"}`,
 				),
 			),
 		},
@@ -570,11 +570,11 @@ export function getColorChartFields(
 			label: "Imagen",
 			type: "image",
 			helpText:
-				"Puedes usar una imagen publica de la API de coloracion o subir una nueva a Cloudinary.",
+				"Puedes usar una imagen pública de la API de coloración o subir una nueva a Cloudinary.",
 		},
 		{
 			name: "description",
-			label: "Descripcion",
+			label: "Descripción",
 			type: "textarea",
 			placeholder: "Notas de uso, temporada, observaciones comerciales...",
 		},
@@ -596,7 +596,7 @@ export function getColorReferenceFields(
 		},
 		{
 			name: "code",
-			label: "Codigo",
+			label: "Código",
 			type: "text",
 			required: true,
 			placeholder: "7.34",
@@ -620,19 +620,19 @@ export function getColorReferenceFields(
 			label: "Miniatura",
 			type: "image",
 			helpText:
-				"Opcional. Puedes definir una miniatura especifica para usos futuros del catalogo.",
+				"Opcional. Puedes definir una miniatura específica para usos futuros del catálogo.",
 		},
 		{
 			name: "displayOrder",
-			label: "Orden de visualizacion",
+			label: "Orden de visualización",
 			type: "number",
 			min: 0,
 		},
 		{
 			name: "description",
-			label: "Descripcion",
+			label: "Descripción",
 			type: "textarea",
-			placeholder: "Informacion adicional sobre tono, matiz o familia",
+			placeholder: "Información adicional sobre tono, matiz o familia",
 		},
 	];
 }

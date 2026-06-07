@@ -21,6 +21,6 @@ export async function DELETE(_: Request, context: RouteContext) {
 		return NextResponse.json(deleted, { status: 200 });
 	} catch (error) {
 		console.error("[admin/communications/client-segments/[id]][DELETE] error:", error);
-		return jsonFromError(error, "Error al quitar asignacion");
+		return jsonFromError(error, "Error al quitar asignación");
 	}
 }

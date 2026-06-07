@@ -7,6 +7,7 @@ export type TrainingEventStatus =
 export type TrainingEventModality = "in_person" | "online" | "hybrid";
 export type TrainingEnrollmentStatus = "registered" | "cancelled" | "attended";
 export type AppReminderStatus = "pending" | "done" | "cancelled";
+export type NotificationDeliveryChannel = "in_app" | "email" | "push";
 
 export type AdminUpsertCustomerSegmentBody = {
 	code?: string;
@@ -33,6 +34,7 @@ export type AdminUpsertPromotionBody = {
 	productLineId?: string | null;
 	clientId?: string | null;
 	customerSegmentId?: string | null;
+	deliveryChannels?: NotificationDeliveryChannel[];
 };
 
 export type AdminUpsertTrainingEventBody = {
@@ -44,6 +46,7 @@ export type AdminUpsertTrainingEventBody = {
 	content?: string | null;
 	status?: TrainingEventStatus;
 	capacity?: number | string | null;
+	deliveryChannels?: NotificationDeliveryChannel[];
 };
 
 export type TrainingEnrollmentBody = {
@@ -93,6 +96,7 @@ export function buildAdminUpsertPromotionInput(
 		productLineId: body.productLineId,
 		clientId: body.clientId,
 		customerSegmentId: body.customerSegmentId,
+		deliveryChannels: body.deliveryChannels,
 	};
 }
 
@@ -108,6 +112,7 @@ export function buildAdminUpsertTrainingEventInput(
 		content: body.content,
 		status: body.status,
 		capacity: body.capacity,
+		deliveryChannels: body.deliveryChannels,
 	};
 }
 

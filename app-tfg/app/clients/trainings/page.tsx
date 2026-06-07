@@ -10,7 +10,7 @@ export default async function ClientTrainingsPage() {
 	return (
 		<TrainingEventsWorkspace
 			title="Formaciones"
-			subtitle="Sesiones disponibles para tu salon"
+			subtitle="Sesiones disponibles para tu salón"
 			backHref="/clients"
 			initialTrainings={trainings.map(serializeTrainingEvent)}
 		/>

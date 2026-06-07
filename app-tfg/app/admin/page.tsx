@@ -11,7 +11,7 @@ import {
 
 const navItems = [
 	{
-		title: "Gestion de usuarios",
+		title: "Gestión de usuarios",
 		icon: <ClientsIcon className="h-6 w-6" />,
 		href: "/admin/users",
 	},
@@ -21,7 +21,7 @@ const navItems = [
 		href: "/admin/clients",
 	},
 	{
-		title: "Catalogo",
+		title: "Catálogo",
 		icon: <CatalogIcon className="h-6 w-6" />,
 		href: "/admin/catalog",
 	},
@@ -36,12 +36,12 @@ const navItems = [
 		href: "/admin/communications",
 	},
 	{
-		title: "Auditoria",
+		title: "Auditoría",
 		icon: <ReportsIcon className="h-6 w-6" />,
 		href: "/admin/audit",
 	},
 	{
-		title: "Operacion M7",
+		title: "Operación M7",
 		icon: <ReportsIcon className="h-6 w-6" />,
 		href: "/admin/operations",
 	},
@@ -51,19 +51,9 @@ const navItems = [
 		href: "/admin/enterprise-operations",
 	},
 	{
-		title: "Integraciones",
+		title: "Configuración",
 		icon: <SettingsIcon className="h-6 w-6" />,
-		href: "/admin/integrations",
-	},
-	{
-		title: "Soporte tecnico",
-		icon: <SettingsIcon className="h-6 w-6" />,
-		href: "/admin/support",
-	},
-	{
-		title: "Ajustes globales",
-		icon: <SettingsIcon className="h-6 w-6" />,
-		href: "/admin/settings",
+		href: "/admin/configuration",
 	},
 ];
 

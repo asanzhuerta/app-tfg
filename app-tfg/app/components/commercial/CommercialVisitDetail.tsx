@@ -287,7 +287,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 			},
 			{
 				id: "employeeCode",
-				label: "Codigo interno",
+				label: "Código interno",
 				value: visit.commercial?.employee_code ?? "-",
 			},
 			{
@@ -546,7 +546,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 				{!loading && !error && visit ? (
 					<>
 						<CollapsibleSection
-							title="Informacion de la visita"
+							title="Información de la visita"
 							description="Fecha, tipo, estado, notas y resultado."
 						>
 							<DataTable<InfoRow>
@@ -567,7 +567,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 									<p className="text-sm text-slate-600">
 										Selecciona los pedidos confirmados que se entregaran en esta
 										visita. Al completar el reparto, esos pedidos pasaran
-										automaticamente a estado entregado.
+										automáticamente a estado entregado.
 									</p>
 								</div>
 
@@ -644,7 +644,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 															</div>
 															<div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
 																<p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-																	Lineas
+																	Líneas
 																</p>
 																<p className="mt-1 text-sm font-semibold text-slate-900">
 																	{order.line_count}
@@ -784,7 +784,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 										}
 										rows={4}
 										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
-										placeholder="Conclusiones de la visita, acuerdos alcanzados, proximos pasos..."
+										placeholder="Conclusiones de la visita, acuerdos alcanzados, próximos pasos..."
 									/>
 								</div>
 
@@ -805,11 +805,11 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 											}}
 											rows={4}
 											className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
-											placeholder="Escanea o pega un QR por linea antes de completar el reparto"
+											placeholder="Escanea o pega un QR por línea antes de completar el reparto"
 										/>
 										<p className="mt-2 text-sm text-slate-600">
 											Debes aportar un QR por cada pedido vinculado al reparto.
-											Tambien puedes pegar el valor completo del codigo si el
+											También puedes pegar el valor completo del código si el
 											lector lo envia como texto.
 										</p>
 										<p className="mt-2 text-sm font-medium text-slate-700">
@@ -879,7 +879,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 
 						<CollapsibleSection
 							title="Datos del comercial"
-							description="Usuario, codigo interno y territorio."
+							description="Usuario, código interno y territorio."
 						>
 							<DataTable<InfoRow>
 								data={commercialRows}

@@ -61,12 +61,12 @@ export default async function AdminColorReferencesPage({ searchParams }: Props) 
 					},
 				]}
 				tableConfig={{
-					categoryLabel: "Linea",
+					categoryLabel: "Línea",
 					showImageFilter: true,
 					cardVariant: "color-reference",
 					defaultSortField: "primaryDate",
 					defaultSortDirection: "asc",
-					primaryDateLabel: "Codigo",
+					primaryDateLabel: "Código",
 					initialCategoryFilter: getSingleSearchParamValue(
 						resolvedSearchParams.category,
 					),
@@ -85,7 +85,7 @@ export default async function AdminColorReferencesPage({ searchParams }: Props) 
 					],
 					gridClassName:
 						"grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4",
-					emptyMessage: "No hay referencias de color registradas todavia.",
+					emptyMessage: "No hay referencias de color registradas todavía.",
 				}}
 			/>
 		</div>

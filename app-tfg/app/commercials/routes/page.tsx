@@ -10,8 +10,8 @@ export default function CommercialRoutesPage() {
 			/>
 
 			<RouteMapCard
-				title="Previsualizacion completa"
-				subtitle="La planificacion combina visitas de hoy, geolocalizacion disponible y configuracion operativa del comercial."
+				title="Previsualización completa"
+				subtitle="La planificación combina visitas de hoy, geolocalización disponible y configuración operativa del comercial."
 			/>
 		</div>
 	);

@@ -38,14 +38,14 @@ export default function PromotionsOverview({
 
 			<section className="rounded-3xl border border-white/30 bg-white/70 p-6 shadow-xl backdrop-blur">
 				<p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-					M6 / Comunicacion comercial
+					M6 / Comunicación comercial
 				</p>
 				<h2 className="mt-2 text-2xl font-bold text-slate-900">
 					Promociones vigentes
 				</h2>
 				<p className="mt-2 max-w-3xl text-sm text-slate-600">
-					Consulta las campanas activas segun tu rol y, en el caso de clientes,
-					segun el rango comercial asignado por administracion.
+					Consulta las campañas activas según tu rol y, en el caso de clientes,
+					según el rango comercial asignado por administración.
 				</p>
 			</section>
 

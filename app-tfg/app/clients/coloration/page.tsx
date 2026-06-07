@@ -18,8 +18,8 @@ export default async function ClientColorationPage() {
 
 	return (
 		<ColorChartsExplorer
-			title="Coloracion"
-			subtitle="Consulta gamas, cartas y tonos disponibles en el catalogo"
+			title="Coloración"
+			subtitle="Consulta gamas, cartas y tonos disponibles en el catálogo"
 			colorCharts={serializedColorCharts}
 			colorReferences={serializedColorReferences}
 			detailBasePath="/clients/coloration"

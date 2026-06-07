@@ -21,13 +21,13 @@ export default async function NewProductPage() {
 	return (
 		<CatalogAdminCreateShell
 			title="Nuevo producto"
-			subtitle="Crea una referencia completa con su linea, estado, imagen y datos comerciales."
+			subtitle="Crea una referencia completa con su línea, estado, imagen y datos comerciales."
 			backHref="/admin/catalog/products"
 			backLabel="productos"
 		>
 			<CatalogAdminForm
 				entityLabel="producto"
-				entityLabelPlural="los productos del catalogo"
+				entityLabelPlural="los productos del catálogo"
 				basePath="/admin/catalog/products"
 				apiBasePath="/api/admin/catalog/products"
 				initialValues={getProductInitialValues()}

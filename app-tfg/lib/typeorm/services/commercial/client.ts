@@ -2,6 +2,7 @@ import { getDataSource } from "@/lib/typeorm/data-source";
 import { Client } from "@/lib/typeorm/entities/Client";
 import { User } from "@/lib/typeorm/entities/User";
 import { ROLE_IDS } from "@/lib/typeorm/constants/catalog-ids";
+import { ensureDefaultSilverClientTier } from "@/lib/typeorm/services/clients/client-tier";
 import {
 	geocodeAddress,
 	hasEnoughAddressToGeocode,
@@ -485,7 +486,11 @@ export async function createClient(input: CreateClientInput) {
 			notes: normalizeText(input.notes) || null,
 		});
 
-		return clientRepo.save(client);
+		const savedClient = await clientRepo.save(client);
+
+		await ensureDefaultSilverClientTier(manager, savedClient.id);
+
+		return savedClient;
 	});
 }
 

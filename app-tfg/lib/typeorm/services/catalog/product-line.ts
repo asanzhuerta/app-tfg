@@ -87,7 +87,7 @@ export async function createProductLine(input: AdminUpsertProductLineBody) {
 	} catch (error) {
 		rethrowCatalogPersistenceError(
 			error,
-			"No se pudo crear la linea comercial",
+			"No se pudo crear la línea comercial",
 			"PRODUCT_LINE_CREATE_FAILED",
 		);
 	}
@@ -108,7 +108,7 @@ export async function updateProductLine(
 
 			if (!productLine) {
 				throw new CatalogServiceError(
-					"Linea comercial no encontrada",
+					"Línea comercial no encontrada",
 					404,
 					"PRODUCT_LINE_NOT_FOUND",
 				);
@@ -162,7 +162,7 @@ export async function updateProductLine(
 	} catch (error) {
 		rethrowCatalogPersistenceError(
 			error,
-			"No se pudo actualizar la linea comercial",
+			"No se pudo actualizar la línea comercial",
 			"PRODUCT_LINE_UPDATE_FAILED",
 		);
 	}

@@ -68,7 +68,7 @@ export function hasOrderLineDiscount(line: OrderSummaryLine) {
 export function buildOrderLinePromotionLabel(line: OrderSummaryLine) {
 	const targetName = line.product_line_name || line.product_name;
 
-	return `Promocion aplicada: ${formatOrderPercentage(
+	return `Promoción aplicada: ${formatOrderPercentage(
 		line.discount_percentage,
 	)} % en ${targetName}`;
 }

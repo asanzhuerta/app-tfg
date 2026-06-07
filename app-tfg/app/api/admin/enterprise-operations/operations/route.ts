@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 		console.error("[admin/enterprise-operations/operations][POST] error:", error);
 		return jsonFromError(
 			error,
-			"Error al registrar la operacion de integracion",
+			"Error al registrar la operación de integración",
 		);
 	}
 }

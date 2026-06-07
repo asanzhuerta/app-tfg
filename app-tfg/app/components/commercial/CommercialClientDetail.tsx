@@ -186,7 +186,7 @@ export default function CommercialClientDetail({ clientId }: Props) {
 
 							<div className="space-y-6">
 								<CommercialClientInfoSection
-									title="Asignacion comercial activa"
+									title="Asignación comercial activa"
 									items={assignmentItems}
 								/>
 

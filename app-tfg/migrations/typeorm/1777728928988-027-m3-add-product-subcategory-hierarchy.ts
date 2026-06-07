@@ -35,7 +35,7 @@ export class M3AddProductSubcategoryHierarchy1777728928988
 				AND "productLine"."name" = 'KINACTIF'
 				AND (
 					"parent"."name" = 'Nº8 SCALP - Equilibrio y bienestar del cuero cabelludo'
-					OR "parent"."name" = 'NÂº8 SCALP - Equilibrio y bienestar del cuero cabelludo'
+					OR "parent"."name" = 'Nó8 SCALP - Equilibrio y bienestar del cuero cabelludo'
 					OR "parent"."name" ILIKE 'N%8 SCALP - %'
 				)
 				AND "child"."name" IN (

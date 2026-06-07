@@ -21,7 +21,7 @@ export default async function CommercialColorChartDetailPage({
 	return (
 		<ColorChartDetail
 			title="Carta de color"
-			subtitle="Busqueda rapida de tonos y referencias comerciales"
+			subtitle="Búsqueda rápida de tonos y referencias comerciales"
 			backHref="/commercials/coloration"
 			colorChart={toClientPlain(serializeColorChartDetail(colorChart))}
 		/>

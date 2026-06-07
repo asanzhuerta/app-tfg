@@ -17,6 +17,11 @@ import { normalizeOrderQrValues } from "@/lib/orders/qr";
 import { getActiveAssignmentByCommercialAndClient } from "@/lib/typeorm/services/commercial/client-commercial-assignment";
 import { normalizeText } from "@/lib/utils/text";
 import { parseTimeToMinutes } from "@/lib/utils/time";
+import {
+	notifyClientVisitCreated,
+	notifyClientVisitRescheduled,
+	notifyCommercialVisitsAutoPostponed,
+} from "./visit-notifications";
 
 // --------------------------------------------------------------------------
 // Funciones auxiliares para normalización de datos
@@ -381,16 +386,26 @@ export async function autoPostponeExpiredPlannedVisitsByCommercial(
 		return 0;
 	}
 
-	await repo
-		.createQueryBuilder()
-		.update(CommercialVisit)
-		.set({
-			status_id: COMMERCIAL_VISIT_STATUS_IDS.POSTPONED,
-		})
-		.where("id IN (:...visitIds)", {
-			visitIds: expiredVisitIds,
-		})
-		.execute();
+	await ds.transaction(async (manager) => {
+		await manager
+			.getRepository(CommercialVisit)
+			.createQueryBuilder()
+			.update(CommercialVisit)
+			.set({
+				status_id: COMMERCIAL_VISIT_STATUS_IDS.POSTPONED,
+			})
+			.where("id IN (:...visitIds)", {
+				visitIds: expiredVisitIds,
+			})
+			.execute();
+
+		await notifyCommercialVisitsAutoPostponed(manager, {
+			commercialUserId: commercialId,
+			visits: candidateVisits.filter((visit) =>
+				expiredVisitIds.includes(visit.id),
+			),
+		});
+	});
 
 	return expiredVisitIds.length;
 }
@@ -518,6 +533,7 @@ export async function createCommercialVisit(input: CreateCommercialVisitInput) {
 		});
 
 		await visitRepo.save(visit);
+		await notifyClientVisitCreated(manager, visit);
 
 		if (validatedOrderIds.length > 0) {
 			await orderRepo
@@ -734,6 +750,9 @@ export async function updateCommercialVisit(input: UpdateCommercialVisitInput) {
 			);
 		}
 
+		const previousStatusId = visit.status_id;
+		const previousScheduledForDate = visit.scheduled_for_date;
+
 		if (input.scheduledForDate !== undefined) {
 			const normalizedScheduledForDate = normalizeDateOnlyForUpdate(
 				input.scheduledForDate,
@@ -929,6 +948,14 @@ export async function updateCommercialVisit(input: UpdateCommercialVisitInput) {
 		visit.result = nextResult;
 
 		await repo.save(visit);
+
+		if (
+			previousStatusId === COMMERCIAL_VISIT_STATUS_IDS.POSTPONED &&
+			nextStatusId === COMMERCIAL_VISIT_STATUS_IDS.PLANNED &&
+			previousScheduledForDate !== visit.scheduled_for_date
+		) {
+			await notifyClientVisitRescheduled(manager, visit);
+		}
 
 		if (
 			nextVisitTypeId === COMMERCIAL_VISIT_TYPE_IDS.DELIVERY &&

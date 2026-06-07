@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
 	if (!kind) {
 		return badRequestError(
-			"Tipo de exportacion de auditoria no valido",
+			"Tipo de exportación de auditoría no válido",
 			"AUDIT_EXPORT_INVALID_TYPE",
 		);
 	}
@@ -54,6 +54,6 @@ export async function GET(request: Request) {
 		});
 	} catch (error) {
 		console.error("[admin/audit/export][GET] error:", error);
-		return jsonFromError(error, "Error al exportar la auditoria");
+		return jsonFromError(error, "Error al exportar la auditoría");
 	}
 }

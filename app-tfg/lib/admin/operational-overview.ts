@@ -117,7 +117,7 @@ export async function getAdminOperationalOverview(
 		buildSection(
 			{
 				slug: "audit-traceability",
-				title: "Auditoria y trazabilidad",
+				title: "Auditoría y trazabilidad",
 				href: "/admin/audit",
 				status: "ready",
 				description:
@@ -155,10 +155,10 @@ export async function getAdminOperationalOverview(
 							? "warning"
 							: "ready",
 				description:
-					"Politicas persistidas que protegen login y API frente a abuso operativo sin redesplegar la aplicacion.",
+					"Políticas persistidas que protegen login y API frente a abuso operativo sin redesplegar la aplicación.",
 				metrics: [
 					{
-						label: "Politicas",
+						label: "Políticas",
 						value: String(rateLimitPolicies.length),
 					},
 					{
@@ -191,7 +191,7 @@ export async function getAdminOperationalOverview(
 							? "warning"
 							: "ready",
 				description:
-					"Inventario de proveedores externos usados por catalogo, rutas, imagenes y QR.",
+					"Inventario de proveedores externos usados por catálogo, rutas, imágenes y QR.",
 				metrics: [
 					{
 						label: "Integraciones",
@@ -216,7 +216,7 @@ export async function getAdminOperationalOverview(
 		buildSection(
 			{
 				slug: "support-capabilities",
-				title: "Soporte tecnico y PWA",
+				title: "Soporte técnico y PWA",
 				href: "/admin/support",
 				status:
 					supportSummary.missing > 0
@@ -259,7 +259,7 @@ export async function getAdminOperationalOverview(
 							? "attention"
 							: "ready",
 				description:
-					"Registro persistente de configuracion, integraciones externas, operaciones de intercambio y propuestas de pedido a proveedor.",
+					"Registro persistente de configuración, integraciones externas, operaciones de intercambio y propuestas de pedido a proveedor.",
 				metrics: [
 					{
 						label: "Configuraciones",

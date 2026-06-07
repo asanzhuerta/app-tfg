@@ -37,7 +37,7 @@ export async function POST(request: Request, context: RouteContext) {
 		return NextResponse.json(enrollment, { status: 201 });
 	} catch (error) {
 		console.error("[communications/trainings/[id]/enrollment][POST] error:", error);
-		return jsonFromError(error, "Error al inscribirse en la formacion");
+		return jsonFromError(error, "Error al inscribirse en la formación");
 	}
 }
 
@@ -62,6 +62,6 @@ export async function DELETE(_: Request, context: RouteContext) {
 		return NextResponse.json(enrollment, { status: 200 });
 	} catch (error) {
 		console.error("[communications/trainings/[id]/enrollment][DELETE] error:", error);
-		return jsonFromError(error, "Error al cancelar la inscripcion");
+		return jsonFromError(error, "Error al cancelar la inscripción");
 	}
 }

@@ -18,7 +18,7 @@ export default async function NewSupportResourcePage() {
 	return (
 		<CatalogAdminCreateShell
 			title="Nuevo recurso de apoyo"
-			subtitle="Añade fichas, catalogos o materiales formativos asociados al catalogo."
+			subtitle="Añade fichas, catálogos o materiales formativos asociados al catálogo."
 			backHref="/admin/catalog/support-resources"
 			backLabel="recursos"
 		>

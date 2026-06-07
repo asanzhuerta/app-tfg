@@ -40,14 +40,14 @@ export default async function NewProductSubcategoryPage({
 
 	return (
 		<CatalogAdminCreateShell
-			title="Nueva subcategoria"
-			subtitle="Crea una agrupacion interna para una linea cuando necesite identidad o imagen propia."
+			title="Nueva subcategoría"
+			subtitle="Crea una agrupacion interna para una línea cuando necesite identidad o imagen propia."
 			backHref={backHref}
-			backLabel="lineas comerciales"
+			backLabel="líneas comerciales"
 		>
 			<CatalogAdminForm
-				entityLabel="subcategoria"
-				entityLabelPlural="las subcategorias del catalogo"
+				entityLabel="subcategoría"
+				entityLabelPlural="las subcategorías del catálogo"
 				basePath={backHref}
 				apiBasePath="/api/admin/catalog/product-subcategories"
 				initialValues={{

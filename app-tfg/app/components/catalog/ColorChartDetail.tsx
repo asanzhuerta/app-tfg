@@ -57,7 +57,7 @@ export default function ColorChartDetail({
 					href={backHref}
 					className="inline-flex rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-white"
 				>
-					Volver a coloracion
+					Volver a coloración
 				</Link>
 
 				<div className="text-sm text-slate-600">
@@ -91,7 +91,7 @@ export default function ColorChartDetail({
 					<div className="space-y-5">
 						<div>
 							<p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-								{colorChart.productLine?.productCategory?.name ?? "Coloracion"}
+								{colorChart.productLine?.productCategory?.name ?? "Coloración"}
 							</p>
 
 							<h2 className="mt-2 text-3xl font-bold text-slate-900">
@@ -100,13 +100,13 @@ export default function ColorChartDetail({
 
 							<p className="mt-3 text-sm leading-7 text-slate-600">
 								{colorChart.description ||
-									"Carta de color disponible para consulta comercial y tecnica."}
+									"Carta de color disponible para consulta comercial y técnica."}
 							</p>
 						</div>
 
 						<div className="flex flex-wrap gap-3">
 							<div className="rounded-full bg-sky-100 px-4 py-2 text-sm font-medium text-sky-700">
-								Linea: {colorChart.productLine?.name ?? "Sin linea"}
+								Línea: {colorChart.productLine?.name ?? "Sin línea"}
 							</div>
 							<div className="rounded-full bg-fuchsia-100 px-4 py-2 text-sm font-medium text-fuchsia-700">
 								{(colorChart.colorReferences ?? []).length} referencias
@@ -154,7 +154,7 @@ export default function ColorChartDetail({
 
 				{filteredReferences.length === 0 ? (
 					<div className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-white/70 px-5 py-6 text-sm text-slate-500">
-						No hay referencias que coincidan con la busqueda indicada.
+						No hay referencias que coincidan con la búsqueda indicada.
 					</div>
 				) : (
 					<div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -194,7 +194,7 @@ export default function ColorChartDetail({
 											{reference.name}
 										</h4>
 										<p className="mt-2 text-sm leading-6 text-slate-600">
-											{reference.description || "Sin descripcion adicional."}
+											{reference.description || "Sin descripción adicional."}
 										</p>
 									</div>
 								</div>

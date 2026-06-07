@@ -1,9 +1,9 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class CreateAppRateLimitPolicies1780617600000
+export class M7CreateAppRateLimitPolicies1780045000000
 	implements MigrationInterface
 {
-	name = "CreateAppRateLimitPolicies1780617600000";
+	name = "M7CreateAppRateLimitPolicies1780045000000";
 
 	public async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(`

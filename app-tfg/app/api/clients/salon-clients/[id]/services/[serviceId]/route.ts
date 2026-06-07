@@ -41,7 +41,7 @@ export async function PATCH(request: Request, context: ServiceRouteContext) {
 			"[clients/salon-clients/[id]/services/[serviceId]][PATCH] error:",
 			error,
 		);
-		return jsonFromError(error, "Error al actualizar el servicio tecnico");
+		return jsonFromError(error, "Error al actualizar el servicio técnico");
 	}
 }
 
@@ -62,6 +62,6 @@ export async function DELETE(_: Request, context: ServiceRouteContext) {
 			"[clients/salon-clients/[id]/services/[serviceId]][DELETE] error:",
 			error,
 		);
-		return jsonFromError(error, "Error al eliminar el servicio tecnico");
+		return jsonFromError(error, "Error al eliminar el servicio técnico");
 	}
 }

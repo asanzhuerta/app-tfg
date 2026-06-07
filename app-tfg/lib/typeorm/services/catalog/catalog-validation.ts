@@ -180,11 +180,11 @@ function normalizeUuidField(
 			);
 		}
 
-		throw new CatalogValidationError(`${fieldName} no es valido`, 400, code);
+		throw new CatalogValidationError(`${fieldName} no es válido`, 400, code);
 	}
 
 	if (!UUID_PATTERN.test(normalized)) {
-		throw new CatalogValidationError(`${fieldName} no es valido`, 400, code);
+		throw new CatalogValidationError(`${fieldName} no es válido`, 400, code);
 	}
 
 	return normalized;
@@ -206,7 +206,7 @@ function normalizeNullableUuidField(
 	}
 
 	if (!UUID_PATTERN.test(normalized)) {
-		throw new CatalogValidationError(`${fieldName} no es valido`, 400, code);
+		throw new CatalogValidationError(`${fieldName} no es válido`, 400, code);
 	}
 
 	return normalized;
@@ -241,7 +241,7 @@ function normalizeLookupIdField(
 	const parsed = Number(value);
 
 	if (!Number.isInteger(parsed) || parsed <= 0) {
-		throw new CatalogValidationError(`${fieldName} no es valido`, 400, code);
+		throw new CatalogValidationError(`${fieldName} no es válido`, 400, code);
 	}
 
 	return parsed;
@@ -263,7 +263,7 @@ function normalizeNonNegativeIntegerField(
 	const parsed = Number(value);
 
 	if (!Number.isInteger(parsed) || parsed < 0) {
-		throw new CatalogValidationError(`${fieldName} no es valido`, 400, code);
+		throw new CatalogValidationError(`${fieldName} no es válido`, 400, code);
 	}
 
 	return parsed;
@@ -287,7 +287,7 @@ function normalizeOptionalNonNegativeIntegerField(
 	const parsed = Number(normalizedValue);
 
 	if (!Number.isInteger(parsed) || parsed < 0) {
-		throw new CatalogValidationError(`${fieldName} no es valido`, 400, code);
+		throw new CatalogValidationError(`${fieldName} no es válido`, 400, code);
 	}
 
 	return parsed;
@@ -322,7 +322,7 @@ function normalizePriceField(
 	const parsed = Number(value);
 
 	if (!Number.isFinite(parsed) || parsed < 0) {
-		throw new CatalogValidationError(`${fieldName} no es valido`, 400, code);
+		throw new CatalogValidationError(`${fieldName} no es válido`, 400, code);
 	}
 
 	return parsed.toFixed(2);
@@ -337,14 +337,14 @@ export function normalizeProductCategoryWriteInput(
 			input.name !== undefined || options.required
 				? normalizeRequiredTextField(
 						input.name,
-						"El nombre de la categoria",
+						"El nombre de la categoría",
 						"PRODUCT_CATEGORY_NAME_REQUIRED",
 				  )
 				: undefined,
 		description: normalizeOptionalTextField(input.description),
 		displayOrder: normalizeNonNegativeIntegerField(
 			input.displayOrder,
-			"El orden de visualizacion de la categoria",
+			"El orden de visualización de la categoría",
 			"INVALID_PRODUCT_CATEGORY_DISPLAY_ORDER",
 		),
 	};
@@ -359,25 +359,25 @@ export function normalizeProductLineWriteInput(
 			input.name !== undefined || options.required
 				? normalizeRequiredTextField(
 						input.name,
-						"El nombre de la linea comercial",
+						"El nombre de la línea comercial",
 						"PRODUCT_LINE_NAME_REQUIRED",
 				  )
 				: undefined,
 		description: normalizeOptionalTextField(input.description),
 		productCategoryId: normalizeUuidField(
 			input.productCategoryId,
-			"La categoria de producto",
+			"La categoría de producto",
 			"INVALID_PRODUCT_LINE_CATEGORY_ID",
 			options,
 		),
 		imageUrl: normalizeOptionalCloudinaryImageField(
 			input.imageUrl,
-			"La imagen de la linea comercial",
+			"La imagen de la línea comercial",
 			"INVALID_PRODUCT_LINE_IMAGE_URL",
 		),
 		displayOrder: normalizeNonNegativeIntegerField(
 			input.displayOrder,
-			"El orden de visualizacion de la linea comercial",
+			"El orden de visualización de la línea comercial",
 			"INVALID_PRODUCT_LINE_DISPLAY_ORDER",
 		),
 	};
@@ -392,30 +392,30 @@ export function normalizeProductSubcategoryWriteInput(
 			input.name !== undefined || options.required
 				? normalizeRequiredTextField(
 						input.name,
-						"El nombre de la subcategoria",
+						"El nombre de la subcategoría",
 						"PRODUCT_SUBCATEGORY_NAME_REQUIRED",
 				  )
 				: undefined,
 		description: normalizeOptionalTextField(input.description),
 		productLineId: normalizeUuidField(
 			input.productLineId,
-			"La linea comercial de la subcategoria",
+			"La línea comercial de la subcategoría",
 			"INVALID_PRODUCT_SUBCATEGORY_PRODUCT_LINE_ID",
 			options,
 		),
 		parentSubcategoryId: normalizeNullableUuidField(
 			input.parentSubcategoryId,
-			"La subcategoria padre",
+			"La subcategoría padre",
 			"INVALID_PRODUCT_SUBCATEGORY_PARENT_ID",
 		),
 		imageUrl: normalizeOptionalCloudinaryImageField(
 			input.imageUrl,
-			"La imagen de la subcategoria",
+			"La imagen de la subcategoría",
 			"INVALID_PRODUCT_SUBCATEGORY_IMAGE_URL",
 		),
 		displayOrder: normalizeNonNegativeIntegerField(
 			input.displayOrder,
-			"El orden de visualizacion de la subcategoria",
+			"El orden de visualización de la subcategoría",
 			"INVALID_PRODUCT_SUBCATEGORY_DISPLAY_ORDER",
 		),
 	};
@@ -445,19 +445,19 @@ export function normalizeProductWriteInput(
 		description: normalizeOptionalTextField(input.description),
 		productCategoryId: normalizeUuidField(
 			input.productCategoryId,
-			"La categoria del producto",
+			"La categoría del producto",
 			"INVALID_PRODUCT_CATEGORY_ID",
 			options,
 		),
 		productLineId: normalizeUuidField(
 			input.productLineId,
-			"La linea comercial del producto",
+			"La línea comercial del producto",
 			"INVALID_PRODUCT_LINE_ID",
 			options,
 		),
 		productSubcategoryId: normalizeNullableUuidField(
 			input.productSubcategoryId,
-			"La subcategoria del producto",
+			"La subcategoría del producto",
 			"INVALID_PRODUCT_SUBCATEGORY_ID",
 		),
 		imageUrl: normalizeOptionalCloudinaryImageField(
@@ -523,7 +523,7 @@ export function normalizeSupportResourceWriteInput(
 		),
 		productLineId: normalizeNullableUuidField(
 			input.productLineId,
-			"La linea comercial asociada",
+			"La línea comercial asociada",
 			"INVALID_SUPPORT_RESOURCE_PRODUCT_LINE_ID",
 		),
 	};
@@ -534,7 +534,7 @@ export function normalizeSupportResourceWriteInput(
 		!normalized.productLineId
 	) {
 		throw new CatalogValidationError(
-			"El recurso debe estar asociado a un producto o a una linea comercial",
+			"El recurso debe estar asociado a un producto o a una línea comercial",
 			400,
 			"SUPPORT_RESOURCE_CONTEXT_REQUIRED",
 		);
@@ -559,7 +559,7 @@ export function normalizeColorChartWriteInput(
 		description: normalizeOptionalTextField(input.description),
 		productLineId: normalizeUuidField(
 			input.productLineId,
-			"La linea comercial de la carta de color",
+			"La línea comercial de la carta de color",
 			"INVALID_COLOR_CHART_PRODUCT_LINE_ID",
 			options,
 		),
@@ -587,7 +587,7 @@ export function normalizeColorReferenceWriteInput(
 			input.code !== undefined || options.required
 				? normalizeRequiredTextField(
 						input.code,
-						"El codigo de la referencia de color",
+						"El código de la referencia de color",
 						"COLOR_REFERENCE_CODE_REQUIRED",
 				  )
 				: undefined,
@@ -614,7 +614,7 @@ export function normalizeColorReferenceWriteInput(
 		),
 		displayOrder: normalizeNonNegativeIntegerField(
 			input.displayOrder,
-			"El orden de visualizacion de la referencia de color",
+			"El orden de visualización de la referencia de color",
 			"INVALID_COLOR_REFERENCE_DISPLAY_ORDER",
 		),
 	};

@@ -11,7 +11,7 @@ import { updateUserStatus } from "@/lib/typeorm/services/users/status";
 
 // PATCH /api/admin/users/[id]/status
 // PATCH /api/admin/users/[id]/status
-// Cambia el estado de un usuario desde administracion y registra la auditoria correspondiente.
+// Cambia el estado de un usuario desde administración y registra la auditoría correspondiente.
 export async function PATCH(request: Request, context: RouteContext) {
 	const user = await requireRoleUser("admin");
 

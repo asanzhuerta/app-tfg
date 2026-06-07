@@ -61,7 +61,7 @@ export default function SalonClientsWorkspace({
 					type: "error",
 					message: getApiErrorMessage(
 						data as ApiErrorResponse | null,
-						"No se ha podido crear la ficha tecnica.",
+						"No se ha podido crear la ficha técnica.",
 					),
 				});
 				return;
@@ -74,12 +74,12 @@ export default function SalonClientsWorkspace({
 			setNotes("");
 			setFeedback({
 				type: "success",
-				message: "Ficha tecnica creada correctamente.",
+				message: "Ficha técnica creada correctamente.",
 			});
 		} catch {
 			setFeedback({
 				type: "error",
-				message: "No se ha podido crear la ficha tecnica.",
+				message: "No se ha podido crear la ficha técnica.",
 			});
 		} finally {
 			setIsSubmitting(false);
@@ -89,8 +89,8 @@ export default function SalonClientsWorkspace({
 	return (
 		<PageTransition>
 			<H1Title
-				title="Fichas tecnicas"
-				subtitle="Gestiona clientes, historial tecnico, plantillas y seguimiento de servicios"
+				title="Fichas técnicas"
+				subtitle="Gestiona clientes, historial técnico, plantillas y seguimiento de servicios"
 			/>
 
 			<div className="mb-4 flex items-center gap-3">
@@ -105,10 +105,10 @@ export default function SalonClientsWorkspace({
 			<div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
 				<section className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
 					<h2 className="text-lg font-semibold text-slate-900">
-						Nueva ficha tecnica
+						Nueva ficha técnica
 					</h2>
 					<p className="mt-1 text-sm text-slate-500">
-						Da de alta a un cliente del salon para empezar a registrar
+						Da de alta a un cliente del salón para empezar a registrar
 						servicios.
 					</p>
 
@@ -219,7 +219,7 @@ export default function SalonClientsWorkspace({
 								Clientes registrados
 							</h2>
 							<p className="mt-1 text-sm text-slate-500">
-								Abre cada ficha para anadir servicios y revisar su historial.
+								Abre cada ficha para añadir servicios y revisar su historial.
 							</p>
 						</div>
 						<span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">
@@ -229,7 +229,7 @@ export default function SalonClientsWorkspace({
 
 					{salonClients.length === 0 ? (
 						<div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-5 py-10 text-center text-sm text-slate-500">
-							Aun no hay fichas tecnicas registradas para este salon.
+							Aún no hay fichas técnicas registradas para este salón.
 						</div>
 					) : (
 						<div className="space-y-4">
@@ -245,7 +245,7 @@ export default function SalonClientsWorkspace({
 												{salonClient.name}
 											</h3>
 											<p className="mt-1 text-sm text-slate-500">
-												{salonClient.phone || "Sin telefono"} ·{" "}
+												{salonClient.phone || "Sin teléfono"} ·{" "}
 												{salonClient.email || "Sin correo"}
 											</p>
 										</div>

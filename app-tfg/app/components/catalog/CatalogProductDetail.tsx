@@ -77,7 +77,7 @@ export default function CatalogProductDetail({
 					href={backHref}
 					className="inline-flex rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-white"
 				>
-					Volver al catalogo
+					Volver al catálogo
 				</Link>
 
 				<div className="text-sm text-slate-600">
@@ -119,24 +119,24 @@ export default function CatalogProductDetail({
 							</h2>
 
 							<p className="mt-3 text-sm leading-7 text-slate-600">
-								{product.description || "Sin descripcion comercial adicional."}
+								{product.description || "Sin descripción comercial adicional."}
 							</p>
 						</div>
 
 						<div className="flex flex-wrap gap-3">
 							<InfoChip
-								label="Categoria"
-								value={product.productCategory?.name ?? "Sin categoria"}
+								label="Categoría"
+								value={product.productCategory?.name ?? "Sin categoría"}
 								className="bg-fuchsia-100 text-fuchsia-700 border border-fuchsia-200"
 							/>
 							<InfoChip
-								label="Linea"
-								value={product.productLine?.name ?? "Sin linea"}
+								label="Línea"
+								value={product.productLine?.name ?? "Sin línea"}
 								className="bg-sky-100 text-sky-700 border border-sky-200"
 							/>
 							{product.productSubcategory?.name ? (
 								<InfoChip
-									label="Subcategoria"
+									label="Subcategoría"
 									value={product.productSubcategory.name}
 									className="bg-violet-100 text-violet-700 border border-violet-200"
 								/>
@@ -208,14 +208,14 @@ export default function CatalogProductDetail({
 			<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
 				<div className="flex flex-col gap-2">
 					<p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-						Informacion tecnica
+						Información técnica
 					</p>
 					<h3 className="text-2xl font-semibold text-slate-900">
 						Modo de uso y caracteristicas
 					</h3>
 					<p className="whitespace-pre-line text-sm leading-7 text-slate-600">
 						{product.technical_info ||
-							"Este producto todavia no tiene informacion tecnica registrada."}
+							"Este producto todavía no tiene información técnica registrada."}
 					</p>
 				</div>
 			</section>
@@ -226,13 +226,13 @@ export default function CatalogProductDetail({
 						Recursos de apoyo
 					</p>
 					<h3 className="text-2xl font-semibold text-slate-900">
-						Fichas, catalogos y materiales vinculados
+						Fichas, catálogos y materiales vinculados
 					</h3>
 				</div>
 
 				{supportResources.length === 0 ? (
 					<div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white/70 px-5 py-6 text-sm text-slate-500">
-						No hay recursos asociados a este producto ni a su linea comercial.
+						No hay recursos asociados a este producto ni a su línea comercial.
 					</div>
 				) : (
 					<div className="mt-5 grid gap-4 lg:grid-cols-2">
@@ -318,10 +318,10 @@ export default function CatalogProductDetail({
 				<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
 					<div className="flex flex-col gap-2">
 						<p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
-							Coloracion relacionada
+							Coloración relacionada
 						</p>
 						<h3 className="text-2xl font-semibold text-slate-900">
-							Cartas de color de esta linea
+							Cartas de color de esta línea
 						</h3>
 					</div>
 
@@ -333,14 +333,14 @@ export default function CatalogProductDetail({
 								className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
 							>
 								<p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-									{colorChart.productLine?.name ?? "Linea cromatica"}
+									{colorChart.productLine?.name ?? "Línea cromática"}
 								</p>
 								<h4 className="mt-3 text-lg font-semibold text-slate-900">
 									{colorChart.name}
 								</h4>
 								<p className="mt-2 text-sm leading-6 text-slate-600">
 									{colorChart.description ||
-										"Abre esta carta para consultar sus referencias cromaticas."}
+										"Abre esta carta para consultar sus referencias cromáticas."}
 								</p>
 							</Link>
 						))}

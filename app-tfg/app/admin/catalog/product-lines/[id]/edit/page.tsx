@@ -25,14 +25,14 @@ export default async function EditProductLinePage({ params }: Props) {
 
 	return (
 		<CatalogAdminEditShell
-			title="Editar linea comercial"
-			subtitle={`Actualiza imagen, categoria y posicion para ${productLine.name}.`}
+			title="Editar línea comercial"
+			subtitle={`Actualiza imagen, categoría y posicion para ${productLine.name}.`}
 			backHref="/admin/catalog/product-lines"
-			backLabel="lineas comerciales"
+			backLabel="líneas comerciales"
 		>
 			<CatalogAdminForm
-				entityLabel="linea comercial"
-				entityLabelPlural="las lineas comerciales"
+				entityLabel="línea comercial"
+				entityLabelPlural="las líneas comerciales"
 				basePath="/admin/catalog/product-lines"
 				apiBasePath="/api/admin/catalog/product-lines"
 				initialValues={getProductLineInitialValues(productLine)}

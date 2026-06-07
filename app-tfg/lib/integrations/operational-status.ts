@@ -73,16 +73,16 @@ export function listIntegrationStatusItems(now = new Date()) {
 		buildItem(
 			{
 				slug: "cloudinary-images",
-				title: "Almacenamiento de imagenes",
+				title: "Almacenamiento de imágenes",
 				provider: "Cloudinary",
 				category: "Activos multimedia",
 				status: cloudinaryConfigured ? "operational" : "not_configured",
 				description:
-					"Subida, reemplazo y validacion de imagenes de perfil, catalogo y resultados finales del salon.",
+					"Subida, reemplazo y validación de imágenes de perfil, catálogo y resultados finales del salón.",
 				operationalUse:
-					"Usado por M1 para perfil, M3 para catalogo/coloracion y M5 para imagenes finales de servicios.",
+					"Usado por M1 para perfil, M3 para catálogo/coloración y M5 para imágenes finales de servicios.",
 				fallbackBehavior:
-					"Si las credenciales no estan completas se mantienen las imagenes ya guardadas, pero las rutas de subida no pueden completar nuevas cargas.",
+					"Si las credenciales no estan completas se mantienen las imágenes ya guardadas, pero las rutas de subida no pueden completar nuevas cargas.",
 				configuration: [
 					{
 						label: "Cloud name",
@@ -106,14 +106,14 @@ export function listIntegrationStatusItems(now = new Date()) {
 						),
 					},
 					{
-						label: "Carpeta catalogo",
+						label: "Carpeta catálogo",
 						value: envValue(
 							"CLOUDINARY_CATALOG_IMAGES_FOLDER",
 							"kinestilistas/catalog-images",
 						),
 					},
 					{
-						label: "Carpeta salon",
+						label: "Carpeta salón",
 						value: envValue(
 							"CLOUDINARY_SALON_RESULT_IMAGES_FOLDER",
 							"kinestilistas/salon-result-images",
@@ -126,9 +126,9 @@ export function listIntegrationStatusItems(now = new Date()) {
 		buildItem(
 			{
 				slug: "geocoding-nominatim",
-				title: "Geocodificacion de direcciones",
+				title: "Geocodificación de direcciones",
 				provider: "Nominatim / OpenStreetMap",
-				category: "Geolocalizacion",
+				category: "Geolocalización",
 				status:
 					geocodingProviderSupported && isValidUrl(geocodingBaseUrl)
 						? "operational"
@@ -136,7 +136,7 @@ export function listIntegrationStatusItems(now = new Date()) {
 				description:
 					"Convierte direcciones de clientes y puntos operativos en coordenadas reutilizables por rutas y estimaciones.",
 				operationalUse:
-					"Usado por M2 para clientes, ubicaciones de comerciales y planificacion de visitas.",
+					"Usado por M2 para clientes, ubicaciones de comerciales y planificación de visitas.",
 				fallbackBehavior:
 					"Si el proveedor no responde, el sistema mantiene los datos existentes y permite conservar direcciones sin coordenadas hasta reintentar.",
 				configuration: [
@@ -153,7 +153,7 @@ export function listIntegrationStatusItems(now = new Date()) {
 						value: envValue("GEOCODING_COUNTRY_NAME", "Espana"),
 					},
 					{
-						label: "Codigo pais",
+						label: "Código pais",
 						value: envValue("GEOCODING_COUNTRY_CODE", "es"),
 					},
 					{
@@ -175,7 +175,7 @@ export function listIntegrationStatusItems(now = new Date()) {
 				description:
 					"Calcula la geometria de rutas visibles en mapa a partir de los puntos comerciales planificados.",
 				operationalUse:
-					"Usado por M2 en la previsualizacion de rutas comerciales y mapas de visitas.",
+					"Usado por M2 en la previsualización de rutas comerciales y mapas de visitas.",
 				fallbackBehavior:
 					"Si OSRM no responde, el mapa conserva los marcadores y la operativa comercial puede continuar sin trazado calculado.",
 				configuration: [
@@ -196,7 +196,7 @@ export function listIntegrationStatusItems(now = new Date()) {
 				slug: "order-qr-quickchart",
 				title: "QR operativo de pedido",
 				provider: "QuickChart",
-				category: "Reparto y validacion",
+				category: "Reparto y validación",
 				status: "operational",
 				description:
 					"Genera la imagen QR del pedido a partir de un payload interno validable durante el reparto.",

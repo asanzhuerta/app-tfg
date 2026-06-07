@@ -1,5 +1,6 @@
 import { EntityManager } from "typeorm";
 import { Client } from "@/lib/typeorm/entities/Client";
+import { ensureDefaultSilverClientTier } from "@/lib/typeorm/services/clients/client-tier";
 
 // --------------------------------------------------------------------------
 // Servicio interno: creación automática de cliente desde usuario
@@ -24,6 +25,7 @@ export async function createClientFromUser(
 	});
 
 	if (existing) {
+		await ensureDefaultSilverClientTier(manager, existing.id);
 		return existing;
 	}
 
@@ -36,5 +38,9 @@ export async function createClientFromUser(
 		notes: "Cliente creado automáticamente",
 	});
 
-	return repo.save(client);
+	const savedClient = await repo.save(client);
+
+	await ensureDefaultSilverClientTier(manager, savedClient.id);
+
+	return savedClient;
 }

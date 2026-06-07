@@ -11,7 +11,7 @@ import type { RejectUserRequestBody } from "@/lib/contracts/user-request";
 import { rejectUserRequest } from "@/lib/typeorm/services/users/request";
 
 // POST /api/admin/user-requests/[id]/reject
-// Rechaza una solicitud de registro guardando el motivo indicado por administracion.
+// Rechaza una solicitud de registro guardando el motivo indicado por administración.
 export async function POST(request: Request, { params }: RouteContext) {
 	const user = await requireRoleUser("admin");
 

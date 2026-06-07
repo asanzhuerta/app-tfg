@@ -8,6 +8,7 @@ import type {
 	AdminUpsertPromotionBody,
 	AdminUpsertTrainingEventBody,
 	AppReminderStatus,
+	NotificationDeliveryChannel,
 	PromotionStatus,
 	TrainingEnrollmentBody,
 	TrainingEventModality,
@@ -25,6 +26,8 @@ import { Product } from "@/lib/typeorm/entities/Product";
 import { ProductLine } from "@/lib/typeorm/entities/ProductLine";
 import { Client } from "@/lib/typeorm/entities/Client";
 import { User } from "@/lib/typeorm/entities/User";
+import { syncTodayVisitNotificationsForUser } from "@/lib/typeorm/services/commercial/visit-notifications";
+import { deliverNotificationToExternalChannels } from "./notification-delivery";
 
 const PROMOTION_STATUSES = ["draft", "active", "archived"] as const;
 const TRAINING_EVENT_STATUSES = [
@@ -36,6 +39,7 @@ const TRAINING_EVENT_STATUSES = [
 const TRAINING_MODALITIES = ["in_person", "online", "hybrid"] as const;
 const REMINDER_STATUSES = ["pending", "done", "cancelled"] as const;
 const ACTIVE_ENROLLMENT_STATUSES = ["registered", "attended"] as const;
+const NOTIFICATION_DELIVERY_CHANNELS = ["in_app", "email", "push"] as const;
 const ACTIVE_ENROLLMENT_STATUS_SET = new Set<string>([
 	...ACTIVE_ENROLLMENT_STATUSES,
 ]);
@@ -50,12 +54,12 @@ const CONSTRAINT_ERRORS: Record<
 	{ message: string; code: string; status?: number }
 > = {
 	customer_segments_code_unique: {
-		message: "Ya existe un rango con ese codigo",
+		message: "Ya existe un rango con ese código",
 		code: "DUPLICATE_CUSTOMER_SEGMENT_CODE",
 		status: 409,
 	},
 	UQ_customer_segments_code: {
-		message: "Ya existe un rango con ese codigo",
+		message: "Ya existe un rango con ese código",
 		code: "DUPLICATE_CUSTOMER_SEGMENT_CODE",
 		status: 409,
 	},
@@ -70,12 +74,12 @@ const CONSTRAINT_ERRORS: Record<
 		status: 409,
 	},
 	training_enrollments_event_user_unique: {
-		message: "El usuario ya esta inscrito en esta formacion",
+		message: "El usuario ya esta inscrito en esta formación",
 		code: "DUPLICATE_TRAINING_ENROLLMENT",
 		status: 409,
 	},
 	UQ_training_enrollments_event_user: {
-		message: "El usuario ya esta inscrito en esta formacion",
+		message: "El usuario ya esta inscrito en esta formación",
 		code: "DUPLICATE_TRAINING_ENROLLMENT",
 		status: 409,
 	},
@@ -173,7 +177,7 @@ function normalizeText(
 }
 
 function normalizeCode(value: string | null | undefined, required = false) {
-	const normalized = normalizeText(value, "El codigo", { required });
+	const normalized = normalizeText(value, "El código", { required });
 
 	if (normalized === undefined || normalized === null) {
 		return normalized;
@@ -187,10 +191,40 @@ function normalizeCode(value: string | null | undefined, required = false) {
 		.replace(/^-+|-+$/g, "");
 
 	if (!code) {
-		throw new CommunicationsServiceError("El codigo no es valido");
+		throw new CommunicationsServiceError("El código no es válido");
 	}
 
 	return code;
+}
+
+function normalizeNotificationDeliveryChannels(
+	value: NotificationDeliveryChannel[] | null | undefined,
+) {
+	const channels = new Set<NotificationDeliveryChannel>(["in_app"]);
+
+	if (value === undefined || value === null) {
+		return [...channels];
+	}
+
+	if (!Array.isArray(value)) {
+		throw new CommunicationsServiceError("Los canales de envío no son válidos");
+	}
+
+	for (const rawChannel of value) {
+		if (
+			!NOTIFICATION_DELIVERY_CHANNELS.includes(
+				rawChannel as (typeof NOTIFICATION_DELIVERY_CHANNELS)[number],
+			)
+		) {
+			throw new CommunicationsServiceError(
+				"Uno de los canales de envío no es válido",
+			);
+		}
+
+		channels.add(rawChannel);
+	}
+
+	return [...channels];
 }
 
 function normalizeOptionalId(value: string | null | undefined) {
@@ -321,7 +355,7 @@ function normalizePromotionStatus(
 
 	if (!PROMOTION_STATUSES.includes(value)) {
 		throw new CommunicationsServiceError(
-			"El estado de la promocion no es valido",
+			"El estado de la promoción no es válido",
 			400,
 			"INVALID_PROMOTION_STATUS",
 		);
@@ -344,7 +378,7 @@ function normalizeTrainingEventStatus(
 
 	if (!TRAINING_EVENT_STATUSES.includes(value)) {
 		throw new CommunicationsServiceError(
-			"El estado de la formacion no es valido",
+			"El estado de la formación no es válido",
 			400,
 			"INVALID_TRAINING_STATUS",
 		);
@@ -367,7 +401,7 @@ function normalizeTrainingEventModality(
 
 	if (!TRAINING_MODALITIES.includes(value)) {
 		throw new CommunicationsServiceError(
-			"La modalidad de la formacion no es valida",
+			"La modalidad de la formación no es valida",
 			400,
 			"INVALID_TRAINING_MODALITY",
 		);
@@ -390,7 +424,7 @@ function normalizeReminderStatus(
 
 	if (!REMINDER_STATUSES.includes(value)) {
 		throw new CommunicationsServiceError(
-			"El estado del recordatorio no es valido",
+			"El estado del recordatorio no es válido",
 			400,
 			"INVALID_REMINDER_STATUS",
 		);
@@ -415,7 +449,7 @@ function assertPromotionTarget(input: {
 }) {
 	if (input.clientId && input.customerSegmentId) {
 		throw new CommunicationsServiceError(
-			"Una promocion no puede estar dirigida simultaneamente a un cliente y a un rango",
+			"Una promoción no puede estar dirigida simultáneamente a un cliente y a un rango",
 			400,
 			"INVALID_PROMOTION_TARGET",
 		);
@@ -464,7 +498,7 @@ async function ensurePromotionRelations(
 			manager,
 			ProductLine,
 			input.productLineId,
-			"Linea comercial no encontrada",
+			"Línea comercial no encontrada",
 			"PRODUCT_LINE_NOT_FOUND",
 		);
 	}
@@ -546,8 +580,12 @@ async function createRecipientNotifications(
 		sourceType: string;
 		sourceId: string;
 		recipientUserIds?: string[];
+		deliveryChannels?: NotificationDeliveryChannel[];
 	},
 ) {
+	const deliveryChannels = normalizeNotificationDeliveryChannels(
+		input.deliveryChannels,
+	);
 	const targetUserIds = input.recipientUserIds
 		? [...new Set(input.recipientUserIds.filter(Boolean))]
 		: null;
@@ -574,11 +612,22 @@ async function createRecipientNotifications(
 			source_id: input.sourceId,
 		})),
 	);
+
+	await deliverNotificationToExternalChannels(manager, {
+		recipients,
+		channels: deliveryChannels,
+		title: input.title,
+		body: input.body,
+		notificationType: input.notificationType,
+		sourceType: input.sourceType,
+		sourceId: input.sourceId,
+	});
 }
 
 async function notifyPromotionPublished(
 	manager: EntityManager,
 	promotion: Promotion,
+	deliveryChannels?: NotificationDeliveryChannel[],
 ) {
 	const clientRecipientIds = await listPromotionClientRecipientIds(
 		manager,
@@ -589,25 +638,28 @@ async function notifyPromotionPublished(
 	]);
 
 	await createRecipientNotifications(manager, {
-		title: `Nueva promocion: ${promotion.title}`,
+		title: `Nueva promoción: ${promotion.title}`,
 		body: `${promotion.description} Beneficio: ${promotion.benefit}`,
 		notificationType: "promotion",
 		sourceType: "promotion",
 		sourceId: promotion.id,
 		recipientUserIds: [...clientRecipientIds, ...commercialRecipientIds],
+		deliveryChannels,
 	});
 }
 
 async function notifyTrainingPublished(
 	manager: EntityManager,
 	trainingEvent: TrainingEvent,
+	deliveryChannels?: NotificationDeliveryChannel[],
 ) {
 	await createRecipientNotifications(manager, {
-		title: `Nueva formacion: ${trainingEvent.title}`,
+		title: `Nueva formación: ${trainingEvent.title}`,
 		body: trainingEvent.description,
 		notificationType: "training",
 		sourceType: "training_event",
 		sourceId: trainingEvent.id,
+		deliveryChannels,
 	});
 }
 
@@ -648,7 +700,7 @@ export async function createCustomerSegment(
 	const ds = await getDataSource();
 	const code = normalizeCode(input.code, true);
 	const name = normalizeText(input.name, "El nombre", { required: true });
-	const description = normalizeText(input.description, "La descripcion");
+	const description = normalizeText(input.description, "La descripción");
 	const criteria = normalizeText(input.criteria, "Los criterios");
 
 	try {
@@ -680,7 +732,7 @@ export async function updateCustomerSegment(
 	const ds = await getDataSource();
 	const code = normalizeCode(input.code);
 	const name = normalizeText(input.name, "El nombre");
-	const description = normalizeText(input.description, "La descripcion");
+	const description = normalizeText(input.description, "La descripción");
 	const criteria = normalizeText(input.criteria, "Los criterios");
 
 	try {
@@ -833,7 +885,7 @@ export async function removeClientSegmentAssignment(assignmentId: string) {
 
 	if (!result.affected) {
 		throw new CommunicationsServiceError(
-			"Asignacion no encontrada",
+			"Asignación no encontrada",
 			404,
 			"CLIENT_SEGMENT_ASSIGNMENT_NOT_FOUND",
 		);
@@ -894,7 +946,7 @@ export async function createPromotion(
 ) {
 	const ds = await getDataSource();
 	const title = normalizeText(input.title, "El titulo", { required: true });
-	const description = normalizeText(input.description, "La descripcion", {
+	const description = normalizeText(input.description, "La descripción", {
 		required: true,
 	});
 	const promotionType = normalizeText(input.promotionType, "El tipo", {
@@ -914,6 +966,9 @@ export async function createPromotion(
 	const productLineId = normalizeOptionalId(input.productLineId) ?? null;
 	const clientId = normalizeOptionalId(input.clientId) ?? null;
 	const customerSegmentId = normalizeOptionalId(input.customerSegmentId) ?? null;
+	const deliveryChannels = normalizeNotificationDeliveryChannels(
+		input.deliveryChannels,
+	);
 
 	assertPromotionDateRange(String(startDate), String(endDate));
 	assertPromotionTarget({ clientId, customerSegmentId });
@@ -946,7 +1001,7 @@ export async function createPromotion(
 			);
 
 			if (promotion.status === "active") {
-				await notifyPromotionPublished(manager, promotion);
+				await notifyPromotionPublished(manager, promotion, deliveryChannels);
 			}
 
 			return promotion;
@@ -956,7 +1011,7 @@ export async function createPromotion(
 	} catch (error) {
 		rethrowCommunicationsPersistenceError(
 			error,
-			"No se pudo crear la promocion",
+			"No se pudo crear la promoción",
 			"PROMOTION_CREATE_FAILED",
 		);
 	}
@@ -968,7 +1023,7 @@ export async function updatePromotion(
 	const ds = await getDataSource();
 	const normalized = {
 		title: normalizeText(input.title, "El titulo"),
-		description: normalizeText(input.description, "La descripcion"),
+		description: normalizeText(input.description, "La descripción"),
 		promotionType: normalizeText(input.promotionType, "El tipo"),
 		benefit: normalizeText(input.benefit, "El beneficio"),
 		startDate: normalizeDateOnly(input.startDate, "La fecha de inicio"),
@@ -978,6 +1033,9 @@ export async function updatePromotion(
 		productLineId: normalizeOptionalId(input.productLineId),
 		clientId: normalizeOptionalId(input.clientId),
 		customerSegmentId: normalizeOptionalId(input.customerSegmentId),
+		deliveryChannels: normalizeNotificationDeliveryChannels(
+			input.deliveryChannels,
+		),
 	};
 
 	try {
@@ -989,7 +1047,7 @@ export async function updatePromotion(
 
 			if (!promotion) {
 				throw new CommunicationsServiceError(
-					"Promocion no encontrada",
+					"Promoción no encontrada",
 					404,
 					"PROMOTION_NOT_FOUND",
 				);
@@ -1044,7 +1102,11 @@ export async function updatePromotion(
 			const saved = await repo.save(promotion);
 
 			if (!wasActive && saved.status === "active") {
-				await notifyPromotionPublished(manager, saved);
+				await notifyPromotionPublished(
+					manager,
+					saved,
+					normalized.deliveryChannels,
+				);
 			}
 
 			return saved;
@@ -1054,7 +1116,7 @@ export async function updatePromotion(
 	} catch (error) {
 		rethrowCommunicationsPersistenceError(
 			error,
-			"No se pudo actualizar la promocion",
+			"No se pudo actualizar la promoción",
 			"PROMOTION_UPDATE_FAILED",
 		);
 	}
@@ -1066,7 +1128,7 @@ export async function deletePromotion(promotionId: string) {
 
 	if (!result.affected) {
 		throw new CommunicationsServiceError(
-			"Promocion no encontrada",
+			"Promoción no encontrada",
 			404,
 			"PROMOTION_NOT_FOUND",
 		);
@@ -1162,7 +1224,7 @@ export async function createTrainingEvent(
 ) {
 	const ds = await getDataSource();
 	const title = normalizeText(input.title, "El titulo", { required: true });
-	const description = normalizeText(input.description, "La descripcion", {
+	const description = normalizeText(input.description, "La descripción", {
 		required: true,
 	});
 	const startsAt = normalizeDateTime(input.startsAt, "La fecha de inicio", {
@@ -1173,6 +1235,9 @@ export async function createTrainingEvent(
 	const content = normalizeText(input.content, "El contenido");
 	const status = normalizeTrainingEventStatus(input.status) ?? "draft";
 	const capacity = normalizePositiveInteger(input.capacity, "La capacidad");
+	const deliveryChannels = normalizeNotificationDeliveryChannels(
+		input.deliveryChannels,
+	);
 
 	try {
 		const created = await ds.transaction(async (manager) => {
@@ -1192,7 +1257,7 @@ export async function createTrainingEvent(
 			);
 
 			if (trainingEvent.status === "published") {
-				await notifyTrainingPublished(manager, trainingEvent);
+				await notifyTrainingPublished(manager, trainingEvent, deliveryChannels);
 			}
 
 			return trainingEvent;
@@ -1202,7 +1267,7 @@ export async function createTrainingEvent(
 	} catch (error) {
 		rethrowCommunicationsPersistenceError(
 			error,
-			"No se pudo crear la formacion",
+			"No se pudo crear la formación",
 			"TRAINING_CREATE_FAILED",
 		);
 	}
@@ -1214,13 +1279,16 @@ export async function updateTrainingEvent(
 	const ds = await getDataSource();
 	const normalized = {
 		title: normalizeText(input.title, "El titulo"),
-		description: normalizeText(input.description, "La descripcion"),
+		description: normalizeText(input.description, "La descripción"),
 		startsAt: normalizeDateTime(input.startsAt, "La fecha de inicio"),
 		location: normalizeText(input.location, "La ubicacion"),
 		modality: normalizeTrainingEventModality(input.modality),
 		content: normalizeText(input.content, "El contenido"),
 		status: normalizeTrainingEventStatus(input.status),
 		capacity: normalizePositiveInteger(input.capacity, "La capacidad"),
+		deliveryChannels: normalizeNotificationDeliveryChannels(
+			input.deliveryChannels,
+		),
 	};
 
 	try {
@@ -1232,7 +1300,7 @@ export async function updateTrainingEvent(
 
 			if (!trainingEvent) {
 				throw new CommunicationsServiceError(
-					"Formacion no encontrada",
+					"Formación no encontrada",
 					404,
 					"TRAINING_NOT_FOUND",
 				);
@@ -1275,7 +1343,11 @@ export async function updateTrainingEvent(
 			const saved = await repo.save(trainingEvent);
 
 			if (!wasPublished && saved.status === "published") {
-				await notifyTrainingPublished(manager, saved);
+				await notifyTrainingPublished(
+					manager,
+					saved,
+					normalized.deliveryChannels,
+				);
 			}
 
 			return saved;
@@ -1285,7 +1357,7 @@ export async function updateTrainingEvent(
 	} catch (error) {
 		rethrowCommunicationsPersistenceError(
 			error,
-			"No se pudo actualizar la formacion",
+			"No se pudo actualizar la formación",
 			"TRAINING_UPDATE_FAILED",
 		);
 	}
@@ -1299,7 +1371,7 @@ export async function deleteTrainingEvent(trainingEventId: string) {
 
 	if (!result.affected) {
 		throw new CommunicationsServiceError(
-			"Formacion no encontrada",
+			"Formación no encontrada",
 			404,
 			"TRAINING_NOT_FOUND",
 		);
@@ -1341,7 +1413,7 @@ export async function enrollTrainingEvent(
 
 			if (!trainingEvent) {
 				throw new CommunicationsServiceError(
-					"Formacion no encontrada",
+					"Formación no encontrada",
 					404,
 					"TRAINING_NOT_FOUND",
 				);
@@ -1375,7 +1447,7 @@ export async function enrollTrainingEvent(
 
 				if (activeCount >= trainingEvent.capacity) {
 					throw new CommunicationsServiceError(
-						"La formacion no tiene plazas disponibles",
+						"La formación no tiene plazas disponibles",
 						409,
 						"TRAINING_CAPACITY_FULL",
 					);
@@ -1400,7 +1472,7 @@ export async function enrollTrainingEvent(
 	} catch (error) {
 		rethrowCommunicationsPersistenceError(
 			error,
-			"No se pudo registrar la inscripcion",
+			"No se pudo registrar la inscripción",
 			"TRAINING_ENROLLMENT_FAILED",
 		);
 	}
@@ -1420,7 +1492,7 @@ export async function cancelTrainingEnrollment(input: {
 
 	if (!enrollment) {
 		throw new CommunicationsServiceError(
-			"Inscripcion no encontrada",
+			"Inscripción no encontrada",
 			404,
 			"TRAINING_ENROLLMENT_NOT_FOUND",
 		);
@@ -1432,6 +1504,12 @@ export async function cancelTrainingEnrollment(input: {
 
 export async function listNotificationsForUser(userId: string) {
 	const ds = await getDataSource();
+
+	try {
+		await syncTodayVisitNotificationsForUser(userId);
+	} catch (error) {
+		console.error("[communications] today visit notification sync failed:", error);
+	}
 
 	return ds
 		.getRepository(AppNotification)
@@ -1457,7 +1535,7 @@ export async function markNotificationRead(input: {
 
 	if (!notification) {
 		throw new CommunicationsServiceError(
-			"Notificacion no encontrada",
+			"Notificación no encontrada",
 			404,
 			"NOTIFICATION_NOT_FOUND",
 		);

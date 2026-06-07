@@ -166,7 +166,7 @@ export default function RequestsActions({
 						}
 						className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
 					>
-						{approveLoading ? "Aprobando..." : "Confirmar aprobacion"}
+						{approveLoading ? "Aprobando..." : "Confirmar aprobación"}
 					</button>
 				</div>
 			</div>

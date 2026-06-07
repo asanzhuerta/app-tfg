@@ -21,7 +21,7 @@ export default async function ClientColorChartDetailPage({
 	return (
 		<ColorChartDetail
 			title="Carta de color"
-			subtitle="Localiza tonos y referencias en tu catalogo profesional"
+			subtitle="Localiza tonos y referencias en tu catálogo profesional"
 			backHref="/clients/coloration"
 			colorChart={toClientPlain(serializeColorChartDetail(colorChart))}
 		/>

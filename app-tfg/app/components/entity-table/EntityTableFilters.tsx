@@ -131,7 +131,7 @@ export default function EntityTableFilters({
 									htmlFor="entity-table-category-filter"
 									className="mb-1 block text-sm font-semibold text-slate-700"
 								>
-									{config?.categoryLabel ?? "Categoria"}
+									{config?.categoryLabel ?? "Categoría"}
 								</label>
 								<select
 									id="entity-table-category-filter"

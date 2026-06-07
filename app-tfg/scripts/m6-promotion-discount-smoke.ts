@@ -33,7 +33,9 @@ type ProductContext = {
 	colorReferenceId: string | null;
 };
 
-const DISCOUNT_PERCENTAGE = 15;
+// Usamos un descuento alto para que el smoke no falle por promociones reales
+// activas de demostración con más prioridad económica.
+const DISCOUNT_PERCENTAGE = 99;
 const ORDER_QUANTITY = 2;
 
 function assertCondition(condition: unknown, message: string): asserts condition {
@@ -213,8 +215,8 @@ async function main() {
 
 	try {
 		const promotion = await createPromotion({
-			title: `Promocion ${tag}`,
-			description: "Promocion temporal para validar descuentos de pedido en M6",
+			title: `Promoción ${tag}`,
+			description: "Promoción temporal para validar descuentos de pedido en M6",
 			promotionType: "descuento",
 			benefit: `${DISCOUNT_PERCENTAGE} % sobre producto`,
 			startDate: toDateOnly(today),
@@ -225,10 +227,10 @@ async function main() {
 			createdByUserId: null,
 		});
 
-		assertCondition(promotion?.id, "No se ha creado la promocion temporal");
+		assertCondition(promotion?.id, "No se ha creado la promoción temporal");
 		created.promotionId = promotion.id;
 		console.log(
-			`PASS promocion temporal creada (${candidate.clientName}, ${productContext.product.name})`,
+			`PASS promoción temporal creada (${candidate.clientName}, ${productContext.product.name})`,
 		);
 
 		const draft = await saveDraftForCommercialUser(candidate.commercialUserId, {
@@ -246,10 +248,10 @@ async function main() {
 		assertCondition(draft?.id, "No se ha creado el borrador temporal");
 		created.draftId = draft.id;
 		const draftLine = draft.lines[0];
-		assertCondition(draftLine, "El borrador no contiene lineas");
+		assertCondition(draftLine, "El borrador no contiene líneas");
 		assertCondition(
 			draftLine.discount_percentage === `${DISCOUNT_PERCENTAGE}.00`,
-			"El borrador no conserva el porcentaje de descuento esperado",
+			`El borrador no conserva el porcentaje de descuento esperado: recibido ${draftLine.discount_percentage}, esperado ${DISCOUNT_PERCENTAGE}.00`,
 		);
 		assertCondition(
 			draftLine.unit_price_snapshot === expected.unitPrice,
@@ -257,7 +259,7 @@ async function main() {
 		);
 		assertCondition(
 			draftLine.line_total === expected.lineTotal,
-			"El borrador no aplica el total de linea descontado esperado",
+			"El borrador no aplica el total de línea descontado esperado",
 		);
 		assertCondition(
 			draft.total_amount === expected.orderTotal,
@@ -280,7 +282,7 @@ async function main() {
 		assertCondition(order?.id, "No se ha creado el pedido temporal");
 		created.orderId = order.id;
 		const orderLine = order.lines[0];
-		assertCondition(orderLine, "El pedido no contiene lineas");
+		assertCondition(orderLine, "El pedido no contiene líneas");
 		assertCondition(
 			order.status_code === "created",
 			"El pedido final no queda en estado created",
@@ -291,7 +293,7 @@ async function main() {
 		);
 		assertCondition(
 			orderLine.line_total === expected.lineTotal,
-			"El pedido final no aplica el total de linea descontado esperado",
+			"El pedido final no aplica el total de línea descontado esperado",
 		);
 		assertCondition(
 			order.total_amount === expected.orderTotal,
@@ -318,7 +320,7 @@ async function main() {
 	const leftovers = await Promise.all([
 		ds.getRepository(Order).count({ where: { notes: tag } }),
 		ds.getRepository(Promotion).count({
-			where: { title: `Promocion ${tag}` },
+			where: { title: `Promoción ${tag}` },
 		}),
 	]);
 

@@ -23,14 +23,14 @@ export default async function NewProductLinePage({ searchParams }: Props) {
 
 	return (
 		<CatalogAdminCreateShell
-			title="Nueva linea comercial"
-			subtitle="Da de alta una linea y vinculala a la categoria adecuada."
+			title="Nueva línea comercial"
+			subtitle="Da de alta una línea y vinculala a la categoría adecuada."
 			backHref="/admin/catalog/product-lines"
-			backLabel="lineas comerciales"
+			backLabel="líneas comerciales"
 		>
 			<CatalogAdminForm
-				entityLabel="linea comercial"
-				entityLabelPlural="las lineas comerciales"
+				entityLabel="línea comercial"
+				entityLabelPlural="las líneas comerciales"
 				basePath="/admin/catalog/product-lines"
 				apiBasePath="/api/admin/catalog/product-lines"
 				initialValues={{

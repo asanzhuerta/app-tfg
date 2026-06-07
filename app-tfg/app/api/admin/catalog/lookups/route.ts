@@ -31,6 +31,6 @@ export async function GET() {
 		);
 	} catch (error) {
 		console.error("[admin/catalog/lookups][GET] error:", error);
-		return jsonFromError(error, "Error al cargar los catalogos de apoyo");
+		return jsonFromError(error, "Error al cargar los catálogos de apoyo");
 	}
 }

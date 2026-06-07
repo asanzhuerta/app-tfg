@@ -36,6 +36,6 @@ export async function GET(
 			"[clients/salon-clients/[id]/services/[serviceId]/technical-email][GET] error:",
 			error,
 		);
-		return jsonFromError(error, "Error al preparar el correo tecnico");
+		return jsonFromError(error, "Error al preparar el correo técnico");
 	}
 }

@@ -50,6 +50,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(trainingEvent, { status: 201 });
 	} catch (error) {
 		console.error("[admin/communications/trainings][POST] error:", error);
-		return jsonFromError(error, "Error al crear formacion");
+		return jsonFromError(error, "Error al crear formación");
 	}
 }

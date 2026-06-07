@@ -1,4 +1,4 @@
-const CACHE_NAME = "app-tfg-shell-v2";
+const CACHE_NAME = "app-tfg-shell-v3";
 const OFFLINE_URL = "/offline";
 const APP_SHELL = [
   OFFLINE_URL,
@@ -97,4 +97,60 @@ self.addEventListener("fetch", (event) => {
       fetch(request).catch(() => caches.match(OFFLINE_URL))
     );
   }
+});
+
+self.addEventListener("push", (event) => {
+  const fallbackPayload = {
+    title: "Nuevo aviso",
+    body: "Tienes una nueva notificacion en Kinestilistas.",
+    url: "/profile",
+  };
+  let payload = fallbackPayload;
+
+  if (event.data) {
+    try {
+      payload = { ...fallbackPayload, ...event.data.json() };
+    } catch {
+      payload = { ...fallbackPayload, body: event.data.text() };
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title, {
+      body: payload.body,
+      icon: "/icons/icon-192.png",
+      badge: "/icons/icon-192.png",
+      tag: payload.tag || "kinestilistas-notification",
+      data: {
+        url: payload.url || fallbackPayload.url,
+      },
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const targetUrl = new URL(
+    event.notification.data?.url || "/profile",
+    self.location.origin
+  ).toString();
+
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(
+      (clientList) => {
+        for (const client of clientList) {
+          if (client.url === targetUrl && "focus" in client) {
+            return client.focus();
+          }
+        }
+
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(targetUrl);
+        }
+
+        return undefined;
+      }
+    )
+  );
 });

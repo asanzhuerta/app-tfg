@@ -301,7 +301,7 @@ export default function OrderHistoryList({
 
 			{filteredOrders.length === 0 ? (
 				<div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 px-5 py-6 text-sm text-slate-600">
-					No hay pedidos que coincidan con la busqueda o los filtros actuales.
+					No hay pedidos que coincidan con la búsqueda o los filtros actuales.
 				</div>
 			) : null}
 
@@ -380,7 +380,7 @@ export default function OrderHistoryList({
 							</div>
 							<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
 								<p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-									Lineas
+									Líneas
 								</p>
 								<p className="mt-2 text-lg font-semibold text-slate-900">
 									{order.line_count}

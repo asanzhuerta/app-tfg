@@ -42,14 +42,14 @@ export default async function EditProductSubcategoryPage({ params }: Props) {
 
 	return (
 		<CatalogAdminEditShell
-			title="Editar subcategoria"
-			subtitle={`Actualiza imagen, linea y posicion para ${productSubcategory.name}.`}
+			title="Editar subcategoría"
+			subtitle={`Actualiza imagen, línea y posicion para ${productSubcategory.name}.`}
 			backHref={backHref}
-			backLabel="lineas comerciales"
+			backLabel="líneas comerciales"
 		>
 			<CatalogAdminForm
-				entityLabel="subcategoria"
-				entityLabelPlural="las subcategorias del catalogo"
+				entityLabel="subcategoría"
+				entityLabelPlural="las subcategorías del catálogo"
 				basePath={backHref}
 				apiBasePath="/api/admin/catalog/product-subcategories"
 				initialValues={getProductSubcategoryInitialValues(productSubcategory)}

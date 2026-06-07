@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { logoutUserSession } from "@/lib/typeorm/services/auth/logout-user-session";
 
 // POST /api/auth/logout
-// Cierra la sesion actual y marca como revocada la sesion persistida del usuario.
+// Cierra la sesión actual y marca como revocada la sesión persistida del usuario.
 export async function POST() {
 	try {
 		const session = await auth();

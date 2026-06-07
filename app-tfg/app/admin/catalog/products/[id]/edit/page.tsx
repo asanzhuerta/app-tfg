@@ -39,7 +39,7 @@ export default async function EditProductPage({ params }: Props) {
 		>
 			<CatalogAdminForm
 				entityLabel="producto"
-				entityLabelPlural="los productos del catalogo"
+				entityLabelPlural="los productos del catálogo"
 				basePath="/admin/catalog/products"
 				apiBasePath="/api/admin/catalog/products"
 				initialValues={getProductInitialValues(product)}

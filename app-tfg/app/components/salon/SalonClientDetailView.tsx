@@ -432,7 +432,7 @@ export default function SalonClientDetailView({
 				message:
 					files.length === 1
 						? "Imagen de resultado subida correctamente."
-						: "Imagenes de resultado subidas correctamente.",
+						: "Imágenes de resultado subidas correctamente.",
 			});
 		} catch (error) {
 			setServiceFeedback({
@@ -527,7 +527,7 @@ export default function SalonClientDetailView({
 					type: "error",
 					message: getApiErrorMessage(
 						data as ApiErrorResponse | null,
-						"No se ha podido guardar la plantilla tecnica.",
+						"No se ha podido guardar la plantilla técnica.",
 					),
 				});
 				return;
@@ -537,12 +537,12 @@ export default function SalonClientDetailView({
 			setTemplateName("");
 			setTemplateFeedback({
 				type: "success",
-				message: "Plantilla tecnica guardada correctamente.",
+				message: "Plantilla técnica guardada correctamente.",
 			});
 		} catch {
 			setTemplateFeedback({
 				type: "error",
-				message: "No se ha podido guardar la plantilla tecnica.",
+				message: "No se ha podido guardar la plantilla técnica.",
 			});
 		} finally {
 			setIsSavingTemplate(false);
@@ -578,7 +578,7 @@ export default function SalonClientDetailView({
 					type: "error",
 					message: getApiErrorMessage(
 						data as ApiErrorResponse | null,
-						"No se ha podido eliminar la plantilla tecnica.",
+						"No se ha podido eliminar la plantilla técnica.",
 					),
 				});
 				return;
@@ -589,12 +589,12 @@ export default function SalonClientDetailView({
 			);
 			setTemplateFeedback({
 				type: "success",
-				message: "Plantilla tecnica eliminada correctamente.",
+				message: "Plantilla técnica eliminada correctamente.",
 			});
 		} catch {
 			setTemplateFeedback({
 				type: "error",
-				message: "No se ha podido eliminar la plantilla tecnica.",
+				message: "No se ha podido eliminar la plantilla técnica.",
 			});
 		} finally {
 			setDeletingTemplateId(null);
@@ -644,7 +644,7 @@ export default function SalonClientDetailView({
 					type: "error",
 					message: getApiErrorMessage(
 						data as ApiErrorResponse | null,
-						"No se ha podido preparar el correo tecnico.",
+						"No se ha podido preparar el correo técnico.",
 					),
 				});
 				return;
@@ -656,7 +656,7 @@ export default function SalonClientDetailView({
 		} catch {
 			setTechnicalEmailFeedback({
 				type: "error",
-				message: "No se ha podido preparar el correo tecnico.",
+				message: "No se ha podido preparar el correo técnico.",
 			});
 		} finally {
 			setIsLoadingTechnicalEmail(false);
@@ -674,12 +674,12 @@ export default function SalonClientDetailView({
 			);
 			setTechnicalEmailFeedback({
 				type: "success",
-				message: "Borrador tecnico copiado al portapapeles.",
+				message: "Borrador técnico copiado al portapapeles.",
 			});
 		} catch {
 			setTechnicalEmailFeedback({
 				type: "error",
-				message: "No se ha podido copiar el borrador tecnico.",
+				message: "No se ha podido copiar el borrador técnico.",
 			});
 		}
 	}
@@ -742,7 +742,7 @@ export default function SalonClientDetailView({
 					type: "error",
 					message: getApiErrorMessage(
 						data as ApiErrorResponse | null,
-						"No se ha podido guardar la ficha tecnica.",
+						"No se ha podido guardar la ficha técnica.",
 					),
 				});
 				return;
@@ -755,12 +755,12 @@ export default function SalonClientDetailView({
 			resetTechnicalEmailDraft();
 			setProfileFeedback({
 				type: "success",
-				message: "Ficha tecnica actualizada correctamente.",
+				message: "Ficha técnica actualizada correctamente.",
 			});
 		} catch {
 			setProfileFeedback({
 				type: "error",
-				message: "No se ha podido guardar la ficha tecnica.",
+				message: "No se ha podido guardar la ficha técnica.",
 			});
 		} finally {
 			setIsSavingProfile(false);
@@ -807,8 +807,8 @@ export default function SalonClientDetailView({
 					message: getApiErrorMessage(
 						data as ApiErrorResponse | null,
 						isEditingService
-							? "No se ha podido actualizar el servicio tecnico."
-							: "No se ha podido registrar el servicio tecnico.",
+							? "No se ha podido actualizar el servicio técnico."
+							: "No se ha podido registrar el servicio técnico.",
 					),
 				});
 				return;
@@ -820,15 +820,15 @@ export default function SalonClientDetailView({
 			setServiceFeedback({
 				type: "success",
 				message: isEditingService
-					? "Servicio tecnico actualizado correctamente."
-					: "Servicio tecnico registrado correctamente.",
+					? "Servicio técnico actualizado correctamente."
+					: "Servicio técnico registrado correctamente.",
 			});
 		} catch {
 			setServiceFeedback({
 				type: "error",
 				message: isEditingService
-					? "No se ha podido actualizar el servicio tecnico."
-					: "No se ha podido registrar el servicio tecnico.",
+					? "No se ha podido actualizar el servicio técnico."
+					: "No se ha podido registrar el servicio técnico.",
 			});
 		} finally {
 			setIsSavingService(false);
@@ -866,7 +866,7 @@ export default function SalonClientDetailView({
 					type: "error",
 					message: getApiErrorMessage(
 						data as ApiErrorResponse | null,
-						"No se ha podido eliminar el servicio tecnico.",
+						"No se ha podido eliminar el servicio técnico.",
 					),
 				});
 				return;
@@ -884,12 +884,12 @@ export default function SalonClientDetailView({
 
 			setServiceFeedback({
 				type: "success",
-				message: "Servicio tecnico eliminado correctamente.",
+				message: "Servicio técnico eliminado correctamente.",
 			});
 		} catch {
 			setServiceFeedback({
 				type: "error",
-				message: "No se ha podido eliminar el servicio tecnico.",
+				message: "No se ha podido eliminar el servicio técnico.",
 			});
 		} finally {
 			setDeletingServiceId(null);
@@ -906,7 +906,7 @@ export default function SalonClientDetailView({
 		<PageTransition>
 			<H1Title
 				title={detail.salonClient.name}
-				subtitle="Consulta la ficha tecnica, el historial y las sugerencias del salon"
+				subtitle="Consulta la ficha técnica, el historial y las sugerencias del salón"
 			/>
 
 			<div className="mb-4 flex items-center justify-between gap-3">
@@ -914,7 +914,7 @@ export default function SalonClientDetailView({
 					href="/clients/salon-clients"
 					className="inline-flex items-center rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-white"
 				>
-					Volver a fichas tecnicas
+					Volver a fichas técnicas
 				</Link>
 				<span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
 					{detail.salonClient.service_count} servicios
@@ -925,10 +925,10 @@ export default function SalonClientDetailView({
 				<div className="space-y-6">
 					<section className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm">
 						<h2 className="text-lg font-semibold text-slate-900">
-							Ficha tecnica base
+							Ficha técnica base
 						</h2>
 						<p className="mt-1 text-sm text-slate-500">
-							Actualiza los datos permanentes del historial del salon.
+							Actualiza los datos permanentes del historial del salón.
 						</p>
 
 						<form className="mt-5 space-y-4" onSubmit={handleProfileSubmit}>
@@ -1029,13 +1029,13 @@ export default function SalonClientDetailView({
 							Sugerencias de producto
 						</h2>
 						<p className="mt-1 text-sm text-slate-500">
-							Se recalculan automaticamente a partir del historial tecnico ya
+							Se recalculan automáticamente a partir del historial técnico ya
 							registrado.
 						</p>
 
 						{detail.suggestions.length === 0 ? (
 							<div className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-sm text-slate-500">
-								Aun no hay suficientes usos de producto como para proponer
+								Aún no hay suficientes usos de producto como para proponer
 								referencias.
 							</div>
 						) : (
@@ -1052,7 +1052,7 @@ export default function SalonClientDetailView({
 												: ""}
 										</p>
 										<p className="mt-1 text-sm text-slate-500">
-											{suggestion.product_line_name || "Sin linea"}
+											{suggestion.product_line_name || "Sin línea"}
 										</p>
 										<p className="mt-3 text-sm leading-6 text-slate-600">
 											{suggestion.reason}
@@ -1069,10 +1069,10 @@ export default function SalonClientDetailView({
 						<div className="flex flex-wrap items-center justify-between gap-3">
 							<div>
 								<h2 className="text-lg font-semibold text-slate-900">
-									Plantillas tecnicas
+									Plantillas técnicas
 								</h2>
 								<p className="mt-1 text-sm text-slate-500">
-									Guarda tecnicas recurrentes del salon y reutilizalas antes de
+									Guarda técnicas recurrentes del salón y reutilízalas antes de
 									registrar un nuevo servicio.
 								</p>
 							</div>
@@ -1109,8 +1109,8 @@ export default function SalonClientDetailView({
 								</div>
 							</div>
 							<p className="mt-3 text-sm text-slate-500">
-								Se guardan el tipo de servicio, el resultado, la descripcion
-								tecnica, la formula, las notas y los productos usados que haya
+								Se guardan el tipo de servicio, el resultado, la descripción
+								técnica, la formula, las notas y los productos usados que haya
 								ahora mismo en el formulario.
 							</p>
 						</div>
@@ -1129,8 +1129,8 @@ export default function SalonClientDetailView({
 
 						{templates.length === 0 ? (
 							<div className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-500">
-								Aun no hay plantillas guardadas. Puedes preparar un servicio en
-								el formulario y guardarlo para reutilizarlo despues.
+								Aún no hay plantillas guardadas. Puedes preparar un servicio en
+								el formulario y guardarlo para reutilizarlo después.
 							</div>
 						) : (
 							<div className="mt-5 grid gap-4 xl:grid-cols-2">
@@ -1218,12 +1218,12 @@ export default function SalonClientDetailView({
 							<div>
 								<h2 className="text-lg font-semibold text-slate-900">
 									{editingServiceId
-										? "Editar servicio tecnico"
-										: "Registrar servicio tecnico"}
+										? "Editar servicio técnico"
+										: "Registrar servicio técnico"}
 								</h2>
 								<p className="mt-1 text-sm text-slate-500">
 									{editingServiceId
-										? "Corrige la ficha tecnica y vuelve a recalcular las sugerencias."
+										? "Corrige la ficha técnica y vuelve a recalcular las sugerencias."
 										: "Documenta el trabajo realizado, la formula y el producto usado."}
 								</p>
 							</div>
@@ -1234,7 +1234,7 @@ export default function SalonClientDetailView({
 									disabled={isSavingService || isUploadingResultImages}
 									className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
 								>
-									Cancelar edicion
+									Cancelar edición
 								</button>
 							) : null}
 						</div>
@@ -1243,7 +1243,7 @@ export default function SalonClientDetailView({
 							{editingServiceId ? (
 								<div className="rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-700">
 									Estas editando un servicio ya registrado. Al guardar, se
-									actualizara tambien la sugerencia de producto asociada al
+									actualizara también la sugerencia de producto asociada al
 									historial.
 								</div>
 							) : null}
@@ -1269,7 +1269,7 @@ export default function SalonClientDetailView({
 										value={serviceType}
 										onChange={(event) => setServiceType(event.target.value)}
 										className={inputClassName}
-										placeholder="Coloracion, matiz, tratamiento..."
+										placeholder="Coloración, matiz, tratamiento..."
 										disabled={isSavingService}
 									/>
 								</div>
@@ -1297,7 +1297,7 @@ export default function SalonClientDetailView({
 													Resultado final
 												</h3>
 												<p className="mt-1 text-sm text-slate-500">
-													Sube tantas imagenes como necesites para documentar
+													Sube tantas imágenes como necesites para documentar
 													como ha quedado el trabajo.
 												</p>
 											</div>
@@ -1312,13 +1312,13 @@ export default function SalonClientDetailView({
 												/>
 												{isUploadingResultImages
 													? "Subiendo..."
-													: "Anadir imagenes"}
+													: "Añadir imágenes"}
 											</label>
 										</div>
 
 										{resultImages.length === 0 ? (
 											<div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-6 text-sm text-slate-500">
-												Aun no has subido imagenes del resultado final.
+												Aún no has subido imágenes del resultado final.
 											</div>
 										) : (
 											<div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -1376,7 +1376,7 @@ export default function SalonClientDetailView({
 							<div className="grid gap-4 md:grid-cols-3">
 								<div className="md:col-span-2">
 									<label className="mb-2 block text-sm font-medium text-slate-700">
-										Descripcion tecnica
+										Descripción técnica
 									</label>
 									<textarea
 										value={technicalDescription}
@@ -1384,7 +1384,7 @@ export default function SalonClientDetailView({
 											setTechnicalDescription(event.target.value)
 										}
 										className={textareaClassName}
-										placeholder="Diagnostico, tecnica aplicada, particiones..."
+										placeholder="Diagnóstico, técnica aplicada, particiones..."
 										disabled={isSavingService}
 									/>
 								</div>
@@ -1404,7 +1404,7 @@ export default function SalonClientDetailView({
 
 							<div>
 								<label className="mb-2 block text-sm font-medium text-slate-700">
-									Notas tecnicas
+									Notas técnicas
 								</label>
 								<textarea
 									value={technicalNotes}
@@ -1430,7 +1430,7 @@ export default function SalonClientDetailView({
 										onClick={addProductUsageRow}
 										className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
 									>
-										Anadir producto
+										Añadir producto
 									</button>
 								</div>
 
@@ -1525,7 +1525,7 @@ export default function SalonClientDetailView({
 								className="inline-flex rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
 							>
 								{isUploadingResultImages
-									? "Subiendo imagenes..."
+									? "Subiendo imágenes..."
 									: isSavingService
 									? editingServiceId
 										? "Actualizando..."
@@ -1541,7 +1541,7 @@ export default function SalonClientDetailView({
 						<div className="mb-5 flex items-center justify-between gap-3">
 							<div>
 								<h2 className="text-lg font-semibold text-slate-900">
-									Historial tecnico
+									Historial técnico
 								</h2>
 								<p className="mt-1 text-sm text-slate-500">
 									Consulta, filtra y corrige todos los trabajos ya registrados
@@ -1558,7 +1558,7 @@ export default function SalonClientDetailView({
 								value={historySearch}
 								onChange={(event) => setHistorySearch(event.target.value)}
 								className={inputClassName}
-								placeholder="Buscar por tecnica, formula o producto"
+								placeholder="Buscar por técnica, formula o producto"
 							/>
 							<select
 								value={historyServiceType}
@@ -1601,7 +1601,7 @@ export default function SalonClientDetailView({
 						{filteredServices.length === 0 ? (
 							<div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-sm text-slate-500">
 								{detail.services.length === 0
-									? "Aun no hay servicios registrados para esta ficha."
+									? "Aún no hay servicios registrados para esta ficha."
 									: "No hay servicios que coincidan con los filtros actuales."}
 							</div>
 						) : (
@@ -1642,7 +1642,7 @@ export default function SalonClientDetailView({
 														: isLoadingTechnicalEmail &&
 																technicalEmailDraftServiceId === service.id
 															? "Preparando..."
-															: "Correo tecnico"}
+															: "Correo técnico"}
 												</button>
 												<button
 													type="button"
@@ -1674,7 +1674,7 @@ export default function SalonClientDetailView({
 												<div className="flex flex-wrap items-start justify-between gap-3">
 													<div>
 														<p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-															Correo tecnico
+															Correo técnico
 														</p>
 														<p className="mt-1 text-sm text-slate-500">
 															Prepara un borrador editable para compartir este
@@ -1692,7 +1692,7 @@ export default function SalonClientDetailView({
 
 												{isLoadingTechnicalEmail ? (
 													<div className="mt-4 rounded-2xl bg-slate-50 px-4 py-6 text-sm text-slate-500">
-														Preparando borrador tecnico...
+														Preparando borrador técnico...
 													</div>
 												) : technicalEmailDraft ? (
 													<div className="mt-4 space-y-4">
@@ -1784,7 +1784,7 @@ export default function SalonClientDetailView({
 												) : (
 													<div className="mt-4 rounded-2xl bg-rose-50 px-4 py-4 text-sm text-rose-700">
 														{technicalEmailFeedback?.message ||
-															"No se ha podido preparar el borrador tecnico."}
+															"No se ha podido preparar el borrador técnico."}
 													</div>
 												)}
 											</div>
@@ -1816,7 +1816,7 @@ export default function SalonClientDetailView({
 
 											{service.result_images.length === 0 ? (
 												<p className="mt-2 text-sm text-slate-500">
-													No se han subido imagenes del resultado final.
+													No se han subido imágenes del resultado final.
 												</p>
 											) : (
 												<div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -1843,19 +1843,19 @@ export default function SalonClientDetailView({
 										<div className="mt-4 grid gap-4 lg:grid-cols-2">
 											<div className="rounded-2xl bg-white px-4 py-4">
 												<p className="text-xs uppercase tracking-[0.18em] text-slate-400">
-													Descripcion tecnica
+													Descripción técnica
 												</p>
 												<p className="mt-2 text-sm leading-6 text-slate-700">
 													{service.technical_description ||
-														"Sin descripcion tecnica"}
+														"Sin descripción técnica"}
 												</p>
 											</div>
 											<div className="rounded-2xl bg-white px-4 py-4">
 												<p className="text-xs uppercase tracking-[0.18em] text-slate-400">
-													Notas tecnicas
+													Notas técnicas
 												</p>
 												<p className="mt-2 text-sm leading-6 text-slate-700">
-													{service.technical_notes || "Sin notas tecnicas"}
+													{service.technical_notes || "Sin notas técnicas"}
 												</p>
 											</div>
 										</div>
@@ -1897,7 +1897,7 @@ export default function SalonClientDetailView({
 																			: ""}
 																	</p>
 																	<p className="mt-1 text-sm text-slate-500">
-																		{productUsage.product_line_name || "Sin linea"}
+																		{productUsage.product_line_name || "Sin línea"}
 																	</p>
 																	{productUsage.color_reference_code ||
 																	productUsage.color_reference_name ? (

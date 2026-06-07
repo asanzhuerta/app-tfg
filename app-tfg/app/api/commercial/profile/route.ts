@@ -12,7 +12,7 @@ import {
 } from "@/lib/typeorm/services/commercial/commercial";
 
 // GET /api/commercial/profile
-// Obtiene la configuracion operativa del comercial autenticado.
+// Obtiene la configuración operativa del comercial autenticado.
 export async function GET() {
 	const user = await requireRoleUser("commercial");
 
@@ -25,12 +25,12 @@ export async function GET() {
 		return NextResponse.json(commercial, { status: 200 });
 	} catch (error) {
 		console.error("[commercial/profile][GET] error:", error);
-		return jsonFromError(error, "Error al obtener la configuracion comercial");
+		return jsonFromError(error, "Error al obtener la configuración comercial");
 	}
 }
 
 // PATCH /api/commercial/profile
-// Actualiza la configuracion de jornada, duraciones y puntos de ruta del comercial autenticado.
+// Actualiza la configuración de jornada, duraciones y puntos de ruta del comercial autenticado.
 export async function PATCH(request: Request) {
 	const user = await requireRoleUser("commercial");
 
@@ -58,6 +58,6 @@ export async function PATCH(request: Request) {
 		return NextResponse.json(commercial, { status: 200 });
 	} catch (error) {
 		console.error("[commercial/profile][PATCH] error:", error);
-		return jsonFromError(error, "Error al actualizar la configuracion comercial");
+		return jsonFromError(error, "Error al actualizar la configuración comercial");
 	}
 }

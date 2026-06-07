@@ -198,7 +198,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 					`/api/admin/client-commercial-assignments?clientId=${selectedClientId}`,
 					{
 						cache: "no-store",
-						fallbackMessage: "Error al cargar la asignacion actual",
+						fallbackMessage: "Error al cargar la asignación actual",
 					},
 				);
 
@@ -217,7 +217,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 				setError(
 					loadError instanceof Error
 						? loadError.message
-						: "Error al cargar la asignacion actual",
+						: "Error al cargar la asignación actual",
 				);
 				setCurrentAssignment(null);
 				setSelectedCommercialId("");
@@ -270,7 +270,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 						commercialId: selectedCommercialId,
 						notes: notes.trim() || null,
 					} satisfies UpsertClientCommercialAssignmentBody),
-					fallbackMessage: "No se pudo guardar la asignacion",
+					fallbackMessage: "No se pudo guardar la asignación",
 				},
 			);
 
@@ -286,7 +286,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 			setError(
 				submitError instanceof Error
 					? submitError.message
-					: "No se pudo guardar la asignacion",
+					: "No se pudo guardar la asignación",
 			);
 		} finally {
 			setSubmitting(false);
@@ -300,7 +300,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 		}
 
 		if (!currentAssignment) {
-			setError("El cliente no tiene una asignacion activa");
+			setError("El cliente no tiene una asignación activa");
 			return;
 		}
 
@@ -321,18 +321,18 @@ function AdminClientCommercialAssignmentsPageContent() {
 						clientId: selectedClientId,
 						notes: notes.trim() || null,
 					} satisfies UpsertClientCommercialAssignmentBody),
-					fallbackMessage: "No se pudo eliminar la asignacion",
+					fallbackMessage: "No se pudo eliminar la asignación",
 				},
 			);
 
 			setCurrentAssignment(null);
 			setSelectedCommercialId("");
-			setSuccess("Asignacion eliminada correctamente");
+			setSuccess("Asignación eliminada correctamente");
 		} catch (submitError) {
 			setError(
 				submitError instanceof Error
 					? submitError.message
-					: "No se pudo eliminar la asignacion",
+					: "No se pudo eliminar la asignación",
 			);
 		} finally {
 			setSubmitting(false);
@@ -383,7 +383,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 								</div>
 							) : filteredClients.length === 0 ? (
 								<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-									No hay clientes que coincidan con la busqueda.
+									No hay clientes que coincidan con la búsqueda.
 								</div>
 							) : (
 								filteredClients.map((client) => {
@@ -485,7 +485,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 
 								{loadingAssignment ? (
 									<div className="mt-3 text-sm text-slate-600">
-										Cargando asignacion actual...
+										Cargando asignación actual...
 									</div>
 								) : currentAssignment ? (
 									<div className="mt-3 space-y-2">
@@ -570,7 +570,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 										</div>
 										<div className="mt-1">
 											<strong className="font-medium text-slate-900">
-												Codigo:
+												Código:
 											</strong>{" "}
 											{selectedCommercial.employee_code || "No definido"}
 										</div>
@@ -583,7 +583,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 									htmlFor="assignment-notes"
 									className="mb-2 block text-sm font-medium text-slate-900"
 								>
-									Notas de la asignacion
+									Notas de la asignación
 								</label>
 								<textarea
 									id="assignment-notes"
@@ -620,13 +620,13 @@ function AdminClientCommercialAssignmentsPageContent() {
 									disabled={submitting || !currentAssignment}
 									className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
 								>
-									Quitar asignacion actual
+									Quitar asignación actual
 								</button>
 							</div>
 
 							<p className="text-xs text-slate-500">
-								Esta relacion define la cartera activa del comercial y
-								condiciona la gestion de clientes, visitas y futuras rutas.
+								Esta relación define la cartera activa del comercial y
+								condiciona la gestión de clientes, visitas y futuras rutas.
 							</p>
 						</div>
 					</section>

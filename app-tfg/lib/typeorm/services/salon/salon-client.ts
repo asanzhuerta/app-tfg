@@ -123,7 +123,7 @@ function normalizeOptionalEmail(value: string | null | undefined) {
 
 	if (!EMAIL_REGEX.test(normalized)) {
 		throw new SalonTechnicalServiceError(
-			"El correo del cliente del salon no es valido",
+			"El correo del cliente del salón no es válido",
 			400,
 			"SALON_CLIENT_EMAIL_INVALID",
 		);
@@ -141,7 +141,7 @@ function normalizeOptionalPhone(value: string | null | undefined) {
 
 	if (normalized.length < 6) {
 		throw new SalonTechnicalServiceError(
-			"El telefono del cliente del salon es demasiado corto",
+			"El teléfono del cliente del salón es demasiado corto",
 			400,
 			"SALON_CLIENT_PHONE_INVALID",
 		);
@@ -191,7 +191,7 @@ function normalizeOptionalQuantityUsed(value: number | string | null | undefined
 
 	if (!Number.isFinite(parsed) || parsed <= 0) {
 		throw new SalonTechnicalServiceError(
-			"La cantidad usada debe ser un numero positivo",
+			"La cantidad usada debe ser un número positivo",
 			400,
 			"SALON_SERVICE_PRODUCT_USAGE_QUANTITY_INVALID",
 		);
@@ -213,7 +213,7 @@ function normalizeResultImageUrls(value: string[] | null | undefined) {
 
 		if (!isValidCloudinaryImageUrl(imageUrl)) {
 			throw new SalonTechnicalServiceError(
-				"Todas las imagenes del resultado final deben estar alojadas en Cloudinary",
+				"Todas las imágenes del resultado final deben estar alojadas en Cloudinary",
 				400,
 				"SALON_SERVICE_RESULT_IMAGE_INVALID",
 			);
@@ -247,7 +247,7 @@ function normalizeProductUsageInputs(
 
 		if (!productId) {
 			throw new SalonTechnicalServiceError(
-				"Cada producto usado debe indicar un producto del catalogo",
+				"Cada producto usado debe indicar un producto del catálogo",
 				400,
 				"SALON_SERVICE_PRODUCT_USAGE_PRODUCT_REQUIRED",
 			);
@@ -389,11 +389,11 @@ function buildSalonTechnicalEmailDraft(params: {
 	suggestions: SalonProductSuggestionSummary[];
 }): SalonTechnicalEmailDraft {
 	const { clientName, salonClient, service, suggestions } = params;
-	const subject = `Resumen tecnico ${service.service_type} - ${salonClient.name} - ${service.service_date}`;
+	const subject = `Resumen técnico ${service.service_type} - ${salonClient.name} - ${service.service_date}`;
 	const lines = [
 		`Hola ${salonClient.name},`,
 		"",
-		`Te compartimos el resumen tecnico de tu servicio realizado el ${formatServiceDateForEmail(
+		`Te compartimos el resumen técnico de tu servicio realizado el ${formatServiceDateForEmail(
 			service.service_date,
 		)}.`,
 		"",
@@ -401,9 +401,9 @@ function buildSalonTechnicalEmailDraft(params: {
 		`- Tipo: ${service.service_type}`,
 		`- Fecha: ${formatServiceDateForEmail(service.service_date)}`,
 		`- Resumen del resultado: ${service.result || "Sin resumen descrito"}`,
-		`- Descripcion tecnica: ${service.technical_description || "Sin descripcion tecnica"}`,
+		`- Descripción técnica: ${service.technical_description || "Sin descripción técnica"}`,
 		`- Formula: ${service.formula || "Sin formula registrada"}`,
-		`- Notas tecnicas: ${service.technical_notes || "Sin notas tecnicas"}`,
+		`- Notas técnicas: ${service.technical_notes || "Sin notas técnicas"}`,
 	];
 
 	if (service.result_images.length > 0) {
@@ -465,7 +465,7 @@ function buildSuggestionReason(usageCount: number, totalQuantity: string | null)
 		return `Usado en ${usageCount} servicios del historial y con ${quantityLabel} unidades registradas.`;
 	}
 
-	return `Usado en ${usageCount} servicios del historial tecnico.`;
+	return `Usado en ${usageCount} servicios del historial técnico.`;
 }
 
 function mapSalonServiceResultImage(
@@ -617,7 +617,7 @@ async function requireOwnedSalonClient(clientId: string, salonClientId: string) 
 
 	if (!salonClient) {
 		throw new SalonTechnicalServiceError(
-			"La ficha tecnica solicitada no existe",
+			"La ficha técnica solicitada no existe",
 			404,
 			"SALON_CLIENT_NOT_FOUND",
 		);
@@ -642,7 +642,7 @@ async function requireOwnedSalonService(
 
 	if (!service) {
 		throw new SalonTechnicalServiceError(
-			"El servicio tecnico solicitado no existe",
+			"El servicio técnico solicitado no existe",
 			404,
 			"SALON_SERVICE_NOT_FOUND",
 		);
@@ -670,7 +670,7 @@ async function getOwnedSalonServiceDetail(
 
 	if (!service) {
 		throw new SalonTechnicalServiceError(
-			"El servicio tecnico solicitado no existe",
+			"El servicio técnico solicitado no existe",
 			404,
 			"SALON_SERVICE_NOT_FOUND",
 		);
@@ -716,7 +716,7 @@ async function ensureSalonProductUsagesAreValid(
 
 	if (products.length !== uniqueProductIds.length) {
 		throw new SalonTechnicalServiceError(
-			"Alguno de los productos indicados ya no existe en el catalogo",
+			"Alguno de los productos indicados ya no existe en el catálogo",
 			400,
 			"SALON_SERVICE_PRODUCT_USAGE_PRODUCT_NOT_FOUND",
 		);
@@ -773,7 +773,7 @@ async function ensureSalonProductUsagesAreValid(
 
 		if (!productUsage.colorReferenceId) {
 			throw new SalonTechnicalServiceError(
-				"Debes indicar la tonalidad concreta para cada tinte o producto de coloracion",
+				"Debes indicar la tonalidad concreta para cada tinte o producto de coloración",
 				400,
 				"SALON_SERVICE_PRODUCT_USAGE_COLOR_REFERENCE_REQUIRED",
 			);
@@ -1173,7 +1173,7 @@ export async function createSalonClientForClientUser(
 		client_id: client.id,
 		name: normalizeRequiredText(
 			input.name,
-			"Debes indicar el nombre del cliente del salon",
+			"Debes indicar el nombre del cliente del salón",
 			"SALON_CLIENT_NAME_REQUIRED",
 		),
 		phone: normalizeOptionalPhone(input.phone),
@@ -1241,7 +1241,7 @@ export async function updateSalonClientForClientUser(
 
 	salonClient.name = normalizeRequiredText(
 		input.name,
-		"Debes indicar el nombre del cliente del salon",
+		"Debes indicar el nombre del cliente del salón",
 		"SALON_CLIENT_NAME_REQUIRED",
 	);
 	salonClient.phone = normalizeOptionalPhone(input.phone);

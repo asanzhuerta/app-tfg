@@ -30,7 +30,7 @@ export async function GET(request: Request) {
 		return NextResponse.json(productSubcategories, { status: 200 });
 	} catch (error) {
 		console.error("[admin/catalog/product-subcategories][GET] error:", error);
-		return jsonFromError(error, "Error al listar las subcategorias");
+		return jsonFromError(error, "Error al listar las subcategorías");
 	}
 }
 
@@ -50,6 +50,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(createdProductSubcategory, { status: 201 });
 	} catch (error) {
 		console.error("[admin/catalog/product-subcategories][POST] error:", error);
-		return jsonFromError(error, "Error al crear la subcategoria");
+		return jsonFromError(error, "Error al crear la subcategoría");
 	}
 }

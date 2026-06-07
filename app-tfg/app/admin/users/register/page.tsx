@@ -54,7 +54,7 @@ export default function AdminRegisterUserPage() {
 		}
 
 		if (password !== confirmPassword) {
-			setError("Las contrasenas no coinciden");
+			setError("Las contraseñas no coinciden");
 			setLoading(false);
 			return;
 		}
@@ -156,7 +156,7 @@ export default function AdminRegisterUserPage() {
 							</select>
 
 							<p className="text-xs text-gray-500">
-								Cada cliente debe quedar asociado a un unico comercial.
+								Cada cliente debe quedar asociado a un único comercial.
 							</p>
 						</div>
 					) : null}

@@ -33,7 +33,7 @@ const sections: Array<{
 	items: DashboardSectionItem[];
 }> = [
 	{
-		title: "Gestion comercial",
+		title: "Gestión comercial",
 		module: "M2",
 		items: [
 			{
@@ -59,16 +59,16 @@ const sections: Array<{
 		],
 	},
 	{
-		title: "Catalogo y operativa comercial",
+		title: "Catálogo y operativa comercial",
 		module: "M3 / M4",
 		items: [
 			{
-				title: "Catalogo",
+				title: "Catálogo",
 				icon: <CatalogIcon className="h-6 w-6" />,
 				href: "/commercials/catalog",
 			},
 			{
-				title: "Coloracion",
+				title: "Coloración",
 				icon: <ColorIcon className="h-6 w-6" />,
 				href: "/commercials/coloration",
 			},
@@ -90,7 +90,7 @@ const sections: Array<{
 		],
 	},
 	{
-		title: "Comunicacion y seguimiento",
+		title: "Comunicación y seguimiento",
 		module: "M6 / M7",
 		items: [
 			{

@@ -50,6 +50,6 @@ export async function POST(request: Request) {
 		return NextResponse.json(promotion, { status: 201 });
 	} catch (error) {
 		console.error("[admin/communications/promotions][POST] error:", error);
-		return jsonFromError(error, "Error al crear promocion");
+		return jsonFromError(error, "Error al crear promoción");
 	}
 }

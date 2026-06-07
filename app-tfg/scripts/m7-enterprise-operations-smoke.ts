@@ -70,7 +70,7 @@ async function main() {
 		);
 		assertCondition(
 			integration,
-			"M7 empresarial debe preparar la integracion Factusol mediante n8n",
+			"M7 empresarial debe preparar la integración Factusol mediante n8n",
 		);
 		touchedIntegrationId = integration.id;
 		initialIntegrationStatus = integration.status;
@@ -83,7 +83,7 @@ async function main() {
 
 		assertCondition(
 			product,
-			"M7 empresarial necesita al menos un producto activo para proponer reposicion",
+			"M7 empresarial necesita al menos un producto activo para proponer reposición",
 		);
 
 		const operation = await createIntegrationOperation({
@@ -97,17 +97,17 @@ async function main() {
 
 		assertCondition(
 			operation.integrationName === "Factusol mediante n8n",
-			"La operacion debe quedar asociada a la integracion empresarial",
+			"La operación debe quedar asociada a la integración empresarial",
 		);
 		assertCondition(
 			operation.status === "success",
-			"La operacion temporal debe registrarse como correcta",
+			"La operación temporal debe registrarse como correcta",
 		);
 
 		const proposal = await generateSupplierOrderProposal({
 			productIds: [product.id],
 			quantity: 2,
-			reason: "smoke_reposicion",
+			reason: "smoke_reposición",
 			notes: "Smoke temporal M7 enterprise operations",
 			status: "generated",
 		});
@@ -115,7 +115,7 @@ async function main() {
 
 		assertCondition(
 			proposal.lines.length === 1,
-			"La propuesta temporal debe contener una linea",
+			"La propuesta temporal debe contener una línea",
 		);
 		assertCondition(
 			proposal.totalUnits === 2,
@@ -134,7 +134,7 @@ async function main() {
 			updatedSnapshot.recentOperations.some(
 				(item) => item.id === createdOperationId,
 			),
-			"El snapshot M7 debe incluir la operacion registrada",
+			"El snapshot M7 debe incluir la operación registrada",
 		);
 		assertCondition(
 			updatedSnapshot.proposals.some((item) => item.id === createdProposalId),
@@ -142,7 +142,7 @@ async function main() {
 		);
 
 		console.log("PASS M7 empresarial persiste configuraciones e integraciones");
-		console.log("PASS M7 empresarial registra operaciones de integracion");
+		console.log("PASS M7 empresarial registra operaciones de integración");
 		console.log("PASS M7 empresarial genera propuestas a proveedor");
 	} finally {
 		await cleanup({

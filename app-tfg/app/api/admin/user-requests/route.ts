@@ -7,7 +7,7 @@ import {
 import { listUserRequests } from "@/lib/typeorm/services/users/request";
 
 // GET /api/admin/user-requests
-// Lista las solicitudes de registro pendientes o historicas para su revision administrativa.
+// Lista las solicitudes de registro pendientes o históricas para su revisión administrativa.
 export async function GET() {
 	const user = await requireRoleUser("admin");
 

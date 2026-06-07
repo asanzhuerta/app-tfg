@@ -44,7 +44,7 @@ export const RATE_LIMIT_POLICIES = {
 		windowMs: 60 * 1000, // 1 minuto
 		scope: "ip",
 		message:
-			"Se han realizado demasiadas operaciones de autenticación en poco tiempo.",
+			"Se han realizado demásiadas operaciones de autenticación en poco tiempo.",
 	},
 
 	REGISTER_REQUEST: {
@@ -54,7 +54,7 @@ export const RATE_LIMIT_POLICIES = {
 		windowMs: 30 * 60 * 1000, // 30 minutos
 		scope: "ip",
 		message:
-			"Has enviado demasiadas solicitudes de registro en poco tiempo. Espera antes de volver a intentarlo.",
+			"Has enviado demásiadas solicitudes de registro en poco tiempo. Espera antes de volver a intentarlo.",
 	},
 
 	ADMIN_GENERIC_READ: {
@@ -64,7 +64,7 @@ export const RATE_LIMIT_POLICIES = {
 		windowMs: 60 * 1000, // 1 minuto
 		scope: "user_or_ip",
 		message:
-			"Se han realizado demasiadas consultas de administración en poco tiempo.",
+			"Se han realizado demásiadas consultas de administración en poco tiempo.",
 	},
 
 	ADMIN_GENERIC_WRITE: {
@@ -74,7 +74,7 @@ export const RATE_LIMIT_POLICIES = {
 		windowMs: 60 * 1000, // 1 minuto
 		scope: "user_or_ip",
 		message:
-			"Se han realizado demasiadas operaciones de administración en poco tiempo.",
+			"Se han realizado demásiadas operaciones de administración en poco tiempo.",
 	},
 
 	ADMIN_USERS_READ: {
@@ -84,7 +84,7 @@ export const RATE_LIMIT_POLICIES = {
 		windowMs: 60 * 1000, // 1 minuto
 		scope: "user_or_ip",
 		message:
-			"Se han realizado demasiadas consultas del listado de usuarios en poco tiempo.",
+			"Se han realizado demásiadas consultas del listado de usuarios en poco tiempo.",
 	},
 
 	ADMIN_USERS_WRITE: {
@@ -94,7 +94,7 @@ export const RATE_LIMIT_POLICIES = {
 		windowMs: 60 * 1000, // 1 minuto
 		scope: "user_or_ip",
 		message:
-			"Se han realizado demasiadas modificaciones de usuarios en poco tiempo.",
+			"Se han realizado demásiadas modificaciones de usuarios en poco tiempo.",
 	},
 
 	PROFILE_IMAGE_UPLOAD: {
@@ -104,7 +104,7 @@ export const RATE_LIMIT_POLICIES = {
 		windowMs: 10 * 60 * 1000, // 10 minutos
 		scope: "user_or_ip",
 		message:
-			"Has subido demasiadas imágenes de perfil en poco tiempo. Espera antes de volver a intentarlo.",
+			"Has subido demásiadas imágenes de perfil en poco tiempo. Espera antes de volver a intentarlo.",
 	},
 
 	LOGIN_IP: {
@@ -135,32 +135,32 @@ export const RATE_LIMIT_POLICY_DESCRIPTORS: Record<
 	DEFAULT_API: {
 		title: "API general",
 		description:
-			"Limite base para rutas API comunes que no tienen una politica mas especifica.",
+			"Límite base para rutas API comunes que no tienen una política mas específica.",
 	},
 	AUTH_API: {
-		title: "Autenticacion API",
+		title: "Autenticación API",
 		description:
-			"Protege rutas auxiliares de autenticacion como proveedores, callbacks y cierre de sesion.",
+			"Protege rutas auxiliares de autenticación como proveedores, callbacks y cierre de sesión.",
 	},
 	REGISTER_REQUEST: {
 		title: "Solicitud de registro",
 		description:
-			"Reduce el abuso del formulario de alta de clientes desde la pantalla publica.",
+			"Reduce el abuso del formulario de alta de clientes desde la pantalla pública.",
 	},
 	ADMIN_GENERIC_READ: {
 		title: "Admin lectura",
 		description:
-			"Controla las consultas GET de administracion fuera del modulo de usuarios.",
+			"Controla las consultas GET de administración fuera del módulo de usuarios.",
 	},
 	ADMIN_GENERIC_WRITE: {
 		title: "Admin escritura",
 		description:
-			"Controla altas, cambios y acciones mutables del panel de administracion.",
+			"Controla altas, cambios y acciones mutables del panel de administración.",
 	},
 	ADMIN_USERS_READ: {
 		title: "Admin usuarios lectura",
 		description:
-			"Limita el acceso frecuente al listado y detalle de usuarios desde administracion.",
+			"Limita el acceso frecuente al listado y detalle de usuarios desde administración.",
 	},
 	ADMIN_USERS_WRITE: {
 		title: "Admin usuarios escritura",
@@ -170,7 +170,7 @@ export const RATE_LIMIT_POLICY_DESCRIPTORS: Record<
 	PROFILE_IMAGE_UPLOAD: {
 		title: "Subida de imagen de perfil",
 		description:
-			"Evita abusos al subir imagenes de perfil repetidamente en un corto intervalo.",
+			"Evita abusos al subir imágenes de perfil repetidamente en un corto intervalo.",
 	},
 	LOGIN_IP: {
 		title: "Login por IP",
@@ -180,7 +180,7 @@ export const RATE_LIMIT_POLICY_DESCRIPTORS: Record<
 	LOGIN_IDENTIFIER: {
 		title: "Login por cuenta",
 		description:
-			"Bloquea intentos repetidos contra un mismo correo, usuario o telefono.",
+			"Bloquea intentos repetidos contra un mismo correo, usuario o teléfono.",
 	},
 };
 

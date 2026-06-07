@@ -13,7 +13,7 @@ export default async function ClientPromotionsPage() {
 	return (
 		<PromotionsOverview
 			title="Promociones"
-			subtitle="Campanas activas para tu salon"
+			subtitle="Campañas activas para tu salón"
 			backHref="/clients"
 			promotions={promotions.map(serializePromotion)}
 		/>

@@ -26,7 +26,7 @@ export async function getClientDeliveryEstimate(
 		return {
 			status: "no_active_commercial",
 			date: dateFrom,
-			message: "Todavia no tienes un comercial asignado para planificar reparto.",
+			message: "Todavía no tienes un comercial asignado para planificar reparto.",
 			estimatedArrivalTime: null,
 			sequence: null,
 			windowStartTime: null,
@@ -125,7 +125,7 @@ export async function getClientDeliveryEstimate(
 			status: "scheduled_without_eta",
 			date: dateFrom,
 			message:
-				"Tu reparto esta previsto para hoy, pero aun falta una geolocalizacion valida para calcular una hora aproximada.",
+				"Tu reparto está previsto para hoy, pero aún falta una geolocalización válida para calcular una hora aproximada.",
 			estimatedArrivalTime: null,
 			sequence: null,
 			windowStartTime: activeAssignment.client?.visit_window_start_time ?? null,

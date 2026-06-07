@@ -19,7 +19,7 @@ export default async function ClientCatalogProductPage({
 	return (
 		<CatalogProductDetail
 			title="Ficha de producto"
-			subtitle="Detalle tecnico y comercial de la referencia"
+			subtitle="Detalle técnico y comercial de la referencia"
 			backHref="/clients/catalog"
 			colorationBasePath="/clients/coloration"
 			showPrice={false}

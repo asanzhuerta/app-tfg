@@ -13,7 +13,7 @@ function mapSupportResourceToItem(
 		title: supportResource.title,
 		subtitle: supportResource.resource_url,
 		category: supportResource.resourceType?.name ?? "Tipo no disponible",
-		status: supportResource.product ? "Producto" : "Linea",
+		status: supportResource.product ? "Producto" : "Línea",
 		primaryDate: toIsoString(supportResource.created_at),
 		badges: [
 			{
@@ -27,7 +27,7 @@ function mapSupportResourceToItem(
 				value: supportResource.product?.name || "-",
 			},
 			{
-				label: "Linea",
+				label: "Línea",
 				value: supportResource.productLine?.name || "-",
 			},
 			{
@@ -35,7 +35,7 @@ function mapSupportResourceToItem(
 				value: formatDateShort(supportResource.created_at),
 			},
 			{
-				label: "Descripcion",
+				label: "Descripción",
 				value: supportResource.description || "-",
 			},
 		],
@@ -66,7 +66,7 @@ export default async function AdminSupportResourcesPage() {
 		<div className="space-y-6">
 			<H1Title
 				title="Recursos de apoyo"
-				subtitle="Centraliza fichas tecnicas, catalogos comerciales y material formativo"
+				subtitle="Centraliza fichas técnicas, catálogos comerciales y material formativo"
 			/>
 
 			<CatalogAdminWorkspace
@@ -81,7 +81,7 @@ export default async function AdminSupportResourcesPage() {
 							.length,
 					},
 					{
-						label: "ligados a linea",
+						label: "ligados a línea",
 						value: supportResources.filter((resource) =>
 							Boolean(resource.product_line_id),
 						).length,
@@ -90,7 +90,7 @@ export default async function AdminSupportResourcesPage() {
 				tableConfig={{
 					categoryLabel: "Tipo",
 					statusLabel: "Contexto",
-					emptyMessage: "No hay recursos de apoyo registrados todavia.",
+					emptyMessage: "No hay recursos de apoyo registrados todavía.",
 				}}
 			/>
 		</div>

@@ -12,7 +12,7 @@ export default async function NewColorChartPage() {
 	return (
 		<CatalogAdminCreateShell
 			title="Nueva carta de color"
-			subtitle="Crea una carta cromatica vinculada a una linea comercial concreta."
+			subtitle="Crea una carta cromática vinculada a una línea comercial concreta."
 			backHref="/admin/catalog/color-charts"
 			backLabel="cartas de color"
 		>

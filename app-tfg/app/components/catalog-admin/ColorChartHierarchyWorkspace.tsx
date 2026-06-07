@@ -64,10 +64,10 @@ function buildProductLineItems(
 
 		return {
 			id: productLineId,
-			title: productLine?.name ?? "Sin linea",
+			title: productLine?.name ?? "Sin línea",
 			subtitle: "",
 			imageUrl: productLine?.image_url,
-			category: productLine?.productCategory?.name ?? "Sin categoria",
+			category: productLine?.productCategory?.name ?? "Sin categoría",
 			status: null,
 			primaryDate: String(9999 - (productLine?.display_order ?? 0)).padStart(
 				4,
@@ -97,7 +97,7 @@ export default function ColorChartHierarchyWorkspace({
 }: Props) {
 	const items = useMemo(() => buildProductLineItems(colorCharts), [colorCharts]);
 	const table = useEntityTable(items, {
-		categoryLabel: "Categoria",
+		categoryLabel: "Categoría",
 		defaultSortField: "title",
 		defaultSortDirection: "asc",
 	});
@@ -219,7 +219,7 @@ export default function ColorChartHierarchyWorkspace({
 				totalCount={Array.from(chartGroupsByLineId.keys()).length}
 				resetFilters={table.resetFilters}
 				config={{
-					categoryLabel: "Categoria",
+					categoryLabel: "Categoría",
 					defaultSortField: "title",
 					defaultSortDirection: "asc",
 				}}
@@ -228,7 +228,7 @@ export default function ColorChartHierarchyWorkspace({
 			<div className="space-y-4">
 				{filteredChartGroups.length === 0 ? (
 					<div className="rounded-2xl border border-slate-200 bg-white px-4 py-10 text-center text-slate-500 shadow-md">
-						No hay lineas con cartas de color que coincidan con los filtros actuales.
+						No hay líneas con cartas de color que coincidan con los filtros actuales.
 					</div>
 				) : null}
 
@@ -255,7 +255,7 @@ export default function ColorChartHierarchyWorkspace({
 												categoryBadgeClassMap,
 											)}`}
 										>
-											{productLine.productCategory?.name ?? "Sin categoria"}
+											{productLine.productCategory?.name ?? "Sin categoría"}
 										</span>
 										<span className="inline-flex rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
 											{charts.length === 1 ? "1 carta" : `${charts.length} cartas`}
@@ -277,7 +277,7 @@ export default function ColorChartHierarchyWorkspace({
 										href={`/admin/catalog/product-lines/${productLine.id}/edit`}
 										className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
 									>
-										Editar linea
+										Editar línea
 									</Link>
 									<button
 										type="button"
@@ -321,7 +321,7 @@ export default function ColorChartHierarchyWorkspace({
 																		lineCategoryBadgeClassMap,
 																	)}`}
 																>
-																	{productLine.productCategory?.name ?? "Sin categoria"}
+																	{productLine.productCategory?.name ?? "Sin categoría"}
 																</span>
 																<span className="inline-flex rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
 																	{chartReferences.length === 1

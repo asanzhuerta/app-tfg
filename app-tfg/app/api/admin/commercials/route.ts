@@ -16,7 +16,7 @@ import {
 } from "@/lib/typeorm/services/commercial/commercial";
 
 // GET /api/admin/commercials
-// Lista los perfiles comerciales disponibles para gestion y asignaciones administrativas.
+// Lista los perfiles comerciales disponibles para gestión y asignaciones administrativas.
 export async function GET() {
 	const user = await requireRoleUser("admin");
 
@@ -34,7 +34,7 @@ export async function GET() {
 }
 
 // POST /api/admin/commercials
-// Crea o actualiza el perfil operativo de un comercial desde administracion.
+// Crea o actualiza el perfil operativo de un comercial desde administración.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 

@@ -14,7 +14,7 @@ import { ROLE_IDS } from "@/lib/typeorm/constants/catalog-ids";
 import { registerUserByAdmin } from "@/lib/typeorm/services/users/user";
 
 // POST /api/admin/register-user
-// Registra manualmente un nuevo usuario desde administracion con el rol indicado.
+// Registra manualmente un nuevo usuario desde administración con el rol indicado.
 export async function POST(request: Request) {
 	const user = await requireRoleUser("admin");
 

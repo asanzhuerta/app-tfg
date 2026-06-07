@@ -13,7 +13,7 @@ export default async function CommercialPromotionsPage() {
 	return (
 		<PromotionsOverview
 			title="Promociones"
-			subtitle="Campanas vigentes para seguimiento comercial"
+			subtitle="Campañas vigentes para seguimiento comercial"
 			backHref="/commercials"
 			promotions={promotions.map(serializePromotion)}
 		/>

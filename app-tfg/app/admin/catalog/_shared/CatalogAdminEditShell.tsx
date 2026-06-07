@@ -30,7 +30,7 @@ export default function CatalogAdminEditShell({
 					</Link>
 
 					<span className="rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-sky-700">
-						Modo edicion
+						Modo edición
 					</span>
 				</div>
 
