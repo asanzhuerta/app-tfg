@@ -1,139 +1,45 @@
-# KinEstilistas App
+# App TFG
 
-## Estado actual del TFG
+Aplicacion principal de Kinestilistas. Esta carpeta contiene el producto software desarrollado para el TFG: interfaz, API, autenticacion, persistencia, migraciones, assets publicos y scripts de comprobacion.
 
-La referencia actualizada del estado funcional, la revision tecnica y el planning de cierre esta en `TFG_STATUS_MASTER_PLAN.md`.
-Este `README` sigue siendo util para setup y estructura tecnica, pero puede no reflejar por si solo el avance modulo a modulo.
+## Funcion de esta carpeta
 
-Aplicación principal del proyecto `KinEstilistas`, construida con `Next.js 16`, `React 19`, `TypeScript` y `PostgreSQL`.
-
-## Qué incluye esta carpeta
-
-- interfaz web por roles (`admin`, `commercial`, `client`);
-- API interna basada en `Route Handlers`;
-- autenticación con `Auth.js`;
-- capa de acceso a datos con `TypeORM`;
-- migraciones versionadas para los módulos 1 a 4;
-- integración con `Cloudinary`, `Nominatim` y `OSRM`.
-
-## Rutas funcionales más importantes
-
-- `/login`
-- `/register`
-- `/profile`
-- `/admin`
-- `/admin/users/*`
-- `/admin/clients/*`
-- `/commercials`
-- `/commercials/clients`
-- `/commercials/routes`
-- `/commercials/visits`
-- `/commercials/settings`
-- `/clients`
+- Centralizar el codigo ejecutable de la aplicacion.
+- Separar la app de la memoria LaTeX, los datos de ejemplo y la configuracion de Docker.
+- Mantener una estructura compatible con Next.js App Router y TypeORM.
 
 ## Estructura principal
 
-```text
-app/
-  admin/              páginas del panel administrador
-  api/                endpoints internos
-  clients/            área cliente
-  commercials/        área comercial
-  components/         UI reutilizable
-  hooks/api/          hooks cliente para consumo de API
-lib/
-  api/                helpers de servidor y control de acceso
-  auth/               helpers de sesión
-  commercial/         lógica de planificación de ruta
-  contracts/          DTOs y contratos compartidos
-  geocoding/          geocodificación de direcciones
-  security/           rate limiting y seguridad transversal
-  typeorm/            data source, entidades y servicios
-migrations/typeorm/   migraciones M1 a M4
-```
+- `app/`: rutas, layouts, paginas, API handlers y componentes de UI.
+- `lib/`: logica de dominio, contratos, servicios, seguridad, integraciones y acceso a datos.
+- `migrations/`: migraciones versionadas de TypeORM.
+- `public/`: imagenes, iconos, fondos y manifest PWA.
+- `scripts/`: scripts de smoke test, carga de imagenes y tareas auxiliares.
 
-## Requisitos
+## Archivos de entrada relevantes
 
-- `Node.js 20` o superior
-- `npm`
-- `Docker Desktop` o equivalente
+- `auth.ts`: configuracion de Auth.js, credenciales, sesiones y trazabilidad de acceso.
+- `proxy.ts`: middleware de proteccion de rutas, compatibilidad de navegador y rate limiting.
+- `next.config.ts`: configuracion de Next.js.
+- `package.json`: scripts, dependencias y comandos de desarrollo.
+- `tsconfig.typeorm.json`: configuracion TypeScript especifica para TypeORM y migraciones.
 
-## Configuración local rápida
-
-### 1. Base de datos
-
-Desde la raiz del repositorio:
+## Scripts recomendados
 
 ```bash
-docker compose up -d
-```
-
-### 2. Dependencias
-
-```bash
-npm install
-```
-
-### 3. Variables de entorno
-
-Crear `app-tfg/.env.local` con:
-
-```env
-DATABASE_URL=postgres://kin:kin@localhost:5432/kin
-AUTH_SECRET=cambia-este-valor
-```
-
-Opcionales:
-
-```env
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-CLOUDINARY_PROFILE_IMAGES_FOLDER=kinestilistas/profile-images
-
-GEOCODING_PROVIDER=nominatim
-GEOCODING_COUNTRY_CODE=es
-GEOCODING_COUNTRY_NAME=España
-GEOCODING_EMAIL=
-GEOCODING_USER_AGENT=KinestilistasTFG/1.0
-
-NEXT_PUBLIC_OSRM_BASE_URL=https://router.project-osrm.org
-```
-
-### 4. Migraciones
-
-```bash
-npm run migration:run
-```
-
-### 5. Desarrollo
-
-```bash
-npm run dev
-```
-
-## Scripts
-
-```bash
-npm run dev
-npm run dev:clean
-npm run build
-npm run build:clean
-npm run start
-npm run start:clean
-npm run lint
 npm run typecheck
-npm run migration:create
-npm run migration:generate
+npm run lint
+npm run build
 npm run migration:run
-npm run migration:revert
-npm run migration:show
+npm run m5:salon-visual-smoke
+npm run m6:closeout
+npm run m7:closeout
+npm run catalog:upload-product-images -- --dry-run
 ```
 
-## Notas útiles para desarrollo
+## Notas de trabajo
 
-- `proxy.ts` aplica protección por rol, compatibilidad mínima de navegador y rate limiting sobre `/api`.
-- `auth.ts` concentra el proveedor de credenciales y la trazabilidad de accesos.
-- `lib/commercial/daily-route-planning.ts` es la pieza principal para ETA, orden de ruta y margen diario.
-- `app/api/profile/upload-image/route.ts` y `lib/cloudinary.ts` gestionan la subida de avatar.
-- No hay batería automatizada de tests funcionales; la validación habitual hoy es `lint`, `typecheck` y comprobación manual por rol.
+- Las migraciones se crean con `npm run migration:create`.
+- El puerto local esperado para desarrollo es `3000`.
+- No se deben versionar `.next`, `node_modules`, logs temporales ni ficheros `.env`.
+- El estado funcional global se documenta en `TFG_STATUS_MASTER_PLAN.md`.

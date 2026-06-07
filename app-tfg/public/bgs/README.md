@@ -1,19 +1,17 @@
-# Fondos por contexto
+# Fondos publicos
 
-Coloca en esta carpeta las imagenes de fondo con estos nombres exactos para que la aplicacion las use automaticamente.
+Imagenes de fondo usadas por landing, login y paneles por rol.
 
-| Contexto | Escritorio | Movil |
-| --- | --- | --- |
-| Fondo general / landing | `fondo-default-PC.jpg` | `fondo-default-Mobile.jpg` |
-| Login | `fondo-login-PC.jpg` | `fondo-login-Mobile.jpg` |
-| Administrador | `fondo-admin-PC.jpg` | `fondo-admin-Mobile.jpg` |
-| Cliente profesional | `fondo-client-PC.jpg` | `fondo-client-Mobile.jpg` |
-| Comercial | `fondo-commercial-PC.jpg` | `fondo-commercial-Mobile.jpg` |
+## Funcion
 
-Si falta una imagen especifica, la pantalla seguira usando el fondo general como fallback.
+Dar identidad visual diferenciada a las experiencias de acceso, cliente, comercial y administracion.
 
-Recomendacion de tamanos:
+## Por que existe
 
-- Escritorio: 1920 x 1080 px o superior.
-- Movil: 1080 x 1920 px o proporcion vertical similar.
-- Formato: JPG optimizado para web.
+Los fondos se sirven publicamente desde Next.js y deben tener nombres estables para que los componentes puedan referenciarlos sin depender de rutas externas.
+
+## Reglas de uso
+
+- Mantener imagenes optimizadas para web.
+- Evitar degradados embebidos si el componente ya controla capas visuales.
+- No usar esta carpeta para imagenes de productos ni recursos de prueba; esos flujos van por Cloudinary o `examples/`.
