@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import SafeForm from "@/app/components/forms/SafeForm";
 import ClientProfileFieldsSection from "@/app/components/clients/ClientProfileFieldsSection";
@@ -35,6 +36,44 @@ const CLIENT_ADDRESS_FIELDS: Array<keyof ClientFormDataState> = [
 
 const EMPTY_CATALOG_OPTIONS: CatalogOption[] = [];
 
+function ClientTierProfileSummary({
+	tierDescription,
+	activePromotionsCount,
+}: {
+	tierDescription: string;
+	activePromotionsCount: number;
+}) {
+	const promotionsLabel =
+		activePromotionsCount === 1
+			? "1 promoción disponible"
+			: `${activePromotionsCount} promociones disponibles`;
+
+	return (
+		<div className="mb-3 rounded-2xl border border-slate-200/80 bg-slate-50/85 px-4 py-3">
+			<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+				<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+					<p className="text-sm text-slate-700">
+						<span className="font-semibold text-slate-900">
+							Rango comercial:
+						</span>{" "}
+						{tierDescription}
+					</p>
+					<span className="w-fit rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-600 ring-1 ring-slate-200">
+						{promotionsLabel}
+					</span>
+				</div>
+
+				<Link
+					href="/clients/promotions"
+					className="inline-flex w-fit items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800"
+				>
+					Ver ventajas
+				</Link>
+			</div>
+		</div>
+	);
+}
+
 export default function UserProfileCard({
 	user,
 	clientProfile = null,
@@ -47,6 +86,8 @@ export default function UserProfileCard({
 	submitLabel,
 	submitUrl,
 	allowPasswordChange = false,
+	clientTierOverview = null,
+	activePromotionsCount = 0,
 }: UserProfileCardProps) {
 	const isViewMode = mode === "view";
 	const isSelfEditMode = mode === "edit";
@@ -54,6 +95,11 @@ export default function UserProfileCard({
 	const isEditableMode = isSelfEditMode || isAdminEditMode;
 	const isClientUser = user.role.code === "client";
 	const isCompactLayout = layout === "compact";
+	const clientTierName =
+		isClientUser && clientTierOverview ? clientTierOverview.name : null;
+	const shouldShowClientTierSummary = Boolean(
+		isClientUser && clientTierOverview,
+	);
 
 	const showPasswordSection =
 		isAdminEditMode || (isSelfEditMode && allowPasswordChange);
@@ -343,6 +389,13 @@ export default function UserProfileCard({
 				>
 					{titleBlock}
 
+					{shouldShowClientTierSummary && clientTierOverview ? (
+						<ClientTierProfileSummary
+							tierDescription={clientTierOverview.description}
+							activePromotionsCount={activePromotionsCount}
+						/>
+					) : null}
+
 					<div className="grid gap-4 xl:grid-cols-[minmax(250px,300px)_minmax(0,1fr)]">
 						<aside className="grid gap-3 xl:content-start">
 							<ProfileIdentitySection
@@ -359,6 +412,7 @@ export default function UserProfileCard({
 								onFileChange={handleProfileImageUpload}
 								onOpenFilePicker={openFilePicker}
 								compact
+								clientTierName={clientTierName}
 							/>
 
 							{showPasswordSection ? (
@@ -451,6 +505,13 @@ export default function UserProfileCard({
 				onSubmit={handleSubmit}
 				className="rounded-2xl border border-gray-200 bg-white p-6 shadow-md"
 			>
+				{shouldShowClientTierSummary && clientTierOverview ? (
+					<ClientTierProfileSummary
+						tierDescription={clientTierOverview.description}
+						activePromotionsCount={activePromotionsCount}
+					/>
+				) : null}
+
 				<ProfileIdentitySection
 					user={user}
 					formData={formData}
@@ -464,6 +525,7 @@ export default function UserProfileCard({
 					onChange={handleChange}
 					onFileChange={handleProfileImageUpload}
 					onOpenFilePicker={openFilePicker}
+					clientTierName={clientTierName}
 				/>
 
 				<ProfileDetailsSection

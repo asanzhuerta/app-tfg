@@ -2,6 +2,7 @@ import {
 	ClientFormDataState,
 	ClientProfileData,
 } from "@/lib/contracts/client-profile";
+import type { ClientTierOverview } from "@/lib/typeorm/services/clients/client-tier";
 
 // ----------------------------------------------------------------------------
 // TIPOS DEL USER PROFILE CARD
@@ -64,4 +65,6 @@ export type UserProfileCardProps = {
 	submitLabel?: string;
 	submitUrl?: string;
 	allowPasswordChange?: boolean;
+	clientTierOverview?: ClientTierOverview | null;
+	activePromotionsCount?: number;
 };

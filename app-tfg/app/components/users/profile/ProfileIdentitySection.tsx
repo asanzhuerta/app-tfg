@@ -31,6 +31,7 @@ type Props = {
 	onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onOpenFilePicker: () => void;
 	compact?: boolean;
+	clientTierName?: string | null;
 };
 
 export default function ProfileIdentitySection({
@@ -47,6 +48,7 @@ export default function ProfileIdentitySection({
 	onFileChange,
 	onOpenFilePicker,
 	compact = false,
+	clientTierName = null,
 }: Props) {
 	const statusBadges = (
 		<div
@@ -71,6 +73,12 @@ export default function ProfileIdentitySection({
 			>
 				{getStatusLabel(user.status.code)}
 			</span>
+
+			{clientTierName ? (
+				<span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-slate-700 ring-1 ring-slate-200">
+					{clientTierName}
+				</span>
+			) : null}
 		</div>
 	);
 

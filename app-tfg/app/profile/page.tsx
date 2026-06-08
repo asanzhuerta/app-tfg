@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import PageTransition from "@/app/components/animations/PageTransition";
 import HeaderTitle from "@/app/components/basics/HeaderTitle";
-import ClientTierBadgeCard from "@/app/components/clients/ClientTierBadgeCard";
 import RoleSidebar from "@/app/components/navigation/RoleSidebar";
 import type { RoleSidebarRole } from "@/app/components/navigation/role-sidebar-items";
 import UserProfileCard from "@/app/components/users/UserProfileCard";
@@ -20,6 +19,18 @@ function getProfileBackgroundClass(role: RoleSidebarRole) {
 	}
 
 	return "app-bg-client";
+}
+
+function getProfileFallbackHref(role: RoleSidebarRole) {
+	if (role === "admin") {
+		return "/admin";
+	}
+
+	if (role === "commercial") {
+		return "/commercials";
+	}
+
+	return "/clients";
 }
 
 export default async function ProfilePage() {
@@ -56,26 +67,15 @@ export default async function ProfilePage() {
 				/>
 
 				<div className="min-w-0 flex-1 px-4 pt-4 pb-6 md:pb-8 lg:px-5 lg:pt-4 2xl:px-6">
-					<div className="mx-auto flex min-h-[100svh] w-full max-w-[1680px] flex-col">
-						<div className="lg:hidden">
-							<HeaderTitle
-								title="Kinestilistas"
-								subtitle="Mi perfil"
-							/>
-						</div>
+					<div className="mx-auto flex w-full max-w-[1680px] flex-col">
+						<HeaderTitle
+							title="Kinestilistas"
+							showBackButton
+							backFallbackHref={getProfileFallbackHref(role)}
+						/>
 
 						<PageTransition>
 							<section className="w-full">
-								{clientTierOverview ? (
-									<div className="mb-3">
-										<ClientTierBadgeCard
-											tier={clientTierOverview}
-											activePromotionsCount={clientPromotions.length}
-											compact
-										/>
-									</div>
-								) : null}
-
 								<UserProfileCard
 									mode="edit"
 									layout="compact"
@@ -83,6 +83,8 @@ export default async function ProfilePage() {
 									subtitle="Consulta y edita tus datos personales y la información operativa asociada."
 									submitUrl="/api/profile"
 									allowPasswordChange
+									clientTierOverview={clientTierOverview}
+									activePromotionsCount={clientPromotions.length}
 									user={{
 										id: user.id,
 										name: user.name,
