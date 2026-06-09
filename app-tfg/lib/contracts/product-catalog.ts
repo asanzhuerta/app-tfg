@@ -40,7 +40,6 @@ export type ProductSubcategory = {
 	description: string | null;
 	product_line_id: string;
 	parent_subcategory_id: string | null;
-	image_url: string | null;
 	display_order: number;
 	created_at: string;
 	updated_at: string;
@@ -129,7 +128,6 @@ export type AdminUpsertProductSubcategoryBody = {
 	description?: string | null;
 	productLineId?: string;
 	parentSubcategoryId?: string | null;
-	imageUrl?: string | null;
 	displayOrder?: number | string | null;
 };
 
@@ -223,7 +221,6 @@ export function buildAdminUpsertProductSubcategoryInput(
 		description: body.description,
 		productLineId: body.productLineId,
 		parentSubcategoryId: body.parentSubcategoryId,
-		imageUrl: body.imageUrl,
 		displayOrder: body.displayOrder,
 	};
 }

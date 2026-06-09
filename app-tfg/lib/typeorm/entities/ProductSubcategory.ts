@@ -39,9 +39,6 @@ export class ProductSubcategory {
 	@Column({ type: "uuid", nullable: true })
 	parent_subcategory_id!: string | null;
 
-	@Column({ type: "text", nullable: true })
-	image_url!: string | null;
-
 	@Column({ type: "integer", default: 0 })
 	display_order!: number;
 

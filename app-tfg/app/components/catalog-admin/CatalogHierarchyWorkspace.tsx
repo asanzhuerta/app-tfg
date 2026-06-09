@@ -40,7 +40,6 @@ type ProductSubcategoryRow = {
 	description: string | null;
 	product_line_id: string;
 	parent_subcategory_id: string | null;
-	image_url: string | null;
 	display_order: number;
 };
 
@@ -240,16 +239,6 @@ export default function CatalogHierarchyWorkspace({
 						style={level > 0 ? { marginLeft: `${level * 18}px` } : undefined}
 					>
 						<div className="flex items-start gap-3">
-							<UserAvatar
-								name={productSubcategory.name}
-								imageUrl={productSubcategory.image_url}
-								size="md"
-								shape="soft-square"
-								imageFit="contain"
-								imageBackgroundClass="bg-white"
-								className="flex-shrink-0"
-							/>
-
 							<div className="min-w-0 flex-1">
 								<div className="flex flex-wrap items-start justify-between gap-3">
 									<div className="min-w-0">

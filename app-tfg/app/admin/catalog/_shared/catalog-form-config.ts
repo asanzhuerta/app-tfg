@@ -59,7 +59,6 @@ type ProductSubcategoryValues = {
 	description: string | null;
 	product_line_id: string | null;
 	parent_subcategory_id: string | null;
-	image_url: string | null;
 	display_order: number | null;
 };
 
@@ -166,7 +165,6 @@ export function getProductSubcategoryInitialValues(
 		description: productSubcategory?.description ?? "",
 		productLineId: productSubcategory?.product_line_id ?? "",
 		parentSubcategoryId: productSubcategory?.parent_subcategory_id ?? "",
-		imageUrl: productSubcategory?.image_url ?? "",
 		displayOrder: String(productSubcategory?.display_order ?? 0),
 	};
 }
@@ -346,13 +344,6 @@ export function getProductSubcategoryFields(
 			filterByFieldName: "productLineId",
 			helpText:
 				"Opcional. Si esta subcategoría depende de otra dentro de la misma línea, indicalo aqui.",
-		},
-		{
-			name: "imageUrl",
-			label: "Imagen",
-			type: "image",
-			helpText:
-				"Sube la imagen principal de la subcategoría. Se guardara en Cloudinary.",
 		},
 		{
 			name: "displayOrder",
