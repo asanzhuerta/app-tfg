@@ -75,6 +75,22 @@ function buildCommittedTimeDescription(
 	return parts.join(" / ");
 }
 
+function formatRouteMargin(
+	hasValidWorkdayRange: boolean,
+	overbookedMinutes: number | null,
+	remainingOperationalMarginMinutes: number | null | undefined,
+) {
+	if (!hasValidWorkdayRange) {
+		return "Pendiente";
+	}
+
+	if ((overbookedMinutes ?? 0) > 0) {
+		return `${formatMinutes(overbookedMinutes)} exceso`;
+	}
+
+	return formatMinutes(remainingOperationalMarginMinutes);
+}
+
 function getRoutePreviewCoordinates(browserLocation: BrowserLocationState) {
 	if (browserLocation.status !== "granted") {
 		return undefined;
@@ -161,6 +177,88 @@ export default function RouteMapCard({
 	const overbookedMinutes = timingSummary?.overbookedMinutes ?? null;
 	const pastWindowStopsCount = timingSummary?.pastWindowStopsCount ?? 0;
 	const shouldShowLoading = browserLocation.status === "loading" || loading;
+
+	if (compact) {
+		return (
+			<div
+				className={`rounded-3xl border border-slate-200 bg-white p-4 shadow-sm ${className}`}
+			>
+				<div className="mb-4 space-y-3">
+					<h2 className="text-lg font-semibold text-slate-900">{title}</h2>
+
+					<a
+						href={googleMapsUrl}
+						target="_blank"
+						rel="noreferrer"
+						className="inline-flex w-full items-center justify-center rounded-2xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 sm:w-auto"
+					>
+						Abrir en Google Maps
+					</a>
+				</div>
+
+				<div className="min-h-[20rem]">
+					{shouldShowLoading ? (
+						<div className="grid h-[20rem] place-items-center rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
+							Cargando vista previa de la ruta...
+						</div>
+					) : null}
+
+					{!shouldShowLoading && error ? (
+						<div className="grid h-[20rem] place-items-center rounded-3xl border border-red-200 bg-red-50 px-4 py-4 text-center text-sm text-red-700">
+							{error}
+						</div>
+					) : null}
+
+					{!shouldShowLoading && !error && preview ? (
+						<LeafletRouteMap
+							startPoint={startPoint}
+							waypoints={waypoints}
+							endPoint={endPoint}
+							heightClassName="h-[20rem] sm:h-[22rem]"
+						/>
+					) : null}
+				</div>
+
+				<p className="mt-4 text-sm text-slate-600">{subtitle}</p>
+
+				{timingSummary ? (
+					<div className="mt-3 flex flex-nowrap items-center gap-1 overflow-x-auto whitespace-nowrap text-[10px] font-medium text-slate-500">
+						<span>
+							Visitas diarias{" "}
+							<strong className="font-semibold text-slate-800">
+								{timingSummary.plannedVisitsCount}
+							</strong>
+						</span>
+						<span aria-hidden="true">/</span>
+						<span>
+							Visitas restantes{" "}
+							<strong className="font-semibold text-slate-800">
+								{waypoints.length}
+							</strong>
+						</span>
+						<span aria-hidden="true">/</span>
+						<span>
+							Tiempo comprometido{" "}
+							<strong className="font-semibold text-slate-800">
+								{formatMinutes(timingSummary.totalCommittedRouteMinutes)}
+							</strong>
+						</span>
+						<span aria-hidden="true">/</span>
+						<span>
+							Margen del día{" "}
+							<strong className="font-semibold text-slate-800">
+								{formatRouteMargin(
+									hasValidWorkdayRange,
+									overbookedMinutes,
+									timingSummary.remainingOperationalMarginMinutes,
+								)}
+							</strong>
+						</span>
+					</div>
+				) : null}
+			</div>
+		);
+	}
 
 	return (
 		<div
