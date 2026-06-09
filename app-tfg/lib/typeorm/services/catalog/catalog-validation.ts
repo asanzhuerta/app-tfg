@@ -44,7 +44,6 @@ export type NormalizedProductSubcategoryWriteInput = {
 	description?: string | null;
 	productLineId?: string;
 	parentSubcategoryId?: string | null;
-	imageUrl?: string | null;
 	displayOrder?: number;
 };
 
@@ -407,11 +406,6 @@ export function normalizeProductSubcategoryWriteInput(
 			input.parentSubcategoryId,
 			"La subcategoría padre",
 			"INVALID_PRODUCT_SUBCATEGORY_PARENT_ID",
-		),
-		imageUrl: normalizeOptionalCloudinaryImageField(
-			input.imageUrl,
-			"La imagen de la subcategoría",
-			"INVALID_PRODUCT_SUBCATEGORY_IMAGE_URL",
 		),
 		displayOrder: normalizeNonNegativeIntegerField(
 			input.displayOrder,

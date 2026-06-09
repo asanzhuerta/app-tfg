@@ -43,7 +43,7 @@ export default async function EditProductSubcategoryPage({ params }: Props) {
 	return (
 		<CatalogAdminEditShell
 			title="Editar subcategoría"
-			subtitle={`Actualiza imagen, línea y posicion para ${productSubcategory.name}.`}
+			subtitle={`Actualiza línea, descripción y posición para ${productSubcategory.name}.`}
 			backHref={backHref}
 			backLabel="líneas comerciales"
 		>

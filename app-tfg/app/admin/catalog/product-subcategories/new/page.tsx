@@ -41,7 +41,7 @@ export default async function NewProductSubcategoryPage({
 	return (
 		<CatalogAdminCreateShell
 			title="Nueva subcategoría"
-			subtitle="Crea una agrupacion interna para una línea cuando necesite identidad o imagen propia."
+			subtitle="Crea una agrupación interna dentro de una línea comercial."
 			backHref={backHref}
 			backLabel="líneas comerciales"
 		>

@@ -7,7 +7,6 @@ import { ProductSubcategory } from "@/lib/typeorm/entities/ProductSubcategory";
 import { normalizeProductSubcategoryWriteInput } from "./catalog-validation";
 import {
 	CatalogServiceError,
-	cleanupCatalogImageReplacement,
 	requireProductLine,
 	requireProductSubcategoryForLine,
 	rethrowCatalogPersistenceError,
@@ -171,7 +170,6 @@ export async function createProductSubcategory(
 				description: normalized.description ?? null,
 				product_line_id: productLineId,
 				parent_subcategory_id: normalized.parentSubcategoryId ?? null,
-				image_url: normalized.imageUrl ?? null,
 				display_order: normalized.displayOrder ?? 0,
 			});
 
@@ -214,7 +212,6 @@ export async function updateProductSubcategory(
 				);
 			}
 
-			const previousImageUrl = productSubcategory.image_url;
 			const nextProductLineId =
 				normalized.productLineId ?? productSubcategory.product_line_id;
 			const nextParentSubcategoryId =
@@ -297,10 +294,6 @@ export async function updateProductSubcategory(
 				productSubcategory.description = normalized.description;
 			}
 
-			if (normalized.imageUrl !== undefined) {
-				productSubcategory.image_url = normalized.imageUrl;
-			}
-
 			if (normalized.displayOrder !== undefined) {
 				productSubcategory.display_order = normalized.displayOrder;
 			}
@@ -309,16 +302,8 @@ export async function updateProductSubcategory(
 
 			return {
 				id: savedProductSubcategory.id,
-				previousImageUrl,
-				nextImageUrl: savedProductSubcategory.image_url,
 			};
 		});
-
-		await cleanupCatalogImageReplacement(
-			updatedProductSubcategory.previousImageUrl,
-			updatedProductSubcategory.nextImageUrl,
-			"catalog/product-subcategory",
-		);
 
 		const productSubcategory = await getProductSubcategoryById(
 			updatedProductSubcategory.id,

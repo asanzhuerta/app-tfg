@@ -25,7 +25,7 @@ export default function ShellHeader({ className = "" }: ShellHeaderProps) {
 			className={`glass-header mb-4 rounded-2xl px-6 py-4 ${className}`.trim()}
 		>
 			{shouldShowBackButton ? (
-				<div className="mb-3 flex justify-start">
+				<div className="mb-3 hidden justify-start sm:flex">
 					<BackButton />
 				</div>
 			) : null}

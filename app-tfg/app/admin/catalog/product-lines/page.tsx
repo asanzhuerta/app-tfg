@@ -53,7 +53,6 @@ function serializeProductSubcategory(
 		description: productSubcategory.description,
 		product_line_id: productSubcategory.product_line_id,
 		parent_subcategory_id: productSubcategory.parent_subcategory_id,
-		image_url: productSubcategory.image_url,
 		display_order: productSubcategory.display_order,
 	};
 }

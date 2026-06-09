@@ -3,6 +3,7 @@ import PageTransition from "../components/animations/PageTransition";
 import RouteMapCard from "../components/RouteMapCard";
 import { requireCommercialSession } from "@/lib/auth/require-session";
 import { listNotificationsForUser } from "@/lib/typeorm/services/communications/communications";
+import Link from "next/link";
 
 import {
 	CatalogIcon,
@@ -116,17 +117,35 @@ export default async function CommercialsHome() {
 
 	return (
 		<PageTransition>
+			<section className="my-5 rounded-3xl border border-amber-200 bg-amber-50/95 px-4 py-4 text-amber-900 shadow-sm">
+				<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+					<div>
+						<p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+							Notificaciones y avisos
+						</p>
+						<p className="mt-1 text-sm text-amber-900">
+							{unreadNotificationsCount > 0
+								? `Tienes ${unreadNotificationsCount} aviso${
+										unreadNotificationsCount === 1 ? "" : "s"
+									} pendiente${
+										unreadNotificationsCount === 1 ? "" : "s"
+									} de lectura.`
+								: "No tienes avisos pendientes de lectura."}
+						</p>
+					</div>
+
+					<Link
+						href="/commercials/notifications"
+						className="inline-flex items-center justify-center rounded-2xl bg-amber-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-800"
+					>
+						Ver avisos
+					</Link>
+				</div>
+			</section>
+
 			<RouteMapCard compact />
 
 			<div className="space-y-6">
-				{unreadNotificationsCount > 0 ? (
-					<div className="rounded-3xl border border-amber-200 bg-amber-50/90 px-4 py-3 text-sm text-amber-800 shadow-sm">
-						Tienes {unreadNotificationsCount} aviso
-						{unreadNotificationsCount === 1 ? "" : "s"} pendiente
-						{unreadNotificationsCount === 1 ? "" : "s"} de lectura.
-					</div>
-				) : null}
-
 				{sections.map((section) => (
 					<section
 						key={section.title}
