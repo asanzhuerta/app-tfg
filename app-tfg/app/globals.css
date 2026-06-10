@@ -121,6 +121,8 @@ body {
 .app-modal-overlay {
 	position: fixed;
 	inset: 0;
+	height: 100dvh;
+	width: 100vw;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -134,19 +136,6 @@ body {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-}
-
-@media (min-width: 1024px) {
-	.app-modal-overlay {
-		left: var(--role-sidebar-modal-offset, 0px);
-	}
-
-	.app-modal-dialog-centered {
-		left: calc(
-			var(--role-sidebar-modal-offset, 0px) +
-				((100vw - var(--role-sidebar-modal-offset, 0px)) / 2)
-		);
-	}
 }
 
 @keyframes pageEnter {

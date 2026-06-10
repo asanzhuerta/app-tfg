@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import H1Title from "@/app/components/H1Title";
 import PageTransition from "@/app/components/animations/PageTransition";
 import type { OrderDetail } from "@/lib/contracts/order";
@@ -59,6 +60,7 @@ export default function OrderDetailView({
 		initialDetail.order.payment_notes ?? "",
 	);
 	const [isLinesModalOpen, setIsLinesModalOpen] = useState(false);
+	const [isMounted, setIsMounted] = useState(false);
 	const [feedback, setFeedback] = useState<{
 		type: "success" | "error";
 		message: string;
@@ -84,6 +86,10 @@ export default function OrderDetailView({
 		order.created_by_user_role_id === ROLE_IDS.COMMERCIAL;
 	const showDeliveryState =
 		Boolean(order.delivery_visit_id) || order.status_code === "confirmed";
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
 	useEffect(() => {
 		setPaymentMethod(detail.order.payment_method ?? "cash");
@@ -550,110 +556,117 @@ export default function OrderDetailView({
 					)}
 				</section>
 
-				{isLinesModalOpen ? (
-					<div
-						className="app-modal-overlay z-[120] px-4 py-6"
-						role="dialog"
-						aria-modal="true"
-						aria-labelledby="order-lines-modal-title"
-					>
-						<div className="max-h-[86vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl">
-							<div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
-								<div>
-									<p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-										Detalle
-									</p>
-									<h2
-										id="order-lines-modal-title"
-										className="text-xl font-semibold text-slate-900"
-									>
-										Bultos del pedido
-									</h2>
-								</div>
-								<button
-									type="button"
-									onClick={() => setIsLinesModalOpen(false)}
-									className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-								>
-									Cerrar
-								</button>
-							</div>
-
-							<div className="max-h-[68vh] overflow-y-auto p-5">
-								<div className="grid gap-3 md:grid-cols-2">
-									{order.lines.map((line) => (
-										<div
-											key={line.id}
-											className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4"
-										>
-											<div className="flex flex-wrap items-center gap-2">
-												<span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white">
-													{line.order_reference}
-												</span>
-												{line.color_reference_code ? (
-													<span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
-														Tono {line.color_reference_code}
-													</span>
-												) : null}
-											</div>
-											<p className="mt-3 text-base font-semibold text-slate-900">
-												{line.product_name}
+				{isMounted && isLinesModalOpen
+					? createPortal(
+							<div
+								className="app-modal-overlay z-[120] px-4 py-6"
+								role="dialog"
+								aria-modal="true"
+								aria-labelledby="order-lines-modal-title"
+							>
+								<div className="max-h-[86vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+									<div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
+										<div>
+											<p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+												Detalle
 											</p>
-											{line.color_reference_name ? (
-												<p className="mt-1 text-sm text-slate-600">
-													{line.color_reference_name}
-												</p>
-											) : null}
-
-											<div className="mt-3 grid gap-2 sm:grid-cols-3">
-												<div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
-													<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-														Cantidad
-													</p>
-													<p className="mt-1 text-sm font-semibold text-slate-900">
-														{line.quantity}
-													</p>
-												</div>
-												<div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
-													<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-														Gama
-													</p>
-													<p className="mt-1 text-sm font-semibold text-slate-900">
-														{line.product_line_name || "-"}
-													</p>
-												</div>
-												<div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
-													<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-														Final
-													</p>
-													<p className="mt-1 text-sm font-semibold text-slate-900">
-														{formatOrderCurrency(line.line_total)}
-													</p>
-												</div>
-											</div>
-
-											{hasOrderLineDiscount(line) ? (
-												<div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-													<p className="font-semibold">
-														{buildOrderLinePromotionLabel(line)}
-													</p>
-													<p className="mt-1">
-														Antes{" "}
-														{formatOrderCents(getOrderLineSubtotalCents(line))}
-														{" - "}ahorro{" "}
-														{formatOrderCents(getOrderLineDiscountCents(line))}
-														{" - "}final{" "}
-														{formatOrderCurrency(line.line_total)}
-													</p>
-												</div>
-											) : null}
+											<h2
+												id="order-lines-modal-title"
+												className="text-xl font-semibold text-slate-900"
+											>
+												Bultos del pedido
+											</h2>
 										</div>
-									))}
+										<button
+											type="button"
+											onClick={() => setIsLinesModalOpen(false)}
+											className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+										>
+											Cerrar
+										</button>
+									</div>
+
+									<div className="max-h-[68vh] overflow-y-auto p-5">
+										<div className="grid gap-3 md:grid-cols-2">
+											{order.lines.map((line) => (
+												<div
+													key={line.id}
+													className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4"
+												>
+													<div className="flex flex-wrap items-center gap-2">
+														<span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white">
+															{line.order_reference}
+														</span>
+														{line.color_reference_code ? (
+															<span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
+																Tono {line.color_reference_code}
+															</span>
+														) : null}
+													</div>
+													<p className="mt-3 text-base font-semibold text-slate-900">
+														{line.product_name}
+													</p>
+													{line.color_reference_name ? (
+														<p className="mt-1 text-sm text-slate-600">
+															{line.color_reference_name}
+														</p>
+													) : null}
+
+													<div className="mt-3 grid gap-2 sm:grid-cols-3">
+														<div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
+															<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+																Cantidad
+															</p>
+															<p className="mt-1 text-sm font-semibold text-slate-900">
+																{line.quantity}
+															</p>
+														</div>
+														<div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
+															<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+																Gama
+															</p>
+															<p className="mt-1 text-sm font-semibold text-slate-900">
+																{line.product_line_name || "-"}
+															</p>
+														</div>
+														<div className="rounded-2xl border border-slate-200 bg-white px-3 py-2">
+															<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+																Final
+															</p>
+															<p className="mt-1 text-sm font-semibold text-slate-900">
+																{formatOrderCurrency(line.line_total)}
+															</p>
+														</div>
+													</div>
+
+													{hasOrderLineDiscount(line) ? (
+														<div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+															<p className="font-semibold">
+																{buildOrderLinePromotionLabel(line)}
+															</p>
+															<p className="mt-1">
+																Antes{" "}
+																{formatOrderCents(
+																	getOrderLineSubtotalCents(line),
+																)}
+																{" - "}ahorro{" "}
+																{formatOrderCents(
+																	getOrderLineDiscountCents(line),
+																)}
+																{" - "}final{" "}
+																{formatOrderCurrency(line.line_total)}
+															</p>
+														</div>
+													) : null}
+												</div>
+											))}
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-					</div>
-				) : null}
+							</div>,
+							document.body,
+						)
+					: null}
 			</div>
 		</PageTransition>
 	);

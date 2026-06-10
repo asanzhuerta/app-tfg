@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import H1Title from "@/app/components/H1Title";
 import PageTransition from "@/app/components/animations/PageTransition";
 import SafeForm from "@/app/components/forms/SafeForm";
@@ -126,11 +127,16 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 	const [qrScanFeedback, setQrScanFeedback] = useState("");
 	const [scannerOpen, setScannerOpen] = useState(false);
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+	const [isMounted, setIsMounted] = useState(false);
 	const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>([]);
 	const [deliveredOrderQrInput, setDeliveredOrderQrInput] = useState("");
 	const [formState, setFormState] = useState<VisitFormState>(
 		DEFAULT_VISIT_FORM_STATE,
 	);
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
 	useEffect(() => {
 		if (!visit) {
@@ -625,8 +631,9 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 				) : null}
 			</div>
 
-			{visit && isEditModalOpen ? (
-				<div className="app-modal-overlay z-[90] px-4 py-6">
+			{isMounted && visit && isEditModalOpen
+				? createPortal(
+						<div className="app-modal-overlay z-[90] px-4 py-6">
 					<div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[28px] border border-slate-200 bg-white p-6 shadow-2xl">
 						<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 							<div>
@@ -877,8 +884,10 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 							</div>
 						</SafeForm>
 					</div>
-				</div>
-			) : null}
+				</div>,
+						document.body,
+					)
+				: null}
 
 			<QrCameraScanner
 				isOpen={scannerOpen}

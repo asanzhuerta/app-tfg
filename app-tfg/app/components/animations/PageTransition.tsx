@@ -85,6 +85,7 @@ export default function PageTransition({
 	const baseTransition = isIOS
 		? "transition-opacity ease-out"
 		: "transition-all ease-out";
+	const transitionHint = !isIOS && phase !== "entered" ? "will-change-transform" : "";
 
 	const durationStyle = {
 		transitionDuration: `${durationMs}ms`,
@@ -109,7 +110,7 @@ export default function PageTransition({
 		if (phase === "entering") {
 			transitionClass = "opacity-0 scale-95 translate-y-4";
 		} else if (phase === "entered") {
-			transitionClass = "opacity-100 scale-100 translate-y-0";
+			transitionClass = "opacity-100";
 		} else {
 			transitionClass = "opacity-0 scale-95 -translate-y-2";
 		}
@@ -117,7 +118,7 @@ export default function PageTransition({
 
 	return (
 		<div
-			className={`${baseTransition} will-change-transform ${transitionClass} ${className}`}
+			className={`${baseTransition} ${transitionHint} ${transitionClass} ${className}`}
 			style={durationStyle}
 		>
 			{children}
