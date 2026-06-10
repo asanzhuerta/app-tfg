@@ -26,6 +26,11 @@ import { Product } from "@/lib/typeorm/entities/Product";
 import { ProductLine } from "@/lib/typeorm/entities/ProductLine";
 import { Client } from "@/lib/typeorm/entities/Client";
 import { User } from "@/lib/typeorm/entities/User";
+import {
+	getCustomerSegmentTierOrderSql,
+	listApplicableCustomerSegmentIdsForClient,
+	listClientIdsEligibleForCustomerSegmentPromotion,
+} from "@/lib/typeorm/services/clients/client-tier";
 import { syncTodayVisitNotificationsForUser } from "@/lib/typeorm/services/commercial/visit-notifications";
 import { deliverNotificationToExternalChannels } from "./notification-delivery";
 
@@ -551,21 +556,10 @@ async function listPromotionClientRecipientIds(
 	}
 
 	if (promotion.customer_segment_id) {
-		const rows = await manager
-			.getRepository(ClientCustomerSegment)
-			.createQueryBuilder("assignment")
-			.innerJoin(User, "user", "user.id = assignment.client_id")
-			.select("assignment.client_id", "clientId")
-			.where("assignment.segment_id = :segmentId", {
-				segmentId: promotion.customer_segment_id,
-			})
-			.andWhere("user.role_id = :clientRole", { clientRole: ROLE_IDS.CLIENT })
-			.andWhere("user.status_id = :activeStatus", {
-				activeStatus: USER_STATUS_IDS.ACTIVE,
-			})
-			.getRawMany<{ clientId: string }>();
-
-		return rows.map((row) => row.clientId);
+		return listClientIdsEligibleForCustomerSegmentPromotion(
+			manager,
+			promotion.customer_segment_id,
+		);
 	}
 
 	return listActiveUserIdsByRole(manager, [ROLE_IDS.CLIENT]);
@@ -668,7 +662,8 @@ export async function listCustomerSegments(input: { search?: string | null } = {
 	const query = ds
 		.getRepository(CustomerSegment)
 		.createQueryBuilder("segment")
-		.orderBy("segment.name", "ASC");
+		.orderBy(getCustomerSegmentTierOrderSql("segment"), "ASC")
+		.addOrderBy("segment.name", "ASC");
 	const search = String(input.search ?? "").trim();
 
 	if (search) {
@@ -803,7 +798,9 @@ export async function listClientSegmentAssignments(
 		.leftJoinAndSelect("client.user", "clientUser")
 		.leftJoinAndSelect("assignment.segment", "segment")
 		.leftJoinAndSelect("assignment.assignedByUser", "assignedByUser")
-		.orderBy("assignment.created_at", "DESC");
+		.orderBy("client.name", "ASC")
+		.addOrderBy(getCustomerSegmentTierOrderSql("segment"), "ASC")
+		.addOrderBy("assignment.created_at", "DESC");
 	const search = String(input.search ?? "").trim();
 
 	if (search) {
@@ -904,7 +901,8 @@ export async function listAdminPromotions(input: { search?: string | null } = {}
 		.leftJoinAndSelect("promotion.client", "client")
 		.leftJoinAndSelect("promotion.customerSegment", "segment")
 		.leftJoinAndSelect("promotion.createdByUser", "createdByUser")
-		.orderBy("promotion.created_at", "DESC");
+		.orderBy(getCustomerSegmentTierOrderSql("segment"), "ASC")
+		.addOrderBy("promotion.created_at", "DESC");
 	const search = String(input.search ?? "").trim();
 
 	if (search) {
@@ -1153,26 +1151,28 @@ export async function listPromotionsForUser(input: {
 		.where("promotion.status = :status", { status: "active" })
 		.andWhere("promotion.start_date <= :today", { today })
 		.andWhere("promotion.end_date >= :today", { today })
-		.orderBy("promotion.end_date", "ASC")
+		.orderBy(getCustomerSegmentTierOrderSql("segment"), "ASC")
+		.addOrderBy("promotion.end_date", "ASC")
 		.addOrderBy("promotion.title", "ASC");
 
 	if (input.role === "client") {
-		query
-			.leftJoin(
-				ClientCustomerSegment,
-				"clientSegment",
-				`clientSegment.segment_id = promotion.customer_segment_id
-				AND clientSegment.client_id = :userId`,
-				{ userId: input.userId },
-			)
-			.andWhere(
-				`(
-					(promotion.client_id IS NULL AND promotion.customer_segment_id IS NULL)
-					OR promotion.client_id = :userId
-					OR clientSegment.id IS NOT NULL
-				)`,
-				{ userId: input.userId },
-			);
+		const applicableSegmentIds =
+			await listApplicableCustomerSegmentIdsForClient(ds.manager, input.userId);
+		const segmentPromotionPredicate = applicableSegmentIds.length
+			? "OR promotion.customer_segment_id IN (:...applicableSegmentIds)"
+			: "";
+		const queryParameters = applicableSegmentIds.length
+			? { userId: input.userId, applicableSegmentIds }
+			: { userId: input.userId };
+
+		query.andWhere(
+			`(
+				(promotion.client_id IS NULL AND promotion.customer_segment_id IS NULL)
+				OR promotion.client_id = :userId
+				${segmentPromotionPredicate}
+			)`,
+			queryParameters,
+		);
 	}
 
 	return query.getMany();

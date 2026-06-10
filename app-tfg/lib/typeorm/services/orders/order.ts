@@ -29,7 +29,7 @@ import { OrderStatus } from "@/lib/typeorm/entities/OrderStatus";
 import { CommercialVisit } from "@/lib/typeorm/entities/CommercialVisit";
 import { ColorReference } from "@/lib/typeorm/entities/ColorReference";
 import { ClientCommercialAssignment } from "@/lib/typeorm/entities/ClientCommercialAssignment";
-import { ClientCustomerSegment } from "@/lib/typeorm/entities/ClientCustomerSegment";
+import { listApplicableCustomerSegmentIdsForClient } from "@/lib/typeorm/services/clients/client-tier";
 import { getClientByUserId } from "@/lib/typeorm/services/commercial/client";
 import {
 	canCommercialAccessClient,
@@ -892,18 +892,19 @@ async function listActivePromotionDiscountsForClient(
 	clientId: string,
 ) {
 	const today = new Date().toISOString().slice(0, 10);
+	const applicableSegmentIds = await listApplicableCustomerSegmentIdsForClient(
+		manager,
+		clientId,
+	);
+	const segmentPromotionPredicate = applicableSegmentIds.length
+		? "OR promotion.customer_segment_id IN (:...applicableSegmentIds)"
+		: "";
+	const queryParameters = applicableSegmentIds.length
+		? { clientId, applicableSegmentIds }
+		: { clientId };
 	const promotions = await manager
 		.getRepository(Promotion)
 		.createQueryBuilder("promotion")
-		.leftJoin(
-			ClientCustomerSegment,
-			"clientSegment",
-			[
-				"clientSegment.segment_id = promotion.customer_segment_id",
-				"clientSegment.client_id = :clientId",
-			].join(" AND "),
-			{ clientId },
-		)
 		.where("promotion.status = :status", { status: "active" })
 		.andWhere("promotion.start_date <= :today", { today })
 		.andWhere("promotion.end_date >= :today", { today })
@@ -912,10 +913,10 @@ async function listActivePromotionDiscountsForClient(
 				"(",
 				"(promotion.client_id IS NULL AND promotion.customer_segment_id IS NULL)",
 				"OR promotion.client_id = :clientId",
-				"OR clientSegment.id IS NOT NULL",
+				segmentPromotionPredicate,
 				")",
 			].join(" "),
-			{ clientId },
+			queryParameters,
 		)
 		.getMany();
 

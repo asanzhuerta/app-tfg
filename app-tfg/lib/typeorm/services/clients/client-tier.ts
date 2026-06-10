@@ -21,7 +21,16 @@ export type ClientTierOverview = {
 	}>;
 };
 
+const CLIENT_TIER_ALIASES: Record<
+	Exclude<ClientTierCode, "none">,
+	readonly string[]
+> = {
+	silver: ["silver", "plata"],
+	gold: ["gold", "oro"],
+	platinum: ["platinum", "platino"],
+};
 const TIER_PRIORITY = ["platinum", "gold", "silver"] as const;
+const TIER_LIST_ORDER = ["silver", "gold", "platinum"] as const;
 const DEFAULT_TIER_CODE = "silver";
 const DEFAULT_TIER_ASSIGNMENT_NOTE = "Asignación automatica de rango base Plata";
 
@@ -67,6 +76,86 @@ function normalizeSegmentCode(value: string | null | undefined) {
 	return String(value ?? "").trim().toLowerCase();
 }
 
+export function normalizeClientTierCode(value: string | null | undefined) {
+	const normalizedCode = normalizeSegmentCode(value);
+
+	return (
+		TIER_LIST_ORDER.find((tierCode) =>
+			CLIENT_TIER_ALIASES[tierCode].includes(normalizedCode),
+		) ?? null
+	);
+}
+
+function getClientTierCodeAliases(
+	tierCodes: readonly Exclude<ClientTierCode, "none">[],
+) {
+	return [
+		...new Set(
+			tierCodes.flatMap((tierCode) => CLIENT_TIER_ALIASES[tierCode]),
+		),
+	];
+}
+
+function getHighestClientTierCode(codes: Iterable<string | null | undefined>) {
+	const normalizedCodes = new Set(
+		[...codes]
+			.map((code) => normalizeClientTierCode(code))
+			.filter((code): code is Exclude<ClientTierCode, "none"> =>
+				Boolean(code),
+			),
+	);
+
+	return (
+		TIER_PRIORITY.find((tierCode) => normalizedCodes.has(tierCode)) ??
+		DEFAULT_TIER_CODE
+	);
+}
+
+function getIncludedClientTierCodes(
+	tierCode: string | null | undefined,
+) {
+	const normalizedTierCode =
+		normalizeClientTierCode(tierCode) ?? DEFAULT_TIER_CODE;
+	const tierIndex = TIER_LIST_ORDER.indexOf(normalizedTierCode);
+
+	return TIER_LIST_ORDER.slice(0, tierIndex + 1);
+}
+
+function getRecipientTierCodesForPromotionTier(
+	tierCode: string | null | undefined,
+) {
+	const normalizedTierCode = normalizeClientTierCode(tierCode);
+
+	if (!normalizedTierCode) {
+		return [];
+	}
+
+	const tierIndex = TIER_LIST_ORDER.indexOf(normalizedTierCode);
+
+	return TIER_LIST_ORDER.slice(tierIndex);
+}
+
+function sqlStringLiteral(value: string) {
+	return `'${value.replace(/'/g, "''")}'`;
+}
+
+function buildSqlInList(values: readonly string[]) {
+	return values.map(sqlStringLiteral).join(", ");
+}
+
+export function getCustomerSegmentTierOrderSql(alias = "segment") {
+	const codeExpression = `LOWER(${alias}.code)`;
+
+	return [
+		"CASE",
+		`WHEN ${codeExpression} IN (${buildSqlInList(CLIENT_TIER_ALIASES.silver)}) THEN 1`,
+		`WHEN ${codeExpression} IN (${buildSqlInList(CLIENT_TIER_ALIASES.gold)}) THEN 2`,
+		`WHEN ${codeExpression} IN (${buildSqlInList(CLIENT_TIER_ALIASES.platinum)}) THEN 3`,
+		"ELSE 4",
+		"END",
+	].join(" ");
+}
+
 async function ensureSilverSegment(manager: EntityManager) {
 	const repo = manager.getRepository(CustomerSegment);
 	const existing = await repo.findOne({
@@ -104,8 +193,8 @@ export async function ensureDefaultSilverClientTier(
 		.createQueryBuilder("assignment")
 		.innerJoin("assignment.segment", "segment")
 		.where("assignment.client_id = :clientId", { clientId })
-		.andWhere("segment.code IN (:...tierCodes)", {
-			tierCodes: TIER_PRIORITY,
+		.andWhere("LOWER(segment.code) IN (:...tierCodes)", {
+			tierCodes: getClientTierCodeAliases(TIER_PRIORITY),
 		})
 		.getExists();
 
@@ -136,6 +225,72 @@ async function resolveClientId(dataSource: DataSource, clientOrUserId: string) {
 	return user?.linkedClient?.id ?? clientOrUserId;
 }
 
+export async function listApplicableCustomerSegmentIdsForClient(
+	manager: EntityManager,
+	clientId: string,
+) {
+	const assignments = await manager
+		.getRepository(ClientCustomerSegment)
+		.createQueryBuilder("assignment")
+		.leftJoinAndSelect("assignment.segment", "segment")
+		.where("assignment.client_id = :clientId", { clientId })
+		.getMany();
+	const assignedSegmentIds = assignments
+		.map((assignment) => assignment.segment_id)
+		.filter(Boolean);
+	const assignedTierCode = getHighestClientTierCode(
+		assignments.map((assignment) => assignment.segment?.code),
+	);
+	const includedTierAliases = getClientTierCodeAliases(
+		getIncludedClientTierCodes(assignedTierCode),
+	);
+	const tierSegments = await manager
+		.getRepository(CustomerSegment)
+		.createQueryBuilder("segment")
+		.select("segment.id", "id")
+		.where("LOWER(segment.code) IN (:...tierCodes)", {
+			tierCodes: includedTierAliases,
+		})
+		.getRawMany<{ id: string }>();
+
+	return [
+		...new Set([
+			...assignedSegmentIds,
+			...tierSegments.map((segment) => segment.id),
+		]),
+	];
+}
+
+export async function listClientIdsEligibleForCustomerSegmentPromotion(
+	manager: EntityManager,
+	segmentId: string,
+) {
+	const targetSegment = await manager.getRepository(CustomerSegment).findOne({
+		where: { id: segmentId },
+	});
+	const targetTierCode = normalizeClientTierCode(targetSegment?.code);
+	const query = manager
+		.getRepository(ClientCustomerSegment)
+		.createQueryBuilder("assignment")
+		.innerJoin("assignment.segment", "segment")
+		.innerJoin(User, "user", "user.id = assignment.client_id")
+		.select("DISTINCT assignment.client_id", "clientId");
+
+	if (targetTierCode) {
+		query.where("LOWER(segment.code) IN (:...tierCodes)", {
+			tierCodes: getClientTierCodeAliases(
+				getRecipientTierCodesForPromotionTier(targetTierCode),
+			),
+		});
+	} else {
+		query.where("assignment.segment_id = :segmentId", { segmentId });
+	}
+
+	const rows = await query.getRawMany<{ clientId: string }>();
+
+	return rows.map((row) => row.clientId);
+}
+
 export async function getClientTierOverview(
 	clientOrUserId: string,
 ): Promise<ClientTierOverview> {
@@ -146,7 +301,8 @@ export async function getClientTierOverview(
 		.createQueryBuilder("assignment")
 		.leftJoinAndSelect("assignment.segment", "segment")
 		.where("assignment.client_id = :clientId", { clientId })
-		.orderBy("assignment.created_at", "DESC")
+		.orderBy(getCustomerSegmentTierOrderSql("segment"), "ASC")
+		.addOrderBy("assignment.created_at", "DESC")
 		.getMany();
 	const assignedSegments = assignments
 		.map((assignment) => assignment.segment)
@@ -157,11 +313,9 @@ export async function getClientTierOverview(
 			description: segment.description,
 			criteria: segment.criteria,
 		}));
-	const assignedCodes = new Set(
-		assignedSegments.map((segment) => normalizeSegmentCode(segment.code)),
+	const tierCode = getHighestClientTierCode(
+		assignedSegments.map((segment) => segment.code),
 	);
-	const tierCode =
-		TIER_PRIORITY.find((candidate) => assignedCodes.has(candidate)) ?? "silver";
 
 	return {
 		code: tierCode,
