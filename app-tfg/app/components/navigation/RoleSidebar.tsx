@@ -36,6 +36,10 @@ type RoleSidebarProps = {
 	userName?: string | null;
 	userEmail?: string | null;
 	userImageUrl?: string | null;
+	clientTierBadge?: {
+		code: string;
+		name: string;
+	} | null;
 };
 
 const MOBILE_SIDEBAR_ANIMATION_MS = 320;
@@ -66,6 +70,48 @@ const iconMap: Record<
 	visits: VisitsIcon,
 };
 
+const clientTierBadgeStyles: Record<
+	string,
+	{
+		backgroundImage: string;
+		borderColor: string;
+		boxShadow: string;
+		color: string;
+		textShadow?: string;
+	}
+> = {
+	silver: {
+		backgroundImage:
+			"linear-gradient(135deg, #f8fafc 0%, #b6bcc6 18%, #ffffff 34%, #7d8794 52%, #edf1f5 72%, #9ca3af 100%)",
+		borderColor: "rgba(148, 163, 184, 0.72)",
+		boxShadow:
+			"inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(15,23,42,0.12), 0 6px 16px rgba(100,116,139,0.18)",
+		color: "#111827",
+	},
+	gold: {
+		backgroundImage:
+			"linear-gradient(135deg, #fff7cc 0%, #d3a633 18%, #fff3a3 36%, #b98212 55%, #f7d56d 76%, #8f5f08 100%)",
+		borderColor: "rgba(180, 124, 20, 0.65)",
+		boxShadow:
+			"inset 0 1px 0 rgba(255,255,255,0.78), inset 0 -1px 0 rgba(120,53,15,0.2), 0 6px 16px rgba(180,83,9,0.2)",
+		color: "#241404",
+	},
+	platinum: {
+		backgroundImage:
+			"linear-gradient(135deg, #eaffff 0%, #2ab8bc 18%, #cffff8 38%, #0f8f99 58%, #f5ffff 78%, #34d4c8 100%)",
+		borderColor: "rgba(20, 184, 166, 0.6)",
+		boxShadow:
+			"inset 0 1px 0 rgba(255,255,255,0.82), inset 0 -1px 0 rgba(13,148,136,0.22), 0 6px 16px rgba(20,184,166,0.2)",
+		color: "#042f2e",
+	},
+};
+
+function getClientTierBadgeStyle(code: string | null | undefined) {
+	const normalizedCode = String(code ?? "").trim().toLowerCase();
+
+	return clientTierBadgeStyles[normalizedCode] ?? clientTierBadgeStyles.silver;
+}
+
 function isActiveHref(pathname: string, href: string) {
 	if (pathname === href) {
 		return true;
@@ -83,6 +129,7 @@ export default function RoleSidebar({
 	userName,
 	userEmail,
 	userImageUrl,
+	clientTierBadge,
 }: RoleSidebarProps) {
 	const pathname = usePathname();
 	const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -92,6 +139,11 @@ export default function RoleSidebar({
 	const labels = roleSidebarLabels[role];
 	const sections = roleSidebarSections[role];
 	const roleDisplayName = roleDisplayNames[role];
+	const showClientTierBadge = Boolean(
+		role === "client" &&
+			clientTierBadge &&
+			String(clientTierBadge.code).trim().toLowerCase() !== "none",
+	);
 	const activeHref =
 		sections
 			.flatMap((section) => section.items)
@@ -292,9 +344,21 @@ export default function RoleSidebar({
 									: "max-w-48 translate-x-0 opacity-100 lg:max-w-0 lg:-translate-x-2 lg:opacity-0"
 							}`}
 						>
-							<p className="truncate text-sm font-bold text-slate-950">
-								{userName || labels.title}
-							</p>
+							<div className="flex min-w-0 items-center gap-2">
+								<p className="min-w-0 truncate text-sm font-bold text-slate-950">
+									{userName || labels.title}
+								</p>
+								{showClientTierBadge && clientTierBadge ? (
+									<span
+										className="relative inline-flex shrink-0 overflow-hidden rounded-full border px-2 py-0.5 text-[0.58rem] font-black uppercase leading-none tracking-[0.12em]"
+										style={getClientTierBadgeStyle(clientTierBadge.code)}
+										title={`Rango ${clientTierBadge.name}`}
+									>
+										<span className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0)_34%,rgba(255,255,255,0.55)_52%,rgba(255,255,255,0)_70%)] opacity-80" />
+										<span className="relative">{clientTierBadge.name}</span>
+									</span>
+								) : null}
+							</div>
 							<p className="truncate text-xs text-slate-500">
 								{userEmail || labels.title}
 							</p>
