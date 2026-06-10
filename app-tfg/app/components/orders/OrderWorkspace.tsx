@@ -124,6 +124,62 @@ function buildProductLabel(product: OrderProductOption) {
 	}`;
 }
 
+function normalizeProductSearchTerm(value: string) {
+	return value
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toLowerCase()
+		.trim();
+}
+
+function buildProductSearchIndex(product: OrderProductOption) {
+	return normalizeProductSearchTerm(
+		[
+			buildProductLabel(product),
+			product.name,
+			product.reference,
+			product.orderReference,
+			product.colorReferenceCode,
+			product.colorReferenceName,
+			product.productCategoryName,
+			product.productLineName,
+			product.format,
+			product.discountTitle,
+			product.discountBenefit,
+		]
+			.filter(Boolean)
+			.join(" "),
+	);
+}
+
+function filterProductOptions(
+	productOptions: OrderProductOption[],
+	searchTerm: string,
+	selectedProductOption: OrderProductOption | null,
+) {
+	const normalizedSearchTerm = normalizeProductSearchTerm(searchTerm);
+
+	if (!normalizedSearchTerm) {
+		return productOptions;
+	}
+
+	const searchTokens = normalizedSearchTerm.split(/\s+/).filter(Boolean);
+	const filteredOptions = productOptions.filter((productOption) => {
+		const searchIndex = buildProductSearchIndex(productOption);
+
+		return searchTokens.every((token) => searchIndex.includes(token));
+	});
+
+	if (
+		selectedProductOption &&
+		!filteredOptions.some((option) => option.id === selectedProductOption.id)
+	) {
+		return [selectedProductOption, ...filteredOptions];
+	}
+
+	return filteredOptions;
+}
+
 function createEmptyLine(localId = `line-${Date.now()}`): EditableLine {
 	return {
 		localId,
@@ -252,6 +308,9 @@ export default function OrderWorkspace({
 	const [lines, setLines] = useState<EditableLine[]>(
 		mapOrderToEditableLines(initialDraftOrder),
 	);
+	const [productSearchByLineId, setProductSearchByLineId] = useState<
+		Record<string, string>
+	>({});
 	const [currentProductOptions, setCurrentProductOptions] =
 		useState(productOptions);
 	const [selectedClientId, setSelectedClientId] = useState(
@@ -381,6 +440,7 @@ export default function OrderWorkspace({
 	function syncDraftState(nextDraftOrder: OrderSummary | null) {
 		setNotes(nextDraftOrder?.notes ?? "");
 		setLines(mapOrderToEditableLines(nextDraftOrder));
+		setProductSearchByLineId({});
 	}
 
 	function resetHistoryFilters() {
@@ -597,6 +657,13 @@ export default function OrderWorkspace({
 		);
 	}
 
+	function updateProductSearch(localId: string, searchTerm: string) {
+		setProductSearchByLineId((currentSearches) => ({
+			...currentSearches,
+			[localId]: searchTerm,
+		}));
+	}
+
 	function updateSelectedOption(localId: string, optionId: string) {
 		const selectedOption = currentProductOptions.find(
 			(option) => option.id === optionId,
@@ -621,6 +688,12 @@ export default function OrderWorkspace({
 				? currentLines
 				: currentLines.filter((line) => line.localId !== localId),
 		);
+		setProductSearchByLineId((currentSearches) => {
+			const nextSearches = { ...currentSearches };
+			delete nextSearches[localId];
+
+			return nextSearches;
+		});
 	}
 
 	function buildPayloadLines() {
@@ -980,6 +1053,13 @@ export default function OrderWorkspace({
 										line,
 										currentProductOptions,
 									);
+									const productSearchValue =
+										productSearchByLineId[line.localId] ?? "";
+									const visibleProductOptions = filterProductOptions(
+										currentProductOptions,
+										productSearchValue,
+										selectedProductOption,
+									);
 									const linePreview = buildLinePreview(
 										line,
 										selectedProductOption,
@@ -1007,33 +1087,74 @@ export default function OrderWorkspace({
 											</div>
 
 											<div>
-												<label
-													htmlFor={`order-product-${line.localId}`}
-													className="mb-2 block text-sm font-medium text-slate-700"
-												>
-													{orderLineLabel} {index + 1}
-												</label>
-												<select
-													id={`order-product-${line.localId}`}
-													value={buildSelectionValue(
-														line.productId,
-														line.colorReferenceId,
-													)}
-													onChange={(event) =>
-														updateSelectedOption(
-															line.localId,
-															event.target.value,
-														)
-													}
-													className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
-												>
-													<option value="">Selecciona una referencia</option>
-													{currentProductOptions.map((product) => (
-														<option key={product.id} value={product.id}>
-															{buildProductLabel(product)}
-														</option>
-													))}
-												</select>
+												<div className="grid gap-3 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+													<div>
+														<label
+															htmlFor={`order-product-search-${line.localId}`}
+															className="mb-2 block text-sm font-medium text-slate-700"
+														>
+															Buscar producto
+														</label>
+														<input
+															id={`order-product-search-${line.localId}`}
+															type="search"
+															value={productSearchValue}
+															onChange={(event) =>
+																updateProductSearch(
+																	line.localId,
+																	event.target.value,
+																)
+															}
+															placeholder="Nombre, referencia, tono o línea"
+															className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+														/>
+													</div>
+
+													<div>
+														<label
+															htmlFor={`order-product-${line.localId}`}
+															className="mb-2 block text-sm font-medium text-slate-700"
+														>
+															{orderLineLabel} {index + 1}
+														</label>
+														<select
+															id={`order-product-${line.localId}`}
+															value={buildSelectionValue(
+																line.productId,
+																line.colorReferenceId,
+															)}
+															onChange={(event) =>
+																updateSelectedOption(
+																	line.localId,
+																	event.target.value,
+																)
+															}
+															className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+														>
+															<option value="">
+																Selecciona una referencia
+															</option>
+															{visibleProductOptions.map((product) => (
+																<option key={product.id} value={product.id}>
+																	{buildProductLabel(product)}
+																</option>
+															))}
+														</select>
+													</div>
+												</div>
+
+												{productSearchValue.trim() &&
+												visibleProductOptions.length === 0 ? (
+													<p className="mt-2 text-xs font-medium text-slate-500">
+														No hay referencias que coincidan con la búsqueda.
+													</p>
+												) : productSearchValue.trim() ? (
+													<p className="mt-2 text-xs font-medium text-slate-500">
+														{visibleProductOptions.length === 1
+															? "1 referencia encontrada"
+															: `${visibleProductOptions.length} referencias encontradas`}
+													</p>
+												) : null}
 
 												{linePreview ? (
 													<div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-600">
