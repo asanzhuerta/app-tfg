@@ -26,11 +26,11 @@ function getErrorMessage(error: unknown, fallback: string) {
 
 function getStatusHelp(status: PushStatus) {
 	if (status === "not_configured") {
-		return "Falta la configuración del servidor para enviar push. Cuando estén definidas las claves VAPID, podrás activar este dispositivo.";
+		return "Falta la configuración del servidor para enviar notificaciones. Cuando estén definidas las claves VAPID, podrás activar este dispositivo.";
 	}
 
 	if (status === "unsupported") {
-		return "Este navegador o esta conexión no permite notificaciones push. Prueba con HTTPS, localhost o la PWA instalada.";
+		return "Este navegador o esta conexión no permite notificaciones. Prueba con HTTPS, localhost o la PWA instalada.";
 	}
 
 	if (status === "denied") {
@@ -91,7 +91,10 @@ export default function PushNotificationOptIn({
 			try {
 				const keyResponse = await requestJson<PushKeyResponse>(
 					"/api/communications/push-subscriptions/public-key",
-					{ fallbackMessage: "No se pudo comprobar la configuración push" },
+					{
+						fallbackMessage:
+							"No se pudo comprobar la configuración de notificaciones",
+					},
 				);
 
 				if (!keyResponse?.configured || !keyResponse.publicKey) {
@@ -106,7 +109,10 @@ export default function PushNotificationOptIn({
 			} catch (error) {
 				if (mounted) {
 					setError(
-						getErrorMessage(error, "No se pudo comprobar el estado push"),
+						getErrorMessage(
+							error,
+							"No se pudo comprobar el estado de las notificaciones",
+						),
 					);
 					setStatus("available");
 				}
@@ -128,7 +134,7 @@ export default function PushNotificationOptIn({
 		try {
 			const keyResponse = await requestJson<PushKeyResponse>(
 				"/api/communications/push-subscriptions/public-key",
-				{ fallbackMessage: "No se pudo obtener la clave push" },
+				{ fallbackMessage: "No se pudo obtener la clave de notificaciones" },
 			);
 
 			if (!keyResponse?.configured || !keyResponse.publicKey) {
@@ -153,13 +159,15 @@ export default function PushNotificationOptIn({
 				method: "POST",
 				headers: { "content-type": "application/json" },
 				body: JSON.stringify(subscription.toJSON()),
-				fallbackMessage: "No se pudo activar push",
+				fallbackMessage: "No se pudieron activar las notificaciones",
 			});
 
 			setStatus("enabled");
-			setMessage("Push activado en este dispositivo");
+			setMessage("Notificaciones activadas en este dispositivo");
 		} catch (error) {
-			setError(getErrorMessage(error, "No se pudo activar push"));
+			setError(
+				getErrorMessage(error, "No se pudieron activar las notificaciones"),
+			);
 		} finally {
 			setPending(false);
 		}
@@ -183,13 +191,15 @@ export default function PushNotificationOptIn({
 				method: "DELETE",
 				headers: { "content-type": "application/json" },
 				body: JSON.stringify({ endpoint }),
-				fallbackMessage: "No se pudo desactivar push",
+				fallbackMessage: "No se pudieron desactivar las notificaciones",
 			});
 
 			setStatus("available");
-			setMessage("Push desactivado en este dispositivo");
+			setMessage("Notificaciones desactivadas en este dispositivo");
 		} catch (error) {
-			setError(getErrorMessage(error, "No se pudo desactivar push"));
+			setError(
+				getErrorMessage(error, "No se pudieron desactivar las notificaciones"),
+			);
 		} finally {
 			setPending(false);
 		}
@@ -203,6 +213,14 @@ export default function PushNotificationOptIn({
 		enabled: "Activo",
 		denied: "Bloqueado",
 	};
+	const inlineStatusLabel: Record<PushStatus, string> = {
+		checking: "Comprobando notificaciones",
+		unsupported: "Notificaciones no disponibles",
+		not_configured: "Notificaciones pendientes de configurar",
+		available: "Notificaciones disponibles",
+		enabled: "Notificaciones activas",
+		denied: "Notificaciones bloqueadas",
+	};
 	const statusHelp = getStatusHelp(status);
 	const canEnablePush = status === "available";
 	const showEnablePushButton =
@@ -212,9 +230,7 @@ export default function PushNotificationOptIn({
 		return (
 			<div className="flex flex-wrap items-center gap-2">
 				<span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
-					{status === "enabled"
-						? "Notificaciónes activas"
-						: `Push ${statusLabel[status]}`}
+					{inlineStatusLabel[status]}
 				</span>
 				{showEnablePushButton ? (
 					<button
@@ -223,7 +239,7 @@ export default function PushNotificationOptIn({
 						disabled={pending || !canEnablePush}
 						className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
 					>
-						Activar push
+						Activar notificaciones
 					</button>
 				) : null}
 				{status === "enabled" ? (
@@ -233,7 +249,7 @@ export default function PushNotificationOptIn({
 						disabled={pending}
 						className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
 					>
-						¿Desea desactivarlas?
+						Desactivar notificaciones
 					</button>
 				) : null}
 				{message ? (
@@ -256,7 +272,7 @@ export default function PushNotificationOptIn({
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<div>
 					<p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-						Push PWA
+						Notificaciones PWA
 					</p>
 					<h3 className="mt-1 text-lg font-semibold text-slate-900">
 						Notificaciones del dispositivo
@@ -275,7 +291,7 @@ export default function PushNotificationOptIn({
 						disabled={pending || !canEnablePush}
 						className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
 					>
-						Activar notificaciones push
+						Activar notificaciones
 					</button>
 				) : null}
 				{status === "enabled" ? (
@@ -285,7 +301,7 @@ export default function PushNotificationOptIn({
 						disabled={pending}
 						className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 disabled:opacity-60"
 					>
-						Desactivar notificaciones push
+						Desactivar notificaciones
 					</button>
 				) : null}
 			</div>
