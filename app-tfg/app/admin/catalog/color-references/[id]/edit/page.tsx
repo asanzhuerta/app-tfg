@@ -30,7 +30,6 @@ export default async function EditColorReferencePage({ params }: Props) {
 			title="Editar referencia de color"
 			subtitle={`Ajusta tono, orden e imagen para ${colorReference.code} · ${colorReference.name}.`}
 			backHref="/admin/catalog/color-references"
-			backLabel="referencias de color"
 		>
 			<CatalogAdminForm
 				entityLabel="referencia"

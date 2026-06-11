@@ -24,7 +24,7 @@ export default function OfflinePage() {
 						href="/"
 						className="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-black uppercase tracking-[0.12em] text-white shadow-xl shadow-slate-950/15 transition hover:bg-slate-800"
 					>
-						Volver al inicio
+						Ir al inicio
 					</Link>
 					<Link
 						href="/login"

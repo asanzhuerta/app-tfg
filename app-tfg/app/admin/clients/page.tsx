@@ -1,6 +1,6 @@
 import NavCard from "../../components/NavCard";
 import PageTransition from "../../components/animations/PageTransition";
-import { ClientsIcon, RegisterRequestsIcon } from "../../components/IconsSVGs";
+import { ClientAssignmentsIcon, ClientsIcon } from "../../components/IconsSVGs";
 
 // Opciones de navegación para la gestión de clientes en el admin panel
 const navItems = [
@@ -11,7 +11,7 @@ const navItems = [
 	},
 	{
 		title: "Asignaciones comerciales",
-		icon: <RegisterRequestsIcon className="h-6 w-6" />,
+		icon: <ClientAssignmentsIcon className="h-6 w-6" />,
 		href: "/admin/clients/assignments",
 	},
 ];

@@ -45,7 +45,6 @@ export default async function EditProductSubcategoryPage({ params }: Props) {
 			title="Editar subcategoría"
 			subtitle={`Actualiza línea, descripción y posición para ${productSubcategory.name}.`}
 			backHref={backHref}
-			backLabel="líneas comerciales"
 		>
 			<CatalogAdminForm
 				entityLabel="subcategoría"

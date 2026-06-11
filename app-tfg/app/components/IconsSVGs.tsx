@@ -316,10 +316,133 @@ export function RegisterRequestsIcon({
 			className={className}
 		>
 			<path
-				d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a3 3 0 013-3h9a3 3 0 013 3v1zM17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m14-10a3.001 3.001 0 11-6.002-.001A3.001 3.001 0 0117 11z"
+				d="M6 3.75h9l3 3v13.5H6z"
 				strokeLinecap="round"
 				strokeLinejoin="round"
-				strokeWidth="1"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M15 3.75v3h3"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M10 15.25a2.25 2.25 0 014.5 0"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M12.25 11.5a1.75 1.75 0 100-3.5 1.75 1.75 0 000 3.5z"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M17.25 14.25h3M18.75 12.75v3"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+		</svg>
+	);
+}
+
+// Icono de gestión de usuarios
+export function UserManagementIcon({
+	className = "w-6 h-6",
+}: {
+	className?: string;
+}) {
+	return (
+		<svg
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+			className={className}
+		>
+			<path
+				d="M5 18.5a4.5 4.5 0 019 0"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M9.5 11.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M16 6h4M16 10h4M16 14h3"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+		</svg>
+	);
+}
+
+// Icono de lista de usuarios
+export function UserListIcon({
+	className = "w-6 h-6",
+}: {
+	className?: string;
+}) {
+	return (
+		<svg
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+			className={className}
+		>
+			<path
+				d="M5 7.5h.01M5 12h.01M5 16.5h.01"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="2.5"
+			/>
+			<path
+				d="M9 7.5h10M9 12h10M9 16.5h7"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+		</svg>
+	);
+}
+
+// Icono de alta de usuario
+export function UserPlusIcon({
+	className = "w-6 h-6",
+}: {
+	className?: string;
+}) {
+	return (
+		<svg
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+			className={className}
+		>
+			<path
+				d="M4.5 19a4.5 4.5 0 019 0"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M9 12a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M17.5 8v6M14.5 11h6"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.7"
 			/>
 		</svg>
 	);
@@ -335,28 +458,63 @@ export function ClientsIcon({ className = "w-6 h-6" }: { className?: string }) {
 			className={className}
 		>
 			<path
-				d="M16 21v-1a4 4 0 00-4-4H7a4 4 0 00-4 4v1"
+				d="M4 10h16l-1.2-5.5H5.2z"
 				strokeLinecap="round"
 				strokeLinejoin="round"
-				strokeWidth="1"
+				strokeWidth="1.5"
 			/>
 			<path
-				d="M9.5 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"
+				d="M5 10v9.5h14V10"
 				strokeLinecap="round"
 				strokeLinejoin="round"
-				strokeWidth="1"
+				strokeWidth="1.5"
 			/>
 			<path
-				d="M17 8a3 3 0 010 6"
+				d="M8 19.5v-5h4v5M15 14.5h2"
 				strokeLinecap="round"
 				strokeLinejoin="round"
-				strokeWidth="1"
+				strokeWidth="1.5"
 			/>
 			<path
-				d="M20 21v-1a4 4 0 00-3-3.87"
+				d="M4 10c.8 1.15 2.2 1.15 3 0 .8 1.15 2.2 1.15 3 0 .8 1.15 2.2 1.15 3 0 .8 1.15 2.2 1.15 3 0 .8 1.15 2.2 1.15 3 0"
 				strokeLinecap="round"
 				strokeLinejoin="round"
-				strokeWidth="1"
+				strokeWidth="1.5"
+			/>
+		</svg>
+	);
+}
+
+// Icono de asignaciones comerciales
+export function ClientAssignmentsIcon({
+	className = "w-6 h-6",
+}: {
+	className?: string;
+}) {
+	return (
+		<svg
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+			className={className}
+		>
+			<path
+				d="M6.75 10.5a2.75 2.75 0 100-5.5 2.75 2.75 0 000 5.5zM3.75 18a3.2 3.2 0 016 0"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M17.25 10.5a2.75 2.75 0 100-5.5 2.75 2.75 0 000 5.5zM14.25 18a3.2 3.2 0 016 0"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
+			/>
+			<path
+				d="M9.75 12.75h4.5M13 10.9l1.55 1.85L13 14.6"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="1.5"
 			/>
 		</svg>
 	);

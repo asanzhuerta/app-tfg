@@ -21,6 +21,7 @@ import {
 	RouteIcon,
 	SettingsIcon,
 	TrainingIcon,
+	UserManagementIcon,
 	VisitsIcon,
 } from "@/app/components/IconsSVGs";
 import UserAvatar from "@/app/components/users/UserAvatar";
@@ -67,6 +68,7 @@ const iconMap: Record<
 	route: RouteIcon,
 	settings: SettingsIcon,
 	training: TrainingIcon,
+	users: UserManagementIcon,
 	visits: VisitsIcon,
 };
 

@@ -36,8 +36,6 @@ export default async function ClientSalonClientHistoryPage({
 			showOverviewPanels={false}
 			showServiceForm={false}
 			showHistory
-			backHref={`/clients/salon-clients/${id}`}
-			backLabel="Volver a la ficha"
 			title={`Historial técnico - ${detail.salonClient.name}`}
 			subtitle="Consulta, filtra y corrige los servicios técnicos registrados."
 		/>

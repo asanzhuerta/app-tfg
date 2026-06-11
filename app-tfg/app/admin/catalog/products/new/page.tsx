@@ -23,7 +23,6 @@ export default async function NewProductPage() {
 			title="Nuevo producto"
 			subtitle="Crea una referencia completa con su línea, estado, imagen y datos comerciales."
 			backHref="/admin/catalog/products"
-			backLabel="productos"
 		>
 			<CatalogAdminForm
 				entityLabel="producto"

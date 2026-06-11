@@ -32,8 +32,6 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
 		<OrderDetailView
 			title="Detalle de pedido"
 			subtitle="Gestiona el estado del pedido y revisa sus referencias registradas."
-			backHref="/admin/orders"
-			backLabel="Volver a pedidos"
 			initialDetail={detail}
 			mode="admin"
 			updateApiPath={`/api/admin/orders/${id}`}

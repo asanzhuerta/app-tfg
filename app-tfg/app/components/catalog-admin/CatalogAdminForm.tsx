@@ -418,14 +418,6 @@ export default function CatalogAdminForm({
 						{getSubmitButtonLabel(isSubmitting, isEditing, entityLabel)}
 					</button>
 
-					{cancelHref ? (
-						<Link
-							href={cancelHref}
-							className="rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-50"
-						>
-							Volver
-						</Link>
-					) : null}
 				</div>
 			</SafeForm>
 		</>

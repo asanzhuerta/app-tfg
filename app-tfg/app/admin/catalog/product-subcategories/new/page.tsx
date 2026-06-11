@@ -43,7 +43,6 @@ export default async function NewProductSubcategoryPage({
 			title="Nueva subcategoría"
 			subtitle="Crea una agrupación interna dentro de una línea comercial."
 			backHref={backHref}
-			backLabel="líneas comerciales"
 		>
 			<CatalogAdminForm
 				entityLabel="subcategoría"
