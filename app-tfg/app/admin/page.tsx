@@ -7,12 +7,13 @@ import {
 	OrderIcon,
 	ReportsIcon,
 	SettingsIcon,
+	UserManagementIcon,
 } from "../components/IconsSVGs";
 
 const navItems = [
 	{
 		title: "Gestión de usuarios",
-		icon: <ClientsIcon className="h-6 w-6" />,
+		icon: <UserManagementIcon className="h-6 w-6" />,
 		href: "/admin/users",
 	},
 	{

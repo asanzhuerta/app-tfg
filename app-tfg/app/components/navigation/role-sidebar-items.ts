@@ -14,6 +14,7 @@ export type RoleSidebarIcon =
 	| "route"
 	| "settings"
 	| "training"
+	| "users"
 	| "visits";
 
 export type RoleSidebarItem = {
@@ -70,7 +71,7 @@ export const roleSidebarSections: Record<
 				{
 					title: "Gestión de usuarios",
 					href: "/admin/users",
-					icon: "clients",
+					icon: "users",
 				},
 				{
 					title: "Gestión de clientes",

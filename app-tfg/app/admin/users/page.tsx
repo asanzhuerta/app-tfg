@@ -1,6 +1,10 @@
 import NavCard from "../../components/NavCard";
 import PageTransition from "../../components/animations/PageTransition";
-import { RegisterRequestsIcon, ClientsIcon } from "../../components/IconsSVGs";
+import {
+	RegisterRequestsIcon,
+	UserListIcon,
+	UserPlusIcon,
+} from "../../components/IconsSVGs";
 
 // Opciones de navegación para la gestión de usuarios en el admin panel
 const navItems = [
@@ -11,12 +15,12 @@ const navItems = [
 	},
 	{
 		title: "Lista de usuarios",
-		icon: <ClientsIcon className="h-6 w-6" />,
+		icon: <UserListIcon className="h-6 w-6" />,
 		href: "/admin/users/list",
 	},
 	{
 		title: "Registrar nuevo usuario",
-		icon: <ClientsIcon className="h-6 w-6" />,
+		icon: <UserPlusIcon className="h-6 w-6" />,
 		href: "/admin/users/register",
 	},
 ];

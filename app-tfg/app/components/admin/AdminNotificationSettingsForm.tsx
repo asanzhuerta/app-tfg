@@ -19,7 +19,7 @@ const CHANNEL_OPTIONS: Array<{
 }> = [
 	{
 		value: "push",
-		label: "Push PWA",
+		label: "Notificación dispositivo",
 		description: "Avisa al dispositivo si el usuario tiene permisos activos.",
 	},
 	{
@@ -71,7 +71,6 @@ export default function AdminNotificationSettingsForm() {
 			return !channelsAreEqual(draftSetting.channels, setting.channels);
 		});
 	}, [draftSettings, settings]);
-
 	useEffect(() => {
 		let isCancelled = false;
 
@@ -206,49 +205,34 @@ export default function AdminNotificationSettingsForm() {
 	}
 
 	return (
-		<section className="glass-card rounded-3xl border border-white/30 bg-white/75 p-6 shadow-xl backdrop-blur">
-			<div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-				<div className="space-y-2">
-					<p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">
-						Avisos automáticos
-					</p>
-					<h2 className="text-xl font-semibold text-slate-900">
-						Canales de notificación
-					</h2>
-					<p className="max-w-3xl text-sm text-slate-600">
-						El aviso interno de la app se crea siempre. Desde aquí decides si
-						cada evento automático también intenta llegar por Push PWA o email.
-					</p>
-				</div>
-				<span className="w-fit rounded-full bg-emerald-100 px-4 py-2 text-xs font-semibold text-emerald-700">
-					In-app siempre activo
-				</span>
-			</div>
-
+		<section className="space-y-5">
 			{loading ? (
-				<p className="mt-5 text-sm text-slate-600">
+				<div className="rounded-3xl border border-white/30 bg-white/75 p-6 text-sm text-slate-600 shadow-xl backdrop-blur">
 					Cargando configuración de avisos automáticos...
-				</p>
+				</div>
 			) : null}
 
 			{!loading ? (
-				<SafeForm onSubmit={handleSubmit} className="mt-5 space-y-5">
+				<SafeForm onSubmit={handleSubmit} className="space-y-5">
 					<div className="grid gap-4 xl:grid-cols-2">
 						{draftSettings.map((setting) => (
 							<article
 								key={setting.key}
-								className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+								className="rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm"
 							>
 								<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 									<div className="space-y-2">
 										<div className="flex flex-wrap items-center gap-2">
-											<h3 className="text-lg font-semibold text-slate-900">
+											<h3 className="text-lg font-semibold text-slate-950">
 												{setting.title}
 											</h3>
 											<span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
 												{setting.audience}
 											</span>
-											{setting.isDefault ? (
+											{channelsAreEqual(
+												setting.channels,
+												setting.defaultChannels,
+											) ? (
 												<span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
 													Por defecto
 												</span>
@@ -258,7 +242,7 @@ export default function AdminNotificationSettingsForm() {
 												</span>
 											)}
 										</div>
-										<p className="text-sm text-slate-600">
+										<p className="text-sm leading-6 text-slate-600">
 											{setting.description}
 										</p>
 									</div>
@@ -266,7 +250,7 @@ export default function AdminNotificationSettingsForm() {
 									<button
 										type="button"
 										onClick={() => restoreDefaults(setting.key)}
-										className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+										className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 sm:w-auto"
 									>
 										Restaurar
 									</button>
@@ -276,7 +260,11 @@ export default function AdminNotificationSettingsForm() {
 									{CHANNEL_OPTIONS.map((option) => (
 										<label
 											key={option.value}
-											className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4"
+											className={`flex items-start gap-3 rounded-2xl border px-4 py-4 transition ${
+												setting.channels.includes(option.value)
+													? "border-slate-950 bg-slate-950 text-white shadow-sm"
+													: "border-slate-200 bg-slate-50 text-slate-700 hover:bg-white"
+											}`}
 										>
 											<input
 												type="checkbox"
@@ -290,11 +278,16 @@ export default function AdminNotificationSettingsForm() {
 												}
 												className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
 											/>
-											<span className="text-sm text-slate-700">
-												<span className="block font-semibold text-slate-900">
+											<span className="text-sm">
+												<span
+													className={`block font-semibold ${
+														setting.channels.includes(option.value)
+															? "text-white"
+															: "text-slate-950"
+													}`}
+												>
 													{option.label}
 												</span>
-												{option.description}
 											</span>
 										</label>
 									))}
@@ -303,11 +296,11 @@ export default function AdminNotificationSettingsForm() {
 						))}
 					</div>
 
-					<div className="flex flex-wrap items-center gap-3">
+					<div className="sticky bottom-6 z-10 mt-8 mb-8 flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white/90 p-4 shadow-xl backdrop-blur sm:flex-row sm:items-center">
 						<SubmitButton
 							isSubmitting={saving}
 							submittingText="Guardando..."
-							className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+							className="w-full rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 sm:w-auto"
 						>
 							Guardar canales
 						</SubmitButton>
