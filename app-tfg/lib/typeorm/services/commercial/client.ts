@@ -210,18 +210,6 @@ export async function applyClientUpdateOrThrow(
 	client: Client,
 	input: ApplyClientUpdateInput,
 ) {
-	clientDebugLog("applyClientUpdateOrThrow - client actual:", {
-		id: client.id,
-		address: client.address,
-		city: client.city,
-		postal_code: client.postal_code,
-		province: client.province,
-		lat: client.lat,
-		lng: client.lng,
-	});
-
-	clientDebugLog("applyClientUpdateOrThrow - input:", input);
-
 	const nextName =
 		input.name !== undefined ? normalizeText(input.name) : client.name;
 
@@ -310,14 +298,6 @@ export async function applyClientUpdateOrThrow(
 			normalizeComparableText(nextPostalCode) ||
 		normalizeComparableText(client.province) !==
 			normalizeComparableText(nextProvince);
-
-	clientDebugLog("Dirección recalculada:", {
-		nextAddress,
-		nextCity,
-		nextPostalCode,
-		nextProvince,
-		addressChanged,
-	});
 
 	client.name = nextName;
 	client.contact_name = nextContactName;

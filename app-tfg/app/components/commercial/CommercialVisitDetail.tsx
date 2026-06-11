@@ -427,15 +427,6 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 					subtitle="Gestiona la visita, sus pedidos y los datos del cliente."
 				/>
 
-				<div className="flex justify-start">
-					<Link
-						href="/commercials/visits"
-						className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
-					>
-						Volver
-					</Link>
-				</div>
-
 				{success ? (
 					<div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
 						{success}
@@ -512,7 +503,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 										>
 											{savingRoutineCompletion
 												? "Completando..."
-												: "TERMINAR visita"}
+												: "Completar visita"}
 										</button>
 									) : null}
 									<button
