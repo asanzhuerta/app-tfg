@@ -35,7 +35,6 @@ export default async function EditProductPage({ params }: Props) {
 			title="Editar producto"
 			subtitle={`Ajusta datos comerciales, imagen y estado para ${product.name}.`}
 			backHref="/admin/catalog/products"
-			backLabel="productos"
 		>
 			<CatalogAdminForm
 				entityLabel="producto"

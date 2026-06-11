@@ -30,8 +30,6 @@ type RelatedLink = {
 type Props = {
 	title: string;
 	subtitle: string;
-	backHref: string;
-	backLabel: string;
 	initialDetail: OrderDetail;
 	mode: "client" | "commercial" | "admin";
 	updateApiPath?: string | null;

@@ -26,7 +26,6 @@ export default async function NewProductLinePage({ searchParams }: Props) {
 			title="Nueva línea comercial"
 			subtitle="Da de alta una línea y vinculala a la categoría adecuada."
 			backHref="/admin/catalog/product-lines"
-			backLabel="líneas comerciales"
 		>
 			<CatalogAdminForm
 				entityLabel="línea comercial"

@@ -62,8 +62,6 @@ type Props = {
 	showHistory?: boolean;
 	showTemplateLibrary?: boolean;
 	historyHref?: string;
-	backHref?: string;
-	backLabel?: string;
 	title?: string;
 	subtitle?: string;
 };
@@ -171,8 +169,6 @@ export default function SalonClientDetailView({
 	showHistory = true,
 	showTemplateLibrary = false,
 	historyHref,
-	backHref,
-	backLabel = "Volver",
 	title,
 	subtitle,
 }: Props) {
@@ -978,19 +974,7 @@ export default function SalonClientDetailView({
 				}
 			/>
 
-			<div
-				className={`mb-4 flex flex-wrap items-center gap-3 ${
-					backHref ? "justify-between" : "justify-end"
-				}`}
-			>
-				{backHref ? (
-					<Link
-						href={backHref}
-						className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-					>
-						{backLabel}
-					</Link>
-				) : null}
+			<div className="mb-4 flex justify-end">
 				<span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
 					{detail.salonClient.service_count} servicios
 				</span>

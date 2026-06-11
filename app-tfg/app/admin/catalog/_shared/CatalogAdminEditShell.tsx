@@ -6,7 +6,6 @@ type Props = {
 	title: string;
 	subtitle: string;
 	backHref: string;
-	backLabel: string;
 	children: ReactNode;
 };
 

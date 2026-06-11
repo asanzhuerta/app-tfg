@@ -26,7 +26,6 @@ export default async function NewColorReferencePage({ searchParams }: Props) {
 			title="Nueva referencia de color"
 			subtitle="Añade un tono individual y situalo en la carta correspondiente."
 			backHref="/admin/catalog/color-references"
-			backLabel="referencias de color"
 		>
 			<CatalogAdminForm
 				entityLabel="referencia"

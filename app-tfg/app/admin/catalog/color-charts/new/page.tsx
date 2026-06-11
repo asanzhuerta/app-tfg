@@ -14,7 +14,6 @@ export default async function NewColorChartPage() {
 			title="Nueva carta de color"
 			subtitle="Crea una carta cromática vinculada a una línea comercial concreta."
 			backHref="/admin/catalog/color-charts"
-			backLabel="cartas de color"
 		>
 			<CatalogAdminForm
 				entityLabel="carta de color"

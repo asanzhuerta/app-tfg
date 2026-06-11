@@ -20,7 +20,6 @@ export default async function NewSupportResourcePage() {
 			title="Nuevo recurso de apoyo"
 			subtitle="Añade fichas, catálogos o materiales formativos asociados al catálogo."
 			backHref="/admin/catalog/support-resources"
-			backLabel="recursos"
 		>
 			<CatalogAdminForm
 				entityLabel="recurso"

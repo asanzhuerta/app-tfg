@@ -11,7 +11,6 @@ export default function NewProductCategoryPage() {
 			title="Nueva categoría"
 			subtitle="Crea una familia principal para ordenar el catálogo profesional."
 			backHref="/admin/catalog/product-lines"
-			backLabel="categorías y líneas"
 		>
 			<CatalogAdminForm
 				entityLabel="categoría"

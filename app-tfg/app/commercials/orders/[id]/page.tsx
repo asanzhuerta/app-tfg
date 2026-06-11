@@ -36,8 +36,6 @@ export default async function CommercialOrderDetailPage({
 		<OrderDetailView
 			title="Detalle de pedido"
 			subtitle="Revisa el pedido del cliente y avanza su estado cuando corresponda."
-			backHref="/commercials/orders"
-			backLabel="Volver a pedidos"
 			initialDetail={detail}
 			mode="commercial"
 			updateApiPath={`/api/commercial/orders/${id}`}

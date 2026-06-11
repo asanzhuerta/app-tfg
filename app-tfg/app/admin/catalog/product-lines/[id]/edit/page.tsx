@@ -28,7 +28,6 @@ export default async function EditProductLinePage({ params }: Props) {
 			title="Editar línea comercial"
 			subtitle={`Actualiza imagen, categoría y posicion para ${productLine.name}.`}
 			backHref="/admin/catalog/product-lines"
-			backLabel="líneas comerciales"
 		>
 			<CatalogAdminForm
 				entityLabel="línea comercial"

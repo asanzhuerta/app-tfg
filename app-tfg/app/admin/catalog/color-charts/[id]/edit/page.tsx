@@ -28,7 +28,6 @@ export default async function EditColorChartPage({ params }: Props) {
 			title="Editar carta de color"
 			subtitle={`Actualiza la portada y la vinculación comercial de ${colorChart.name}.`}
 			backHref="/admin/catalog/color-charts"
-			backLabel="cartas de color"
 		>
 			<CatalogAdminForm
 				entityLabel="carta de color"

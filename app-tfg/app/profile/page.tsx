@@ -21,18 +21,6 @@ function getProfileBackgroundClass(role: RoleSidebarRole) {
 	return "app-bg-client";
 }
 
-function getProfileFallbackHref(role: RoleSidebarRole) {
-	if (role === "admin") {
-		return "/admin";
-	}
-
-	if (role === "commercial") {
-		return "/commercials";
-	}
-
-	return "/clients";
-}
-
 export default async function ProfilePage() {
 	const session = await requireUserSession();
 	const user = await getUserById(session.user.id);
@@ -70,8 +58,6 @@ export default async function ProfilePage() {
 					<div className="mx-auto flex w-full max-w-[1680px] flex-col">
 						<HeaderTitle
 							title="Kinestilistas"
-							showBackButton
-							backFallbackHref={getProfileFallbackHref(role)}
 						/>
 
 						<PageTransition>
