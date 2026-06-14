@@ -96,7 +96,10 @@ function getClientTierCodeAliases(
 	];
 }
 
-function getHighestClientTierCode(codes: Iterable<string | null | undefined>) {
+function getHighestClientTierCode(
+	codes: Iterable<string | null | undefined>,
+	fallback: ClientTierCode = DEFAULT_TIER_CODE,
+) {
 	const normalizedCodes = new Set(
 		[...codes]
 			.map((code) => normalizeClientTierCode(code))
@@ -107,7 +110,7 @@ function getHighestClientTierCode(codes: Iterable<string | null | undefined>) {
 
 	return (
 		TIER_PRIORITY.find((tierCode) => normalizedCodes.has(tierCode)) ??
-		DEFAULT_TIER_CODE
+		fallback
 	);
 }
 
@@ -240,7 +243,11 @@ export async function listApplicableCustomerSegmentIdsForClient(
 		.filter(Boolean);
 	const assignedTierCode = getHighestClientTierCode(
 		assignments.map((assignment) => assignment.segment?.code),
+		"none",
 	);
+	if (assignedTierCode === "none") {
+		return assignedSegmentIds;
+	}
 	const includedTierAliases = getClientTierCodeAliases(
 		getIncludedClientTierCodes(assignedTierCode),
 	);
@@ -315,6 +322,7 @@ export async function getClientTierOverview(
 		}));
 	const tierCode = getHighestClientTierCode(
 		assignedSegments.map((segment) => segment.code),
+		"none",
 	);
 
 	return {

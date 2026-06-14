@@ -1,4 +1,5 @@
 import H1Title from "@/app/components/H1Title";
+import Image from "next/image";
 import type { PromotionView } from "./communication-view-types";
 
 type Props = {
@@ -50,14 +51,24 @@ export default function PromotionsOverview({
 							className="rounded-3xl border border-slate-200 bg-white/85 p-5 shadow-sm"
 						>
 							<div className="flex items-start justify-between gap-3">
-								<div>
+								<div className="min-w-0 flex-1">
 									<p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-										{promotion.promotionType}
+										{promotion.promotionDiscountTypeName}
 									</p>
 									<h3 className="mt-1 text-lg font-semibold text-slate-900">
 										{promotion.title}
 									</h3>
 								</div>
+								{promotion.imageUrl ? (
+									<Image
+										src={promotion.imageUrl}
+										alt="Imagen de la promoción"
+										width={180}
+										height={120}
+										unoptimized
+										className="h-24 w-32 rounded-2xl object-cover"
+									/>
+								) : null}
 								<span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
 									Activa
 								</span>
@@ -68,11 +79,21 @@ export default function PromotionsOverview({
 							<p className="mt-3 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white">
 								{promotion.benefit}
 							</p>
+							{promotion.attachmentUrl ? (
+								<a
+									href={promotion.attachmentUrl}
+									target="_blank"
+									rel="noreferrer"
+									className="mt-3 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+								>
+									{promotion.attachmentName || "Ver PDF adjunto"}
+								</a>
+							) : null}
 							<p className="mt-3 text-xs text-slate-500">
 								Disponible hasta {formatDate(promotion.endDate)}
 							</p>
 							<p className="mt-2 text-xs text-slate-500">
-								Ambito:{" "}
+								Ámbito:{" "}
 								{promotion.clientName ??
 									promotion.customerSegmentName ??
 									"General"}

@@ -48,6 +48,7 @@ import { SalonServiceTemplate } from "./entities/SalonServiceTemplate";
 import { SalonServiceTemplateProductUsage } from "./entities/SalonServiceTemplateProductUsage";
 import { CustomerSegment } from "./entities/CustomerSegment";
 import { ClientCustomerSegment } from "./entities/ClientCustomerSegment";
+import { PromotionDiscountType } from "./entities/PromotionDiscountType";
 import { Promotion } from "./entities/Promotion";
 import { TrainingEvent } from "./entities/TrainingEvent";
 import { TrainingEnrollment } from "./entities/TrainingEnrollment";
@@ -108,6 +109,7 @@ export const entities = [
 	SalonServiceTemplateProductUsage,
 	CustomerSegment,
 	ClientCustomerSegment,
+	PromotionDiscountType,
 	Promotion,
 	TrainingEvent,
 	TrainingEnrollment,

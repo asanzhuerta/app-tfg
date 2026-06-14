@@ -14,6 +14,7 @@ import { ProductLine } from "./ProductLine";
 import { Client } from "./Client";
 import { CustomerSegment } from "./CustomerSegment";
 import { User } from "./User";
+import { PromotionDiscountType } from "./PromotionDiscountType";
 
 export type PromotionStatus = "draft" | "active" | "archived";
 
@@ -22,6 +23,7 @@ export type PromotionStatus = "draft" | "active" | "archived";
 @Index("promotions_start_end_date_index", ["start_date", "end_date"])
 @Index("promotions_client_id_index", ["client_id"])
 @Index("promotions_customer_segment_id_index", ["customer_segment_id"])
+@Index("promotions_discount_type_id_index", ["promotion_discount_type_id"])
 export class Promotion {
 	@PrimaryGeneratedColumn("uuid")
 	id!: string;
@@ -37,6 +39,33 @@ export class Promotion {
 
 	@Column({ type: "text" })
 	benefit!: string;
+
+	@Column({ type: "uuid" })
+	promotion_discount_type_id!: string;
+
+	@Column({ type: "numeric", precision: 5, scale: 2, nullable: true })
+	discount_percentage!: string | null;
+
+	@Column({ type: "numeric", precision: 12, scale: 2, nullable: true })
+	minimum_order_amount!: string | null;
+
+	@Column({ type: "uuid", nullable: true })
+	gift_product_id!: string | null;
+
+	@Column({ type: "text", nullable: true })
+	gift_description!: string | null;
+
+	@Column({ type: "text", nullable: true })
+	image_url!: string | null;
+
+	@Column({ type: "text", nullable: true })
+	attachment_url!: string | null;
+
+	@Column({ type: "text", nullable: true })
+	attachment_name!: string | null;
+
+	@Column({ type: "text", nullable: true })
+	attachment_mime_type!: string | null;
 
 	@Column({ type: "date" })
 	start_date!: string;
@@ -62,6 +91,14 @@ export class Promotion {
 	@Column({ type: "uuid", nullable: true })
 	created_by_user_id!: string | null;
 
+	@ManyToOne(() => PromotionDiscountType, (discountType) => discountType.promotions, {
+		nullable: false,
+		onDelete: "RESTRICT",
+		onUpdate: "CASCADE",
+	})
+	@JoinColumn({ name: "promotion_discount_type_id" })
+	discountType!: Relation<PromotionDiscountType>;
+
 	@ManyToOne(() => Product, {
 		nullable: true,
 		onDelete: "SET NULL",
@@ -69,6 +106,14 @@ export class Promotion {
 	})
 	@JoinColumn({ name: "product_id" })
 	product!: Relation<Product | null>;
+
+	@ManyToOne(() => Product, {
+		nullable: true,
+		onDelete: "SET NULL",
+		onUpdate: "CASCADE",
+	})
+	@JoinColumn({ name: "gift_product_id" })
+	giftProduct!: Relation<Product | null>;
 
 	@ManyToOne(() => ProductLine, {
 		nullable: true,

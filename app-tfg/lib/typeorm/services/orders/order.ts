@@ -27,6 +27,7 @@ import { Order } from "@/lib/typeorm/entities/Order";
 import { OrderLine } from "@/lib/typeorm/entities/OrderLine";
 import { OrderPayment } from "@/lib/typeorm/entities/OrderPayment";
 import { Promotion } from "@/lib/typeorm/entities/Promotion";
+import type { PromotionDiscountTypeCode } from "@/lib/typeorm/entities/PromotionDiscountType";
 import { OrderPaymentStatus } from "@/lib/typeorm/entities/OrderPaymentStatus";
 import { OrderStatus } from "@/lib/typeorm/entities/OrderStatus";
 import { CommercialVisit } from "@/lib/typeorm/entities/CommercialVisit";
@@ -124,7 +125,9 @@ type ActivePromotionDiscount = {
 	id: string;
 	title: string;
 	benefit: string;
+	typeCode: PromotionDiscountTypeCode | string;
 	discountPercentage: number;
+	minimumOrderAmountCents: number | null;
 	endDate: string;
 	productId: string | null;
 	productLineId: string | null;
@@ -209,12 +212,19 @@ function formatCents(cents: number) {
 }
 
 function parsePromotionDiscountPercentage(promotion: Promotion) {
-	const normalizedType = normalizeText(promotion.promotion_type).toLowerCase();
+	const structuredDiscount = Number(promotion.discount_percentage);
 
 	if (
-		!normalizedType.includes("descuento") &&
-		!normalizedType.includes("discount")
+		Number.isFinite(structuredDiscount) &&
+		structuredDiscount > 0 &&
+		structuredDiscount <= 100
 	) {
+		return structuredDiscount;
+	}
+
+	const normalizedType = normalizeText(promotion.promotion_type).toLowerCase();
+
+	if (!normalizedType.includes("descuento") && !normalizedType.includes("discount")) {
 		return null;
 	}
 
@@ -228,6 +238,23 @@ function parsePromotionDiscountPercentage(promotion: Promotion) {
 	}
 
 	return parsed;
+}
+
+function parsePromotionMinimumOrderAmountCents(promotion: Promotion) {
+	const parsed = Number(promotion.minimum_order_amount);
+
+	return Number.isFinite(parsed) && parsed > 0
+		? Math.round(parsed * 100)
+		: null;
+}
+
+function getPromotionDiscountTypeCode(promotion: Promotion) {
+	return (
+		promotion.discountType?.code ??
+		(promotion.minimum_order_amount
+			? "volume_percentage_discount"
+			: "percentage_discount")
+	);
 }
 
 function formatDiscountPercentage(discountPercentage: number) {
@@ -297,9 +324,18 @@ function promotionAppliesToProduct(
 function findBestPromotionDiscountForProduct(
 	promotions: ActivePromotionDiscount[],
 	product: Product,
+	orderSubtotalCents = 0,
 ) {
 	return promotions.reduce<ActivePromotionDiscount | null>(
 		(bestPromotion, promotion) => {
+			if (
+				promotion.typeCode === "volume_percentage_discount" &&
+				(promotion.minimumOrderAmountCents === null ||
+					orderSubtotalCents < promotion.minimumOrderAmountCents)
+			) {
+				return bestPromotion;
+			}
+
 			if (!promotionAppliesToProduct(promotion, product)) {
 				return bestPromotion;
 			}
@@ -1184,6 +1220,7 @@ async function listActivePromotionDiscountsForClient(
 	const promotions = await manager
 		.getRepository(Promotion)
 		.createQueryBuilder("promotion")
+		.leftJoinAndSelect("promotion.discountType", "discountType")
 		.where("promotion.status = :status", { status: "active" })
 		.andWhere("promotion.start_date <= :today", { today })
 		.andWhere("promotion.end_date >= :today", { today })
@@ -1202,8 +1239,13 @@ async function listActivePromotionDiscountsForClient(
 	return promotions
 		.map((promotion) => {
 			const discountPercentage = parsePromotionDiscountPercentage(promotion);
+			const typeCode = getPromotionDiscountTypeCode(promotion);
 
-			if (discountPercentage === null) {
+			if (
+				discountPercentage === null ||
+				(typeCode !== "percentage_discount" &&
+					typeCode !== "volume_percentage_discount")
+			) {
 				return null;
 			}
 
@@ -1211,7 +1253,12 @@ async function listActivePromotionDiscountsForClient(
 				id: promotion.id,
 				title: promotion.title,
 				benefit: promotion.benefit,
+				typeCode,
 				discountPercentage,
+				minimumOrderAmountCents:
+					typeCode === "volume_percentage_discount"
+						? parsePromotionMinimumOrderAmountCents(promotion)
+						: null,
 				endDate: promotion.end_date,
 				productId: promotion.product_id,
 				productLineId: promotion.product_line_id,
@@ -1292,8 +1339,7 @@ async function prepareOrderLineRecords(
 	const activePromotionDiscounts =
 		await listActivePromotionDiscountsForClient(manager, clientId);
 
-	let totalAmountCents = 0;
-	const lineRecords = lines.map((line) => {
+	const preparedLines = lines.map((line) => {
 		const product = productMap.get(line.productId);
 
 		if (!product) {
@@ -1350,33 +1396,49 @@ async function prepareOrderLineRecords(
 
 		const unitPriceCents = parseMoneyToCents(product.base_price);
 		const lineSubtotalCents = unitPriceCents * line.quantity;
+
+		return {
+			line,
+			product,
+			selectedColorReference,
+			unitPriceCents,
+			lineSubtotalCents,
+		};
+	});
+	const orderSubtotalCents = preparedLines.reduce(
+		(total, preparedLine) => total + preparedLine.lineSubtotalCents,
+		0,
+	);
+	let totalAmountCents = 0;
+	const lineRecords = preparedLines.map((preparedLine) => {
 		const promotionDiscount = findBestPromotionDiscountForProduct(
 			activePromotionDiscounts,
-			product,
+			preparedLine.product,
+			orderSubtotalCents,
 		);
 		const discountPercentage = promotionDiscount?.discountPercentage ?? 0;
 		const lineTotalCents =
 			discountPercentage > 0
 				? applyPercentageDiscountToCents(
-						lineSubtotalCents,
+						preparedLine.lineSubtotalCents,
 						discountPercentage,
 					)
-				: lineSubtotalCents;
+				: preparedLine.lineSubtotalCents;
 		totalAmountCents += lineTotalCents;
 
 		return {
-			productId: product.id,
-			colorReferenceId: selectedColorReference?.id ?? null,
-			quantity: line.quantity,
-			unitPriceSnapshot: formatCents(unitPriceCents),
+			productId: preparedLine.product.id,
+			colorReferenceId: preparedLine.selectedColorReference?.id ?? null,
+			quantity: preparedLine.line.quantity,
+			unitPriceSnapshot: formatCents(preparedLine.unitPriceCents),
 			discountPercentage: formatDiscountPercentage(discountPercentage),
 			lineTotal: formatCents(lineTotalCents),
 			orderReferenceSnapshot:
-				selectedColorReference?.erp_reference ||
-				selectedColorReference?.code ||
-				product.reference,
-			variantCodeSnapshot: selectedColorReference?.code ?? null,
-			variantNameSnapshot: selectedColorReference?.name ?? null,
+				preparedLine.selectedColorReference?.erp_reference ||
+				preparedLine.selectedColorReference?.code ||
+				preparedLine.product.reference,
+			variantCodeSnapshot: preparedLine.selectedColorReference?.code ?? null,
+			variantNameSnapshot: preparedLine.selectedColorReference?.name ?? null,
 		};
 	});
 

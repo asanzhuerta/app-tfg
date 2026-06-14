@@ -32,6 +32,10 @@ export const CLOUDINARY_SALON_RESULT_IMAGES_FOLDER =
 	process.env.CLOUDINARY_SALON_RESULT_IMAGES_FOLDER ||
 	"kinestilistas/salon-result-images";
 
+export const CLOUDINARY_PROMOTION_ATTACHMENTS_FOLDER =
+	process.env.CLOUDINARY_PROMOTION_ATTACHMENTS_FOLDER ||
+	"kinestilistas/promotion-attachments";
+
 // ============================================================================
 // HELPERS REUTILIZABLES
 // ============================================================================
@@ -58,10 +62,31 @@ export async function uploadSalonResultImage(base64File: string) {
 	});
 }
 
+export async function uploadPromotionImage(base64File: string) {
+	return cloudinary.uploader.upload(base64File, {
+		folder: CLOUDINARY_PROMOTION_ATTACHMENTS_FOLDER,
+		resource_type: "image",
+	});
+}
+
+export async function uploadPromotionDocument(base64File: string) {
+	return cloudinary.uploader.upload(base64File, {
+		folder: CLOUDINARY_PROMOTION_ATTACHMENTS_FOLDER,
+		resource_type: "raw",
+	});
+}
+
 // Elimina una imagen de Cloudinary por public_id
 export async function deleteImageByPublicId(publicId: string) {
 	return cloudinary.uploader.destroy(publicId, {
 		resource_type: "image",
+		invalidate: true,
+	});
+}
+
+export async function deleteRawFileByPublicId(publicId: string) {
+	return cloudinary.uploader.destroy(publicId, {
+		resource_type: "raw",
 		invalidate: true,
 	});
 }

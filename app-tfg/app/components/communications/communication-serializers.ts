@@ -4,6 +4,7 @@ import type {
 	listClientSegmentAssignments,
 	listCustomerSegments,
 	listNotificationsForUser,
+	listPromotionDiscountTypes,
 	listPromotionsForUser,
 	listRemindersForUser,
 	listTrainingEventsForUser,
@@ -18,6 +19,7 @@ import type {
 	ProductLineOptionView,
 	ProductOptionView,
 	PromotionView,
+	PromotionDiscountTypeView,
 	ReminderView,
 	SegmentView,
 	TrainingEventView,
@@ -75,6 +77,18 @@ export function serializeProductLineOption(
 	};
 }
 
+export function serializePromotionDiscountType(
+	discountType: Awaited<ReturnType<typeof listPromotionDiscountTypes>>[number],
+): PromotionDiscountTypeView {
+	return {
+		id: discountType.id,
+		code: discountType.code,
+		name: discountType.name,
+		description: discountType.description,
+		displayOrder: discountType.display_order,
+	};
+}
+
 export function serializeClientSegmentAssignment(
 	assignment: Awaited<ReturnType<typeof listClientSegmentAssignments>>[number],
 ): ClientSegmentAssignmentView {
@@ -101,7 +115,21 @@ export function serializePromotion(
 		title: promotion.title,
 		description: promotion.description,
 		promotionType: promotion.promotion_type,
+		promotionDiscountTypeId: promotion.promotion_discount_type_id,
+		promotionDiscountTypeCode:
+			promotion.discountType?.code ?? "percentage_discount",
+		promotionDiscountTypeName:
+			promotion.discountType?.name ?? promotion.promotion_type,
 		benefit: promotion.benefit,
+		discountPercentage: promotion.discount_percentage,
+		minimumOrderAmount: promotion.minimum_order_amount,
+		giftProductId: promotion.gift_product_id,
+		giftProductName: promotion.giftProduct?.name ?? null,
+		giftDescription: promotion.gift_description,
+		imageUrl: promotion.image_url,
+		attachmentUrl: promotion.attachment_url,
+		attachmentName: promotion.attachment_name,
+		attachmentMimeType: promotion.attachment_mime_type,
 		startDate: promotion.start_date,
 		endDate: promotion.end_date,
 		status: promotion.status,

@@ -32,6 +32,14 @@ export type ProductLineOptionView = {
 	name: string;
 };
 
+export type PromotionDiscountTypeView = {
+	id: string;
+	code: string;
+	name: string;
+	description: string | null;
+	displayOrder: number;
+};
+
 export type ClientSegmentAssignmentView = {
 	id: string;
 	clientId: string;
@@ -49,7 +57,19 @@ export type PromotionView = {
 	title: string;
 	description: string;
 	promotionType: string;
+	promotionDiscountTypeId: string;
+	promotionDiscountTypeCode: string;
+	promotionDiscountTypeName: string;
 	benefit: string;
+	discountPercentage: string | null;
+	minimumOrderAmount: string | null;
+	giftProductId: string | null;
+	giftProductName: string | null;
+	giftDescription: string | null;
+	imageUrl: string | null;
+	attachmentUrl: string | null;
+	attachmentName: string | null;
+	attachmentMimeType: string | null;
 	startDate: string;
 	endDate: string;
 	status: PromotionStatus;

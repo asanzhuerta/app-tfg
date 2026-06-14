@@ -6,6 +6,7 @@ import {
 	serializeProductLineOption,
 	serializeProductOption,
 	serializePromotion,
+	serializePromotionDiscountType,
 	serializeSegment,
 	serializeTrainingEvent,
 } from "@/app/components/communications/communication-serializers";
@@ -18,6 +19,7 @@ import {
 	listAdminTrainingEvents,
 	listClientSegmentAssignments,
 	listCustomerSegments,
+	listPromotionDiscountTypes,
 } from "@/lib/typeorm/services/communications/communications";
 
 export default async function AdminCommunicationsPage() {
@@ -29,6 +31,7 @@ export default async function AdminCommunicationsPage() {
 		clients,
 		products,
 		productLines,
+		promotionDiscountTypes,
 		promotions,
 		trainings,
 	] = await Promise.all([
@@ -37,6 +40,7 @@ export default async function AdminCommunicationsPage() {
 		listClients(),
 		listProducts(),
 		listProductLines(),
+		listPromotionDiscountTypes(),
 		listAdminPromotions(),
 		listAdminTrainingEvents(),
 	]);
@@ -54,6 +58,9 @@ export default async function AdminCommunicationsPage() {
 				clients={clients.map(serializeClientOption)}
 				products={products.map(serializeProductOption)}
 				productLines={productLines.map(serializeProductLineOption)}
+				promotionDiscountTypes={promotionDiscountTypes.map(
+					serializePromotionDiscountType,
+				)}
 				promotions={promotions.map(serializePromotion)}
 				trainings={trainings.map(serializeTrainingEvent)}
 			/>

@@ -18,6 +18,8 @@ import type {
 import { CustomerSegment } from "@/lib/typeorm/entities/CustomerSegment";
 import { ClientCustomerSegment } from "@/lib/typeorm/entities/ClientCustomerSegment";
 import { Promotion } from "@/lib/typeorm/entities/Promotion";
+import { PromotionDiscountType } from "@/lib/typeorm/entities/PromotionDiscountType";
+import type { PromotionDiscountTypeCode } from "@/lib/typeorm/entities/PromotionDiscountType";
 import { TrainingEvent } from "@/lib/typeorm/entities/TrainingEvent";
 import { TrainingEnrollment } from "@/lib/typeorm/entities/TrainingEnrollment";
 import { AppNotification } from "@/lib/typeorm/entities/AppNotification";
@@ -35,6 +37,12 @@ import { syncTodayVisitNotificationsForUser } from "@/lib/typeorm/services/comme
 import { deliverNotificationToExternalChannels } from "./notification-delivery";
 
 const PROMOTION_STATUSES = ["draft", "active", "archived"] as const;
+const PROMOTION_DISCOUNT_TYPE_CODES = [
+	"percentage_discount",
+	"volume_percentage_discount",
+	"gift_product",
+] as const;
+const DEFAULT_PROMOTION_DISCOUNT_TYPE_CODE = "percentage_discount";
 const TRAINING_EVENT_STATUSES = [
 	"draft",
 	"published",
@@ -346,6 +354,130 @@ function normalizePositiveInteger(
 	return parsed;
 }
 
+function normalizeDecimalAmount(
+	value: number | string | null | undefined,
+	fieldName: string,
+	options: { required?: boolean; max?: number } = {},
+) {
+	if (value === undefined) {
+		if (options.required) {
+			throw new CommunicationsServiceError(`${fieldName} es obligatorio`);
+		}
+
+		return undefined;
+	}
+
+	if (value === null || String(value).trim() === "") {
+		if (options.required) {
+			throw new CommunicationsServiceError(`${fieldName} es obligatorio`);
+		}
+
+		return null;
+	}
+
+	const parsed = Number(String(value).trim().replace(",", "."));
+
+	if (
+		!Number.isFinite(parsed) ||
+		parsed < 0 ||
+		(options.max !== undefined && parsed > options.max)
+	) {
+		throw new CommunicationsServiceError(
+			`${fieldName} no es válido`,
+			400,
+			"INVALID_DECIMAL_AMOUNT",
+		);
+	}
+
+	return parsed.toFixed(2);
+}
+
+function normalizePromotionDiscountPercentage(
+	value: number | string | null | undefined,
+	fieldName = "El porcentaje de descuento",
+	options: { required?: boolean } = {},
+) {
+	const normalized = normalizeDecimalAmount(value, fieldName, {
+		...options,
+		max: 100,
+	});
+
+	if (normalized === undefined || normalized === null) {
+		return normalized;
+	}
+
+	if (Number(normalized) <= 0) {
+		throw new CommunicationsServiceError(
+			`${fieldName} debe ser mayor que cero`,
+			400,
+			"INVALID_PROMOTION_DISCOUNT_PERCENTAGE",
+		);
+	}
+
+	return normalized;
+}
+
+function normalizePromotionDiscountTypeCode(
+	value: string | null | undefined,
+) {
+	if (value === undefined || value === null || String(value).trim() === "") {
+		return undefined;
+	}
+
+	const normalized = String(value).trim();
+
+	if (
+		!PROMOTION_DISCOUNT_TYPE_CODES.includes(
+			normalized as (typeof PROMOTION_DISCOUNT_TYPE_CODES)[number],
+		)
+	) {
+		throw new CommunicationsServiceError(
+			"El tipo de descuento no es válido",
+			400,
+			"INVALID_PROMOTION_DISCOUNT_TYPE",
+		);
+	}
+
+	return normalized as PromotionDiscountTypeCode;
+}
+
+function parseDiscountPercentageFromBenefit(value: string | null | undefined) {
+	const match = String(value ?? "")
+		.replace(",", ".")
+		.match(/(\d+(?:\.\d+)?)/);
+	const parsed = Number(match?.[1]);
+
+	if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 100) {
+		return null;
+	}
+
+	return parsed.toFixed(2);
+}
+
+function buildPromotionBenefit(input: {
+	benefit?: string | null;
+	discountTypeCode: string;
+	discountPercentage: string | null;
+	minimumOrderAmount: string | null;
+	giftDescription: string | null;
+}) {
+	if (input.benefit) {
+		return input.benefit;
+	}
+
+	if (input.discountTypeCode === "volume_percentage_discount") {
+		return `${input.discountPercentage}% de descuento desde ${input.minimumOrderAmount} EUR`;
+	}
+
+	if (input.discountTypeCode === "gift_product") {
+		return input.giftDescription
+			? `Regalo: ${input.giftDescription}`
+			: "Producto de regalo incluido";
+	}
+
+	return `${input.discountPercentage}% de descuento`;
+}
+
 function normalizePromotionStatus(
 	value: PromotionStatus | undefined,
 	required = false,
@@ -484,6 +616,7 @@ async function ensurePromotionRelations(
 	input: {
 		productId: string | null;
 		productLineId: string | null;
+		giftProductId?: string | null;
 		clientId: string | null;
 		customerSegmentId: string | null;
 	},
@@ -495,6 +628,16 @@ async function ensurePromotionRelations(
 			input.productId,
 			"Producto no encontrado",
 			"PRODUCT_NOT_FOUND",
+		);
+	}
+
+	if (input.giftProductId) {
+		await requireEntityById(
+			manager,
+			Product,
+			input.giftProductId,
+			"Producto de regalo no encontrado",
+			"GIFT_PRODUCT_NOT_FOUND",
 		);
 	}
 
@@ -527,6 +670,145 @@ async function ensurePromotionRelations(
 			"CUSTOMER_SEGMENT_NOT_FOUND",
 		);
 	}
+}
+
+async function resolvePromotionDiscountType(
+	manager: EntityManager,
+	input: {
+		discountTypeId?: string | null;
+		discountTypeCode?: PromotionDiscountTypeCode | string | null;
+		fallbackDiscountTypeId?: string | null;
+	},
+) {
+	const repo = manager.getRepository(PromotionDiscountType);
+	const normalizedDiscountTypeId = normalizeOptionalId(input.discountTypeId);
+	const normalizedDiscountTypeCode = normalizePromotionDiscountTypeCode(
+		input.discountTypeCode,
+	);
+
+	const discountType =
+		normalizedDiscountTypeId !== undefined
+			? normalizedDiscountTypeId
+				? await repo.findOne({ where: { id: normalizedDiscountTypeId } })
+				: null
+			: normalizedDiscountTypeCode
+				? await repo.findOne({ where: { code: normalizedDiscountTypeCode } })
+				: input.fallbackDiscountTypeId
+					? await repo.findOne({
+							where: { id: input.fallbackDiscountTypeId },
+						})
+					: await repo.findOne({
+							where: { code: DEFAULT_PROMOTION_DISCOUNT_TYPE_CODE },
+						});
+
+	if (!discountType) {
+		throw new CommunicationsServiceError(
+			"Tipo de descuento no encontrado",
+			404,
+			"PROMOTION_DISCOUNT_TYPE_NOT_FOUND",
+		);
+	}
+
+	if (!discountType.is_active) {
+		throw new CommunicationsServiceError(
+			"El tipo de descuento no esta activo",
+			400,
+			"PROMOTION_DISCOUNT_TYPE_INACTIVE",
+		);
+	}
+
+	return discountType;
+}
+
+function normalizePromotionSpecificValues(input: {
+	discountTypeCode: string;
+	benefit?: string | null;
+	discountPercentage?: string | null | undefined;
+	minimumOrderAmount?: string | null | undefined;
+	giftProductId?: string | null | undefined;
+	giftDescription?: string | null | undefined;
+	existing?: {
+		discountPercentage: string | null;
+		minimumOrderAmount: string | null;
+		giftProductId: string | null;
+		giftDescription: string | null;
+	};
+}) {
+	let discountPercentage =
+		input.discountPercentage !== undefined
+			? input.discountPercentage
+			: input.existing?.discountPercentage ?? null;
+	let minimumOrderAmount =
+		input.minimumOrderAmount !== undefined
+			? input.minimumOrderAmount
+			: input.existing?.minimumOrderAmount ?? null;
+	let giftProductId =
+		input.giftProductId !== undefined
+			? input.giftProductId
+			: input.existing?.giftProductId ?? null;
+	let giftDescription =
+		input.giftDescription !== undefined
+			? input.giftDescription
+			: input.existing?.giftDescription ?? null;
+
+	if (
+		(input.discountTypeCode === "percentage_discount" ||
+			input.discountTypeCode === "volume_percentage_discount") &&
+		!discountPercentage
+	) {
+		discountPercentage = parseDiscountPercentageFromBenefit(input.benefit);
+	}
+
+	if (
+		input.discountTypeCode === "percentage_discount" &&
+		!discountPercentage
+	) {
+		throw new CommunicationsServiceError(
+			"Indica el porcentaje de descuento",
+			400,
+			"PROMOTION_PERCENTAGE_REQUIRED",
+		);
+	}
+
+	if (
+		input.discountTypeCode === "volume_percentage_discount" &&
+		(!discountPercentage || !minimumOrderAmount)
+	) {
+		throw new CommunicationsServiceError(
+			"Indica el porcentaje y el importe mínimo del descuento por volumen",
+			400,
+			"PROMOTION_VOLUME_RULE_REQUIRED",
+		);
+	}
+
+	if (input.discountTypeCode === "gift_product") {
+		discountPercentage = null;
+		minimumOrderAmount = minimumOrderAmount ?? null;
+
+		if (!giftProductId && !giftDescription) {
+			throw new CommunicationsServiceError(
+				"Indica un producto de regalo o una descripcion del regalo",
+				400,
+				"PROMOTION_GIFT_REQUIRED",
+			);
+		}
+	}
+
+	if (input.discountTypeCode !== "gift_product") {
+		giftProductId = null;
+		giftDescription = null;
+	}
+
+	if (input.discountTypeCode !== "volume_percentage_discount") {
+		minimumOrderAmount = null;
+	}
+
+	return {
+		discountPercentage,
+		minimumOrderAmount,
+		giftProductId,
+		giftDescription,
+	};
 }
 
 async function listActiveUserIdsByRole(
@@ -891,12 +1173,26 @@ export async function removeClientSegmentAssignment(assignmentId: string) {
 	return { id: assignmentId };
 }
 
+export async function listPromotionDiscountTypes() {
+	const ds = await getDataSource();
+
+	return ds.getRepository(PromotionDiscountType).find({
+		where: { is_active: true },
+		order: {
+			display_order: "ASC",
+			name: "ASC",
+		},
+	});
+}
+
 export async function listAdminPromotions(input: { search?: string | null } = {}) {
 	const ds = await getDataSource();
 	const query = ds
 		.getRepository(Promotion)
 		.createQueryBuilder("promotion")
+		.leftJoinAndSelect("promotion.discountType", "discountType")
 		.leftJoinAndSelect("promotion.product", "product")
+		.leftJoinAndSelect("promotion.giftProduct", "giftProduct")
 		.leftJoinAndSelect("promotion.productLine", "productLine")
 		.leftJoinAndSelect("promotion.client", "client")
 		.leftJoinAndSelect("promotion.customerSegment", "segment")
@@ -912,6 +1208,8 @@ export async function listAdminPromotions(input: { search?: string | null } = {}
 				OR promotion.description ILIKE :search
 				OR promotion.promotion_type ILIKE :search
 				OR promotion.benefit ILIKE :search
+				OR COALESCE(discountType.name, '') ILIKE :search
+				OR COALESCE(giftProduct.name, '') ILIKE :search
 				OR COALESCE(product.name, '') ILIKE :search
 				OR COALESCE(productLine.name, '') ILIKE :search
 				OR COALESCE(client.name, '') ILIKE :search
@@ -930,7 +1228,9 @@ export async function getPromotionById(id: string) {
 	return ds
 		.getRepository(Promotion)
 		.createQueryBuilder("promotion")
+		.leftJoinAndSelect("promotion.discountType", "discountType")
 		.leftJoinAndSelect("promotion.product", "product")
+		.leftJoinAndSelect("promotion.giftProduct", "giftProduct")
 		.leftJoinAndSelect("promotion.productLine", "productLine")
 		.leftJoinAndSelect("promotion.client", "client")
 		.leftJoinAndSelect("promotion.customerSegment", "segment")
@@ -947,12 +1247,24 @@ export async function createPromotion(
 	const description = normalizeText(input.description, "La descripción", {
 		required: true,
 	});
-	const promotionType = normalizeText(input.promotionType, "El tipo", {
-		required: true,
-	});
-	const benefit = normalizeText(input.benefit, "El beneficio", {
-		required: true,
-	});
+	const promotionType = normalizeText(input.promotionType, "El tipo");
+	const rawBenefit = normalizeText(input.benefit, "El beneficio");
+	const discountPercentage = normalizePromotionDiscountPercentage(
+		input.discountPercentage,
+	);
+	const minimumOrderAmount = normalizeDecimalAmount(
+		input.minimumOrderAmount,
+		"El importe mínimo",
+	);
+	const giftProductId = normalizeOptionalId(input.giftProductId) ?? null;
+	const giftDescription = normalizeText(input.giftDescription, "El regalo");
+	const imageUrl = normalizeText(input.imageUrl, "La imagen");
+	const attachmentUrl = normalizeText(input.attachmentUrl, "El adjunto");
+	const attachmentName = normalizeText(input.attachmentName, "El nombre del adjunto");
+	const attachmentMimeType = normalizeText(
+		input.attachmentMimeType,
+		"El tipo del adjunto",
+	);
 	const startDate = normalizeDateOnly(input.startDate, "La fecha de inicio", {
 		required: true,
 	});
@@ -973,20 +1285,50 @@ export async function createPromotion(
 
 	try {
 		const created = await ds.transaction(async (manager) => {
+			const discountType = await resolvePromotionDiscountType(manager, {
+				discountTypeId: input.promotionDiscountTypeId,
+				discountTypeCode: input.promotionDiscountTypeCode,
+			});
+			const specificValues = normalizePromotionSpecificValues({
+				discountTypeCode: discountType.code,
+				benefit: rawBenefit,
+				discountPercentage,
+				minimumOrderAmount,
+				giftProductId,
+				giftDescription,
+			});
+
 			await ensurePromotionRelations(manager, {
 				productId,
 				productLineId,
+				giftProductId: specificValues.giftProductId,
 				clientId,
 				customerSegmentId,
 			});
 
 			const repo = manager.getRepository(Promotion);
+			const benefit = buildPromotionBenefit({
+				benefit: rawBenefit,
+				discountTypeCode: discountType.code,
+				discountPercentage: specificValues.discountPercentage,
+				minimumOrderAmount: specificValues.minimumOrderAmount,
+				giftDescription: specificValues.giftDescription,
+			});
 			const promotion = await repo.save(
 				repo.create({
 					title: String(title),
 					description: String(description),
-					promotion_type: String(promotionType),
-					benefit: String(benefit),
+					promotion_type: String(promotionType ?? discountType.name),
+					promotion_discount_type_id: discountType.id,
+					benefit,
+					discount_percentage: specificValues.discountPercentage,
+					minimum_order_amount: specificValues.minimumOrderAmount,
+					gift_product_id: specificValues.giftProductId,
+					gift_description: specificValues.giftDescription,
+					image_url: imageUrl ?? null,
+					attachment_url: attachmentUrl ?? null,
+					attachment_name: attachmentName ?? null,
+					attachment_mime_type: attachmentMimeType ?? null,
 					start_date: String(startDate),
 					end_date: String(endDate),
 					status,
@@ -1024,6 +1366,22 @@ export async function updatePromotion(
 		description: normalizeText(input.description, "La descripción"),
 		promotionType: normalizeText(input.promotionType, "El tipo"),
 		benefit: normalizeText(input.benefit, "El beneficio"),
+		discountPercentage: normalizePromotionDiscountPercentage(
+			input.discountPercentage,
+		),
+		minimumOrderAmount: normalizeDecimalAmount(
+			input.minimumOrderAmount,
+			"El importe mínimo",
+		),
+		giftProductId: normalizeOptionalId(input.giftProductId),
+		giftDescription: normalizeText(input.giftDescription, "El regalo"),
+		imageUrl: normalizeText(input.imageUrl, "La imagen"),
+		attachmentUrl: normalizeText(input.attachmentUrl, "El adjunto"),
+		attachmentName: normalizeText(input.attachmentName, "El nombre del adjunto"),
+		attachmentMimeType: normalizeText(
+			input.attachmentMimeType,
+			"El tipo del adjunto",
+		),
 		startDate: normalizeDateOnly(input.startDate, "La fecha de inicio"),
 		endDate: normalizeDateOnly(input.endDate, "La fecha fin"),
 		status: normalizePromotionStatus(input.status),
@@ -1052,11 +1410,72 @@ export async function updatePromotion(
 			}
 
 			const wasActive = promotion.status === "active";
+			const discountType = await resolvePromotionDiscountType(manager, {
+				discountTypeId: input.promotionDiscountTypeId,
+				discountTypeCode: input.promotionDiscountTypeCode,
+				fallbackDiscountTypeId: promotion.promotion_discount_type_id,
+			});
+			const hasSpecificPromotionChanges =
+				input.promotionDiscountTypeId !== undefined ||
+				input.promotionDiscountTypeCode !== undefined ||
+				input.discountPercentage !== undefined ||
+				input.minimumOrderAmount !== undefined ||
+				input.giftProductId !== undefined ||
+				input.giftDescription !== undefined;
+			const specificValues = normalizePromotionSpecificValues({
+				discountTypeCode: discountType.code,
+				benefit: normalized.benefit ?? promotion.benefit,
+				discountPercentage: normalized.discountPercentage,
+				minimumOrderAmount: normalized.minimumOrderAmount,
+				giftProductId: normalized.giftProductId,
+				giftDescription: normalized.giftDescription,
+				existing: {
+					discountPercentage: promotion.discount_percentage,
+					minimumOrderAmount: promotion.minimum_order_amount,
+					giftProductId: promotion.gift_product_id,
+					giftDescription: promotion.gift_description,
+				},
+			});
+			const nextBenefit =
+				normalized.benefit !== undefined || hasSpecificPromotionChanges
+					? buildPromotionBenefit({
+							benefit: normalized.benefit ?? null,
+							discountTypeCode: discountType.code,
+							discountPercentage: specificValues.discountPercentage,
+							minimumOrderAmount: specificValues.minimumOrderAmount,
+							giftDescription: specificValues.giftDescription,
+						})
+					: promotion.benefit;
 			const nextValues = {
 				title: normalized.title ?? promotion.title,
 				description: normalized.description ?? promotion.description,
-				promotionType: normalized.promotionType ?? promotion.promotion_type,
-				benefit: normalized.benefit ?? promotion.benefit,
+				promotionType:
+					normalized.promotionType ??
+					(hasSpecificPromotionChanges
+						? discountType.name
+						: promotion.promotion_type),
+				benefit: nextBenefit,
+				discountTypeId: discountType.id,
+				discountPercentage: specificValues.discountPercentage,
+				minimumOrderAmount: specificValues.minimumOrderAmount,
+				giftProductId: specificValues.giftProductId,
+				giftDescription: specificValues.giftDescription,
+				imageUrl:
+					normalized.imageUrl !== undefined
+						? normalized.imageUrl
+						: promotion.image_url,
+				attachmentUrl:
+					normalized.attachmentUrl !== undefined
+						? normalized.attachmentUrl
+						: promotion.attachment_url,
+				attachmentName:
+					normalized.attachmentName !== undefined
+						? normalized.attachmentName
+						: promotion.attachment_name,
+				attachmentMimeType:
+					normalized.attachmentMimeType !== undefined
+						? normalized.attachmentMimeType
+						: promotion.attachment_mime_type,
 				startDate: normalized.startDate ?? promotion.start_date,
 				endDate: normalized.endDate ?? promotion.end_date,
 				status: normalized.status ?? promotion.status,
@@ -1089,6 +1508,15 @@ export async function updatePromotion(
 			promotion.description = String(nextValues.description);
 			promotion.promotion_type = String(nextValues.promotionType);
 			promotion.benefit = String(nextValues.benefit);
+			promotion.promotion_discount_type_id = nextValues.discountTypeId;
+			promotion.discount_percentage = nextValues.discountPercentage;
+			promotion.minimum_order_amount = nextValues.minimumOrderAmount;
+			promotion.gift_product_id = nextValues.giftProductId;
+			promotion.gift_description = nextValues.giftDescription;
+			promotion.image_url = nextValues.imageUrl;
+			promotion.attachment_url = nextValues.attachmentUrl;
+			promotion.attachment_name = nextValues.attachmentName;
+			promotion.attachment_mime_type = nextValues.attachmentMimeType;
 			promotion.start_date = nextValues.startDate;
 			promotion.end_date = nextValues.endDate;
 			promotion.status = nextValues.status;
@@ -1144,7 +1572,9 @@ export async function listPromotionsForUser(input: {
 	const query = ds
 		.getRepository(Promotion)
 		.createQueryBuilder("promotion")
+		.leftJoinAndSelect("promotion.discountType", "discountType")
 		.leftJoinAndSelect("promotion.product", "product")
+		.leftJoinAndSelect("promotion.giftProduct", "giftProduct")
 		.leftJoinAndSelect("promotion.productLine", "productLine")
 		.leftJoinAndSelect("promotion.client", "client")
 		.leftJoinAndSelect("promotion.customerSegment", "segment")

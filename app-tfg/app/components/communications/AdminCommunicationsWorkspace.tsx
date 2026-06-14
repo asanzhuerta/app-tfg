@@ -1,6 +1,7 @@
 "use client";
 
-import { type FormEvent, useEffect, useState } from "react";
+import Image from "next/image";
+import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiClientError, requestJson } from "@/lib/api/client";
 import type { NotificationDeliveryChannel } from "@/lib/contracts/communications";
@@ -10,6 +11,7 @@ import type {
 	ProductLineOptionView,
 	ProductOptionView,
 	PromotionView,
+	PromotionDiscountTypeView,
 	SegmentView,
 	TrainingEventView,
 } from "./communication-view-types";
@@ -19,12 +21,20 @@ type DeliveryFormState = {
 	deliveryChannels: NotificationDeliveryChannel[];
 };
 
+type PromotionAttachmentUploadResponse = {
+	url: string;
+	name: string;
+	mimeType: string;
+	kind: "image" | "pdf";
+};
+
 type Props = {
 	segments: SegmentView[];
 	assignments: ClientSegmentAssignmentView[];
 	clients: ClientOptionView[];
 	products: ProductOptionView[];
 	productLines: ProductLineOptionView[];
+	promotionDiscountTypes: PromotionDiscountTypeView[];
 	promotions: PromotionView[];
 	trainings: TrainingEventView[];
 };
@@ -40,8 +50,17 @@ const defaultDeliveryChannels: NotificationDeliveryChannel[] = ["in_app"];
 const emptyPromotionForm = {
 	title: "",
 	description: "",
-	promotionType: "descuento",
+	promotionType: "",
+	promotionDiscountTypeCode: "percentage_discount",
 	benefit: "",
+	discountPercentage: "",
+	minimumOrderAmount: "",
+	giftProductId: "",
+	giftDescription: "",
+	imageUrl: "",
+	attachmentUrl: "",
+	attachmentName: "",
+	attachmentMimeType: "",
 	startDate: "",
 	endDate: "",
 	status: "draft",
@@ -169,6 +188,7 @@ export default function AdminCommunicationsWorkspace({
 	clients,
 	products,
 	productLines,
+	promotionDiscountTypes,
 	promotions: initialPromotions,
 	trainings: initialTrainings,
 }: Props) {
@@ -296,8 +316,23 @@ export default function AdminCommunicationsWorkspace({
 	}
 
 	function buildPromotionPayload() {
+		const selectedDiscountType = promotionDiscountTypes.find(
+			(discountType) =>
+				discountType.code === promotionForm.promotionDiscountTypeCode,
+		);
+
 		return {
 			...promotionForm,
+			promotionType:
+				promotionForm.promotionType || selectedDiscountType?.name || "",
+			discountPercentage: promotionForm.discountPercentage || null,
+			minimumOrderAmount: promotionForm.minimumOrderAmount || null,
+			giftProductId: promotionForm.giftProductId || null,
+			giftDescription: promotionForm.giftDescription || null,
+			imageUrl: promotionForm.imageUrl || null,
+			attachmentUrl: promotionForm.attachmentUrl || null,
+			attachmentName: promotionForm.attachmentName || null,
+			attachmentMimeType: promotionForm.attachmentMimeType || null,
 			productId: promotionForm.productId || null,
 			productLineId: promotionForm.productLineId || null,
 			clientId: promotionForm.clientId || null,
@@ -321,7 +356,16 @@ export default function AdminCommunicationsWorkspace({
 			title: promotion.title,
 			description: promotion.description,
 			promotionType: promotion.promotionType,
+			promotionDiscountTypeCode: promotion.promotionDiscountTypeCode,
 			benefit: promotion.benefit,
+			discountPercentage: promotion.discountPercentage ?? "",
+			minimumOrderAmount: promotion.minimumOrderAmount ?? "",
+			giftProductId: promotion.giftProductId ?? "",
+			giftDescription: promotion.giftDescription ?? "",
+			imageUrl: promotion.imageUrl ?? "",
+			attachmentUrl: promotion.attachmentUrl ?? "",
+			attachmentName: promotion.attachmentName ?? "",
+			attachmentMimeType: promotion.attachmentMimeType ?? "",
 			startDate: promotion.startDate,
 			endDate: promotion.endDate,
 			status: promotion.status,
@@ -362,6 +406,65 @@ export default function AdminCommunicationsWorkspace({
 			description: segment.description ?? "",
 			criteria: segment.criteria ?? "",
 		});
+	}
+
+	async function handlePromotionAttachmentUpload(
+		event: ChangeEvent<HTMLInputElement>,
+		kind: "image" | "pdf",
+	) {
+		const file = event.target.files?.[0];
+		event.target.value = "";
+
+		if (!file) {
+			return;
+		}
+
+		clearFeedback();
+		setPendingAction(`promotion-upload-${kind}`);
+
+		try {
+			const formData = new FormData();
+			formData.append("file", file);
+
+			if (kind === "image" && promotionForm.imageUrl) {
+				formData.append("previousUrl", promotionForm.imageUrl);
+			}
+
+			if (kind === "pdf" && promotionForm.attachmentUrl) {
+				formData.append("previousUrl", promotionForm.attachmentUrl);
+				formData.append(
+					"previousMimeType",
+					promotionForm.attachmentMimeType || "application/pdf",
+				);
+			}
+
+			const upload = await requestJson<PromotionAttachmentUploadResponse>(
+				"/api/admin/communications/promotions/upload-attachment",
+				{
+					method: "POST",
+					body: formData,
+					fallbackMessage: "No se pudo subir el adjunto",
+				},
+			);
+
+			if (kind === "image") {
+				setPromotionForm((current) => ({
+					...current,
+					imageUrl: upload.url,
+				}));
+			} else {
+				setPromotionForm((current) => ({
+					...current,
+					attachmentUrl: upload.url,
+					attachmentName: upload.name,
+					attachmentMimeType: upload.mimeType,
+				}));
+			}
+		} catch (error) {
+			setError(getErrorMessage(error, "No se pudo subir el adjunto"));
+		} finally {
+			setPendingAction(null);
+		}
 	}
 
 	async function handleSubmitPromotion(event: FormEvent<HTMLFormElement>) {
@@ -849,21 +952,45 @@ export default function AdminCommunicationsWorkspace({
 							className="min-h-24 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
 						/>
 						<div className="grid gap-3 md:grid-cols-2">
-							<input
-								required
-								placeholder="Tipo"
-								value={promotionForm.promotionType}
+							<select
+								value={promotionForm.promotionDiscountTypeCode}
 								onChange={(event) =>
 									setPromotionForm((current) => ({
 										...current,
-										promotionType: event.target.value,
+										promotionDiscountTypeCode: event.target.value,
+										promotionType:
+											promotionDiscountTypes.find(
+												(discountType) =>
+													discountType.code === event.target.value,
+											)?.name ?? "",
+										discountPercentage:
+											event.target.value === "gift_product"
+												? ""
+												: current.discountPercentage,
+										minimumOrderAmount:
+											event.target.value === "volume_percentage_discount"
+												? current.minimumOrderAmount
+												: "",
+										giftProductId:
+											event.target.value === "gift_product"
+												? current.giftProductId
+												: "",
+										giftDescription:
+											event.target.value === "gift_product"
+												? current.giftDescription
+												: "",
 									}))
 								}
 								className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
-							/>
+							>
+								{promotionDiscountTypes.map((discountType) => (
+									<option key={discountType.id} value={discountType.code}>
+										{discountType.name}
+									</option>
+								))}
+							</select>
 							<input
-								required
-								placeholder="Beneficio"
+								placeholder="Beneficio visible (opcional)"
 								value={promotionForm.benefit}
 								onChange={(event) =>
 									setPromotionForm((current) => ({
@@ -873,6 +1000,75 @@ export default function AdminCommunicationsWorkspace({
 								}
 								className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
 							/>
+							{promotionForm.promotionDiscountTypeCode !== "gift_product" ? (
+								<input
+									required
+									type="number"
+									min="0.01"
+									max="100"
+									step="0.01"
+									placeholder="Porcentaje de descuento"
+									value={promotionForm.discountPercentage}
+									onChange={(event) =>
+										setPromotionForm((current) => ({
+											...current,
+											discountPercentage: event.target.value,
+										}))
+									}
+									className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
+								/>
+							) : null}
+							{promotionForm.promotionDiscountTypeCode ===
+							"volume_percentage_discount" ? (
+								<input
+									required
+									type="number"
+									min="0"
+									step="0.01"
+									placeholder="Importe mínimo del pedido"
+									value={promotionForm.minimumOrderAmount}
+									onChange={(event) =>
+										setPromotionForm((current) => ({
+											...current,
+											minimumOrderAmount: event.target.value,
+										}))
+									}
+									className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
+								/>
+							) : null}
+							{promotionForm.promotionDiscountTypeCode === "gift_product" ? (
+								<>
+									<select
+										value={promotionForm.giftProductId}
+										onChange={(event) =>
+											setPromotionForm((current) => ({
+												...current,
+												giftProductId: event.target.value,
+											}))
+										}
+										className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
+									>
+										<option value="">Producto de regalo opcional</option>
+										{products.map((product) => (
+											<option key={product.id} value={product.id}>
+												{product.reference ? `${product.reference} - ` : ""}
+												{product.name}
+											</option>
+										))}
+									</select>
+									<input
+										placeholder="Regalo externo o merchandising"
+										value={promotionForm.giftDescription}
+										onChange={(event) =>
+											setPromotionForm((current) => ({
+												...current,
+												giftDescription: event.target.value,
+											}))
+										}
+										className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
+									/>
+								</>
+							) : null}
 							<input
 								required
 								type="date"
@@ -983,6 +1179,113 @@ export default function AdminCommunicationsWorkspace({
 								))}
 							</select>
 						</div>
+						<div className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-2">
+							<div>
+								<p className="text-sm font-semibold text-slate-900">
+									Imagen de la promoción
+								</p>
+								<p className="mt-1 text-xs text-slate-500">
+									Se muestra junto al texto en el listado de promociones.
+								</p>
+								<div className="mt-3 flex flex-wrap items-center gap-2">
+									<label className="cursor-pointer rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700">
+										{pendingAction === "promotion-upload-image"
+											? "Subiendo..."
+											: promotionForm.imageUrl
+												? "Cambiar imagen"
+												: "Adjuntar imagen"}
+										<input
+											type="file"
+											accept="image/*"
+											onChange={(event) =>
+												handlePromotionAttachmentUpload(event, "image")
+											}
+											className="sr-only"
+										/>
+									</label>
+									{promotionForm.imageUrl ? (
+										<button
+											type="button"
+											onClick={() =>
+												setPromotionForm((current) => ({
+													...current,
+													imageUrl: "",
+												}))
+											}
+											className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600"
+										>
+											Quitar
+										</button>
+									) : null}
+								</div>
+								{promotionForm.imageUrl ? (
+									<Image
+										src={promotionForm.imageUrl}
+										alt="Imagen de la promoción"
+										width={640}
+										height={240}
+										unoptimized
+										className="mt-3 h-28 w-full rounded-2xl object-cover"
+									/>
+								) : null}
+							</div>
+							<div>
+								<p className="text-sm font-semibold text-slate-900">
+									PDF adjunto
+								</p>
+								<p className="mt-1 text-xs text-slate-500">
+									Permite conservar bases, folleto o documento comercial.
+								</p>
+								<div className="mt-3 flex flex-wrap items-center gap-2">
+									<label className="cursor-pointer rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700">
+										{pendingAction === "promotion-upload-pdf"
+											? "Subiendo..."
+											: promotionForm.attachmentUrl
+												? "Cambiar PDF"
+												: "Adjuntar PDF"}
+										<input
+											type="file"
+											accept="application/pdf"
+											onChange={(event) =>
+												handlePromotionAttachmentUpload(event, "pdf")
+											}
+											className="sr-only"
+										/>
+									</label>
+									{promotionForm.attachmentUrl ? (
+										<>
+											<a
+												href={promotionForm.attachmentUrl}
+												target="_blank"
+												rel="noreferrer"
+												className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600"
+											>
+												Ver PDF
+											</a>
+											<button
+												type="button"
+												onClick={() =>
+													setPromotionForm((current) => ({
+														...current,
+														attachmentUrl: "",
+														attachmentName: "",
+														attachmentMimeType: "",
+													}))
+												}
+												className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600"
+											>
+												Quitar
+											</button>
+										</>
+									) : null}
+								</div>
+								{promotionForm.attachmentName ? (
+									<p className="mt-3 truncate text-xs font-medium text-slate-600">
+										{promotionForm.attachmentName}
+									</p>
+								) : null}
+							</div>
+						</div>
 						<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
 							<p className="text-sm font-semibold text-slate-900">
 								Canales de aviso
@@ -1063,7 +1366,7 @@ export default function AdminCommunicationsWorkspace({
 									className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-sm"
 								>
 									<div className="flex flex-wrap items-start justify-between gap-3">
-										<div>
+										<div className="min-w-0 flex-1">
 											<h3 className="font-semibold text-slate-900">
 												{promotion.title}
 											</h3>
@@ -1071,17 +1374,40 @@ export default function AdminCommunicationsWorkspace({
 												{promotion.description}
 											</p>
 										</div>
+										{promotion.imageUrl ? (
+											<Image
+												src={promotion.imageUrl}
+												alt="Imagen de la promoción"
+												width={180}
+												height={120}
+												unoptimized
+												className="h-24 w-36 rounded-2xl object-cover"
+											/>
+										) : null}
 										<StatusBadge status={promotion.status} />
 									</div>
+									<p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+										{promotion.promotionDiscountTypeName}
+									</p>
 									<p className="mt-3 text-sm font-medium text-slate-800">
 										{promotion.benefit}
 									</p>
+									{promotion.attachmentUrl ? (
+										<a
+											href={promotion.attachmentUrl}
+											target="_blank"
+											rel="noreferrer"
+											className="mt-2 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
+										>
+											{promotion.attachmentName || "Ver PDF adjunto"}
+										</a>
+									) : null}
 									<p className="mt-2 text-xs text-slate-500">
 										{formatDate(promotion.startDate)} -{" "}
 										{formatDate(promotion.endDate)}
 									</p>
 									<p className="mt-2 text-xs text-slate-500">
-										Ambito:{" "}
+										Ámbito:{" "}
 										{promotion.clientName ??
 											promotion.customerSegmentName ??
 											"Global"}

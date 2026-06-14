@@ -99,7 +99,9 @@ En esta sección se resumen los requisitos de información que el sistema debe a
 \texttt{RI-M5} & Correo técnico generado & Servicio, destinatario, asunto, contenido y fecha de generación. & Servicio y ficha técnica. \\
 \hline
 \RIModuleHeader{M6. Comunicaciones, promociones y formación}
-\texttt{RI-M6} & Promoción & Título, descripción, tipo, beneficio, vigencia, estado, segmento y condiciones. & Productos, segmentos, clientes y pedidos con descuento. \\
+\texttt{RI-M6} & Promoción & Título, descripción, tipo de descuento, beneficio, porcentaje, umbral de compra, regalo, adjuntos, vigencia, estado, segmento y condiciones. & Productos, segmentos, clientes, tipos de promoción y pedidos con descuento. \\
+\hline
+\texttt{RI-M6} & Tipo de promoción & Código, nombre, descripción, orden de visualización y estado de actividad. & Promociones comerciales. \\
 \hline
 \texttt{RI-M6} & Segmento de cliente & Código, nombre, criterio, descripción y fechas. & Clientes profesionales, promociones y asignaciones. \\
 \hline
@@ -116,7 +118,7 @@ En esta sección se resumen los requisitos de información que el sistema debe a
 \texttt{RI-M6} & Formación e inscripción & Datos de formación, fecha, modalidad, aforo, estado, usuario inscrito y estado de inscripción. & Formación, usuario e integración externa si aplica. \\
 \hline
 \RIModuleHeader{M7. Administración técnica e integraciones}
-\texttt{RI-M7} & Configuración del sistema & Clave, valor, tipo, ámbito, descripción y fecha de actualización. & Usuario administrador y servicios transversales. \\
+\texttt{RI-M7} & Configuración del sistema & Clave, valor, tipo, ámbito, descripción y fecha de actualización, incluyendo cargo por agencia y política de umbrales/recálculo de rangos. & Usuario administrador y servicios transversales. \\
 \hline
 \texttt{RI-M7} & Política de rate limiting & Ámbito, límite, ventana temporal, estado y descripción. & Sobrescritura técnica y endpoints protegidos. \\
 \hline

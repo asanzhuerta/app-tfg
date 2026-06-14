@@ -93,7 +93,7 @@ El proyecto ya interactúa con varios servicios externos:
 
 Al tocar estas integraciones conviene mantener siempre una ruta de degradación razonable. El código actual ya contempla varios ejemplos: avatar con \textit{fallback}, punto de salida guardado si no hay geolocalización actual, ETA anulada si el reparto no es coherente, lectura manual del QR cuando el dispositivo no ofrece soporte suficiente, etiqueta de agencia sin QR comercial y conservación de la notificación interna aunque SMTP, VAPID o una suscripción push no estén disponibles.
 
-En promociones debe conservarse la regla de negocio vigente: los rangos comerciales se tratan de forma jerárquica, de modo que \textit{Oro} hereda promociones \textit{Plata} y \textit{Platino} hereda promociones \textit{Oro} y \textit{Plata}. Además, no se acumulan varias promociones en una misma línea de pedido; el servicio selecciona una única promoción aplicable según mayor descuento, especificidad y caducidad.
+En promociones debe conservarse la regla de negocio vigente: los rangos comerciales se tratan de forma jerárquica, de modo que \textit{Oro} hereda promociones \textit{Plata} y \textit{Platino} hereda promociones \textit{Oro} y \textit{Plata}. Además, no se acumulan varias promociones económicas en una misma línea de pedido; el servicio selecciona una única promoción aplicable según mayor descuento, especificidad y caducidad. Los tipos actuales son descuento porcentual, descuento porcentual por volumen y producto/regalo promocional. El descuento por volumen se evalúa con el subtotal bruto del pedido antes de aplicar descuentos, y el regalo promocional se registra como condición visible sin modificar el total económico.
 
 \subsection{Validación de cambios}
 
