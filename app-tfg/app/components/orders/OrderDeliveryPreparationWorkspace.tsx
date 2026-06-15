@@ -5,7 +5,12 @@ import { useMemo, useState } from "react";
 import PageTransition from "@/app/components/animations/PageTransition";
 import H1Title from "@/app/components/H1Title";
 import SubmitButton from "@/app/components/forms/SubmitButton";
-import { requestJson } from "@/lib/api/client";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 import type {
 	OrderDeliverySummary,
 	PendingOrderDeliveryPreparation,
@@ -160,19 +165,16 @@ export default function OrderDeliveryPreparationWorkspace({
 			setFeedback(null);
 			const delivery = await requestJson<OrderDeliverySummary>(
 				"/api/commercial/order-deliveries",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
+				jsonRequestOptions(
+					"POST",
+					{
 						orderId: selectedOrder.id,
 						packageCount,
 						notes,
 						lines,
-					}),
-					fallbackMessage: "No se pudo preparar el reparto",
-				},
+					},
+					"No se pudo preparar el reparto",
+				),
 			);
 
 			setFeedback({
@@ -183,10 +185,10 @@ export default function OrderDeliveryPreparationWorkspace({
 		} catch (error) {
 			setFeedback({
 				type: "error",
-				message:
-					error instanceof Error
-						? error.message
-						: "No se pudo preparar el reparto.",
+				message: getClientErrorMessage(
+					error,
+					"No se pudo preparar el reparto.",
+				),
 			});
 		} finally {
 			setSaving(false);
@@ -217,15 +219,7 @@ export default function OrderDeliveryPreparationWorkspace({
 				</div>
 
 				{feedback ? (
-					<div
-						className={`rounded-2xl border px-4 py-3 text-sm font-medium ${
-							feedback.type === "success"
-								? "border-emerald-200 bg-emerald-50 text-emerald-700"
-								: "border-rose-200 bg-rose-50 text-rose-700"
-						}`}
-					>
-						{feedback.message}
-					</div>
+					<FeedbackMessage {...feedback} className="font-medium" />
 				) : null}
 
 				<div className="grid gap-6 xl:grid-cols-[minmax(280px,380px)_minmax(0,1fr)]">

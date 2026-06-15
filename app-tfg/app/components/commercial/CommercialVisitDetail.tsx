@@ -7,13 +7,10 @@ import H1Title from "@/app/components/H1Title";
 import PageTransition from "@/app/components/animations/PageTransition";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 import QrCameraScanner from "@/app/components/qr/QrCameraScanner";
 import { useCommercialVisit } from "@/app/hooks/api/useCommercialVisit";
-import {
-	COMMERCIAL_VISIT_STATUS_IDS,
-	COMMERCIAL_VISIT_TYPE_IDS,
-	ORDER_STATUS_IDS,
-} from "@/lib/typeorm/constants/catalog-ids";
+import { getClientErrorMessage } from "@/lib/api/client";
 import {
 	extractOrderDeliveryIdFromQrValue,
 	extractOrderIdFromQrValue,
@@ -25,14 +22,17 @@ import { formatTimeLabel } from "@/lib/utils/time";
 import { formatDateTime } from "@/lib/utils/user-utils";
 import {
 	formatOrderCurrency,
-	getOrderStatusClassesById,
+	getOrderStatusClasses,
 } from "@/app/components/orders/order-ui";
 import {
 	COMMERCIAL_VISIT_STATUS_OPTIONS,
 	COMMERCIAL_VISIT_TYPE_OPTIONS,
 	formatVisitDate,
+	getVisitStatusCodeById,
 	getVisitStatusClasses,
+	getVisitStatusIdByCode,
 	getVisitStatusLabel,
+	getVisitTypeCodeById,
 	getVisitTypeLabel,
 	type CommercialVisitDeliveryOrder,
 } from "./commercial-visit-types";
@@ -116,8 +116,8 @@ function OrderMiniCard({
 					Pedido {order.id.slice(0, 8)}
 				</span>
 				<span
-					className={`rounded-full px-3 py-1 text-xs font-semibold ${getOrderStatusClassesById(
-						order.status_id,
+					className={`rounded-full px-3 py-1 text-xs font-semibold ${getOrderStatusClasses(
+						order.status_code,
 					)}`}
 				>
 					{order.status_name}
@@ -245,13 +245,14 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 		setQrScanFeedback("");
 	}, [visit]);
 
-	const isPostponed =
-		visit?.status_id === COMMERCIAL_VISIT_STATUS_IDS.POSTPONED;
-	const isPlanned = visit?.status_id === COMMERCIAL_VISIT_STATUS_IDS.PLANNED;
-	const isDeliveryVisit =
-		visit?.visit_type_id === COMMERCIAL_VISIT_TYPE_IDS.DELIVERY;
-	const isRoutineVisit =
-		visit?.visit_type_id === COMMERCIAL_VISIT_TYPE_IDS.ROUTINE;
+	const visitStatusCode = visit?.status_code ?? visit?.status?.code ?? null;
+	const visitTypeCode = visit?.visit_type_code ?? visit?.visitType?.code ?? null;
+	const formVisitTypeCode = getVisitTypeCodeById(formState.visitTypeId);
+	const formStatusCode = getVisitStatusCodeById(formState.statusId);
+	const isPostponed = visitStatusCode === "postponed";
+	const isPlanned = visitStatusCode === "planned";
+	const isDeliveryVisit = visitTypeCode === "delivery";
+	const isRoutineVisit = visitTypeCode === "routine";
 	const hasLinkedOrders = Boolean(visit?.linkedOrders.length);
 	const hasLinkedDeliveries = Boolean(visit?.linkedDeliveries.length);
 	const hasCompletedElsewhereOrders = Boolean(
@@ -262,7 +263,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 	);
 	const hasPendingLinkedOrders = Boolean(
 		visit?.linkedOrders.some(
-			(order) => order.status_id === ORDER_STATUS_IDS.CONFIRMED,
+			(order) => order.status_code === "confirmed",
 		),
 	);
 	const hasPendingLinkedDeliveries = Boolean(
@@ -393,10 +394,10 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 						stop: true,
 					};
 				} catch (err) {
-					const message =
-						err instanceof Error
-							? err.message
-							: "No se pudo completar el reparto escaneado.";
+					const message = getClientErrorMessage(
+						err,
+						"No se pudo completar el reparto escaneado.",
+					);
 					setSubmissionError(message);
 
 					return {
@@ -428,7 +429,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 			};
 		}
 
-		if (linkedOrder.status_id === ORDER_STATUS_IDS.DELIVERED) {
+		if (linkedOrder.status_code === "delivered") {
 			return {
 				accepted: false,
 				message:
@@ -457,10 +458,10 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 				stop: true,
 			};
 		} catch (err) {
-			const message =
-				err instanceof Error
-					? err.message
-					: "No se pudo completar el pedido escaneado.";
+			const message = getClientErrorMessage(
+				err,
+				"No se pudo completar el pedido escaneado.",
+			);
 			setSubmissionError(message);
 
 			return {
@@ -483,16 +484,14 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 			setSuccess("");
 
 			await save({
-				statusId: COMMERCIAL_VISIT_STATUS_IDS.COMPLETED,
+				statusId: getVisitStatusIdByCode("completed") ?? Number(formState.statusId),
 				result: formState.result || "Visita rutinaria completada.",
 			});
 
 			setSuccess("Visita rutinaria completada correctamente.");
 		} catch (err) {
 			setSubmissionError(
-				err instanceof Error
-					? err.message
-					: "No se pudo completar la visita rutinaria.",
+				getClientErrorMessage(err, "No se pudo completar la visita rutinaria."),
 			);
 		} finally {
 			setSavingRoutineCompletion(false);
@@ -510,8 +509,8 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 		}
 
 		if (
-			formState.visitTypeId === String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY) &&
-			formState.statusId !== String(COMMERCIAL_VISIT_STATUS_IDS.CANCELLED) &&
+			formVisitTypeCode === "delivery" &&
+			formStatusCode !== "cancelled" &&
 			selectedOrderIds.length === 0 &&
 			selectedDeliveryIds.length === 0
 		) {
@@ -522,9 +521,9 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 		}
 
 		if (
-			formState.visitTypeId === String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY) &&
-			visit.status_id !== COMMERCIAL_VISIT_STATUS_IDS.COMPLETED &&
-			formState.statusId === String(COMMERCIAL_VISIT_STATUS_IDS.COMPLETED) &&
+			formVisitTypeCode === "delivery" &&
+			visitStatusCode !== "completed" &&
+			formStatusCode === "completed" &&
 			selectedDeliveryIds.length > 0 &&
 			scannedDeliveredDeliveryIds.length !== selectedDeliveryIds.length
 		) {
@@ -535,9 +534,9 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 		}
 
 		if (
-			formState.visitTypeId === String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY) &&
-			visit.status_id !== COMMERCIAL_VISIT_STATUS_IDS.COMPLETED &&
-			formState.statusId === String(COMMERCIAL_VISIT_STATUS_IDS.COMPLETED) &&
+			formVisitTypeCode === "delivery" &&
+			visitStatusCode !== "completed" &&
+			formStatusCode === "completed" &&
 			selectedDeliveryIds.length === 0 &&
 			scannedDeliveredOrderIds.length !== selectedOrderIds.length
 		) {
@@ -558,23 +557,21 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 							scheduledForDate: formState.scheduledForDate,
 							visitTypeId: Number(formState.visitTypeId),
 							orderIds:
-								formState.visitTypeId ===
-								String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY)
+								formVisitTypeCode === "delivery"
 									? selectedOrderIds
 									: [],
 							deliveryIds:
-								formState.visitTypeId ===
-								String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY)
+								formVisitTypeCode === "delivery"
 									? selectedDeliveryIds
 									: [],
 						}
 					: {}),
 				deliveredDeliveryQrs:
-					formState.visitTypeId === String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY)
+					formVisitTypeCode === "delivery"
 						? getNonEmptyTrimmedLines(deliveredDeliveryQrInput)
 						: [],
 				deliveredOrderQrs:
-					formState.visitTypeId === String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY)
+					formVisitTypeCode === "delivery"
 						? getNonEmptyTrimmedLines(deliveredOrderQrInput)
 						: [],
 				statusId: Number(formState.statusId),
@@ -586,7 +583,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 			setIsEditModalOpen(false);
 		} catch (err) {
 			setSubmissionError(
-				err instanceof Error ? err.message : "No se pudo actualizar la visita.",
+				getClientErrorMessage(err, "No se pudo actualizar la visita."),
 			);
 		} finally {
 			setSaving(false);
@@ -602,15 +599,19 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 				/>
 
 				{success ? (
-					<div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-						{success}
-					</div>
+					<FeedbackMessage
+						type="success"
+						message={success}
+						className="font-medium"
+					/>
 				) : null}
 
 				{submissionError ? (
-					<div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
-						{submissionError}
-					</div>
+					<FeedbackMessage
+						type="error"
+						message={submissionError}
+						className="font-medium"
+					/>
 				) : null}
 
 				{loading ? (
@@ -882,8 +883,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 										}));
 
 										if (
-											nextVisitTypeId !==
-											String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY)
+											getVisitTypeCodeById(nextVisitTypeId) !== "delivery"
 										) {
 											setSelectedOrderIds([]);
 										}
@@ -969,8 +969,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 								/>
 							</div>
 
-							{formState.visitTypeId ===
-							String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY) ? (
+							{formVisitTypeCode === "delivery" ? (
 								<div className="md:col-span-2 rounded-3xl border border-slate-200 bg-slate-50 p-4">
 									<h3 className="text-sm font-semibold text-slate-900">
 										Repartos vinculados
@@ -1031,10 +1030,8 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 								</div>
 							) : null}
 
-							{formState.visitTypeId ===
-								String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY) &&
-							formState.statusId ===
-								String(COMMERCIAL_VISIT_STATUS_IDS.COMPLETED) ? (
+							{formVisitTypeCode === "delivery" &&
+							formStatusCode === "completed" ? (
 								<div className="md:col-span-2">
 									<label
 										htmlFor="visit-delivered-delivery-qrs"

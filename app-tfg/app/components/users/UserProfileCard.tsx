@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import SafeForm from "@/app/components/forms/SafeForm";
 import ClientProfileFieldsSection from "@/app/components/clients/ClientProfileFieldsSection";
-import { requestJson } from "@/lib/api/client";
+import { jsonRequestOptions, requestJson } from "@/lib/api/client";
 import type { ClientFormDataState } from "@/lib/contracts/client-profile";
 import type {
 	UpdateAdminUserBody,
@@ -327,14 +327,14 @@ export default function UserProfileCard({
 			setErrorMessage(null);
 			setSuccessMessage(null);
 
-			const body = await requestJson<UpdateProfileResponse>(submitUrl, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(requestPayload),
-				fallbackMessage: "No se pudo guardar",
-			});
+			const body = await requestJson<UpdateProfileResponse>(
+				submitUrl,
+				jsonRequestOptions(
+					"PATCH",
+					requestPayload,
+					"No se pudo guardar",
+				),
+			);
 
 			setSuccessMessage(body?.message ?? "Cambios guardados correctamente");
 			setSelectedImageName(null);

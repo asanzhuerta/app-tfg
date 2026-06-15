@@ -4,7 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import SafeForm from "@/app/components/forms/SafeForm";
-import { ApiClientError, requestJson } from "@/lib/api/client";
+import {
+	ApiClientError,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 import type { UploadProfileImageResponse } from "@/lib/contracts/user-profile";
 import {
 	getCloudinaryAttachmentDownloadUrl,
@@ -286,14 +290,11 @@ export default function CatalogAdminForm({
 				id?: string;
 			}>(
 				isEditing ? `${apiBasePath}/${editingId}` : apiBasePath,
-				{
-					method: isEditing ? "PATCH" : "POST",
-					headers: {
-						"content-type": "application/json",
-					},
-					body: JSON.stringify(formValues),
-					fallbackMessage: `No se pudo guardar ${entityLabel}`,
-				},
+				jsonRequestOptions(
+					isEditing ? "PATCH" : "POST",
+					formValues,
+					`No se pudo guardar ${entityLabel}`,
+				),
 			);
 
 			const nextId =

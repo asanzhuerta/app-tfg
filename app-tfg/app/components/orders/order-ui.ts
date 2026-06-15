@@ -3,35 +3,22 @@ import type {
 	OrderSummary,
 	OrderSummaryLine,
 } from "@/lib/contracts/order";
+import {
+	formatCents,
+	formatCurrency,
+	formatPercentage,
+} from "@/lib/utils/money";
 
 export function formatOrderCurrency(amount: string) {
-	const parsed = Number(amount);
-
-	if (!Number.isFinite(parsed)) {
-		return amount;
-	}
-
-	return parsed.toLocaleString("es-ES", {
-		style: "currency",
-		currency: "EUR",
-	});
+	return formatCurrency(amount, amount);
 }
 
 export function formatOrderCents(cents: number) {
-	return formatOrderCurrency((cents / 100).toFixed(2));
+	return formatCurrency(formatCents(cents));
 }
 
 export function formatOrderPercentage(value: string | number) {
-	const parsed = Number(value);
-
-	if (!Number.isFinite(parsed)) {
-		return String(value);
-	}
-
-	return parsed.toLocaleString("es-ES", {
-		maximumFractionDigits: 2,
-		minimumFractionDigits: parsed % 1 === 0 ? 0 : 2,
-	});
+	return formatPercentage(value);
 }
 
 export function getOrderLineSubtotalCents(line: OrderSummaryLine) {

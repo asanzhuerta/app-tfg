@@ -7,10 +7,8 @@ import {
 	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
-import {
-	resolveNextAdminRoleId,
-	type UpdateAdminUserRoleBody,
-} from "@/lib/contracts/admin-user";
+import type { UpdateAdminUserRoleBody } from "@/lib/contracts/admin-user";
+import { resolveNextAdminRoleId } from "@/lib/typeorm/services/users/admin-user-role-resolvers";
 import { updateUserRole } from "@/lib/typeorm/services/users/role";
 
 // PATCH /api/admin/users/[id]/role

@@ -32,6 +32,10 @@ import { listColorReferences } from "@/lib/typeorm/services/catalog/color-chart"
 import { listProducts } from "@/lib/typeorm/services/catalog/product";
 import { getClientByUserId } from "@/lib/typeorm/services/commercial/client";
 import { In, type EntityManager, type Repository } from "typeorm";
+import { formatLongUtcDate } from "@/lib/utils/date-format";
+import { toIsoString } from "@/lib/utils/date-serialization";
+import { formatNumber } from "@/lib/utils/money";
+import { normalizeRequiredTextValue } from "@/lib/utils/validation";
 
 type CreateSalonClientInput = {
 	name?: string | null;
@@ -92,20 +96,12 @@ type ProductSuggestionAggregateRow = {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function toIsoString(value: Date | string | null | undefined) {
-	if (!value) {
-		return "";
-	}
-
-	return value instanceof Date ? value.toISOString() : String(value);
-}
-
 function normalizeRequiredText(
 	value: string | null | undefined,
 	message: string,
 	code: string,
 ) {
-	const normalized = normalizeText(value);
+	const normalized = normalizeRequiredTextValue(value);
 
 	if (!normalized) {
 		throw new SalonTechnicalServiceError(message, 400, code);
@@ -285,31 +281,11 @@ function normalizeSalonServiceInput(
 }
 
 function formatQuantity(value: string | number | null | undefined) {
-	const parsed = Number(value);
-
-	if (!Number.isFinite(parsed)) {
-		return null;
-	}
-
-	return parsed.toLocaleString("es-ES", {
-		minimumFractionDigits: Number.isInteger(parsed) ? 0 : 2,
-		maximumFractionDigits: 2,
-	});
+	return formatNumber(value, "") || null;
 }
 
 function formatServiceDateForEmail(value: string) {
-	const parsed = new Date(`${value}T00:00:00.000Z`);
-
-	if (Number.isNaN(parsed.getTime())) {
-		return value;
-	}
-
-	return new Intl.DateTimeFormat("es-ES", {
-		day: "numeric",
-		month: "long",
-		year: "numeric",
-		timeZone: "UTC",
-	}).format(parsed);
+	return formatLongUtcDate(`${value}T00:00:00.000Z`, value);
 }
 
 function buildColorToneLabel(params: {

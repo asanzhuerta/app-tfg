@@ -10,6 +10,7 @@ import {
 import type { RateLimitPolicySettingsItem } from "@/lib/contracts/rate-limit-settings";
 import { getDataSource } from "@/lib/typeorm/data-source";
 import { AppRateLimitPolicy } from "@/lib/typeorm/entities/AppRateLimitPolicy";
+import { parsePositiveIntegerValue } from "@/lib/utils/validation";
 
 type RateLimitPolicyOverrideMap = Partial<
 	Record<RateLimitPolicyName, RateLimitPolicyOverride>
@@ -61,10 +62,9 @@ function parsePositiveInteger(
 	fieldName: string,
 	code: string,
 ) {
-	const normalizedValue =
-		typeof value === "string" ? Number(value.trim()) : Number(value);
+	const normalizedValue = parsePositiveIntegerValue(value);
 
-	if (!Number.isInteger(normalizedValue) || normalizedValue <= 0) {
+	if (normalizedValue === null) {
 		throw new RateLimitPolicySettingsError(
 			`${fieldName} debe ser un entero positivo`,
 			400,

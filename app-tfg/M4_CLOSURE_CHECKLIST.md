@@ -15,15 +15,15 @@
 
 - Fecha: `2026-06-12`
 - Rama: `feat/coloration-row-view`
-- Base de datos revisada: `si; smoke test funcional a nivel servicio con limpieza final OK`
+- Base de datos revisada: `si; prueba funcional a nivel servicio con limpieza final OK`
 - Build revisada: `si; typecheck, lint y build OK`
 - Responsable de la revisión: `usuario + Codex`
 
 ## Validación automatizada de hoy
 
 - [x] Smoke test funcional de `M4` ejecutado a nivel de servicio y dominio: `19/19` comprobaciones OK.
-- [x] El smoke test cubrio migraciones `029` a `034`, preflight de roles y datos, borradores cliente/comercial, creación, listado, detalle, límite de `2` pedidos abiertos, reparto, validación QR, entrega, cobro, vuelta a `pending` y visibilidad cruzada.
-- [x] El smoke test limpio sus datos temporales al final: `5` pedidos y `2` visitas de reparto eliminados.
+- [x] La prueba funcional cubrio migraciones `029` a `034`, preflight de roles y datos, borradores cliente/comercial, creación, listado, detalle, límite de `2` pedidos abiertos, reparto, validación QR, entrega, cobro, vuelta a `pending` y visibilidad cruzada.
+- [x] La prueba funcional limpio sus datos temporales al final: `5` pedidos y `2` visitas de reparto eliminados.
 - [x] Smoke test de cierre `M4` ejecutado para `cancelled`, `postponed`, `ETA` y reglas límite: `12/12` comprobaciones OK con limpieza final.
 - [x] Se corrigio un problema de infraestructura en desarrollo en [data-source.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/lib/typeorm/data-source.ts) que estaba recreando conexiones y provocando `53300 too many clients already`.
 
@@ -73,7 +73,7 @@ Checklist:
 Notas:
 
 - Validado a nivel servicio: borrador cliente, guardado, recuperacion, creación de pedido real, listado propio, detalle y límite de `2` pedidos abiertos.
-- Validado por smoke de cierre `M4`: sin reparto vinculado no aparece ETA; con reparto real planificado si aparece; con reparto aplazado desaparece la ETA exacta.
+- Validado por prueba funcional `M4`: sin reparto vinculado no aparece ETA; con reparto real planificado si aparece; con reparto aplazado desaparece la ETA exacta.
 - Validado en sesión autenticada de cliente: `/clients/orders` responde `200` y `/clients/orders/[id]` también responde `200`.
 - Sesión de prueba: cliente `Lucy`. Historial visible con `2` pedidos y estados `confirmed` y `cancelled`, ambos con cobro `pending`.
 - `GET /api/clients/orders/[id]`: pedido del cliente `Salón de belleza Lucy`, con líneas presentes y visita vinculada `0a650fea-1ab3-4353-9e78-2d3ea26b4f60`.
@@ -133,7 +133,7 @@ Notas:
 - Verificación visual adicional en el detalle comercial: la página renderiza el bloque de seguimiento del cobro y contiene el pedido entregado `2ba93afe-01dd-4621-9e1d-5f9b81fcc8f2`.
 - Verificación visual adicional en `/commercials/orders/2ba93afe-01dd-4621-9e1d-5f9b81fcc8f2`: el detalle renderiza `Entregado`, `Pendiente`, enlace a `Ver visita de reparto` y el bloque `Método de cobro`.
 - Prueba real del subflujo de cobro: al pasar el pedido `2ba93afe-01dd-4621-9e1d-5f9b81fcc8f2` de `pending` a `paid`, el detalle muestra `Cobrado`, registra método, fecha y usuario, y permite revertir a pendiente.
-- El smoke de cierre `M4` valida además que un reparto solo acepte pedidos `confirmed` del cliente correcto y rechace pedidos `cancelled`, `delivered` o de otro cliente.
+- La prueba funcional `M4` valida además que un reparto solo acepte pedidos `confirmed` del cliente correcto y rechace pedidos `cancelled`, `delivered` o de otro cliente.
 - Verificación adicional en sesión autenticada `comercial@email.com / comercial123$`: `POST /api/commercial/orders` contra un cliente no asignado devuelve `403`, confirmando el bloqueo por asignación.
 - Verificación adicional en `/commercials/orders/[id]`: un pedido temporal renderiza `QR del paquete` y `Código QR` correctamente.
 - Verificación visual hidratada ejecutada con `Chrome --headless`: `/commercials/visits` muestra la bandeja `Pedidos confirmados sin reparto asignado`, el CTA `Crear reparto manual` y la zona de filtros.
@@ -178,7 +178,7 @@ Notas:
 
 Notas:
 
-- Validado a nivel servicio y smoke de cierre: rechazo de pedido vacio, rechazo de transicion invalida sobre pedido entregado, rechazo de vincular pedidos `cancelled`, `delivered` o de otro cliente, y cancelación coherente del ultimo pedido vinculado.
+- Validado a nivel servicio y prueba funcional: rechazo de pedido vacio, rechazo de transicion invalida sobre pedido entregado, rechazo de vincular pedidos `cancelled`, `delivered` o de otro cliente, y cancelación coherente del ultimo pedido vinculado.
 - Se corrigio en [order.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/lib/typeorm/services/orders/order.ts) la cancelación automática de visitas de reparto que se quedaban sin pedidos confirmados al cancelar el ultimo pedido vinculado.
 - Verificación visual hidratada ejecutada con `Chrome --headless`: al limpiar sesión y entrar en `/commercials/orders`, la app redirige a `/login` sin reproducir bucles de carga.
 - Verificación visual hidratada ejecutada con `Chrome --headless`: `/commercials/visits/00000000-0000-0000-0000-000000000000` muestra un error entendible ante fallo de obtencion de datos.
@@ -203,8 +203,8 @@ Notas:
 
 - `.\node_modules\.bin\tsc.cmd --noEmit` OK.
 - `.\node_modules\.bin\eslint.cmd .` OK.
-- `node -r ./scripts/load-env.cjs -r ts-node/register -r tsconfig-paths/register ./scripts/m4-closeout-smoke.ts` OK (`12/12` comprobaciones y limpieza final).
-- Script reusable disponible en [scripts/m4-closeout-smoke.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/scripts/m4-closeout-smoke.ts) y comando `npm run m4:closeout`.
+- `npm run test:m4:orders-delivery` OK (`12/12` comprobaciones y limpieza final en la pasada original).
+- Script reusable disponible en [scripts/m4-orders-delivery-test.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/scripts/m4-orders-delivery-test.ts) y comando `npm run test:m4:orders-delivery`.
 - Eliminado un warning deprecado de `pg` al quitar `Promise.all` sobre el mismo `manager` transaccional en [order.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/lib/typeorm/services/orders/order.ts) y [commercial-visit.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/lib/typeorm/services/commercial/commercial-visit.ts).
 - Se eliminó la dependencia de `next/font/google` en [layout.tsx](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/app/layout.tsx) para que el `build` no dependa de descargar `Geist` y `Geist Mono`.
 - `.\node_modules\.bin\next.cmd build --webpack` OK tras el ajuste del layout raíz.
@@ -212,9 +212,9 @@ Notas:
 - Corregido el leak de conexiones en desarrollo en [data-source.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/lib/typeorm/data-source.ts), que estaba disparando `53300 too many clients already`.
 - Comprobación autenticada de rutas comerciales por HTTP: `/commercials/orders`, `/commercials/visits` y el detalle de pedido comercial responden `200` con sesión válida de comercial.
 - Comprobación autenticada de rutas cliente y admin por HTTP: `/clients/orders`, `/clients/orders/[id]`, `/admin/orders` y `/admin/orders/[id]` responden `200` con sesiones válidas.
-- Verificación de UI hidratada reusable disponible en [m4-ui-headless-check.mjs](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/scripts/m4-ui-headless-check.mjs) y comando `npm run m4:ui-check`, con capturas generadas en `.codex-artifacts/m4-ui-evidence/`.
+- Verificación de UI hidratada reusable disponible en [m4-orders-ui-check.mjs](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/scripts/m4-orders-ui-check.mjs) y comando `npm run test:m4:ui`, con capturas generadas en `.codex-artifacts/m4-ui-evidence/`.
 - La pasada hidratada completa sobre cliente, comercial y admin finalizó sin reproducir los antiguos errores `Maximum update depth exceeded` ni `JWTSessionError`.
-- Tras la pasada de UI se reejecutó el smoke de cierre `M4` y volvió a terminar `12/12` OK, confirmando que la base de datos quedó consistente.
+- Tras la pasada de UI se reejecutó `test:m4:orders-delivery` y volvió a terminar OK, confirmando que la base de datos quedó consistente.
 
 ## Evidencias para memoria y cierre
 
@@ -238,7 +238,7 @@ Marca una sola opción:
 
 ## Observaciones residuales
 
-1. El script `m4-ui-headless-check.mjs` queda como evidencia reusable de cierre visual para futuras regresiones de `M4`.
+1. El script `m4-orders-ui-check.mjs` queda como evidencia reusable de cierre visual para futuras regresiones de `M4`.
 2. La memoria en LaTeX debe reflejar expresamente que `M4` cubre pagos parciales, pero no facturación, vencimientos automáticos ni conciliación avanzada.
 
 ## Decision de salida

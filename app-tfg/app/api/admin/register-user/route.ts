@@ -6,11 +6,9 @@ import {
 	requireRoleUser,
 	unauthorizedError,
 } from "@/lib/api/server";
-import {
-	resolveAdminUserRoleId,
-	type RegisterAdminUserBody,
-} from "@/lib/contracts/admin-user";
+import type { RegisterAdminUserBody } from "@/lib/contracts/admin-user";
 import { ROLE_IDS } from "@/lib/typeorm/constants/catalog-ids";
+import { resolveAdminUserRoleId } from "@/lib/typeorm/services/users/admin-user-role-resolvers";
 import { registerUserByAdmin } from "@/lib/typeorm/services/users/user";
 
 // POST /api/admin/register-user

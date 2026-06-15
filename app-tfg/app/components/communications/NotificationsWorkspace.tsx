@@ -4,7 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import H1Title from "@/app/components/H1Title";
-import { ApiClientError, requestJson } from "@/lib/api/client";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
+import { formatDisplayDateTime } from "@/lib/utils/date-format";
 import type {
 	NotificationView,
 	ReminderView,
@@ -27,21 +33,11 @@ const emptyReminderForm = {
 
 const NOTIFICATIONS_PER_PAGE = 5;
 
-const notificationDateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
-	day: "2-digit",
-	month: "short",
-	year: "numeric",
-	hour: "2-digit",
-	minute: "2-digit",
-});
-
 function formatDateTime(value: string) {
-	return notificationDateTimeFormatter.format(new Date(value));
+	return formatDisplayDateTime(value, value);
 }
 
-function getErrorMessage(error: unknown, fallback: string) {
-	return error instanceof ApiClientError ? error.message : fallback;
-}
+const getErrorMessage = getClientErrorMessage;
 
 function getNotificationAction(
 	notification: NotificationView,
@@ -166,12 +162,10 @@ export default function NotificationsWorkspace({
 		setPendingAction("create-reminder");
 
 		try {
-			await requestJson("/api/communications/reminders", {
-				method: "POST",
-				headers: { "content-type": "application/json" },
-				body: JSON.stringify(reminderForm),
-				fallbackMessage: "No se pudo crear el recordatorio",
-			});
+			await requestJson(
+				"/api/communications/reminders",
+				jsonRequestOptions("POST", reminderForm, "No se pudo crear el recordatorio"),
+			);
 			setReminderForm(emptyReminderForm);
 			setMessage("Recordatorio creado");
 			router.refresh();
@@ -188,12 +182,10 @@ export default function NotificationsWorkspace({
 		setPendingAction(`reminder-${reminderId}`);
 
 		try {
-			await requestJson(`/api/communications/reminders/${reminderId}`, {
-				method: "PATCH",
-				headers: { "content-type": "application/json" },
-				body: JSON.stringify({ status }),
-				fallbackMessage: "No se pudo actualizar el recordatorio",
-			});
+			await requestJson(
+				`/api/communications/reminders/${reminderId}`,
+				jsonRequestOptions("PATCH", { status }, "No se pudo actualizar el recordatorio"),
+			);
 			setMessage("Recordatorio actualizado");
 			router.refresh();
 		} catch (error) {
@@ -208,15 +200,11 @@ export default function NotificationsWorkspace({
 				<H1Title title={title} subtitle={subtitle} />
 
 			{message ? (
-				<div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-					{message}
-				</div>
+				<FeedbackMessage type="success" message={message} />
 			) : null}
 
 			{error ? (
-				<div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-					{error}
-				</div>
+				<FeedbackMessage type="error" message={error} />
 			) : null}
 
 			<div className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">

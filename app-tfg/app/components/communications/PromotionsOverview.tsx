@@ -1,11 +1,9 @@
 import H1Title from "@/app/components/H1Title";
 import Image from "next/image";
-import {
-	getCloudinaryAttachmentDownloadUrl,
-	isPdfResourceUrl,
-	sanitizeDownloadFileName,
-} from "@/lib/cloudinary-url";
+import { sanitizeDownloadFileName } from "@/lib/cloudinary-url";
+import { formatDisplayDate } from "@/lib/utils/date-format";
 import type { PromotionView } from "./communication-view-types";
+import { getPromotionAttachmentHref } from "./promotion-attachments";
 
 type Props = {
 	title: string;
@@ -15,35 +13,8 @@ type Props = {
 	showIntro?: boolean;
 };
 
-const promotionDateFormatter = new Intl.DateTimeFormat("es-ES", {
-	day: "2-digit",
-	month: "short",
-	year: "numeric",
-});
-
 function formatDate(value: string) {
-	return promotionDateFormatter.format(new Date(`${value}T00:00:00`));
-}
-
-function getPromotionAttachmentHref(promotion: PromotionView) {
-	if (!promotion.attachmentUrl) {
-		return "";
-	}
-
-	if (
-		isPdfResourceUrl(
-			promotion.attachmentUrl,
-			promotion.attachmentMimeType,
-			promotion.attachmentName,
-		)
-	) {
-		return getCloudinaryAttachmentDownloadUrl(
-			promotion.attachmentUrl,
-			promotion.attachmentName,
-		);
-	}
-
-	return promotion.attachmentUrl;
+	return formatDisplayDate(value, value);
 }
 
 export default function PromotionsOverview({

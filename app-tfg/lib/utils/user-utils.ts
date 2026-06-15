@@ -1,3 +1,10 @@
+import {
+	formatMediumDateTime,
+	formatNumericDateTime,
+	formatShortDate as formatSharedShortDate,
+	type DateLike,
+} from "@/lib/utils/date-format";
+
 // Utilidades de presentación para la tabla de usuarios.
 // Aquí mantenemos solo lo que pertenece claramente a la UI:
 // - tipo plano que consume la tabla
@@ -38,64 +45,26 @@ export const sortableFields: { key: SortField; label: string }[] = [
 	{ key: "last_login_at", label: "Último acceso" },
 ];
 
-type DateLike = Date | string | null | undefined;
-
-function parseDate(value: DateLike) {
-	if (!value) return null;
-
-	const date = value instanceof Date ? value : new Date(value);
-
-	if (Number.isNaN(date.getTime())) {
-		return null;
-	}
-
-	return date;
-}
-
-// Formatea una fecha y hora en formato numérico.
+// Formatea una fecha y hora en formato numerico.
 // Ejemplo: 26/04/2026, 11:30
 export function formatDate(value: DateLike) {
-	const date = parseDate(value);
-
-	if (!date) return "-";
-
-	return date.toLocaleString("es-ES", {
-		day: "2-digit",
-		month: "2-digit",
-		year: "numeric",
-		hour: "2-digit",
-		minute: "2-digit",
-	});
+	return formatNumericDateTime(value);
 }
 
 // Formatea solo la fecha en formato corto.
 // Ejemplo: 26/04/26
 export function formatDateShort(value: DateLike) {
-	const date = parseDate(value);
-
-	if (!date) return "-";
-
-	return date.toLocaleDateString("es-ES", {
-		day: "2-digit",
-		month: "2-digit",
-		year: "2-digit",
-	});
+	return formatSharedShortDate(value);
 }
 
-// Formatea una fecha y hora en formato más legible.
-// Si no es una fecha válida, devuelve el valor original.
+// Formatea una fecha y hora en formato mas legible.
+// Si no es una fecha valida, devuelve el valor original.
 // Ejemplo: 26 abr 2026, 11:30
 export function formatDateTime(value: DateLike) {
-	const date = parseDate(value);
-
-	if (!date) {
-		return typeof value === "string" && value ? value : "--";
-	}
-
-	return date.toLocaleString("es-ES", {
-		dateStyle: "medium",
-		timeStyle: "short",
-	});
+	return formatMediumDateTime(
+		value,
+		typeof value === "string" && value ? value : "--",
+	);
 }
 
 // Normaliza valores para búsqueda y filtrado.

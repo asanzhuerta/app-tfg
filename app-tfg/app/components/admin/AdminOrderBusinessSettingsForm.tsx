@@ -3,7 +3,12 @@
 import { useState } from "react";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
-import { requestJson } from "@/lib/api/client";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 import type { OrderBusinessSettings } from "@/lib/contracts/order-settings";
 
 type Props = {
@@ -29,25 +34,21 @@ export default function AdminOrderBusinessSettingsForm({
 		try {
 			const settings = await requestJson<OrderBusinessSettings>(
 				"/api/admin/settings/orders",
-				{
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						agencyDeliveryFee,
-					}),
-					fallbackMessage: "No se pudo guardar el cargo por agencia",
-				},
+				jsonRequestOptions(
+					"PUT",
+					{ agencyDeliveryFee },
+					"No se pudo guardar el cargo por agencia",
+				),
 			);
 
 			setAgencyDeliveryFee(settings.agencyDeliveryFee);
 			setSuccess("Ajustes de pedidos guardados correctamente.");
 		} catch (requestError) {
 			setError(
-				requestError instanceof Error
-					? requestError.message
-					: "No se pudo guardar el cargo por agencia",
+				getClientErrorMessage(
+					requestError,
+					"No se pudo guardar el cargo por agencia",
+				),
 			);
 		} finally {
 			setSaving(false);
@@ -99,15 +100,19 @@ export default function AdminOrderBusinessSettingsForm({
 				</div>
 
 				{error ? (
-					<div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
-						{error}
-					</div>
+					<FeedbackMessage
+						type="error"
+						message={error}
+						className="font-semibold"
+					/>
 				) : null}
 
 				{success ? (
-					<div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
-						{success}
-					</div>
+					<FeedbackMessage
+						type="success"
+						message={success}
+						className="font-semibold"
+					/>
 				) : null}
 			</SafeForm>
 		</section>

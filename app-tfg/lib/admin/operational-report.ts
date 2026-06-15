@@ -1,25 +1,10 @@
 import type { AdminOperationalOverview } from "@/lib/contracts/admin-operational-overview";
 import { getAdminOperationalOverview } from "@/lib/admin/operational-overview";
+import { CSV_CONTENT_TYPE, toCsv } from "@/lib/utils/csv";
 
 type BuildAdminOperationalReportInput = {
 	now?: Date;
 };
-
-function escapeCsvValue(value: string | number | null | undefined) {
-	const text = String(value ?? "");
-
-	if (!/[",\r\n]/.test(text)) {
-		return text;
-	}
-
-	return `"${text.replaceAll('"', '""')}"`;
-}
-
-function toCsv(headers: string[], rows: Array<Array<string | number | null>>) {
-	return [headers, ...rows]
-		.map((row) => row.map((value) => escapeCsvValue(value)).join(","))
-		.join("\n");
-}
 
 function buildFileName(now: Date) {
 	const date = now.toISOString().slice(0, 10);
@@ -62,7 +47,7 @@ export async function buildAdminOperationalReport(
 
 	return {
 		content: toCsv(headers, rows),
-		contentType: "text/csv; charset=utf-8",
+		contentType: CSV_CONTENT_TYPE,
 		fileName: buildFileName(now),
 		rowCount: rows.length,
 		summary: overview.summary,

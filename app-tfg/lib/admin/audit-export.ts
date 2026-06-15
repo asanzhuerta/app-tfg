@@ -2,6 +2,7 @@ import { MoreThanOrEqual } from "typeorm";
 import { getDataSource } from "@/lib/typeorm/data-source";
 import { UserAccessLog } from "@/lib/typeorm/entities/UserAccessLog";
 import { UserManagementLog } from "@/lib/typeorm/entities/UserManagementLog";
+import { CSV_CONTENT_TYPE, toCsv } from "@/lib/utils/csv";
 
 export type AdminAuditExportKind = "access" | "management";
 
@@ -41,22 +42,6 @@ function formatUserLabel(
 	}
 
 	return user.name || user.email || "";
-}
-
-function escapeCsvValue(value: string | number | null | undefined) {
-	const text = String(value ?? "");
-
-	if (!/[",\r\n]/.test(text)) {
-		return text;
-	}
-
-	return `"${text.replaceAll('"', '""')}"`;
-}
-
-function toCsv(headers: string[], rows: Array<Array<string | number | null>>) {
-	return [headers, ...rows]
-		.map((row) => row.map((value) => escapeCsvValue(value)).join(","))
-		.join("\n");
 }
 
 function buildFileName(kind: AdminAuditExportKind, now: Date) {
@@ -113,7 +98,7 @@ export async function buildAdminAuditExport(input: BuildAdminAuditExportInput) {
 
 		return {
 			content: toCsv(headers, rows),
-			contentType: "text/csv; charset=utf-8",
+			contentType: CSV_CONTENT_TYPE,
 			fileName: buildFileName(input.kind, now),
 			rowCount: logs.length,
 		};
@@ -166,7 +151,7 @@ export async function buildAdminAuditExport(input: BuildAdminAuditExportInput) {
 
 	return {
 		content: toCsv(headers, rows),
-		contentType: "text/csv; charset=utf-8",
+		contentType: CSV_CONTENT_TYPE,
 		fileName: buildFileName(input.kind, now),
 		rowCount: logs.length,
 	};

@@ -1,6 +1,7 @@
 import { getDataSource } from "@/lib/typeorm/data-source";
 import { IsNull } from "typeorm";
 import { UserPushSubscription } from "@/lib/typeorm/entities/UserPushSubscription";
+import { normalizeRequiredTextValue } from "@/lib/utils/validation";
 import { CommunicationsServiceError } from "./communications";
 
 type PushSubscriptionKeysBody = {
@@ -15,7 +16,7 @@ export type PushSubscriptionBody = {
 };
 
 function normalizeRequiredText(value: unknown, fieldName: string) {
-	const normalized = String(value ?? "").trim();
+	const normalized = normalizeRequiredTextValue(String(value ?? ""));
 
 	if (!normalized) {
 		throw new CommunicationsServiceError(`${fieldName} es obligatorio`);

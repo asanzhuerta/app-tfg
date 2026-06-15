@@ -6,6 +6,7 @@ import {
 	buildOrderQrImageUrl,
 	buildOrderQrPayload,
 } from "@/lib/orders/qr";
+import { formatDisplayDate } from "@/lib/utils/date-format";
 
 const A6_PORTRAIT_WIDTH = 298;
 const A6_PORTRAIT_HEIGHT = 420;
@@ -51,17 +52,7 @@ function fitTextToWidth(
 }
 
 function formatDateLabel(value: string | null | undefined) {
-	const parsed = new Date(String(value ?? ""));
-
-	if (Number.isNaN(parsed.getTime())) {
-		return "-";
-	}
-
-	return new Intl.DateTimeFormat("es-ES", {
-		day: "2-digit",
-		month: "short",
-		year: "numeric",
-	}).format(parsed);
+	return formatDisplayDate(value, "-");
 }
 
 function buildPdfBuffer(input: {

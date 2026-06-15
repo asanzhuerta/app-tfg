@@ -24,16 +24,9 @@ import type {
 	SegmentView,
 	TrainingEventView,
 } from "./communication-view-types";
+import { toIsoString } from "@/lib/utils/date-serialization";
 
 const ACTIVE_ENROLLMENTS = new Set(["registered", "attended"]);
-
-function toIsoString(value: Date | string | null | undefined) {
-	if (!value) {
-		return "";
-	}
-
-	return value instanceof Date ? value.toISOString() : String(value);
-}
 
 export function serializeSegment(
 	segment: Awaited<ReturnType<typeof listCustomerSegments>>[number],

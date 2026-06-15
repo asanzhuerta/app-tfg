@@ -87,14 +87,17 @@ npm run lint
 npm run build
 npm run migration:create -- ./migrations/typeorm/<nombre>
 npm run migration:run
-npm run m6:closeout
-npm run m7:closeout
+npm run test:m6
+npm run test:m7
+npm run test:business
 npm run catalog:upload-product-images -- --dry-run
 ```
 
 ## Criterio de organización
 
 Cada carpeta versionada relevante incluye un `README.md` propio para explicar su contenido y su función dentro de la aplicación.
+
+La aplicación mantiene además una capa de utilidades compartidas para reducir duplicidades: `app-tfg/lib/utils/` concentra formato de fechas, dinero, CSV, búsqueda y validaciones base; `app-tfg/lib/api/client.ts` centraliza las llamadas JSON desde cliente; y `app-tfg/app/components/ui/` agrupa piezas visuales transversales como mensajes de feedback y estilos comunes de formulario.
 
 ## Autor
 

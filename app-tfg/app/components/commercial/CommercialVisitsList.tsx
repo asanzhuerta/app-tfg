@@ -9,9 +9,14 @@ import EntityTableView from "@/app/components/entity-table/EntityTableView";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
 import { useSessionStorageState } from "@/app/hooks/useSessionStorageState";
-import { requestJson } from "@/lib/api/client";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 import type { CommercialRoutePreviewResponse } from "@/lib/contracts/commercial-route";
 import type { OrderDeliverySummary } from "@/lib/contracts/order";
+import { formatDisplayDate } from "@/lib/utils/date-format";
 import { getTodayDateInMadrid } from "@/lib/utils/time";
 import type { CommercialClient } from "./commercial-client-types";
 import type { CommercialVisit } from "./commercial-visit-types";
@@ -67,9 +72,6 @@ function buildPendingDeliveriesQuery() {
 }
 
 const DELIVERY_VISIT_TYPE_ID = "1";
-const deliveryCreatedDateFormatter = new Intl.DateTimeFormat("es-ES", {
-	dateStyle: "medium",
-});
 
 function getDeliveryIdsForClient(
 	deliveries: OrderDeliverySummary[],
@@ -344,9 +346,7 @@ export default function CommercialVisitsList() {
 			} catch (err) {
 				if (!ignore) {
 					setError(
-						err instanceof Error
-							? err.message
-							: "Error al cargar los clientes del comercial",
+						getClientErrorMessage(err, "Error al cargar los clientes del comercial"),
 					);
 				}
 			}
@@ -403,9 +403,7 @@ export default function CommercialVisitsList() {
 			} catch (err) {
 				if (!ignore) {
 					setError(
-						err instanceof Error
-							? err.message
-							: "Error al cargar las visitas del comercial",
+						getClientErrorMessage(err, "Error al cargar las visitas del comercial"),
 					);
 				}
 			} finally {
@@ -449,21 +447,21 @@ export default function CommercialVisitsList() {
 				return;
 			}
 
-			await requestJson<CommercialVisit>("/api/commercial/visits", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					clientId,
-					scheduledForDate,
-					visitTypeId: Number(visitTypeId),
-					notes,
-					deliveryIds:
-						visitTypeId === DELIVERY_VISIT_TYPE_ID ? selectedDeliveryIds : [],
-				}),
-				fallbackMessage: "No se pudo crear la visita",
-			});
+			await requestJson<CommercialVisit>(
+				"/api/commercial/visits",
+				jsonRequestOptions(
+					"POST",
+					{
+						clientId,
+						scheduledForDate,
+						visitTypeId: Number(visitTypeId),
+						notes,
+						deliveryIds:
+							visitTypeId === DELIVERY_VISIT_TYPE_ID ? selectedDeliveryIds : [],
+					},
+					"No se pudo crear la visita",
+				),
+			);
 
 			setClientId("");
 			setScheduledForDate(todayDate);
@@ -491,7 +489,7 @@ export default function CommercialVisitsList() {
 			setPendingDeliveries(pendingDeliveriesData);
 		} catch (err) {
 			setFormError(
-				err instanceof Error ? err.message : "Error al crear la visita",
+				getClientErrorMessage(err, "Error al crear la visita"),
 			);
 		} finally {
 			setSaving(false);
@@ -702,9 +700,7 @@ export default function CommercialVisitsList() {
 														<p className="text-sm font-semibold text-slate-900">
 															Reparto {delivery.id.slice(0, 8)} · Pedido{" "}
 															{delivery.order_short_id} ·{" "}
-															{deliveryCreatedDateFormatter.format(
-																new Date(delivery.created_at),
-															)}
+															{formatDisplayDate(delivery.created_at)}
 														</p>
 														<p className="text-xs text-slate-500">
 															{delivery.package_count} bulto
@@ -1089,9 +1085,7 @@ export default function CommercialVisitsList() {
 																		<p className="text-sm font-semibold text-slate-900">
 																			Reparto {delivery.id.slice(0, 8)} · Pedido{" "}
 																			{delivery.order_short_id} ·{" "}
-																			{deliveryCreatedDateFormatter.format(
-																				new Date(delivery.created_at),
-																			)}
+																			{formatDisplayDate(delivery.created_at)}
 																		</p>
 																		<p className="text-sm font-medium text-slate-900">
 																			{delivery.package_count} bulto

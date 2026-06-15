@@ -67,6 +67,34 @@ export function getDatePartsInTimeZone(
 	};
 }
 
+export function getClockInTimeZone(date = new Date(), timeZone = MADRID_TIME_ZONE) {
+	const parts = new Intl.DateTimeFormat("en-GB", {
+		timeZone,
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: false,
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	}).formatToParts(date);
+
+	const year = parts.find((part) => part.type === "year")?.value ?? "1970";
+	const month = parts.find((part) => part.type === "month")?.value ?? "01";
+	const day = parts.find((part) => part.type === "day")?.value ?? "01";
+	const hour = Number(parts.find((part) => part.type === "hour")?.value ?? "0");
+	const minute = Number(
+		parts.find((part) => part.type === "minute")?.value ?? "0",
+	);
+
+	return {
+		date: `${year}-${month}-${day}`,
+		hour,
+		minute,
+		timeLabel: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
+		totalMinutes: hour * 60 + minute,
+	};
+}
+
 export function getTodayDateInMadrid(date = new Date()) {
 	const { year, month, day } = getDatePartsInTimeZone(
 		date,

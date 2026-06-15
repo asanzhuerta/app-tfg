@@ -39,6 +39,16 @@ La construcción se ha guiado por varios criterios comunes a todos los módulos,
 
 Estos criterios permiten que el sistema siga siendo comprensible a medida que crecen los módulos y facilitan la localización de responsabilidades cuando se incorporan nuevas funcionalidades.
 
+\subsection{Reutilización y limpieza estructural}
+
+Durante la fase final de consolidación se ha realizado una revisión específica de duplicidades y organización interna. El objetivo ha sido reducir funciones equivalentes repartidas por componentes y servicios, sin alterar las reglas funcionales ya validadas.
+
+Las utilidades transversales se han agrupado en \path{lib/utils/}. Esta carpeta concentra formateo de fechas, serialización temporal, cálculo de zona horaria de Madrid, parseo y formateo monetario, generación de \texttt{CSV}, normalización de búsqueda y validación básica de textos o enteros. Los servicios de dominio siguen conservando sus errores específicos, pero delegan el comportamiento común en estas utilidades para evitar implementaciones divergentes.
+
+En la capa cliente se ha centralizado el patrón de llamadas HTTP en \path{lib/api/client.ts}. Los componentes reutilizan \texttt{requestJson}, \texttt{jsonRequestOptions} y \texttt{getClientErrorMessage} para compartir lectura de respuestas, serialización JSON y extracción de mensajes de error. Del mismo modo, los mensajes de éxito o error de formularios se apoyan en \path{app/components/ui/FeedbackMessage.tsx} y las clases comunes de formularios se agrupan en \path{app/components/ui/form-styles.ts}.
+
+También se han dividido pantallas extensas en piezas más pequeñas. En comunicaciones, el \textit{workspace} administrativo separa formularios, listas, resumen, API cliente y hook de orquestación. En pedidos, la carga remota del borrador y las mutaciones principales se han extraído de la vista principal. En el módulo de salón, el detalle se organiza por paneles de ficha, formulario de servicio, historial y plantillas. Esta estructura reduce el acoplamiento entre presentación, estado y reglas de negocio, y facilita que futuras ampliaciones se incorporen sobre puntos de extensión más acotados.
+
 \input{./sections/development/implementation/apiroutes.tex}
 
 \subsection{Implementación del módulo M1}
@@ -113,7 +123,7 @@ Actualmente ya están implementados:
     \item consulta de ETA para cliente solo cuando existe una visita de reparto válida y alineada con un reparto comercial pendiente.
 \end{itemize}
 
-La lógica de negocio del módulo se concentra principalmente en \path{order.ts}, \path{order-delivery.ts}, \path{order-settings.ts} y \path{commercial-visit.ts}. El helper \path{lib/orders/qr.ts} encapsula la generación y normalización del QR de cada reparto, mientras que \path{lib/orders/qr-pdf.ts} genera la etiqueta logística imprimible. \path{lib/clients/delivery-estimate.ts} resuelve la lectura reutilizable de la información de reparto que consume la zona cliente. Para la verificación del módulo se han incorporado además los scripts \path{m4-closeout-smoke.ts} y \path{m4-ui-headless-check.mjs}.
+La lógica de negocio del módulo se concentra principalmente en \path{order.ts}, \path{order-delivery.ts}, \path{order-settings.ts} y \path{commercial-visit.ts}. El helper \path{lib/orders/qr.ts} encapsula la generación y normalización del QR de cada reparto, mientras que \path{lib/orders/qr-pdf.ts} genera la etiqueta logística imprimible. \path{lib/clients/delivery-estimate.ts} resuelve la lectura reutilizable de la información de reparto que consume la zona cliente. Para la verificación del módulo se han incorporado además los scripts \path{m4-orders-delivery-test.ts}, \path{m4-payments-test.ts} y \path{m4-orders-ui-check.mjs}.
 
 \subsection{Implementación del módulo M5}
 

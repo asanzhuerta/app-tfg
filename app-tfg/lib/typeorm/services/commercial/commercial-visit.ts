@@ -28,12 +28,17 @@ import {
 } from "@/lib/typeorm/services/orders/order-delivery";
 import { getActiveAssignmentByCommercialAndClient } from "@/lib/typeorm/services/commercial/client-commercial-assignment";
 import { normalizeText } from "@/lib/utils/text";
-import { parseTimeToMinutes } from "@/lib/utils/time";
+import {
+	MADRID_TIME_ZONE,
+	getClockInTimeZone,
+	parseTimeToMinutes,
+} from "@/lib/utils/time";
 import {
 	notifyClientVisitCreated,
 	notifyClientVisitRescheduled,
 	notifyCommercialVisitsAutoPostponed,
 } from "./visit-notifications";
+import { toIsoString } from "@/lib/utils/date-serialization";
 
 // --------------------------------------------------------------------------
 // Funciones auxiliares para normalización de datos
@@ -76,27 +81,11 @@ function normalizeDateOnlyForUpdate(value: string | null | undefined) {
 }
 
 function getMadridClock(date = new Date()) {
-	const parts = new Intl.DateTimeFormat("en-GB", {
-		timeZone: "Europe/Madrid",
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-		hour: "2-digit",
-		minute: "2-digit",
-		hour12: false,
-	}).formatToParts(date);
-
-	const year = parts.find((part) => part.type === "year")?.value ?? "1970";
-	const month = parts.find((part) => part.type === "month")?.value ?? "01";
-	const day = parts.find((part) => part.type === "day")?.value ?? "01";
-	const hour = Number(parts.find((part) => part.type === "hour")?.value ?? "0");
-	const minute = Number(
-		parts.find((part) => part.type === "minute")?.value ?? "0",
-	);
+	const clock = getClockInTimeZone(date, MADRID_TIME_ZONE);
 
 	return {
-		date: `${year}-${month}-${day}`,
-		totalMinutes: hour * 60 + minute,
+		date: clock.date,
+		totalMinutes: clock.totalMinutes,
 	};
 }
 
@@ -111,19 +100,12 @@ function buildCommercialVisitQuery(repo: Repository<CommercialVisit>) {
 		.leftJoinAndSelect("visit.status", "status");
 }
 
-function toIsoString(value: Date | string | null | undefined) {
-	if (!value) {
-		return "";
-	}
-
-	return value instanceof Date ? value.toISOString() : String(value);
-}
-
 function mapOrderToDeliveryOrderSummary(order: Order): CommercialVisitDeliveryOrder {
 	return {
 		id: order.id,
 		delivery_visit_id: order.delivery_visit_id ?? null,
 		status_id: order.status_id,
+		status_code: order.status?.code ?? "",
 		status_name: order.status?.name ?? "Sin estado",
 		total_amount: String(order.total_amount ?? "0.00"),
 		notes: order.notes ?? null,
@@ -964,6 +946,8 @@ async function buildCommercialVisitDetail(
 
 	return {
 		...visitData,
+		visit_type_code: visit.visitType?.code ?? null,
+		status_code: visit.status?.code ?? null,
 		linkedOrders,
 		availableOrdersForDelivery,
 		completedElsewhereOrders,

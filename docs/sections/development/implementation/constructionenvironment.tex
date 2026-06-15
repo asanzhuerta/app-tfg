@@ -115,8 +115,8 @@ La validación automatizada actualmente consolidada en el proyecto se apoya en:
 npm run lint
 npm run typecheck
 npm run build
-npm run m4:closeout
-npm run m4:ui-check
+npm run test:m4
+npm run test:m4:ui
 \end{lstlisting}
 
-Junto a estas comprobaciones se realiza verificación manual por rol, especialmente sobre login, perfil, clientes, visitas, catálogo, pedidos, reparto y cobro. La existencia de scripts específicos para el cierre de \texttt{M4} no limita su utilidad a ese módulo: complementan la comprobación estática general de toda la aplicación y proporcionan evidencia repetible sobre algunos de sus flujos más sensibles.
+Junto a estas comprobaciones se realiza verificación manual por rol, especialmente sobre login, perfil, clientes, visitas, catálogo, pedidos, reparto y cobro. La existencia de scripts específicos para \texttt{M4} no limita su utilidad a ese módulo: complementan la comprobación estática general de toda la aplicación y proporcionan evidencia repetible sobre algunos de sus flujos más sensibles.

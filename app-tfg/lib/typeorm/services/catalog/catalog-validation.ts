@@ -13,6 +13,10 @@ import {
 	isValidColorReferenceImageUrl,
 } from "@/lib/cloudinary";
 import { normalizeText } from "@/lib/utils/text";
+import {
+	normalizeOptionalText,
+	normalizeRequiredTextValue,
+} from "@/lib/utils/validation";
 
 const UUID_PATTERN =
 	/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -110,7 +114,7 @@ function normalizeRequiredTextField(
 	fieldName: string,
 	code: string,
 ) {
-	const normalized = normalizeText(value);
+	const normalized = normalizeRequiredTextValue(value);
 
 	if (!normalized) {
 		throw new CatalogValidationError(
@@ -124,11 +128,7 @@ function normalizeRequiredTextField(
 }
 
 function normalizeOptionalTextField(value: string | null | undefined) {
-	if (value === undefined) {
-		return undefined;
-	}
-
-	return normalizeText(value) || null;
+	return normalizeOptionalText(value);
 }
 
 function normalizeOptionalCloudinaryImageField(

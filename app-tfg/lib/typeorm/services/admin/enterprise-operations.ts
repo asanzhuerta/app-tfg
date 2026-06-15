@@ -25,6 +25,10 @@ import {
 	type SupplierOrderProposalStatus,
 } from "@/lib/typeorm/entities/SupplierOrderProposal";
 import { SupplierOrderProposalLine } from "@/lib/typeorm/entities/SupplierOrderProposalLine";
+import {
+	normalizeWhitespace,
+	parsePositiveIntegerValue,
+} from "@/lib/utils/validation";
 
 const INTEGRATION_TYPES = [
 	"storage",
@@ -92,7 +96,7 @@ function normalizeText(
 	fieldName: string,
 	options: { required?: boolean; maxLength?: number } = {},
 ) {
-	const normalized = String(value ?? "").trim().replace(/\s+/g, " ");
+	const normalized = normalizeWhitespace(value);
 
 	if (!normalized && options.required) {
 		throw new EnterpriseOperationsServiceError(`${fieldName} es obligatorio`);
@@ -115,9 +119,9 @@ function parsePositiveInteger(
 	const normalized =
 		value === undefined || value === null || value === ""
 			? fallback
-			: Number(value);
+			: parsePositiveIntegerValue(value);
 
-	if (!Number.isInteger(normalized) || normalized <= 0) {
+	if (normalized === null) {
 		throw new EnterpriseOperationsServiceError(
 			`${fieldName} debe ser un entero positivo`,
 		);

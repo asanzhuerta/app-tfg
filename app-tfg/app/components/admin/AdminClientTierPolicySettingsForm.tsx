@@ -3,7 +3,12 @@
 import { useState } from "react";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
-import { requestJson } from "@/lib/api/client";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 import type {
 	ClientTierPolicySettings,
 	ClientTierRecalculationResult,
@@ -43,23 +48,21 @@ export default function AdminClientTierPolicySettingsForm({
 		try {
 			const nextSettings = await requestJson<ClientTierPolicySettings>(
 				"/api/admin/settings/client-tiers",
-				{
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(settings),
-					fallbackMessage: "No se pudo guardar la política de rangos",
-				},
+				jsonRequestOptions(
+					"PUT",
+					settings,
+					"No se pudo guardar la política de rangos"
+				),
 			);
 
 			setSettings(nextSettings);
 			setSuccess("Política de rangos guardada correctamente.");
 		} catch (requestError) {
 			setError(
-				requestError instanceof Error
-					? requestError.message
-					: "No se pudo guardar la política de rangos",
+				getClientErrorMessage(
+					requestError,
+					"No se pudo guardar la política de rangos",
+				),
 			);
 		} finally {
 			setSaving(false);
@@ -85,9 +88,10 @@ export default function AdminClientTierPolicySettingsForm({
 			);
 		} catch (requestError) {
 			setError(
-				requestError instanceof Error
-					? requestError.message
-					: "No se pudo recalcular la política de rangos",
+				getClientErrorMessage(
+					requestError,
+					"No se pudo recalcular la política de rangos",
+				),
 			);
 		} finally {
 			setRecalculating(false);
@@ -237,15 +241,19 @@ export default function AdminClientTierPolicySettingsForm({
 				</div>
 
 				{error ? (
-					<div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700">
-						{error}
-					</div>
+					<FeedbackMessage
+						type="error"
+						message={error}
+						className="font-semibold"
+					/>
 				) : null}
 
 				{success ? (
-					<div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
-						{success}
-					</div>
+					<FeedbackMessage
+						type="success"
+						message={success}
+						className="font-semibold"
+					/>
 				) : null}
 			</SafeForm>
 		</section>

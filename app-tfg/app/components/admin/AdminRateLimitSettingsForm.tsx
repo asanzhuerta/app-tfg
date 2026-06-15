@@ -6,7 +6,11 @@ import AdminNotificationSettingsForm from "@/app/components/admin/AdminNotificat
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
 import H1Title from "@/app/components/H1Title";
-import { requestJson } from "@/lib/api/client";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 import type {
 	RateLimitPolicySettingsItem,
 	UpdateRateLimitPolicySettingsBody,
@@ -105,10 +109,11 @@ export default function AdminRateLimitSettingsForm() {
 			} catch (requestError) {
 				if (!isCancelled) {
 					setError(
-						requestError instanceof Error
-							? requestError.message
-							: "No se pudo cargar la configuración de límites de peticiones",
-					);
+				getClientErrorMessage(
+					requestError,
+					"No se pudo cargar la configuración de límites de peticiones",
+				),
+			);
 				}
 			} finally {
 				if (!isCancelled) {
@@ -168,15 +173,7 @@ export default function AdminRateLimitSettingsForm() {
 		try {
 			const nextPolicies = await requestJson<RateLimitPolicySettingsItem[]>(
 				"/api/admin/settings/rate-limits",
-				{
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(payload),
-					fallbackMessage:
-						"No se pudo guardar la configuración de límites de peticiones",
-				},
+				jsonRequestOptions("PUT", payload, "No se pudo guardar la configuración de límites de peticiones"),
 			);
 
 			setPolicies(nextPolicies);
@@ -184,9 +181,10 @@ export default function AdminRateLimitSettingsForm() {
 			setSuccess("Configuración de límites de peticiones guardada correctamente.");
 		} catch (requestError) {
 			setError(
-				requestError instanceof Error
-					? requestError.message
-					: "No se pudo guardar la configuración de límites de peticiones",
+				getClientErrorMessage(
+					requestError,
+					"No se pudo guardar la configuración de límites de peticiones",
+				),
 			);
 		} finally {
 			setSaving(false);

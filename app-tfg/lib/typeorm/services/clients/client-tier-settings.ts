@@ -11,7 +11,11 @@ import { Client } from "@/lib/typeorm/entities/Client";
 import { ClientCustomerSegment } from "@/lib/typeorm/entities/ClientCustomerSegment";
 import { CustomerSegment } from "@/lib/typeorm/entities/CustomerSegment";
 import { Order } from "@/lib/typeorm/entities/Order";
-import { SystemConfiguration } from "@/lib/typeorm/entities/SystemConfiguration";
+import { getSystemConfigurationRepository } from "@/lib/typeorm/services/system-configuration";
+import {
+	formatCents,
+	parseNonNegativeMoneyToCents,
+} from "@/lib/utils/money";
 
 type TierCode = "silver" | "gold" | "platinum";
 
@@ -90,20 +94,6 @@ export class ClientTierSettingsError extends Error {
 	}
 }
 
-function parseMoneyToCents(value: string | number | null | undefined) {
-	const parsed = Number(String(value ?? "").trim().replace(",", "."));
-
-	if (!Number.isFinite(parsed) || parsed < 0) {
-		return null;
-	}
-
-	return Math.round(parsed * 100);
-}
-
-function formatCents(value: number) {
-	return (Math.max(0, value) / 100).toFixed(2);
-}
-
 function toIsoDate(value: Date) {
 	return value.toISOString().slice(0, 10);
 }
@@ -112,7 +102,7 @@ function normalizeThreshold(
 	value: string | number | null | undefined,
 	fieldName: string,
 ) {
-	const cents = parseMoneyToCents(value);
+	const cents = parseNonNegativeMoneyToCents(value);
 
 	if (cents === null) {
 		throw new ClientTierSettingsError(
@@ -160,19 +150,12 @@ function normalizeIntegerInRange(
 	return parsed;
 }
 
-async function getConfigurationRepository(manager?: EntityManager) {
-	if (manager) {
-		return manager.getRepository(SystemConfiguration);
-	}
-
-	const dataSource = await getDataSource();
-	return dataSource.getRepository(SystemConfiguration);
-}
-
 function assertThresholdOrder(settings: ClientTierPolicySettings) {
-	const silverCents = parseMoneyToCents(settings.thresholdSilver) ?? 0;
-	const goldCents = parseMoneyToCents(settings.thresholdGold) ?? 0;
-	const platinumCents = parseMoneyToCents(settings.thresholdPlatinum) ?? 0;
+	const silverCents =
+		parseNonNegativeMoneyToCents(settings.thresholdSilver) ?? 0;
+	const goldCents = parseNonNegativeMoneyToCents(settings.thresholdGold) ?? 0;
+	const platinumCents =
+		parseNonNegativeMoneyToCents(settings.thresholdPlatinum) ?? 0;
 
 	if (silverCents > goldCents || goldCents > platinumCents) {
 		throw new ClientTierSettingsError(
@@ -201,9 +184,11 @@ function resolveTierForPurchaseTotal(
 	totalCents: number,
 	settings: ClientTierPolicySettings,
 ): TierCode | "none" {
-	const silverCents = parseMoneyToCents(settings.thresholdSilver) ?? 0;
-	const goldCents = parseMoneyToCents(settings.thresholdGold) ?? 0;
-	const platinumCents = parseMoneyToCents(settings.thresholdPlatinum) ?? 0;
+	const silverCents =
+		parseNonNegativeMoneyToCents(settings.thresholdSilver) ?? 0;
+	const goldCents = parseNonNegativeMoneyToCents(settings.thresholdGold) ?? 0;
+	const platinumCents =
+		parseNonNegativeMoneyToCents(settings.thresholdPlatinum) ?? 0;
 
 	if (totalCents >= platinumCents) {
 		return "platinum";
@@ -251,7 +236,7 @@ function parseStoredMoneyToCents(value: string | number | null | undefined) {
 export async function getClientTierPolicySettings(
 	manager?: EntityManager,
 ): Promise<ClientTierPolicySettings> {
-	const repository = await getConfigurationRepository(manager);
+	const repository = await getSystemConfigurationRepository(manager);
 	const configurations = await repository.find({
 		where: Object.values(CONFIG_KEYS).map((key) => ({ key })),
 	});
@@ -339,7 +324,7 @@ export async function updateClientTierPolicySettings(
 
 	assertThresholdOrder(nextSettings);
 
-	const repository = await getConfigurationRepository();
+	const repository = await getSystemConfigurationRepository();
 	await repository.upsert(
 		[
 			{

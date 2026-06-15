@@ -3,7 +3,12 @@ import type {
 	CommercialRouteTimingSummary,
 	RoutePoint,
 } from "@/lib/contracts/commercial-route";
-import { MADRID_TIME_ZONE, parseTimeToMinutes } from "@/lib/utils/time";
+import {
+	MADRID_TIME_ZONE,
+	getClockInTimeZone,
+	getTodayDateInMadrid,
+	parseTimeToMinutes,
+} from "@/lib/utils/time";
 
 const APPROX_TRAVEL_SPEED_KMH = 28;
 
@@ -79,50 +84,18 @@ function formatMinutesAsTimeLabel(value: number) {
 	return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 }
 
-function getMadridDateParts(date: Date) {
-	const parts = new Intl.DateTimeFormat("en-CA", {
-		timeZone: MADRID_TIME_ZONE,
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-	}).formatToParts(date);
-
-	return {
-		year: parts.find((part) => part.type === "year")?.value ?? "1970",
-		month: parts.find((part) => part.type === "month")?.value ?? "01",
-		day: parts.find((part) => part.type === "day")?.value ?? "01",
-	};
-}
-
 function getCurrentMadridClock(date = new Date()): MadridClock {
-	const parts = new Intl.DateTimeFormat("en-GB", {
-		timeZone: MADRID_TIME_ZONE,
-		hour: "2-digit",
-		minute: "2-digit",
-		hour12: false,
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-	}).formatToParts(date);
-
-	const year = parts.find((part) => part.type === "year")?.value ?? "1970";
-	const month = parts.find((part) => part.type === "month")?.value ?? "01";
-	const day = parts.find((part) => part.type === "day")?.value ?? "01";
-	const hour = Number(parts.find((part) => part.type === "hour")?.value ?? "0");
-	const minute = Number(
-		parts.find((part) => part.type === "minute")?.value ?? "0",
-	);
+	const clock = getClockInTimeZone(date, MADRID_TIME_ZONE);
 
 	return {
-		date: `${year}-${month}-${day}`,
-		timeLabel: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
-		totalMinutes: hour * 60 + minute,
+		date: clock.date,
+		timeLabel: clock.timeLabel,
+		totalMinutes: clock.totalMinutes,
 	};
 }
 
 export function getTodayRangeInMadrid(date = new Date()) {
-	const { year, month, day } = getMadridDateParts(date);
-	const today = `${year}-${month}-${day}`;
+	const today = getTodayDateInMadrid(date);
 
 	return {
 		dateFrom: today,

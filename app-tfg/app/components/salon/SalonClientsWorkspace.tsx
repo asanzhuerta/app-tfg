@@ -4,19 +4,22 @@ import Link from "next/link";
 import { useState } from "react";
 import H1Title from "@/app/components/H1Title";
 import PageTransition from "@/app/components/animations/PageTransition";
-import type { ApiErrorResponse } from "@/lib/contracts/api";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
+import {
+	inputClassName,
+	primaryButtonClassName,
+	textareaClassName,
+} from "@/app/components/ui/form-styles";
 import type { SalonClientSummary } from "@/lib/contracts/salon";
 import { formatDateShort } from "@/lib/utils/user-utils";
-import { getApiErrorMessage } from "./salon-ui";
+import {
+	createSalonClient,
+	getSalonRequestErrorMessage,
+} from "./salon-client-api";
 
 type Props = {
 	initialSalonClients: SalonClientSummary[];
 };
-
-const inputClassName =
-	"w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-slate-400";
-
-const textareaClassName = `${inputClassName} min-h-28 resize-y`;
 
 export default function SalonClientsWorkspace({
 	initialSalonClients,
@@ -39,33 +42,12 @@ export default function SalonClientsWorkspace({
 		setIsSubmitting(true);
 
 		try {
-			const response = await fetch("/api/clients/salon-clients", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					name,
-					phone,
-					email,
-					notes,
-				}),
+			const data = await createSalonClient({
+				name,
+				phone,
+				email,
+				notes,
 			});
-			const data = (await response.json().catch(() => null)) as
-				| SalonClientSummary
-				| ApiErrorResponse
-				| null;
-
-			if (!response.ok || !data || !("id" in data)) {
-				setFeedback({
-					type: "error",
-					message: getApiErrorMessage(
-						data as ApiErrorResponse | null,
-						"No se ha podido crear la ficha técnica.",
-					),
-				});
-				return;
-			}
 
 			setSalonClients((current) => [data, ...current]);
 			setName("");
@@ -76,10 +58,13 @@ export default function SalonClientsWorkspace({
 				type: "success",
 				message: "Ficha técnica creada correctamente.",
 			});
-		} catch {
+		} catch (error) {
 			setFeedback({
 				type: "error",
-				message: "No se ha podido crear la ficha técnica.",
+				message: getSalonRequestErrorMessage(
+					error,
+					"No se ha podido crear la ficha técnica.",
+				),
 			});
 		} finally {
 			setIsSubmitting(false);
@@ -181,22 +166,12 @@ export default function SalonClientsWorkspace({
 							/>
 						</div>
 
-						{feedback ? (
-							<div
-								className={`rounded-2xl px-4 py-3 text-sm ${
-									feedback.type === "success"
-										? "bg-emerald-50 text-emerald-700"
-										: "bg-rose-50 text-rose-700"
-								}`}
-							>
-								{feedback.message}
-							</div>
-						) : null}
+						{feedback ? <FeedbackMessage {...feedback} /> : null}
 
 						<button
 							type="submit"
 							disabled={isSubmitting}
-							className="inline-flex rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+							className={primaryButtonClassName}
 						>
 							{isSubmitting ? "Creando..." : "Crear ficha"}
 						</button>

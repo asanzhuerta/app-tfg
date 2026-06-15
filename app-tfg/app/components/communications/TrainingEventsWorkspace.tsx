@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import H1Title from "@/app/components/H1Title";
-import { ApiClientError, requestJson } from "@/lib/api/client";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
+import { formatDisplayDateTime } from "@/lib/utils/date-format";
 import type { TrainingEventView } from "./communication-view-types";
 
 type Props = {
@@ -14,21 +20,11 @@ type Props = {
 	showIntro?: boolean;
 };
 
-const trainingDateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
-	day: "2-digit",
-	month: "short",
-	year: "numeric",
-	hour: "2-digit",
-	minute: "2-digit",
-});
-
 function formatDateTime(value: string) {
-	return trainingDateTimeFormatter.format(new Date(value));
+	return formatDisplayDateTime(value, value);
 }
 
-function getErrorMessage(error: unknown, fallback: string) {
-	return error instanceof ApiClientError ? error.message : fallback;
-}
+const getErrorMessage = getClientErrorMessage;
 
 function getEnrollmentStatus(training: TrainingEventView) {
 	return training.currentUserEnrollment?.status ?? null;
@@ -56,12 +52,10 @@ export default function TrainingEventsWorkspace({
 		setPendingId(trainingId);
 
 		try {
-			await requestJson(`/api/communications/trainings/${trainingId}/enrollment`, {
-				method: "POST",
-				headers: { "content-type": "application/json" },
-				body: JSON.stringify({}),
-				fallbackMessage: "No se pudo completar la inscripción",
-			});
+			await requestJson(
+				`/api/communications/trainings/${trainingId}/enrollment`,
+				jsonRequestOptions("POST", {}, "No se pudo completar la inscripción"),
+			);
 			setMessage("Inscripción registrada correctamente");
 			router.refresh();
 		} catch (error) {
@@ -110,15 +104,11 @@ export default function TrainingEventsWorkspace({
 			) : null}
 
 			{message ? (
-				<div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-					{message}
-				</div>
+				<FeedbackMessage type="success" message={message} />
 			) : null}
 
 			{error ? (
-				<div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-					{error}
-				</div>
+				<FeedbackMessage type="error" message={error} />
 			) : null}
 
 			{trainings.length ? (

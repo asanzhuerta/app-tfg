@@ -75,3 +75,22 @@ export async function requestJson<T>(
 
 	return payload as T;
 }
+
+export function getClientErrorMessage(error: unknown, fallbackMessage: string) {
+	return error instanceof Error ? error.message : fallbackMessage;
+}
+
+export function jsonRequestOptions(
+	method: "POST" | "PUT" | "PATCH" | "DELETE",
+	body: unknown,
+	fallbackMessage: string,
+) {
+	return {
+		method,
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(body),
+		fallbackMessage,
+	};
+}

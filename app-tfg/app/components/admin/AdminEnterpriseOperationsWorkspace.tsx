@@ -5,12 +5,19 @@ import PageTransition from "@/app/components/animations/PageTransition";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
 import H1Title from "@/app/components/H1Title";
-import { requestJson } from "@/lib/api/client";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 import type {
 	CreateIntegrationOperationBody,
 	EnterpriseOperationsSnapshot,
 	GenerateSupplierOrderProposalBody,
 } from "@/lib/contracts/enterprise-operations";
+import { formatDisplayDateTime } from "@/lib/utils/date-format";
+import { formatCurrency } from "@/lib/utils/money";
 import type { ExternalIntegrationStatus } from "@/lib/typeorm/entities/ExternalIntegration";
 import type { IntegrationOperationStatus } from "@/lib/typeorm/entities/IntegrationOperation";
 import type { SupplierOrderProposalStatus } from "@/lib/typeorm/entities/SupplierOrderProposal";
@@ -46,26 +53,16 @@ const proposalStatusStyles: Record<SupplierOrderProposalStatus, string> = {
 	archived: "border-slate-200 bg-slate-100 text-slate-600",
 };
 
-const enterpriseDateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
-	dateStyle: "short",
-	timeStyle: "short",
-});
-
-const enterpriseMoneyFormatter = new Intl.NumberFormat("es-ES", {
-	style: "currency",
-	currency: "EUR",
-});
-
 function formatDateTime(value: string | null) {
 	if (!value) {
 		return "Sin registros";
 	}
 
-	return enterpriseDateTimeFormatter.format(new Date(value));
+	return formatDisplayDateTime(value, value);
 }
 
 function formatMoney(value: number) {
-	return enterpriseMoneyFormatter.format(value);
+	return formatCurrency(value);
 }
 
 function selectedValues(select: HTMLSelectElement) {
@@ -126,21 +123,18 @@ export default function AdminEnterpriseOperationsWorkspace({
 		};
 
 		try {
-			await requestJson("/api/admin/enterprise-operations/operations", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(payload),
-				fallbackMessage: "No se pudo registrar la operación",
-			});
+			await requestJson(
+				"/api/admin/enterprise-operations/operations",
+				jsonRequestOptions("POST", payload, "No se pudo registrar la operación"),
+			);
 			await refreshSnapshot();
 			setMessage("Operación de integración registrada correctamente.");
 		} catch (requestError) {
 			setError(
-				requestError instanceof Error
-					? requestError.message
-					: "No se pudo registrar la operación",
+				getClientErrorMessage(
+					requestError,
+					"No se pudo registrar la operación",
+				),
 			);
 		} finally {
 			setSavingOperation(false);
@@ -164,22 +158,16 @@ export default function AdminEnterpriseOperationsWorkspace({
 		try {
 			await requestJson(
 				"/api/admin/enterprise-operations/supplier-proposals",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(payload),
-					fallbackMessage: "No se pudo generar la propuesta",
-				},
+				jsonRequestOptions("POST", payload, "No se pudo generar la propuesta"),
 			);
 			await refreshSnapshot();
 			setMessage("Propuesta de pedido a proveedor generada correctamente.");
 		} catch (requestError) {
 			setError(
-				requestError instanceof Error
-					? requestError.message
-					: "No se pudo generar la propuesta",
+				getClientErrorMessage(
+					requestError,
+					"No se pudo generar la propuesta",
+				),
 			);
 		} finally {
 			setGeneratingProposal(false);
@@ -243,14 +231,18 @@ export default function AdminEnterpriseOperationsWorkspace({
 				</section>
 
 				{message ? (
-					<div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-						{message}
-					</div>
+					<FeedbackMessage
+						type="success"
+						message={message}
+						className="font-medium"
+					/>
 				) : null}
 				{error ? (
-					<div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
-						{error}
-					</div>
+					<FeedbackMessage
+						type="error"
+						message={error}
+						className="font-medium"
+					/>
 				) : null}
 
 				<section className="grid gap-6 xl:grid-cols-[1fr_1fr]">

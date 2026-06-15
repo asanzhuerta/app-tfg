@@ -11,6 +11,7 @@ import type {
 	CommercialVisitType,
 	CommercialVisitTypeCode,
 } from "@/lib/contracts/commercial-visit";
+import { formatDisplayDate } from "@/lib/utils/date-format";
 
 export type {
 	CommercialVisitDetail,
@@ -27,72 +28,82 @@ export type {
 };
 
 export const COMMERCIAL_VISIT_STATUS_OPTIONS = [
-	{ id: 1, label: "Planificada" },
-	{ id: 2, label: "Completada" },
-	{ id: 3, label: "Cancelada" },
-	{ id: 4, label: "Aplazada" },
+	{ id: 1, code: "planned", label: "Planificada" },
+	{ id: 2, code: "completed", label: "Completada" },
+	{ id: 3, code: "cancelled", label: "Cancelada" },
+	{ id: 4, code: "postponed", label: "Aplazada" },
 ] as const;
 
 export const COMMERCIAL_VISIT_TYPE_OPTIONS = [
-	{ id: 1, label: "Reparto" },
-	{ id: 2, label: "Rutinaria" },
+	{ id: 1, code: "delivery", label: "Reparto" },
+	{ id: 2, code: "routine", label: "Rutinaria" },
 ] as const;
 
+export function getVisitStatusCodeById(
+	statusId: number | string | null | undefined,
+) {
+	const parsedStatusId = Number(statusId);
+	return (
+		COMMERCIAL_VISIT_STATUS_OPTIONS.find(
+			(option) => option.id === parsedStatusId,
+		)?.code ?? null
+	);
+}
+
+export function getVisitStatusIdByCode(
+	statusCode: CommercialVisitStatusCode | string,
+) {
+	return (
+		COMMERCIAL_VISIT_STATUS_OPTIONS.find(
+			(option) => option.code === statusCode,
+		)?.id ?? null
+	);
+}
+
+export function getVisitTypeCodeById(
+	visitTypeId: number | string | null | undefined,
+) {
+	const parsedVisitTypeId = Number(visitTypeId);
+	return (
+		COMMERCIAL_VISIT_TYPE_OPTIONS.find(
+			(option) => option.id === parsedVisitTypeId,
+		)?.code ?? null
+	);
+}
+
 export function getVisitStatusLabel(statusId: number) {
-	switch (statusId) {
-		case 1:
-			return "Planificada";
-		case 2:
-			return "Completada";
-		case 3:
-			return "Cancelada";
-		case 4:
-			return "Aplazada";
-		default:
-			return "Desconocido";
-	}
+	return (
+		COMMERCIAL_VISIT_STATUS_OPTIONS.find((option) => option.id === statusId)
+			?.label ?? "Desconocido"
+	);
 }
 
 export function getVisitTypeLabel(visitTypeId: number) {
-	switch (visitTypeId) {
-		case 1:
-			return "Reparto";
-		case 2:
-			return "Rutinaria";
-		default:
-			return "Desconocido";
-	}
+	return (
+		COMMERCIAL_VISIT_TYPE_OPTIONS.find((option) => option.id === visitTypeId)
+			?.label ?? "Desconocido"
+	);
 }
 
 export function getVisitStatusClasses(statusId: number) {
-	switch (statusId) {
-		case 1:
+	switch (getVisitStatusCodeById(statusId)) {
+		case "planned":
 			return "bg-amber-50 text-amber-700";
-		case 2:
+		case "completed":
 			return "bg-emerald-50 text-emerald-700";
-		case 3:
+		case "cancelled":
 			return "bg-rose-50 text-rose-700";
-		case 4:
+		case "postponed":
 			return "bg-orange-50 text-orange-700";
 		default:
 			return "bg-slate-100 text-slate-700";
 	}
 }
 
-const visitDateFormatter = new Intl.DateTimeFormat("es-ES", {
-	dateStyle: "medium",
-});
-
 export function formatVisitDate(value: string | null | undefined) {
 	if (!value) {
 		return "-";
 	}
 
-	const date = new Date(`${value}T00:00:00`);
-
-	if (Number.isNaN(date.getTime())) {
-		return "-";
-	}
-
-	return visitDateFormatter.format(date);
+	return formatDisplayDate(value);
 }

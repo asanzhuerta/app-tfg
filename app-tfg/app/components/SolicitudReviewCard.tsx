@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
+import { formatMadridDateTime } from "@/lib/utils/date-format";
 
 type Solicitud = {
 	id: string;
@@ -20,19 +21,6 @@ type Props = {
 	actionColor: "green" | "red";
 	showRejectionReason?: boolean;
 };
-
-const solicitudDateFormatter = new Intl.DateTimeFormat("es-ES", {
-	timeZone: "Europe/Madrid",
-	day: "2-digit",
-	month: "2-digit",
-	year: "numeric",
-	hour: "2-digit",
-	minute: "2-digit",
-});
-
-function formatFecha(fecha: string | Date) {
-	return solicitudDateFormatter.format(new Date(fecha));
-}
 
 export default function SolicitudReviewCard({
 	title,
@@ -89,7 +77,7 @@ export default function SolicitudReviewCard({
 							Fecha de solicitud
 						</p>
 						<p className="mt-1 text-sm text-black">
-							{formatFecha(solicitud.requested_at)}
+							{formatMadridDateTime(solicitud.requested_at)}
 						</p>
 					</div>
 				</div>

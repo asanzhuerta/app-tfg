@@ -142,6 +142,7 @@ export type OrderSummary = {
 	created_by_user_id: string;
 	created_by_user_name: string;
 	created_by_user_role_id: number | null;
+	created_by_user_role_code: string | null;
 	status_id: number;
 	status_code: OrderStatusCode | string;
 	status_name: string;

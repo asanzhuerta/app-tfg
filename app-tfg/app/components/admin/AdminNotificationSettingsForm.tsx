@@ -3,7 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import SafeForm from "@/app/components/forms/SafeForm";
 import SubmitButton from "@/app/components/forms/SubmitButton";
-import { requestJson } from "@/lib/api/client";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 import type {
 	ExternalNotificationDeliveryChannel,
 	NotificationDeliverySettingsItem,
@@ -97,10 +101,11 @@ export default function AdminNotificationSettingsForm() {
 			} catch (requestError) {
 				if (!isCancelled) {
 					setError(
-						requestError instanceof Error
-							? requestError.message
-							: "No se pudo cargar la configuración de avisos automáticos",
-					);
+				getClientErrorMessage(
+					requestError,
+					"No se pudo cargar la configuración de avisos automáticos",
+				),
+			);
 				}
 			} finally {
 				if (!isCancelled) {
@@ -183,24 +188,20 @@ export default function AdminNotificationSettingsForm() {
 		try {
 			const nextSettings = await requestJson<
 				NotificationDeliverySettingsItem[]
-			>("/api/admin/settings/notifications", {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(payload),
-				fallbackMessage:
-					"No se pudo guardar la configuración de avisos automáticos",
-			});
+			>(
+				"/api/admin/settings/notifications",
+				jsonRequestOptions("PUT", payload, "No se pudo guardar la configuración de avisos automáticos"),
+			);
 
 			setSettings(nextSettings);
 			setDraftSettings(nextSettings.map(cloneSetting));
 			setSuccess("Canales de avisos automáticos guardados correctamente.");
 		} catch (requestError) {
 			setError(
-				requestError instanceof Error
-					? requestError.message
-					: "No se pudo guardar la configuración de avisos automáticos",
+				getClientErrorMessage(
+					requestError,
+					"No se pudo guardar la configuración de avisos automáticos",
+				),
 			);
 		} finally {
 			setSaving(false);

@@ -1,6 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import {
+	addDraftOrderItem,
+	getOrderRequestErrorMessage,
+} from "@/app/components/orders/order-workspace-api";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 
 type OrderableColorReference = {
 	id: string;
@@ -85,31 +90,12 @@ export default function ProductOrderBox({
 		setSubmitting(true);
 
 		try {
-			const response = await fetch(`${draftApiBasePath}/draft/items`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					clientId: mode === "commercial" ? selectedClientId : undefined,
-					productId,
-					colorReferenceId: hasVariants ? selectedColorReferenceId : undefined,
-					quantity,
-				}),
+			await addDraftOrderItem(draftApiBasePath, {
+				clientId: mode === "commercial" ? selectedClientId : undefined,
+				productId,
+				colorReferenceId: hasVariants ? selectedColorReferenceId : undefined,
+				quantity,
 			});
-			const data = (await response.json().catch(() => null)) as
-				| { id?: string; error?: string }
-				| null;
-
-			if (!response.ok) {
-				setFeedback({
-					type: "error",
-					message:
-						(data && "error" in data && data.error) ||
-						"No se ha podido añadir la referencia al pedido en curso.",
-				});
-				return;
-			}
 
 			setFeedback({
 				type: "success",
@@ -119,8 +105,10 @@ export default function ProductOrderBox({
 			console.error("[catalog][product-order-box] error:", error);
 			setFeedback({
 				type: "error",
-				message:
+				message: getOrderRequestErrorMessage(
+					error,
 					"Ha ocurrido un error inesperado al añadir la línea al pedido en curso.",
+				),
 			});
 		} finally {
 			setSubmitting(false);
@@ -144,15 +132,7 @@ export default function ProductOrderBox({
 			</div>
 
 			{feedback ? (
-				<div
-					className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${
-						feedback.type === "success"
-							? "border-emerald-200 bg-emerald-50 text-emerald-700"
-							: "border-rose-200 bg-rose-50 text-rose-700"
-					}`}
-				>
-					{feedback.message}
-				</div>
+				<FeedbackMessage {...feedback} className="mt-4" />
 			) : null}
 
 			{isDisabledForCommercial ? (

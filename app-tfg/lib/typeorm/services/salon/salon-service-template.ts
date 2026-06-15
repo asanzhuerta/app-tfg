@@ -13,6 +13,8 @@ import { SalonServiceTemplateProductUsage } from "@/lib/typeorm/entities/SalonSe
 import { getClientByUserId } from "@/lib/typeorm/services/commercial/client";
 import { SalonTechnicalServiceError } from "@/lib/typeorm/services/salon/salon-client";
 import { In, type EntityManager, type Repository } from "typeorm";
+import { toIsoString } from "@/lib/utils/date-serialization";
+import { normalizeRequiredTextValue } from "@/lib/utils/validation";
 
 type CreateSalonServiceTemplateInput = {
 	name?: string | null;
@@ -43,20 +45,12 @@ type NormalizedSalonServiceTemplateInput = {
 	productUsages: NormalizedSalonTemplateProductUsageInput[];
 };
 
-function toIsoString(value: Date | string | null | undefined) {
-	if (!value) {
-		return "";
-	}
-
-	return value instanceof Date ? value.toISOString() : String(value);
-}
-
 function normalizeRequiredText(
 	value: string | null | undefined,
 	message: string,
 	code: string,
 ) {
-	const normalized = normalizeText(value);
+	const normalized = normalizeRequiredTextValue(value);
 
 	if (!normalized) {
 		throw new SalonTechnicalServiceError(message, 400, code);

@@ -17,6 +17,6 @@ export function revalidateCatalogCache() {
 	try {
 		revalidateTag(CATALOG_CACHE_TAG, "max");
 	} catch {
-		// The catalog writes should not fail if a smoke script runs outside Next.
+		// The catalog writes should not fail if a test script runs outside Next.
 	}
 }

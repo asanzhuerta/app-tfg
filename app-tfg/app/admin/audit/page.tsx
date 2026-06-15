@@ -5,18 +5,14 @@ import H1Title from "@/app/components/H1Title";
 import { getDataSource } from "@/lib/typeorm/data-source";
 import { UserAccessLog } from "@/lib/typeorm/entities/UserAccessLog";
 import { UserManagementLog } from "@/lib/typeorm/entities/UserManagementLog";
-
-const auditDateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
-	dateStyle: "short",
-	timeStyle: "short",
-});
+import { formatDisplayDateTime } from "@/lib/utils/date-format";
 
 function formatDateTime(value: Date | null) {
 	if (!value) {
 		return "Sin fecha";
 	}
 
-	return auditDateTimeFormatter.format(value);
+	return formatDisplayDateTime(value, "Sin fecha");
 }
 
 function formatUserLabel(user: { name?: string | null; email?: string | null } | null) {

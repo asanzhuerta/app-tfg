@@ -19,9 +19,14 @@ import {
 	COMMERCIAL_VISIT_STATUS_IDS,
 	ORDER_STATUS_IDS,
 } from "@/lib/typeorm/constants/catalog-ids";
+import {
+	formatCents,
+	parseStoredMoneyToCents,
+} from "@/lib/typeorm/services/orders/order-money";
 import { requireCommercialByUserId } from "@/lib/typeorm/services/commercial/commercial";
 import { canCommercialAccessClient } from "@/lib/typeorm/services/commercial/client-commercial-assignment";
 import { normalizeText } from "@/lib/utils/text";
+import { toIsoString } from "@/lib/utils/date-serialization";
 
 const DELIVERY_STATUS_LABELS: Record<OrderDeliveryStatusCode, string> = {
 	prepared: "Preparado",
@@ -36,28 +41,6 @@ type PrepareOrderDeliveryInput = {
 	notes?: string | null;
 	lines?: PrepareOrderDeliveryLineBody[];
 };
-
-function toIsoString(value: Date | string | null | undefined) {
-	if (!value) {
-		return "";
-	}
-
-	return value instanceof Date ? value.toISOString() : String(value);
-}
-
-function parseMoneyToCents(value: string | number | null | undefined) {
-	const amount = Number(value ?? 0);
-
-	if (!Number.isFinite(amount)) {
-		return 0;
-	}
-
-	return Math.round(amount * 100);
-}
-
-function formatCents(value: number) {
-	return (Math.max(0, value) / 100).toFixed(2);
-}
 
 function normalizeUuid(value: string | null | undefined, label: string) {
 	const normalized = String(value ?? "").trim();
@@ -123,6 +106,7 @@ function createOrderDeliveryBaseQuery(repo: Repository<OrderDelivery>) {
 		.leftJoinAndSelect("order.status", "orderStatus")
 		.leftJoinAndSelect("order.paymentStatus", "paymentStatus")
 		.leftJoinAndSelect("order.createdByUser", "createdByUser")
+		.leftJoinAndSelect("createdByUser.role", "createdByUserRole")
 		.leftJoinAndSelect("order.payments", "payments")
 		.leftJoinAndSelect("payments.registeredByUser", "paymentRegisteredByUser")
 		.leftJoinAndSelect("delivery.commercial", "commercial")
@@ -311,10 +295,10 @@ function mapOrderToPendingPreparation(
 	const lines = sortedLines.map((line) => mapOrderLineToPendingLine(line, input));
 	const payments = [...(order.payments ?? [])];
 	const paidCents = payments.reduce(
-		(total, payment) => total + parseMoneyToCents(payment.amount),
+		(total, payment) => total + parseStoredMoneyToCents(payment.amount),
 		0,
 	);
-	const totalCents = parseMoneyToCents(order.total_amount);
+	const totalCents = parseStoredMoneyToCents(order.total_amount);
 	const remainingLineCount = lines.reduce(
 		(total, line) => total + line.remaining_quantity,
 		0,
@@ -330,6 +314,7 @@ function mapOrderToPendingPreparation(
 		created_by_user_id: order.created_by_user_id,
 		created_by_user_name: order.createdByUser?.name ?? "Usuario",
 		created_by_user_role_id: order.createdByUser?.role_id ?? null,
+		created_by_user_role_code: order.createdByUser?.role?.code ?? null,
 		status_id: order.status_id,
 		status_code: order.status?.code ?? "",
 		status_name: order.status?.name ?? "Sin estado",
@@ -386,6 +371,7 @@ async function loadConfirmedOrdersForCommercial(
 		.leftJoinAndSelect("order.client", "client")
 		.leftJoinAndSelect("client.user", "clientUser")
 		.leftJoinAndSelect("order.createdByUser", "createdByUser")
+		.leftJoinAndSelect("createdByUser.role", "createdByUserRole")
 		.leftJoinAndSelect("order.status", "status")
 		.leftJoinAndSelect("order.paymentStatus", "paymentStatus")
 		.leftJoinAndSelect("order.paidByUser", "paidByUser")

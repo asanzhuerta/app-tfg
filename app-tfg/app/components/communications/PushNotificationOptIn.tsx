@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ApiClientError, requestJson } from "@/lib/api/client";
+import {
+	getClientErrorMessage,
+	jsonRequestOptions,
+	requestJson,
+} from "@/lib/api/client";
 
 type PushKeyResponse = {
 	configured: boolean;
@@ -38,9 +42,7 @@ const inlineStatusLabel: Record<PushStatus, string> = {
 	denied: "Notificaciones bloqueadas",
 };
 
-function getErrorMessage(error: unknown, fallback: string) {
-	return error instanceof ApiClientError ? error.message : fallback;
-}
+const getErrorMessage = getClientErrorMessage;
 
 function getStatusHelp(status: PushStatus) {
 	if (status === "not_configured") {
@@ -173,12 +175,14 @@ export default function PushNotificationOptIn({
 				applicationServerKey: urlBase64ToUint8Array(keyResponse.publicKey),
 			});
 
-			await requestJson("/api/communications/push-subscriptions", {
-				method: "POST",
-				headers: { "content-type": "application/json" },
-				body: JSON.stringify(subscription.toJSON()),
-				fallbackMessage: "No se pudieron activar las notificaciones",
-			});
+			await requestJson(
+				"/api/communications/push-subscriptions",
+				jsonRequestOptions(
+					"POST",
+					subscription.toJSON(),
+					"No se pudieron activar las notificaciones",
+				),
+			);
 
 			setStatus("enabled");
 			setMessage("Notificaciones activadas en este dispositivo");
@@ -205,12 +209,14 @@ export default function PushNotificationOptIn({
 				await subscription.unsubscribe();
 			}
 
-			await requestJson("/api/communications/push-subscriptions", {
-				method: "DELETE",
-				headers: { "content-type": "application/json" },
-				body: JSON.stringify({ endpoint }),
-				fallbackMessage: "No se pudieron desactivar las notificaciones",
-			});
+			await requestJson(
+				"/api/communications/push-subscriptions",
+				jsonRequestOptions(
+					"DELETE",
+					{ endpoint },
+					"No se pudieron desactivar las notificaciones",
+				),
+			);
 
 			setStatus("available");
 			setMessage("Notificaciones desactivadas en este dispositivo");

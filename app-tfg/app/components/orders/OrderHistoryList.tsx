@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useSessionStorageState } from "@/app/hooks/useSessionStorageState";
 import type { OrderSummary } from "@/lib/contracts/order";
-import { ROLE_IDS } from "@/lib/typeorm/constants/catalog-ids";
+import { toLocalDateInputValue } from "@/lib/utils/date-format";
+import { normalizeSearchText } from "@/lib/utils/text";
 import { formatDateTime } from "@/lib/utils/user-utils";
 import {
 	buildOrderLinePromotionLabel,
@@ -27,11 +28,7 @@ type Props = {
 };
 
 function normalizeSearchValue(value: unknown) {
-	return String(value ?? "")
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "")
-		.toLowerCase()
-		.trim();
+	return normalizeSearchText(String(value ?? ""));
 }
 
 function buildOrderSearchText(order: OrderSummary) {
@@ -109,24 +106,12 @@ function buildClientOptions(orders: OrderSummary[]) {
 	);
 }
 
-function getLocalDateInputValue(value: string | null | undefined) {
-	const date = new Date(String(value ?? ""));
-
-	if (Number.isNaN(date.getTime())) {
-		return "";
-	}
-
-	const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
-
-	return localDate.toISOString().slice(0, 10);
-}
-
 function isOrderInsideDateRange(
 	order: OrderSummary,
 	dateFrom: string,
 	dateTo: string,
 ) {
-	const orderDate = getLocalDateInputValue(order.created_at);
+	const orderDate = toLocalDateInputValue(order.created_at);
 
 	if (!orderDate) {
 		return false;
@@ -449,7 +434,7 @@ export default function OrderHistoryList({
 									</span>
 								) : null}
 								{mode === "client" &&
-								order.created_by_user_role_id === ROLE_IDS.COMMERCIAL ? (
+								order.created_by_user_role_code === "commercial" ? (
 									<span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
 										Gestionado por {order.created_by_user_name}
 									</span>

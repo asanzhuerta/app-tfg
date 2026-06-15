@@ -59,7 +59,9 @@ export type CommercialVisit = {
 	commercial_id: string;
 	scheduled_for_date: string;
 	visit_type_id: number;
+	visit_type_code: CommercialVisitTypeCode | string | null;
 	status_id: number;
+	status_code: CommercialVisitStatusCode | string | null;
 	notes: string | null;
 	result: string | null;
 	client: CommercialVisitClient | null;
@@ -72,6 +74,7 @@ export type CommercialVisitDeliveryOrder = {
 	id: string;
 	delivery_visit_id: string | null;
 	status_id: number;
+	status_code: string;
 	status_name: string;
 	total_amount: string;
 	notes: string | null;

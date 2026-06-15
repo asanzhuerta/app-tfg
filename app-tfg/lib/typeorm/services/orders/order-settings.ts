@@ -3,8 +3,11 @@ import type {
 	OrderBusinessSettings,
 	UpdateOrderBusinessSettingsBody,
 } from "@/lib/contracts/order-settings";
-import { getDataSource } from "@/lib/typeorm/data-source";
-import { SystemConfiguration } from "@/lib/typeorm/entities/SystemConfiguration";
+import { getSystemConfigurationRepository } from "@/lib/typeorm/services/system-configuration";
+import {
+	formatCents,
+	parseNonNegativeMoneyToCents,
+} from "@/lib/utils/money";
 
 const AGENCY_DELIVERY_FEE_CONFIGURATION_KEY = "orders.agency_delivery_fee";
 const AGENCY_DELIVERY_FEE_CONFIGURATION_DESCRIPTION =
@@ -23,22 +26,8 @@ export class OrderSettingsError extends Error {
 	}
 }
 
-function parseMoneyToCents(value: string | number | null | undefined) {
-	const parsed = Number(value ?? 0);
-
-	if (!Number.isFinite(parsed) || parsed < 0) {
-		return null;
-	}
-
-	return Math.round(parsed * 100);
-}
-
-function formatCents(value: number) {
-	return (Math.max(0, value) / 100).toFixed(2);
-}
-
 function normalizeFee(value: string | number | null | undefined) {
-	const cents = parseMoneyToCents(value);
+	const cents = parseNonNegativeMoneyToCents(value);
 
 	if (cents === null) {
 		throw new OrderSettingsError(
@@ -51,19 +40,10 @@ function normalizeFee(value: string | number | null | undefined) {
 	return formatCents(cents);
 }
 
-async function getConfigurationRepository(manager?: EntityManager) {
-	if (manager) {
-		return manager.getRepository(SystemConfiguration);
-	}
-
-	const dataSource = await getDataSource();
-	return dataSource.getRepository(SystemConfiguration);
-}
-
 export async function getOrderBusinessSettings(
 	manager?: EntityManager,
 ): Promise<OrderBusinessSettings> {
-	const repository = await getConfigurationRepository(manager);
+	const repository = await getSystemConfigurationRepository(manager);
 	const configuration = await repository.findOne({
 		where: {
 			key: AGENCY_DELIVERY_FEE_CONFIGURATION_KEY,
@@ -79,7 +59,7 @@ export async function getOrderBusinessSettings(
 
 export async function getAgencyDeliveryFeeCents(manager?: EntityManager) {
 	const settings = await getOrderBusinessSettings(manager);
-	const cents = parseMoneyToCents(settings.agencyDeliveryFee);
+	const cents = parseNonNegativeMoneyToCents(settings.agencyDeliveryFee);
 
 	return cents ?? 0;
 }
@@ -88,7 +68,7 @@ export async function updateOrderBusinessSettings(
 	input: UpdateOrderBusinessSettingsBody,
 ) {
 	const nextAgencyDeliveryFee = normalizeFee(input.agencyDeliveryFee);
-	const repository = await getConfigurationRepository();
+	const repository = await getSystemConfigurationRepository();
 
 	await repository.upsert(
 		{

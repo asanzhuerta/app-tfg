@@ -2,24 +2,41 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import PageTransition from "@/app/components/animations/PageTransition";
 import H1Title from "@/app/components/H1Title";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 import { useSessionStorageState } from "@/app/hooks/useSessionStorageState";
 import type {
 	OrderFulfillmentMethod,
 	OrderProductOption,
 	OrderSummary,
 } from "@/lib/contracts/order";
-import { ROLE_IDS } from "@/lib/typeorm/constants/catalog-ids";
+import { toLocalDateInputValue } from "@/lib/utils/date-format";
+import {
+	applyPercentageDiscountToCents,
+	parsePercentage,
+	parseStoredMoneyToCents,
+} from "@/lib/utils/money";
 import { formatDateTime } from "@/lib/utils/user-utils";
 import {
+	formatOrderCurrency,
 	formatOrderCents,
 	formatOrderPercentage,
 	getOrderDiscountSummary,
 	getOrderPackageCount,
 	getOrderPaymentStatusClasses,
 } from "./order-ui";
+import {
+	clearOrderDraft,
+	getOrderRequestErrorMessage,
+	saveOrderDraft,
+	submitOrder,
+} from "./order-workspace-api";
+import {
+	useOrderWorkspaceRemoteState,
+	type OrderWorkspaceFeedback,
+} from "./useOrderWorkspaceRemoteState";
 
 type OrderClientOption = {
 	id: string;
@@ -52,48 +69,6 @@ type WorkspaceProps = {
 	showHistory?: boolean;
 	historyHref?: string;
 };
-
-function formatCurrency(amount: string) {
-	const parsed = Number(amount);
-
-	if (!Number.isFinite(parsed)) {
-		return amount;
-	}
-
-	return parsed.toLocaleString("es-ES", {
-		style: "currency",
-		currency: "EUR",
-	});
-}
-
-function parseMoneyToCents(amount: string | null | undefined) {
-	const parsed = Number(amount);
-
-	if (!Number.isFinite(parsed) || parsed < 0) {
-		return 0;
-	}
-
-	return Math.round(parsed * 100);
-}
-
-function parseDiscountPercentage(value: string | number | null | undefined) {
-	const parsed = Number(value);
-
-	if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 100) {
-		return 0;
-	}
-
-	return parsed;
-}
-
-function applyDiscountToCents(amountCents: number, discountPercentage: number) {
-	const basisPoints = Math.round(discountPercentage * 100);
-
-	return Math.max(
-		0,
-		Math.round((amountCents * (10_000 - basisPoints)) / 10_000),
-	);
-}
 
 function getOrderStatusClasses(statusCode: string) {
 	switch (statusCode) {
@@ -228,14 +203,12 @@ function buildLinePreview(
 	}
 
 	const quantity = Math.max(1, Number(line.quantity) || 1);
-	const unitPriceCents = parseMoneyToCents(productOption.basePrice);
+	const unitPriceCents = parseStoredMoneyToCents(productOption.basePrice);
 	const subtotalCents = unitPriceCents * quantity;
-	const discountPercentage = parseDiscountPercentage(
-		productOption.discountPercentage,
-	);
+	const discountPercentage = parsePercentage(productOption.discountPercentage);
 	const totalCents =
 		discountPercentage > 0
-			? applyDiscountToCents(subtotalCents, discountPercentage)
+			? applyPercentageDiscountToCents(subtotalCents, discountPercentage)
 			: subtotalCents;
 
 	return {
@@ -288,24 +261,12 @@ function matchesOrderSearch(order: OrderSummary, searchTerm: string) {
 		.includes(normalizedSearchTerm);
 }
 
-function getLocalDateInputValue(value: string | null | undefined) {
-	const date = new Date(String(value ?? ""));
-
-	if (Number.isNaN(date.getTime())) {
-		return "";
-	}
-
-	const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
-
-	return localDate.toISOString().slice(0, 10);
-}
-
 function isOrderInsideDateRange(
 	order: OrderSummary,
 	dateFrom: string,
 	dateTo: string,
 ) {
-	const orderDate = getLocalDateInputValue(order.created_at);
+	const orderDate = toLocalDateInputValue(order.created_at);
 
 	if (!orderDate) {
 		return false;
@@ -363,8 +324,6 @@ export default function OrderWorkspace({
 	const [submitting, setSubmitting] = useState(false);
 	const [savingDraft, setSavingDraft] = useState(false);
 	const [clearingDraft, setClearingDraft] = useState(false);
-	const [loadingDraft, setLoadingDraft] = useState(false);
-	const [loadingProductOptions, setLoadingProductOptions] = useState(false);
 	const workspaceHistoryFilterKey = `order-workspace-history:${mode}:${detailBasePath}`;
 	const [historyClientFilter, setHistoryClientFilter] = useSessionStorageState(
 		`${workspaceHistoryFilterKey}:client`,
@@ -390,10 +349,28 @@ export default function OrderWorkspace({
 	const [isCreatePanelOpen, setIsCreatePanelOpen] = useState(
 		mode !== "commercial" || initialCreatePanelOpen,
 	);
-	const [feedback, setFeedback] = useState<{
-		type: "success" | "error";
-		message: string;
-	} | null>(null);
+	const [feedback, setFeedback] = useState<OrderWorkspaceFeedback>(null);
+	const syncDraftState = useCallback((nextDraftOrder: OrderSummary | null) => {
+		setNotes(nextDraftOrder?.notes ?? "");
+		setFulfillmentMethod(
+			nextDraftOrder?.fulfillment_method === "agency"
+				? "agency"
+				: "commercial",
+		);
+		setLines(mapOrderToEditableLines(nextDraftOrder));
+		setProductSearchByLineId({});
+	}, []);
+	const { loadingDraft, loadingProductOptions } =
+		useOrderWorkspaceRemoteState({
+			apiPath,
+			mode,
+			productOptions,
+			selectedClientId,
+			showOrderForm,
+			setCurrentProductOptions,
+			setFeedback,
+			syncDraftState,
+		});
 
 	const selectedClientOrders = useMemo(
 		() =>
@@ -505,7 +482,7 @@ export default function OrderWorkspace({
 	const orderLineLabel = mode === "client" ? "Producto" : "Bulto";
 	const addLineLabel =
 		mode === "client" ? "Añadir nuevo producto" : "Añadir bulto";
-	const agencyDeliveryFeeCents = parseMoneyToCents(agencyDeliveryFee);
+	const agencyDeliveryFeeCents = parseStoredMoneyToCents(agencyDeliveryFee);
 	const orderPreview = useMemo(() => {
 		const lineTotals = lines.reduce(
 			(accumulator, line) => {
@@ -546,17 +523,6 @@ export default function OrderWorkspace({
 		lines,
 	]);
 
-	function syncDraftState(nextDraftOrder: OrderSummary | null) {
-		setNotes(nextDraftOrder?.notes ?? "");
-		setFulfillmentMethod(
-			nextDraftOrder?.fulfillment_method === "agency"
-				? "agency"
-				: "commercial",
-		);
-		setLines(mapOrderToEditableLines(nextDraftOrder));
-		setProductSearchByLineId({});
-	}
-
 	function resetHistoryFilters() {
 		setHistorySearch("");
 		setHistoryClientFilter("all");
@@ -565,205 +531,6 @@ export default function OrderWorkspace({
 		setHistoryDateFromFilter("");
 		setHistoryDateToFilter("");
 	}
-
-	useEffect(() => {
-		setCurrentProductOptions(productOptions);
-	}, [productOptions]);
-
-	useEffect(() => {
-		if (mode !== "client" || !showOrderForm) {
-			return;
-		}
-
-		let isCancelled = false;
-
-		async function loadDraft() {
-			setLoadingDraft(true);
-
-			try {
-				const response = await fetch(`${apiPath}/draft`, {
-					method: "GET",
-					cache: "no-store",
-				});
-				const data = (await response.json().catch(() => null)) as
-					| OrderSummary
-					| { error?: string }
-					| null;
-
-				if (isCancelled) {
-					return;
-				}
-
-				if (!response.ok) {
-					setFeedback({
-						type: "error",
-						message:
-							(data && "error" in data && data.error) ||
-							"No se ha podido cargar el pedido en curso.",
-					});
-					return;
-				}
-
-				syncDraftState(data && "id" in data ? data : null);
-			} catch (error) {
-				console.error("[orders][client-draft][load] error:", error);
-
-				if (!isCancelled) {
-					setFeedback({
-						type: "error",
-						message:
-							"Ha ocurrido un error inesperado al cargar el pedido en curso.",
-					});
-				}
-			} finally {
-				if (!isCancelled) {
-					setLoadingDraft(false);
-				}
-			}
-		}
-
-		loadDraft();
-
-		return () => {
-			isCancelled = true;
-		};
-	}, [apiPath, mode, showOrderForm]);
-
-	useEffect(() => {
-		if (mode !== "commercial") {
-			return;
-		}
-
-		if (!selectedClientId) {
-			setCurrentProductOptions(productOptions);
-			return;
-		}
-
-		let isCancelled = false;
-
-		async function loadProductOptions() {
-			setLoadingProductOptions(true);
-
-			try {
-				const response = await fetch(
-					`${apiPath}/product-options?clientId=${encodeURIComponent(
-						selectedClientId,
-					)}`,
-					{
-						method: "GET",
-						cache: "no-store",
-					},
-				);
-				const data = (await response.json().catch(() => null)) as
-					| OrderProductOption[]
-					| { error?: string }
-					| null;
-
-				if (isCancelled) {
-					return;
-				}
-
-				if (!response.ok || !Array.isArray(data)) {
-					setFeedback({
-						type: "error",
-						message:
-							(data && "error" in data && data.error) ||
-							"No se han podido cargar las promociones de este cliente.",
-					});
-					return;
-				}
-
-				setCurrentProductOptions(data);
-			} catch (error) {
-				console.error("[orders][product-options][load] error:", error);
-
-				if (!isCancelled) {
-					setFeedback({
-						type: "error",
-						message:
-							"Ha ocurrido un error inesperado al cargar las promociones del cliente.",
-					});
-				}
-			} finally {
-				if (!isCancelled) {
-					setLoadingProductOptions(false);
-				}
-			}
-		}
-
-		loadProductOptions();
-
-		return () => {
-			isCancelled = true;
-		};
-	}, [apiPath, mode, productOptions, selectedClientId]);
-
-	useEffect(() => {
-		if (mode !== "commercial") {
-			return;
-		}
-
-		if (!selectedClientId) {
-			syncDraftState(null);
-			return;
-		}
-
-		let isCancelled = false;
-
-		async function loadDraft() {
-			setLoadingDraft(true);
-
-			try {
-				const response = await fetch(
-					`${apiPath}/draft?clientId=${encodeURIComponent(selectedClientId)}`,
-					{
-						method: "GET",
-						cache: "no-store",
-					},
-				);
-				const data = (await response.json().catch(() => null)) as
-					| OrderSummary
-					| { error?: string }
-					| null;
-
-				if (isCancelled) {
-					return;
-				}
-
-				if (!response.ok) {
-					setFeedback({
-						type: "error",
-						message:
-							(data && "error" in data && data.error) ||
-							"No se ha podido cargar el pedido en curso de este cliente.",
-					});
-					return;
-				}
-
-				syncDraftState(data && "id" in data ? data : null);
-			} catch (error) {
-				console.error("[orders][draft][load] error:", error);
-
-				if (!isCancelled) {
-					setFeedback({
-						type: "error",
-						message:
-							"Ha ocurrido un error inesperado al cargar el pedido en curso.",
-					});
-				}
-			} finally {
-				if (!isCancelled) {
-					setLoadingDraft(false);
-				}
-			}
-		}
-
-		loadDraft();
-
-		return () => {
-			isCancelled = true;
-		};
-	}, [apiPath, mode, selectedClientId]);
 
 	function updateLine(localId: string, updates: Partial<EditableLine>) {
 		setLines((currentLines) =>
@@ -834,32 +601,12 @@ export default function OrderWorkspace({
 		setSavingDraft(true);
 
 		try {
-			const response = await fetch(`${apiPath}/draft`, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
+			const data = await saveOrderDraft(apiPath, {
 					clientId: mode === "commercial" ? selectedClientId : undefined,
 					fulfillmentMethod,
 					notes,
 					lines: buildPayloadLines(),
-				}),
 			});
-			const data = (await response.json().catch(() => null)) as
-				| OrderSummary
-				| { error?: string }
-				| null;
-
-			if (!response.ok) {
-				setFeedback({
-					type: "error",
-					message:
-						(data && "error" in data && data.error) ||
-						"No se ha podido guardar el pedido en curso.",
-				});
-				return;
-			}
 
 			syncDraftState(data && "id" in data ? data : null);
 			setFeedback({
@@ -873,7 +620,10 @@ export default function OrderWorkspace({
 			console.error("[orders][draft][save] error:", error);
 			setFeedback({
 				type: "error",
-				message: "Ha ocurrido un error inesperado al guardar el pedido en curso.",
+				message: getOrderRequestErrorMessage(
+					error,
+					"Ha ocurrido un error inesperado al guardar el pedido en curso.",
+				),
 			});
 		} finally {
 			setSavingDraft(false);
@@ -894,26 +644,10 @@ export default function OrderWorkspace({
 		setClearingDraft(true);
 
 		try {
-			const draftPath =
-				mode === "commercial"
-					? `${apiPath}/draft?clientId=${encodeURIComponent(selectedClientId)}`
-					: `${apiPath}/draft`;
-			const response = await fetch(draftPath, {
-				method: "DELETE",
-			});
-			const data = (await response.json().catch(() => null)) as
-				| { ok?: boolean; error?: string }
-				| null;
-
-			if (!response.ok) {
-				setFeedback({
-					type: "error",
-					message:
-						(data && "error" in data && data.error) ||
-						"No se ha podido vaciar el pedido en curso.",
-				});
-				return;
-			}
+			await clearOrderDraft(
+				apiPath,
+				mode === "commercial" ? selectedClientId : undefined,
+			);
 
 			syncDraftState(null);
 			setFeedback({
@@ -924,7 +658,10 @@ export default function OrderWorkspace({
 			console.error("[orders][draft][clear] error:", error);
 			setFeedback({
 				type: "error",
-				message: "Ha ocurrido un error inesperado al vaciar el pedido en curso.",
+				message: getOrderRequestErrorMessage(
+					error,
+					"Ha ocurrido un error inesperado al vaciar el pedido en curso.",
+				),
 			});
 		} finally {
 			setClearingDraft(false);
@@ -957,30 +694,17 @@ export default function OrderWorkspace({
 		setSubmitting(true);
 
 		try {
-			const response = await fetch(apiPath, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					clientId: mode === "commercial" ? selectedClientId : undefined,
-					fulfillmentMethod,
-					notes,
-					lines: buildPayloadLines(),
-				}),
+			const data = await submitOrder(apiPath, {
+				clientId: mode === "commercial" ? selectedClientId : undefined,
+				fulfillmentMethod,
+				notes,
+				lines: buildPayloadLines(),
 			});
 
-			const data = (await response.json().catch(() => null)) as
-				| OrderSummary
-				| { error?: string }
-				| null;
-
-			if (!response.ok || !data || !("id" in data)) {
+			if (!data || !("id" in data)) {
 				setFeedback({
 					type: "error",
-					message:
-						(data && "error" in data && data.error) ||
-						"No se ha podido registrar el pedido.",
+					message: "No se ha podido registrar el pedido.",
 				});
 				return;
 			}
@@ -992,7 +716,7 @@ export default function OrderWorkspace({
 			}
 			setFeedback({
 				type: "success",
-				message: `Pedido registrado correctamente por un total de ${formatCurrency(
+				message: `Pedido registrado correctamente por un total de ${formatOrderCurrency(
 					data.total_amount,
 				)}.`,
 			});
@@ -1000,7 +724,10 @@ export default function OrderWorkspace({
 			console.error("[orders][submit] error:", error);
 			setFeedback({
 				type: "error",
-				message: "Ha ocurrido un error inesperado al registrar el pedido.",
+				message: getOrderRequestErrorMessage(
+					error,
+					"Ha ocurrido un error inesperado al registrar el pedido.",
+				),
 			});
 		} finally {
 			setSubmitting(false);
@@ -1047,15 +774,7 @@ export default function OrderWorkspace({
 				) : null}
 
 				{mode === "commercial" && feedback ? (
-					<div
-						className={`rounded-2xl border px-4 py-3 text-sm shadow-sm ${
-							feedback.type === "success"
-								? "border-emerald-200 bg-emerald-50 text-emerald-700"
-								: "border-rose-200 bg-rose-50 text-rose-700"
-						}`}
-					>
-						{feedback.message}
-					</div>
+					<FeedbackMessage {...feedback} className="shadow-sm" />
 				) : null}
 
 				{showOrderForm && (mode !== "commercial" || isCreatePanelOpen) ? (
@@ -1098,15 +817,7 @@ export default function OrderWorkspace({
 					</div>
 
 					{feedback && mode !== "commercial" ? (
-						<div
-							className={`mt-5 rounded-2xl border px-4 py-3 text-sm shadow-sm ${
-								feedback.type === "success"
-									? "border-emerald-200 bg-emerald-50 text-emerald-700"
-									: "border-rose-200 bg-rose-50 text-rose-700"
-							}`}
-						>
-							{feedback.message}
-						</div>
+						<FeedbackMessage {...feedback} className="mt-5 shadow-sm" />
 					) : null}
 
 					{mode === "commercial" && clientOptions.length === 0 ? (
@@ -1722,7 +1433,7 @@ export default function OrderWorkspace({
 													</span>
 												) : null}
 												{mode === "client" &&
-												order.created_by_user_role_id === ROLE_IDS.COMMERCIAL ? (
+												order.created_by_user_role_code === "commercial" ? (
 													<span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
 														Gestionado por {order.created_by_user_name}
 													</span>
@@ -1775,7 +1486,7 @@ export default function OrderWorkspace({
 													Importe total
 												</p>
 												<p className="mt-2 text-lg font-semibold text-slate-900">
-													{formatCurrency(order.total_amount)}
+													{formatOrderCurrency(order.total_amount)}
 												</p>
 												{getOrderDiscountSummary(order).hasDiscounts ? (
 													<p className="mt-1 text-xs font-semibold text-emerald-700">
@@ -1789,7 +1500,7 @@ export default function OrderWorkspace({
 												{order.fulfillment_method === "agency" ? (
 													<p className="mt-1 text-xs font-semibold text-amber-700">
 														Agencia +{" "}
-														{formatCurrency(order.agency_delivery_fee)}
+														{formatOrderCurrency(order.agency_delivery_fee)}
 													</p>
 												) : null}
 											</div>

@@ -15,6 +15,8 @@ import {
 	getAutomaticNotificationDeliveryChannels,
 	hasExternalNotificationChannels,
 } from "@/lib/typeorm/services/communications/notification-settings";
+import { formatDisplayDate } from "@/lib/utils/date-format";
+import { getTodayDateInMadrid } from "@/lib/utils/time";
 
 type VisitNotificationInput = {
 	recipientUserId: string;
@@ -28,17 +30,7 @@ type VisitNotificationInput = {
 };
 
 function formatVisitDate(value: string) {
-	const parsed = new Date(`${value}T00:00:00`);
-
-	if (Number.isNaN(parsed.getTime())) {
-		return value;
-	}
-
-	return new Intl.DateTimeFormat("es-ES", {
-		day: "2-digit",
-		month: "short",
-		year: "numeric",
-	}).format(parsed);
+	return formatDisplayDate(value, value);
 }
 
 function getVisitTypeLabel(visitTypeId: number) {
@@ -47,21 +39,6 @@ function getVisitTypeLabel(visitTypeId: number) {
 	}
 
 	return "visita comercial";
-}
-
-function getMadridTodayDate(date = new Date()) {
-	const parts = new Intl.DateTimeFormat("en-CA", {
-		timeZone: "Europe/Madrid",
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-	}).formatToParts(date);
-
-	const year = parts.find((part) => part.type === "year")?.value ?? "1970";
-	const month = parts.find((part) => part.type === "month")?.value ?? "01";
-	const day = parts.find((part) => part.type === "day")?.value ?? "01";
-
-	return `${year}-${month}-${day}`;
 }
 
 async function getVisitNotificationDeliveryOptions(
@@ -221,7 +198,7 @@ export async function notifyCommercialVisitsAutoPostponed(
 
 export async function syncTodayVisitNotificationsForUser(userId: string) {
 	const ds = await getDataSource();
-	const today = getMadridTodayDate();
+	const today = getTodayDateInMadrid();
 
 	await ds.transaction(async (manager) => {
 		const user = await manager.getRepository(User).findOne({

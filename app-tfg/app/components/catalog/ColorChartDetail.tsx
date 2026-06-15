@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import H1Title from "@/app/components/H1Title";
 import { useSessionStorageState } from "@/app/hooks/useSessionStorageState";
+import { normalizeSearchText } from "@/lib/utils/text";
 import { formatDateTime } from "@/lib/utils/user-utils";
 import type { SerializedColorChartDetail } from "./coloration-serializers";
 
@@ -15,14 +16,6 @@ type Props = {
 	toneDetailBasePath: string;
 	colorChart: SerializedColorChartDetail;
 };
-
-function normalizeText(value: string | null | undefined) {
-	return String(value ?? "")
-		.trim()
-		.normalize("NFD")
-		.replace(/\p{Diacritic}/gu, "")
-		.toLowerCase();
-}
 
 export default function ColorChartDetail({
 	title,
@@ -36,14 +29,14 @@ export default function ColorChartDetail({
 	);
 
 	const filteredReferences = useMemo(() => {
-		const searchTerm = normalizeText(search);
+		const searchTerm = normalizeSearchText(search);
 
 		if (!searchTerm) {
 			return colorChart.colorReferences ?? [];
 		}
 
 		return (colorChart.colorReferences ?? []).filter((reference) =>
-			normalizeText(
+			normalizeSearchText(
 				[
 					reference.code,
 					reference.name,

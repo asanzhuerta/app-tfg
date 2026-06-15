@@ -5,8 +5,7 @@ import {
 	type NotificationDeliverySettingsItem,
 	type UpdateNotificationDeliverySettingsBody,
 } from "@/lib/contracts/notification-settings";
-import { getDataSource } from "@/lib/typeorm/data-source";
-import { SystemConfiguration } from "@/lib/typeorm/entities/SystemConfiguration";
+import { getSystemConfigurationRepository } from "@/lib/typeorm/services/system-configuration";
 
 type NotificationDeliverySettingsMap = Record<
 	AutomaticNotificationKey,
@@ -165,17 +164,8 @@ function mapsAreEqual(
 	});
 }
 
-async function getConfigurationRepository(manager?: EntityManager) {
-	if (manager) {
-		return manager.getRepository(SystemConfiguration);
-	}
-
-	const dataSource = await getDataSource();
-	return dataSource.getRepository(SystemConfiguration);
-}
-
 async function getStoredSettingsMap(manager?: EntityManager) {
-	const repository = await getConfigurationRepository(manager);
+	const repository = await getSystemConfigurationRepository(manager);
 	const configuration = await repository.findOne({
 		where: {
 			key: CONFIGURATION_KEY,
@@ -255,7 +245,7 @@ export async function updateNotificationDeliverySettings(
 		nextSettings[event.key] = normalizeExternalChannels(event.channels);
 	}
 
-	const repository = await getConfigurationRepository();
+	const repository = await getSystemConfigurationRepository();
 	await repository.upsert(
 		{
 			key: CONFIGURATION_KEY,

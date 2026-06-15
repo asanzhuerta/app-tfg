@@ -14,7 +14,7 @@ Aplicación principal de Kinestilistas. Esta carpeta contiene el producto softwa
 - `lib/`: lógica de dominio, contratos, servicios, seguridad, integraciones y acceso a datos.
 - `migrations/`: migraciones versionadas de TypeORM.
 - `public/`: imágenes, iconos, fondos y manifest PWA.
-- `scripts/`: scripts de smoke test, carga de imágenes y tareas auxiliares.
+- `scripts/`: pruebas funcionales automatizadas, carga de imágenes y tareas auxiliares.
 
 ## Estado funcional destacado
 
@@ -22,6 +22,14 @@ Aplicación principal de Kinestilistas. Esta carpeta contiene el producto softwa
 - `M4` diferencia pedido y reparto: un pedido confirmado puede prepararse en uno o varios repartos con bultos manuales, etiqueta propia y validación de entrega por QR.
 - `M4` registra pagos parciales en una tabla propia para conservar historial de cobros y saldo pendiente.
 - `M4/M7` permite elegir entrega por comercial o por agencia; la agencia añade un cargo configurable desde administración y genera una etiqueta diferenciada.
+
+## Criterios de limpieza y reutilización
+
+- Los helpers transversales viven en `lib/utils/`: fechas, zona horaria, dinero, CSV, búsqueda normalizada y validación básica.
+- Las llamadas `fetch` desde componentes cliente deben usar `requestJson`, `jsonRequestOptions` y `getClientErrorMessage` de `lib/api/client.ts` para evitar repetir parseo de errores, cabeceras y serialización JSON.
+- Los mensajes de feedback reutilizables deben apoyarse en `app/components/ui/FeedbackMessage.tsx`; las clases comunes de formularios se centralizan en `app/components/ui/form-styles.ts`.
+- Los servicios TypeORM pueden conservar errores de dominio propios, pero deben delegar normalización genérica, parseo monetario, fechas y repositorios de configuración en helpers compartidos.
+- Los componentes grandes de módulos complejos se dividen por responsabilidad: orquestación en hooks, APIs cliente en ficheros propios y paneles visuales separados por pestaña o bloque funcional.
 
 ## Archivos de entrada relevantes
 
@@ -38,9 +46,10 @@ npm run typecheck
 npm run lint
 npm run build
 npm run migration:run
-npm run m5:salon-visual-smoke
-npm run m6:closeout
-npm run m7:closeout
+npm run test:m5:visual-results
+npm run test:m6
+npm run test:m7
+npm run test:business
 npm run catalog:upload-product-images -- --dry-run
 ```
 

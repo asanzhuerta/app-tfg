@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import H1Title from "@/app/components/H1Title";
 import PageTransition from "@/app/components/animations/PageTransition";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 import type { OrderDetail } from "@/lib/contracts/order";
-import { ROLE_IDS } from "@/lib/typeorm/constants/catalog-ids";
 import { formatDateTime } from "@/lib/utils/user-utils";
 import {
 	buildOrderLinePromotionLabel,
@@ -21,6 +21,12 @@ import {
 	getOrderStatusClasses,
 	hasOrderLineDiscount,
 } from "./order-ui";
+import {
+	getOrderDetailRequestErrorMessage,
+	registerOrderPayment,
+	updateOrderPaymentStatus,
+	updateOrderStatus,
+} from "./order-detail-api";
 
 type RelatedLink = {
 	label: string;
@@ -122,8 +128,7 @@ export default function OrderDetailView({
 	const markAsPendingOption = detail.availablePaymentTransitions.find(
 		(option) => option.code === "pending",
 	);
-	const createdByCommercial =
-		order.created_by_user_role_id === ROLE_IDS.COMMERCIAL;
+	const createdByCommercial = order.created_by_user_role_code === "commercial";
 	const showDeliveryState =
 		order.deliveries.length > 0 ||
 		Boolean(order.delivery_visit_id) ||
@@ -158,29 +163,7 @@ export default function OrderDetailView({
 		setUpdatingStatusId(statusId);
 
 		try {
-			const response = await fetch(updateApiPath, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					statusId,
-				}),
-			});
-			const data = (await response.json().catch(() => null)) as
-				| OrderDetail
-				| { error?: string }
-				| null;
-
-			if (!response.ok || !data || !("order" in data)) {
-				setFeedback({
-					type: "error",
-					message:
-						(data && "error" in data && data.error) ||
-						"No se ha podido actualizar el estado del pedido.",
-				});
-				return;
-			}
+			const data = await updateOrderStatus(updateApiPath, statusId);
 
 			setDetail(data);
 			setFeedback({
@@ -191,8 +174,10 @@ export default function OrderDetailView({
 			console.error("[orders][detail][status] error:", error);
 			setFeedback({
 				type: "error",
-				message:
+				message: getOrderDetailRequestErrorMessage(
+					error,
 					"Ha ocurrido un error inesperado al actualizar el estado del pedido.",
+				),
 			});
 		} finally {
 			setUpdatingStatusId(null);
@@ -224,32 +209,11 @@ export default function OrderDetailView({
 		setUpdatingPaymentStatusId(paymentStatusId);
 
 		try {
-			const response = await fetch(updateApiPath, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					paymentStatusId,
-					paymentMethod:
-						nextPaymentStatus.code === "paid" ? paymentMethod : null,
-					paymentNotes,
-				}),
+			const data = await updateOrderPaymentStatus(updateApiPath, {
+				paymentStatusId,
+				paymentMethod: nextPaymentStatus.code === "paid" ? paymentMethod : null,
+				paymentNotes,
 			});
-			const data = (await response.json().catch(() => null)) as
-				| OrderDetail
-				| { error?: string }
-				| null;
-
-			if (!response.ok || !data || !("order" in data)) {
-				setFeedback({
-					type: "error",
-					message:
-						(data && "error" in data && data.error) ||
-						"No se ha podido actualizar el estado del cobro.",
-				});
-				return;
-			}
 
 			setDetail(data);
 			setFeedback({
@@ -260,8 +224,10 @@ export default function OrderDetailView({
 			console.error("[orders][detail][payment] error:", error);
 			setFeedback({
 				type: "error",
-				message:
+				message: getOrderDetailRequestErrorMessage(
+					error,
 					"Ha ocurrido un error inesperado al actualizar el cobro del pedido.",
+				),
 			});
 		} finally {
 			setUpdatingPaymentStatusId(null);
@@ -303,31 +269,11 @@ export default function OrderDetailView({
 		setRegisteringPayment(true);
 
 		try {
-			const response = await fetch(paymentApiPath, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					amount: paymentAmount,
-					paymentMethod,
-					paymentNotes,
-				}),
+			const data = await registerOrderPayment(paymentApiPath, {
+				amount: paymentAmount,
+				paymentMethod,
+				paymentNotes,
 			});
-			const data = (await response.json().catch(() => null)) as
-				| OrderDetail
-				| { error?: string }
-				| null;
-
-			if (!response.ok || !data || !("order" in data)) {
-				setFeedback({
-					type: "error",
-					message:
-						(data && "error" in data && data.error) ||
-						"No se ha podido registrar el pago del pedido.",
-				});
-				return;
-			}
 
 			setDetail(data);
 			setPaymentNotes("");
@@ -339,8 +285,10 @@ export default function OrderDetailView({
 			console.error("[orders][detail][payment-register] error:", error);
 			setFeedback({
 				type: "error",
-				message:
+				message: getOrderDetailRequestErrorMessage(
+					error,
 					"Ha ocurrido un error inesperado al registrar el pago del pedido.",
+				),
 			});
 		} finally {
 			setRegisteringPayment(false);
@@ -353,15 +301,7 @@ export default function OrderDetailView({
 				<H1Title title={title} subtitle={subtitle} />
 
 				{feedback ? (
-					<div
-						className={`rounded-2xl border px-4 py-3 text-sm shadow-sm ${
-							feedback.type === "success"
-								? "border-emerald-200 bg-emerald-50 text-emerald-700"
-								: "border-rose-200 bg-rose-50 text-rose-700"
-						}`}
-					>
-						{feedback.message}
-					</div>
+					<FeedbackMessage {...feedback} className="shadow-sm" />
 				) : null}
 
 				<section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">

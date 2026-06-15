@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import type { SessionLike } from "@/lib/contracts/api";
+import { parsePositiveIntegerValue } from "@/lib/utils/validation";
 
 export type SessionUser = NonNullable<NonNullable<SessionLike>["user"]>;
 
@@ -49,9 +50,9 @@ export function parsePositiveInteger(
 	fallback: number,
 	max?: number,
 ) {
-	const parsed = Number(value);
+	const parsed = parsePositiveIntegerValue(value);
 
-	if (!Number.isInteger(parsed) || parsed <= 0) {
+	if (parsed === null) {
 		return fallback;
 	}
 
