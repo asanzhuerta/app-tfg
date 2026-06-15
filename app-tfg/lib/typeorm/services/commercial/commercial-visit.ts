@@ -285,7 +285,7 @@ async function validateOrderDeliveryIdsForVisit(
 
 		if (delivery.status === "cancelled") {
 			throw createError(
-				"Hay repartos seleccionados que estan cancelados",
+				"Hay repartos seleccionados que están cancelados",
 				409,
 				"VISIT_DELIVERY_CANCELLED",
 			);
@@ -300,7 +300,7 @@ async function validateOrderDeliveryIdsForVisit(
 				COMMERCIAL_VISIT_STATUS_IDS.POSTPONED
 			) {
 				throw createError(
-					"Hay repartos seleccionados que ya estan asignados a otra visita",
+					"Hay repartos seleccionados que ya están asignados a otra visita",
 					409,
 					"VISIT_DELIVERY_ALREADY_ASSIGNED",
 				);
@@ -382,7 +382,7 @@ async function validateDeliveryOrderIdsForVisit(
 				COMMERCIAL_VISIT_STATUS_IDS.POSTPONED
 			) {
 				throw createError(
-					"Hay pedidos seleccionados que ya estan asignados a otro reparto",
+					"Hay pedidos seleccionados que ya están asignados a otro reparto",
 					409,
 					"VISIT_ORDER_ALREADY_ASSIGNED",
 				);
@@ -1086,7 +1086,7 @@ export async function updateCommercialVisit(input: UpdateCommercialVisitInput) {
 
 		if (visit.status_id === COMMERCIAL_VISIT_STATUS_IDS.POSTPONED) {
 			throw new UpdateCommercialVisitError(
-				"Esta visita esta aplazada y no se puede modificar. Crea una nueva visita para continuar.",
+				"Esta visita está aplazada y no se puede modificar. Crea una nueva visita para continuar.",
 				409,
 				"VISIT_POSTPONED_READ_ONLY",
 			);
@@ -1132,7 +1132,7 @@ export async function updateCommercialVisit(input: UpdateCommercialVisitInput) {
 
 			if (!linkedDelivery) {
 				throw new UpdateCommercialVisitError(
-					"El QR escaneado no pertenece a ningun reparto vinculado a esta visita",
+					"El QR escaneado no pertenece a ningún reparto vinculado a esta visita",
 					409,
 					"DELIVERY_VISIT_QR_DELIVERY_MISMATCH",
 				);
@@ -1148,7 +1148,7 @@ export async function updateCommercialVisit(input: UpdateCommercialVisitInput) {
 
 			if (linkedDelivery.status !== "planned") {
 				throw new UpdateCommercialVisitError(
-					"Este reparto no esta pendiente de entrega",
+					"Este reparto no está pendiente de entrega",
 					409,
 					"DELIVERY_NOT_DELIVERABLE",
 				);
@@ -1224,7 +1224,7 @@ export async function updateCommercialVisit(input: UpdateCommercialVisitInput) {
 
 			if (!linkedOrder) {
 				throw new UpdateCommercialVisitError(
-					"El QR escaneado no pertenece a ningun pedido vinculado a esta visita",
+					"El QR escaneado no pertenece a ningún pedido vinculado a esta visita",
 					409,
 					"DELIVERY_VISIT_QR_ORDER_MISMATCH",
 				);
@@ -1240,7 +1240,7 @@ export async function updateCommercialVisit(input: UpdateCommercialVisitInput) {
 
 			if (linkedOrder.status_id !== ORDER_STATUS_IDS.CONFIRMED) {
 				throw new UpdateCommercialVisitError(
-					"Este pedido no esta pendiente de entrega",
+					"Este pedido no está pendiente de entrega",
 					409,
 					"DELIVERY_ORDER_NOT_CONFIRMABLE",
 				);

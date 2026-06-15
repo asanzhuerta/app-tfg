@@ -79,6 +79,10 @@ export function getVisitStatusClasses(statusId: number) {
 	}
 }
 
+const visitDateFormatter = new Intl.DateTimeFormat("es-ES", {
+	dateStyle: "medium",
+});
+
 export function formatVisitDate(value: string | null | undefined) {
 	if (!value) {
 		return "-";
@@ -90,7 +94,5 @@ export function formatVisitDate(value: string | null | undefined) {
 		return "-";
 	}
 
-	return new Intl.DateTimeFormat("es-ES", {
-		dateStyle: "medium",
-	}).format(date);
+	return visitDateFormatter.format(date);
 }

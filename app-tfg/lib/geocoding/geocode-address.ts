@@ -235,7 +235,7 @@ async function fetchNominatimSearch(
 
 		if (response.status >= 500) {
 			throw new GeocodingError(
-				"El servicio de geocodificación no esta disponible temporalmente.",
+				"El servicio de geocodificación no está disponible temporalmente.",
 				response.status,
 				"GEOCODING_PROVIDER_UNAVAILABLE",
 				true,
