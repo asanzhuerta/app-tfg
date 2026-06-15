@@ -47,8 +47,11 @@ function DetailCard({
 }
 
 export default async function AdminClientDetailPage({ params }: PageProps) {
-	const [{ id }] = await Promise.all([params, requireAdminSession()]);
-	const client = await getClientById(id);
+	const { id } = await params;
+	const [, client] = await Promise.all([
+		requireAdminSession(),
+		getClientById(id),
+	]);
 
 	if (!client) {
 		notFound();

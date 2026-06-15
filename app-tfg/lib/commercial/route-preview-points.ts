@@ -17,7 +17,7 @@ export function buildRoutePreviewStartPoint(input: {
 	const startPoint: RoutePoint | null = usingCurrentLocation
 		? {
 				id: "route-start-current",
-				label: "Ubicacion actual",
+				label: "Ubicación actual",
 				lat: input.currentStartLat!,
 				lng: input.currentStartLng!,
 				description: "Punto de inicio detectado desde el dispositivo",

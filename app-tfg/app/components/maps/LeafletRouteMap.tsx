@@ -33,6 +33,7 @@ type OsrmRouteResponse = {
 
 const EMPTY_ROUTE_POINTS: RoutePoint[] = [];
 const EMPTY_ROUTE_POSITIONS: LatLngExpression[] = [];
+const FALLBACK_CENTER: LatLngExpression = [36.5297, -6.2926];
 const ROUTE_FALLBACK_MESSAGE =
 	"No se pudo calcular la ruta real. Se muestra una union aproximada entre puntos.";
 
@@ -235,8 +236,6 @@ export default function LeafletRouteMap({
 	const routePositions =
 		routeGeometry && routeGeometry.length >= 2 ? routeGeometry : pointPositions;
 
-	const fallbackCenter: LatLngExpression = [36.5297, -6.2926];
-
 	return (
 		<div className="h-full space-y-3">
 			{routeError ? (
@@ -250,7 +249,7 @@ export default function LeafletRouteMap({
 			>
 				<MapContainer
 					center={
-						points.length > 0 ? [points[0].lat, points[0].lng] : fallbackCenter
+						points.length > 0 ? [points[0].lat, points[0].lng] : FALLBACK_CENTER
 					}
 					zoom={13}
 					scrollWheelZoom

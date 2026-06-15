@@ -242,7 +242,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 		}
 
 		if (sameCommercialSelected) {
-			setError("Ese comercial ya esta asignado actualmente a este cliente");
+			setError("Ese comercial ya está asignado actualmente a este cliente");
 			return;
 		}
 
@@ -451,7 +451,7 @@ function AdminClientCommercialAssignmentsPageContent() {
 												"Comercial sin nombre"}
 										</div>
 										<div className="text-sm text-slate-600">
-											{currentAssignment.commercial?.user?.email || "Sin email"}
+											{currentAssignment.commercial?.user?.email || "Sin correo"}
 										</div>
 										<div className="text-sm text-slate-600">
 											<strong className="font-medium text-slate-900">
@@ -515,9 +515,9 @@ function AdminClientCommercialAssignmentsPageContent() {
 										</div>
 										<div className="mt-1">
 											<strong className="font-medium text-slate-900">
-												Email:
+												Correo:
 											</strong>{" "}
-											{selectedCommercial.user?.email || "Sin email"}
+											{selectedCommercial.user?.email || "Sin correo"}
 										</div>
 										<div className="mt-1">
 											<strong className="font-medium text-slate-900">

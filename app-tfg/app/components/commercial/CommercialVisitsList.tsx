@@ -67,6 +67,24 @@ function buildPendingDeliveriesQuery() {
 }
 
 const DELIVERY_VISIT_TYPE_ID = "1";
+const deliveryCreatedDateFormatter = new Intl.DateTimeFormat("es-ES", {
+	dateStyle: "medium",
+});
+
+function getDeliveryIdsForClient(
+	deliveries: OrderDeliverySummary[],
+	clientId: string,
+) {
+	const deliveryIds = new Set<string>();
+
+	for (const delivery of deliveries) {
+		if (delivery.client_id === clientId) {
+			deliveryIds.add(delivery.id);
+		}
+	}
+
+	return deliveryIds;
+}
 
 function sortVisitsForDisplay(
 	visits: CommercialVisit[],
@@ -74,7 +92,7 @@ function sortVisitsForDisplay(
 	todayDate: string,
 	isTodayOnly: boolean,
 ) {
-	return [...visits].sort((left, right) => {
+	return visits.toSorted((left, right) => {
 		const leftIsToday = left.scheduled_for_date === todayDate;
 		const rightIsToday = right.scheduled_for_date === todayDate;
 
@@ -517,10 +535,9 @@ export default function CommercialVisitsList() {
 			return;
 		}
 
-		const allowedOrderIds = new Set(
-			pendingDeliveries
-				.filter((delivery) => delivery.client_id === nextClientId)
-				.map((delivery) => delivery.id),
+		const allowedOrderIds = getDeliveryIdsForClient(
+			pendingDeliveries,
+			nextClientId,
 		);
 
 		setSelectedDeliveryIds((current) =>
@@ -536,11 +553,7 @@ export default function CommercialVisitsList() {
 			return;
 		}
 
-		const allowedOrderIds = new Set(
-			pendingDeliveries
-				.filter((delivery) => delivery.client_id === clientId)
-				.map((delivery) => delivery.id),
-		);
+		const allowedOrderIds = getDeliveryIdsForClient(pendingDeliveries, clientId);
 
 		setSelectedDeliveryIds((current) =>
 			current.filter((orderId) => allowedOrderIds.has(orderId)),
@@ -689,9 +702,9 @@ export default function CommercialVisitsList() {
 														<p className="text-sm font-semibold text-slate-900">
 															Reparto {delivery.id.slice(0, 8)} · Pedido{" "}
 															{delivery.order_short_id} ·{" "}
-															{new Intl.DateTimeFormat("es-ES", {
-																dateStyle: "medium",
-															}).format(new Date(delivery.created_at))}
+															{deliveryCreatedDateFormatter.format(
+																new Date(delivery.created_at),
+															)}
 														</p>
 														<p className="text-xs text-slate-500">
 															{delivery.package_count} bulto
@@ -1076,9 +1089,9 @@ export default function CommercialVisitsList() {
 																		<p className="text-sm font-semibold text-slate-900">
 																			Reparto {delivery.id.slice(0, 8)} · Pedido{" "}
 																			{delivery.order_short_id} ·{" "}
-																			{new Intl.DateTimeFormat("es-ES", {
-																				dateStyle: "medium",
-																			}).format(new Date(delivery.created_at))}
+																			{deliveryCreatedDateFormatter.format(
+																				new Date(delivery.created_at),
+																			)}
 																		</p>
 																		<p className="text-sm font-medium text-slate-900">
 																			{delivery.package_count} bulto

@@ -201,7 +201,7 @@ export default function CommercialSettingsForm() {
 							</div>
 
 							<div className="md:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
-								El horario especifico de cada peluqueria se aplicara después
+								El horario específico de cada peluquería se aplicará después
 								sobre esta base diaria para decidir el encaje real de visitas.
 							</div>
 
@@ -210,8 +210,8 @@ export default function CommercialSettingsForm() {
 									Puntos de apoyo para la ruta
 								</p>
 								<p className="mt-1 text-sm text-slate-600">
-									Si no se puede usar la ubicacion actual del dispositivo, el
-									sistema recurrira al punto de salida guardado. Estas
+									Si no se puede usar la ubicación actual del dispositivo, el
+									sistema recurrirá al punto de salida guardado. Estas
 									direcciones se geocodifican automáticamente al guardarlas.
 								</p>
 							</div>
@@ -259,8 +259,8 @@ export default function CommercialSettingsForm() {
 										Finalizar la jornada volviendo al punto de salida
 									</label>
 									<p className="mt-1 text-sm text-slate-600">
-										Si se desactiva esta opcion, se utilizara el punto final
-										configurado mas abajo.
+										Si se desactiva esta opción, se utilizará el punto final
+										configurado más abajo.
 									</p>
 								</div>
 							</div>

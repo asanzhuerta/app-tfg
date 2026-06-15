@@ -192,7 +192,7 @@ export async function notifyCommercialVisitsAutoPostponed(
 		.map((visit) => visit.client?.name ?? "cliente")
 		.join(", ");
 	const extraCount = Math.max(count - 3, 0);
-	const suffix = extraCount > 0 ? ` y ${extraCount} mas` : "";
+	const suffix = extraCount > 0 ? ` y ${extraCount} más` : "";
 
 	await createNotificationIfMissing(manager, {
 		recipientUserId: input.commercialUserId,

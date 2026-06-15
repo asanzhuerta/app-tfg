@@ -17,14 +17,16 @@ import {
 // GET /api/admin/commercial-visits/[id]
 // Obtiene el detalle de una visita comercial concreta desde el panel de administración.
 export async function GET(_: Request, context: RouteContext) {
-		const user = await requireRoleUser("admin");
+	const [user, { id }] = await Promise.all([
+		requireRoleUser("admin"),
+		context.params,
+	]);
 
 	if (!user) {
 		return unauthorizedError();
 	}
 
 	try {
-		const { id } = await context.params;
 		const visit = await getCommercialVisitDetailById(id);
 
 		if (!visit) {
@@ -48,8 +50,10 @@ export async function PATCH(request: Request, context: RouteContext) {
 	}
 
 	try {
-		const { id } = await context.params;
-		const body = await readJsonBody<UpdateCommercialVisitBody>(request);
+		const [{ id }, body] = await Promise.all([
+			context.params,
+			readJsonBody<UpdateCommercialVisitBody>(request),
+		]);
 		const existingVisit = await getCommercialVisitById(id);
 
 		if (!existingVisit) {

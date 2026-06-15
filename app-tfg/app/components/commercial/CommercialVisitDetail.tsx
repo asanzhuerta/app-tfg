@@ -57,6 +57,34 @@ const DEFAULT_VISIT_FORM_STATE: VisitFormState = {
 	result: "",
 };
 
+function getNonEmptyTrimmedLines(value: string) {
+	const lines: string[] = [];
+
+	for (const line of value.split(/\r?\n/)) {
+		const trimmedLine = line.trim();
+
+		if (trimmedLine) {
+			lines.push(trimmedLine);
+		}
+	}
+
+	return lines;
+}
+
+function joinLocationLabel(city?: string | null, province?: string | null) {
+	const parts: string[] = [];
+
+	if (city) {
+		parts.push(city);
+	}
+
+	if (province) {
+		parts.push(province);
+	}
+
+	return parts.join(" - ");
+}
+
 function DetailRow({
 	label,
 	value,
@@ -272,26 +300,20 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 	const scannedDeliveredOrderIds = useMemo(
 		() =>
 			normalizeOrderQrValues(
-				deliveredOrderQrInput
-					.split(/\r?\n/)
-					.map((value) => value.trim())
-					.filter(Boolean),
+				getNonEmptyTrimmedLines(deliveredOrderQrInput),
 			).filter((orderId) => selectedOrderIds.includes(orderId)),
 		[deliveredOrderQrInput, selectedOrderIds],
 	);
 	const scannedDeliveredDeliveryIds = useMemo(
 		() =>
 			normalizeOrderDeliveryQrValues(
-				deliveredDeliveryQrInput
-					.split(/\r?\n/)
-					.map((value) => value.trim())
-					.filter(Boolean),
+				getNonEmptyTrimmedLines(deliveredDeliveryQrInput),
 			).filter((deliveryId) => selectedDeliveryIds.includes(deliveryId)),
 		[deliveredDeliveryQrInput, selectedDeliveryIds],
 	);
 
 	const locationLabel = visit
-		? [visit.client?.city, visit.client?.province].filter(Boolean).join(" - ")
+		? joinLocationLabel(visit.client?.city, visit.client?.province)
 		: "";
 	const visitWindowLabel =
 		visit?.client?.visit_window_start_time &&
@@ -333,7 +355,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 			return {
 				accepted: false,
 				message:
-					"Esta visita esta aplazada y no se puede modificar. Crea una nueva visita.",
+					"Esta visita está aplazada y no se puede modificar. Crea una nueva visita.",
 			};
 		}
 
@@ -402,7 +424,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 			return {
 				accepted: false,
 				message:
-					"El QR escaneado no pertenece a ningun pedido vinculado a esta visita.",
+					"El QR escaneado no pertenece a ningún pedido vinculado a esta visita.",
 			};
 		}
 
@@ -482,7 +504,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 
 		if (!visit || isPostponed) {
 			setSubmissionError(
-				"Esta visita esta aplazada y no se puede modificar. Crea una nueva visita.",
+				"Esta visita está aplazada y no se puede modificar. Crea una nueva visita.",
 			);
 			return;
 		}
@@ -549,17 +571,11 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 					: {}),
 				deliveredDeliveryQrs:
 					formState.visitTypeId === String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY)
-						? deliveredDeliveryQrInput
-								.split(/\r?\n/)
-								.map((value) => value.trim())
-								.filter(Boolean)
+						? getNonEmptyTrimmedLines(deliveredDeliveryQrInput)
 						: [],
 				deliveredOrderQrs:
 					formState.visitTypeId === String(COMMERCIAL_VISIT_TYPE_IDS.DELIVERY)
-						? deliveredOrderQrInput
-								.split(/\r?\n/)
-								.map((value) => value.trim())
-								.filter(Boolean)
+						? getNonEmptyTrimmedLines(deliveredOrderQrInput)
 						: [],
 				statusId: Number(formState.statusId),
 				notes: formState.notes,
@@ -634,8 +650,8 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 									</div>
 									<p className="mt-3 text-sm leading-6 text-slate-600">
 										{isPostponed
-											? "Esta visita esta aplazada y queda bloqueada. Para continuar con el cliente o el reparto, crea una visita nueva."
-											: "Gestiona la visita desde las acciones principales o abre la edicion manual si necesitas corregir datos."}
+											? "Esta visita está aplazada y queda bloqueada. Para continuar con el cliente o el reparto, crea una visita nueva."
+											: "Gestiona la visita desde las acciones principales o abre la edición manual si necesitas corregir datos."}
 									</p>
 								</div>
 
@@ -685,7 +701,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 							<aside className="space-y-4">
 								<section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
 									<h2 className="text-base font-semibold text-slate-900">
-										Informacion de la visita
+										Información de la visita
 									</h2>
 									<div className="mt-4 grid gap-3">
 										<DetailRow
@@ -739,7 +755,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 
 									<div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
 										<DetailRow
-											label="Telefono"
+											label="Teléfono"
 											value={visit.client?.user?.phone || "-"}
 										/>
 										<DetailRow
@@ -747,7 +763,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 											value={visit.client?.user?.email || "-"}
 										/>
 										<DetailRow
-											label="Ubicacion"
+											label="Ubicación"
 											value={locationLabel || "-"}
 										/>
 										<DetailRow label="Franja" value={visitWindowLabel} />
