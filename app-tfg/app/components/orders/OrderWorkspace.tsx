@@ -467,18 +467,24 @@ export default function OrderWorkspace({
 		historyDateToFilter ||
 		(mode === "commercial" && historyClientFilter !== "all");
 	const summaryCounts = useMemo(() => {
-		const blockedClients = new Set(
-			clientOptions
-				.filter((client) => {
-					const clientOpenOrdersCount = orders.filter(
-						(order) =>
-							order.client_id === client.id && isOrderOpenWithoutPayment(order),
-					).length;
+		const openOrdersByClientId = new Map<string, number>();
 
-					return clientOpenOrdersCount >= 2;
-				})
-				.map((client) => client.id),
-		);
+		for (const order of orders) {
+			if (isOrderOpenWithoutPayment(order)) {
+				openOrdersByClientId.set(
+					order.client_id,
+					(openOrdersByClientId.get(order.client_id) ?? 0) + 1,
+				);
+			}
+		}
+
+		const blockedClients = new Set<string>();
+
+		for (const client of clientOptions) {
+			if ((openOrdersByClientId.get(client.id) ?? 0) >= 2) {
+				blockedClients.add(client.id);
+			}
+		}
 
 		return {
 			blockedClients: blockedClients.size,
@@ -1160,10 +1166,10 @@ export default function OrderWorkspace({
 							) : null}
 
 							<div className="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 lg:grid-cols-[minmax(0,1fr)_260px]">
-								<div>
-									<p className="text-sm font-semibold text-slate-900">
+								<fieldset>
+									<legend className="text-sm font-semibold text-slate-900">
 										Entrega del pedido
-									</p>
+									</legend>
 									<div className="mt-3 grid gap-2 sm:grid-cols-2">
 										{[
 											{
@@ -1210,7 +1216,7 @@ export default function OrderWorkspace({
 											</label>
 										))}
 									</div>
-								</div>
+								</fieldset>
 
 								<div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm">
 									<div className="flex items-center justify-between gap-3 text-slate-600">
@@ -1471,7 +1477,7 @@ export default function OrderWorkspace({
 									type="button"
 									onClick={handleClearDraft}
 									disabled={clearingDraft || savingDraft || submitting}
-									className="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-3 text-sm font-medium text-rose-700 transition hover:bg-rose-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
+									className="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-3 text-sm font-medium text-rose-800 transition hover:bg-rose-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:opacity-70"
 								>
 									{clearingDraft ? "Vaciando..." : "Vaciar borrador"}
 								</button>

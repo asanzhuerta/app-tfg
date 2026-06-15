@@ -245,16 +245,16 @@ export async function buildOrderDeliveryQrPdf(delivery: OrderDeliverySummary) {
 		: buildOrderDeliveryQrPayload(delivery.id);
 	const commercialName = delivery.commercial_name || "Comercial";
 	const commercialAddress =
-		delivery.commercial_address || "Direccion del comercial";
+		delivery.commercial_address || "Dirección del comercial";
 	const commercialCity = delivery.commercial_territory || "Ciudad comercial";
 	const clientName = delivery.client_name || "Cliente";
-	const clientAddress = delivery.client_address || "Direccion del cliente";
+	const clientAddress = delivery.client_address || "Dirección del cliente";
 	const clientCity = delivery.client_city || "Ciudad cliente";
 	const clientPostalProvince =
 		[delivery.client_postal_code, delivery.client_province]
 			.filter(Boolean)
 			.join(" ") || "CP cliente provincia";
-	const phone = delivery.commercial_phone || "Telefono comercial";
+	const phone = delivery.commercial_phone || "Teléfono comercial";
 	const deliveryId = `REPARTO ${delivery.id.slice(0, 8).toUpperCase()}`;
 	const contentStream = [
 		"1 1 1 rg",

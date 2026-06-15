@@ -19,11 +19,29 @@ type Props = {
 type QuantityByLineId = Record<string, string>;
 
 function buildInitialQuantities(order: PendingOrderDeliveryPreparation | null) {
-	return Object.fromEntries(
-		(order?.lines ?? [])
-			.filter((line) => line.remaining_quantity > 0)
-			.map((line) => [line.id, "0"]),
-	) as QuantityByLineId;
+	const quantities: QuantityByLineId = {};
+
+	for (const line of order?.lines ?? []) {
+		if (line.remaining_quantity > 0) {
+			quantities[line.id] = "0";
+		}
+	}
+
+	return quantities;
+}
+
+function getFulfillmentLabel(
+	method: PendingOrderDeliveryPreparation["fulfillment_method"],
+) {
+	return method === "agency" ? "Agencia" : "Comercial";
+}
+
+function getFulfillmentClasses(
+	method: PendingOrderDeliveryPreparation["fulfillment_method"],
+) {
+	return method === "agency"
+		? "bg-amber-100 text-amber-800"
+		: "bg-sky-100 text-sky-800";
 }
 
 export default function OrderDeliveryPreparationWorkspace({
@@ -39,6 +57,21 @@ export default function OrderDeliveryPreparationWorkspace({
 		() => pendingOrders.find((order) => order.id === selectedOrderId) ?? null,
 		[pendingOrders, selectedOrderId],
 	);
+	const preparableLines = useMemo(() => {
+		if (!selectedOrder) {
+			return [];
+		}
+
+		const lines: PendingOrderDeliveryPreparation["lines"] = [];
+
+		for (const line of selectedOrder.lines) {
+			if (line.remaining_quantity > 0) {
+				lines.push(line);
+			}
+		}
+
+		return lines;
+	}, [selectedOrder]);
 	const [quantities, setQuantities] = useState<QuantityByLineId>(
 		buildInitialQuantities(selectedOrder),
 	);
@@ -101,12 +134,18 @@ export default function OrderDeliveryPreparationWorkspace({
 			return;
 		}
 
-		const lines = selectedOrder.lines
-			.map((line) => ({
-				orderLineId: line.id,
-				quantity: Number(quantities[line.id] ?? 0),
-			}))
-			.filter((line) => Number.isInteger(line.quantity) && line.quantity > 0);
+		const lines: Array<{ orderLineId: string; quantity: number }> = [];
+
+		for (const line of selectedOrder.lines) {
+			const quantity = Number(quantities[line.id] ?? 0);
+
+			if (Number.isInteger(quantity) && quantity > 0) {
+				lines.push({
+					orderLineId: line.id,
+					quantity,
+				});
+			}
+		}
 
 		if (lines.length === 0) {
 			setFeedback({
@@ -152,20 +191,6 @@ export default function OrderDeliveryPreparationWorkspace({
 		} finally {
 			setSaving(false);
 		}
-	}
-
-	function getFulfillmentLabel(
-		method: PendingOrderDeliveryPreparation["fulfillment_method"],
-	) {
-		return method === "agency" ? "Agencia" : "Comercial";
-	}
-
-	function getFulfillmentClasses(
-		method: PendingOrderDeliveryPreparation["fulfillment_method"],
-	) {
-		return method === "agency"
-			? "bg-amber-100 text-amber-800"
-			: "bg-sky-100 text-sky-800";
 	}
 
 	return (
@@ -297,9 +322,7 @@ export default function OrderDeliveryPreparationWorkspace({
 								</div>
 
 								<div className="space-y-3">
-									{selectedOrder.lines
-										.filter((line) => line.remaining_quantity > 0)
-										.map((line) => (
+									{preparableLines.map((line) => (
 											<div
 												key={line.id}
 												className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 md:grid-cols-[minmax(0,1fr)_140px]"

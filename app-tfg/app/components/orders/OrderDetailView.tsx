@@ -627,17 +627,18 @@ export default function OrderDetailView({
 
 							<div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(360px,0.85fr)]">
 								<div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-									<h3 className="text-base font-semibold text-slate-900">
+									<h3
+										id="order-register-payment-title"
+										className="text-base font-semibold text-slate-900"
+									>
 										Registrar pago
 									</h3>
 
 									{canRegisterPayment ? (
-										<form
+										<div
+											role="group"
+											aria-labelledby="order-register-payment-title"
 											className="mt-4 grid gap-3 lg:grid-cols-[180px_220px_minmax(0,1fr)]"
-											onSubmit={(event) => {
-												event.preventDefault();
-												void handleRegisterPayment();
-											}}
 										>
 											<div>
 												<label
@@ -706,7 +707,8 @@ export default function OrderDetailView({
 
 											<div className="lg:col-span-3">
 												<button
-													type="submit"
+													type="button"
+													onClick={() => void handleRegisterPayment()}
 													disabled={isBusy}
 													className="rounded-2xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-400"
 												>
@@ -715,7 +717,7 @@ export default function OrderDetailView({
 														: "Registrar pago"}
 												</button>
 											</div>
-										</form>
+										</div>
 									) : canUpdatePayment ? (
 										<div className="mt-3 flex flex-wrap gap-2">
 											{markAsPaidOption ? (
@@ -740,7 +742,7 @@ export default function OrderDetailView({
 														handlePaymentChange(markAsPendingOption.id)
 													}
 													disabled={isBusy}
-													className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-700 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
+													className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-800 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:opacity-70"
 												>
 													{updatingPaymentStatusId === markAsPendingOption.id
 														? "Actualizando cobro..."
