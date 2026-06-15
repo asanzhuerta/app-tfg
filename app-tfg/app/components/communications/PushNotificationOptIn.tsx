@@ -20,6 +20,24 @@ type PushNotificationOptInProps = {
 	variant?: "card" | "inline";
 };
 
+const statusLabel: Record<PushStatus, string> = {
+	checking: "Comprobando",
+	unsupported: "No disponible",
+	not_configured: "Pendiente de configurar",
+	available: "Disponible",
+	enabled: "Activo",
+	denied: "Bloqueado",
+};
+
+const inlineStatusLabel: Record<PushStatus, string> = {
+	checking: "Comprobando notificaciones",
+	unsupported: "Notificaciones no disponibles",
+	not_configured: "Notificaciones pendientes de configurar",
+	available: "Notificaciones disponibles",
+	enabled: "Notificaciones activas",
+	denied: "Notificaciones bloqueadas",
+};
+
 function getErrorMessage(error: unknown, fallback: string) {
 	return error instanceof ApiClientError ? error.message : fallback;
 }
@@ -205,22 +223,6 @@ export default function PushNotificationOptIn({
 		}
 	}
 
-	const statusLabel: Record<PushStatus, string> = {
-		checking: "Comprobando",
-		unsupported: "No disponible",
-		not_configured: "Pendiente de configurar",
-		available: "Disponible",
-		enabled: "Activo",
-		denied: "Bloqueado",
-	};
-	const inlineStatusLabel: Record<PushStatus, string> = {
-		checking: "Comprobando notificaciones",
-		unsupported: "Notificaciones no disponibles",
-		not_configured: "Notificaciones pendientes de configurar",
-		available: "Notificaciones disponibles",
-		enabled: "Notificaciones activas",
-		denied: "Notificaciones bloqueadas",
-	};
 	const statusHelp = getStatusHelp(status);
 	const canEnablePush = status === "available";
 	const showEnablePushButton =

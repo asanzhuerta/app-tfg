@@ -230,9 +230,9 @@ export class M6CommunicationsCenter1780525989286
 		await queryRunner.query(`
 			INSERT INTO "customer_segments" ("code", "name", "description", "criteria")
 			VALUES
-				('platinum', 'Platino', 'Clientes de mayor actividad y prioridad comercial.', 'Segmento gestionado manualmente por administracion.'),
-				('gold', 'Oro', 'Clientes con uso frecuente de la plataforma y relacion comercial estable.', 'Segmento gestionado manualmente por administracion.'),
-				('silver', 'Plata', 'Clientes activos con seguimiento comercial ordinario.', 'Segmento gestionado manualmente por administracion.')
+				('platinum', 'Platino', 'Clientes de mayor actividad y prioridad comercial.', 'Segmento gestionado manualmente por administración.'),
+				('gold', 'Oro', 'Clientes con uso frecuente de la plataforma y relación comercial estable.', 'Segmento gestionado manualmente por administración.'),
+				('silver', 'Plata', 'Clientes activos con seguimiento comercial ordinario.', 'Segmento gestionado manualmente por administración.')
 			ON CONFLICT ("code") DO NOTHING
 		`);
 	}

@@ -11,6 +11,7 @@ import {
 	uploadPromotionDocument,
 	uploadPromotionImage,
 } from "@/lib/cloudinary";
+import { getCloudinaryAttachmentDownloadUrl } from "@/lib/cloudinary-url";
 
 const MAX_IMAGE_SIZE_IN_BYTES = 5 * 1024 * 1024;
 const MAX_PDF_SIZE_IN_BYTES = 10 * 1024 * 1024;
@@ -36,7 +37,9 @@ async function deletePreviousAttachment(
 		return;
 	}
 
-	const publicId = extractPublicIdFromUrl(previousUrl);
+	const publicId = extractPublicIdFromUrl(previousUrl, {
+		keepExtension: previousMimeType === "application/pdf",
+	});
 
 	if (!publicId) {
 		return;
@@ -95,7 +98,7 @@ export async function POST(request: Request) {
 		const uploadResult =
 			kind === "image"
 				? await uploadPromotionImage(base64File)
-				: await uploadPromotionDocument(base64File);
+				: await uploadPromotionDocument(base64File, file.name);
 
 		if (previousUrl) {
 			try {
@@ -116,6 +119,10 @@ export async function POST(request: Request) {
 			{
 				message: "Adjunto subido correctamente",
 				url: uploadResult.secure_url,
+				downloadUrl:
+					kind === "pdf"
+						? getCloudinaryAttachmentDownloadUrl(uploadResult.secure_url, file.name)
+						: uploadResult.secure_url,
 				publicId: uploadResult.public_id,
 				name: file.name,
 				mimeType: file.type,

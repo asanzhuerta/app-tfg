@@ -32,19 +32,19 @@ export class M6PromotionTypesTierPolicies1781433689484 implements MigrationInter
 				(
 					'percentage_discount',
 					'Descuento porcentual',
-					'Descuento directo aplicado a los productos incluidos en la promocion.',
+					'Descuento directo aplicado a los productos incluidos en la promoción.',
 					10
 				),
 				(
 					'volume_percentage_discount',
 					'Descuento por volumen',
-					'Descuento porcentual que se activa cuando el pedido alcanza un importe minimo.',
+					'Descuento porcentual que se activa cuando el pedido alcanza un importe mínimo.',
 					20
 				),
 				(
 					'gift_product',
 					'Producto de regalo',
-					'Promocion informativa que asocia un producto o regalo de merchandising al pedido.',
+					'Promoción informativa que asocia un producto o regalo de merchandising al pedido.',
 					30
 				)
 			ON CONFLICT ("code") DO NOTHING
@@ -159,17 +159,17 @@ export class M6PromotionTypesTierPolicies1781433689484 implements MigrationInter
 				(
 					'client_tiers.threshold.silver',
 					'0.00',
-					'Compra anual minima para rango Plata.'
+					'Compra anual mínima para rango Plata.'
 				),
 				(
 					'client_tiers.threshold.gold',
 					'1000.00',
-					'Compra anual minima para rango Oro.'
+					'Compra anual mínima para rango Oro.'
 				),
 				(
 					'client_tiers.threshold.platinum',
 					'2500.00',
-					'Compra anual minima para rango Platino.'
+					'Compra anual mínima para rango Platino.'
 				),
 				(
 					'client_tiers.recalculation.frequency',

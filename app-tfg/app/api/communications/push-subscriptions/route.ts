@@ -32,13 +32,15 @@ export async function POST(request: Request) {
 
 	try {
 		const body = await readJsonBody<PushSubscriptionBody>(request);
-		const result = await upsertPushSubscriptionForUser({
+		const { result, activeSubscriptions } = await upsertPushSubscriptionForUser({
 			userId: user.id,
 			body,
 			userAgent: request.headers.get("user-agent"),
-		});
-		const activeSubscriptions = await countActivePushSubscriptionsForUser(
-			user.id,
+		}).then((result) =>
+			countActivePushSubscriptionsForUser(user.id).then((activeSubscriptions) => ({
+				result,
+				activeSubscriptions,
+			})),
 		);
 
 		return NextResponse.json(
@@ -66,13 +68,10 @@ export async function DELETE(request: Request) {
 		const body = await readJsonBody<{ endpoint?: string | null }>(request).catch(
 			() => ({ endpoint: null }),
 		);
-		await revokePushSubscriptionForUser({
+		const activeSubscriptions = await revokePushSubscriptionForUser({
 			userId: user.id,
 			endpoint: body.endpoint,
-		});
-		const activeSubscriptions = await countActivePushSubscriptionsForUser(
-			user.id,
-		);
+		}).then(() => countActivePushSubscriptionsForUser(user.id));
 
 		return NextResponse.json({ ok: true, activeSubscriptions }, { status: 200 });
 	} catch (error) {

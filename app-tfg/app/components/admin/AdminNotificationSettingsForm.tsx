@@ -24,7 +24,7 @@ const CHANNEL_OPTIONS: Array<{
 	},
 	{
 		value: "email",
-		label: "Email",
+		label: "Correo",
 		description: "Envía un correo de apoyo cuando el evento se genera.",
 	},
 ];
@@ -146,12 +146,15 @@ export default function AdminNotificationSettingsForm() {
 			nextChannels.delete(channel);
 		}
 
-		updateChannels(
-			key,
-			CHANNEL_OPTIONS.map((option) => option.value).filter((value) =>
-				nextChannels.has(value),
-			),
-		);
+		const orderedChannels: ExternalNotificationDeliveryChannel[] = [];
+
+		for (const option of CHANNEL_OPTIONS) {
+			if (nextChannels.has(option.value)) {
+				orderedChannels.push(option.value);
+			}
+		}
+
+		updateChannels(key, orderedChannels);
 	}
 
 	function restoreDefaults(key: string) {
@@ -257,40 +260,46 @@ export default function AdminNotificationSettingsForm() {
 								</div>
 
 								<div className="mt-5 grid gap-3 sm:grid-cols-2">
-									{CHANNEL_OPTIONS.map((option) => (
-										<label
-											key={option.value}
-											className={`flex items-start gap-3 rounded-2xl border px-4 py-4 transition ${
-												setting.channels.includes(option.value)
-													? "border-slate-950 bg-slate-950 text-white shadow-sm"
-													: "border-slate-200 bg-slate-50 text-slate-700 hover:bg-white"
-											}`}
-										>
-											<input
-												type="checkbox"
-												checked={setting.channels.includes(option.value)}
-												onChange={(event) =>
-													toggleChannel(
-														setting.key,
-														option.value,
-														event.target.checked,
-													)
-												}
-												className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
-											/>
-											<span className="text-sm">
-												<span
-													className={`block font-semibold ${
-														setting.channels.includes(option.value)
-															? "text-white"
-															: "text-slate-950"
-													}`}
-												>
-													{option.label}
+									{CHANNEL_OPTIONS.map((option) => {
+										const inputId = `notification-${setting.key}-${option.value}`;
+
+										return (
+											<label
+												key={option.value}
+												htmlFor={inputId}
+												className={`flex items-start gap-3 rounded-2xl border px-4 py-4 transition ${
+													setting.channels.includes(option.value)
+														? "border-slate-950 bg-slate-950 text-white shadow-sm"
+														: "border-slate-200 bg-slate-50 text-slate-700 hover:bg-white"
+												}`}
+											>
+												<input
+													id={inputId}
+													type="checkbox"
+													checked={setting.channels.includes(option.value)}
+													onChange={(event) =>
+														toggleChannel(
+															setting.key,
+															option.value,
+															event.target.checked,
+														)
+													}
+													className="mt-1 h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+												/>
+												<span className="text-sm">
+													<span
+														className={`block font-semibold ${
+															setting.channels.includes(option.value)
+																? "text-white"
+																: "text-slate-950"
+														}`}
+													>
+														{option.label}
+													</span>
 												</span>
-											</span>
-										</label>
-									))}
+											</label>
+										);
+									})}
 								</div>
 							</article>
 						))}
