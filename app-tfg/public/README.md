@@ -13,4 +13,4 @@ Recursos servidos directamente por Next.js.
 
 Guardar recursos estáticos que deben estar disponibles por URL pública.
 
-Next.js sirve esta carpeta desde la raíz del sitio. Por eso solo deben vivir aqué assets finales, no recursos de prueba.
+Next.js sirve esta carpeta desde la raíz del sitio. Por eso solo deben vivir aquí assets finales, no recursos de prueba.

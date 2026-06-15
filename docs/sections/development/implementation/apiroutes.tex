@@ -7,11 +7,11 @@ El uso de rutas API internas aporta varias ventajas al proyecto. En primer lugar
 
 La documentación siguiente se presenta con una estructura similar a una coleccion de Postman: método, URL, autenticación, parámetros o cuerpo de entrada y respuesta principal. Postman organiza las peticiones alrededor de estos elementos de solicitud y respuesta, incluyendo URL, parámetros, autenticación, cabeceras y cuerpo \citep{postmanrequests2026}. En las tablas se omiten cabeceras repetitivas como \texttt{Content-Type: application/json} cuando el cuerpo es JSON; cuando se indica \texttt{multipart/form-data}, la ruta espera subida de archivo.
 
-Como convención general, las rutas autenticadas devuelven \texttt{401} cuando no existe sesión valida y \texttt{403} cuando el rol no está autorizado. Las validaciones de entrada se responden habitualmente con \texttt{400}, los recursos inexistentes con \texttt{404}, los conflictos de datos con \texttt{409} cuando procede y los errores no controlados con \texttt{500}. Todas las rutas bajo \path{/api} pasan por el control de \textit{rate limiting} del \path{proxy.ts}, que puede responder \texttt{429} si se supera la política aplicable.
+Como convención general, las rutas autenticadas devuelven \texttt{401} cuando no existe sesión válida y \texttt{403} cuando el rol no está autorizado. Las validaciones de entrada se responden habitualmente con \texttt{400}, los recursos inexistentes con \texttt{404}, los conflictos de datos con \texttt{409} cuando procede y los errores no controlados con \texttt{500}. Todas las rutas bajo \path{/api} pasan por el control de \textit{rate limiting} del \path{proxy.ts}, que puede responder \texttt{429} si se supera la política aplicable.
 
 \newcommand{\apiHeader}{\textbf{Método} & \textbf{Ruta} & \textbf{Acceso} & \textbf{Entrada y respuesta principal}\\}
-\newcolumntype{A}[1]{>{\hspace{0pt}\arraybackslash}p{#1}}
-\newcommand{\apiTableSetup}{\footnotesize\setlength{\tabcolsep}{3pt}}
+\newcolumntype{A}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcommand{\apiTableSetup}{\footnotesize\setlength{\tabcolsep}{2pt}\setlength{\emergencystretch}{2em}}
 
 \subsubsection{Autenticación, cuenta y perfil}
 
@@ -223,12 +223,12 @@ Como convención general, las rutas autenticadas devuelven \texttt{401} cuando n
 \texttt{POST} & \path{/api/admin/communications/client-segments} & Admin & JSON con \texttt{clientId}, \texttt{segmentId}, \texttt{notes}. Respuesta \texttt{201}: asignación creada.\\
 \texttt{DELETE} & \path{/api/admin/communications/client-segments/:id} & Admin & Parámetro \texttt{id}. Respuesta \texttt{200}: asignación eliminada.\\
 \texttt{GET} & \path{/api/admin/communications/promotions} & Admin & Query opcional \texttt{search}. Respuesta \texttt{200}: promociones administrativas.\\
-\texttt{POST} & \path{/api/admin/communications/promotions} & Admin & JSON con titulo, descripción, tipo, beneficio, fechas, estado, alcance por producto, línea, cliente o segmento y \texttt{deliveryChannels}. Respuesta \texttt{201}: promoción creada y notificaciones generadas por los canales seleccionados cuando queda activa.\\
+\texttt{POST} & \path{/api/admin/communications/promotions} & Admin & JSON con título, descripción, tipo, beneficio, fechas, estado, alcance por producto, línea, cliente o segmento y \texttt{deliveryChannels}. Respuesta \texttt{201}: promoción creada y notificaciones generadas por los canales seleccionados cuando queda activa.\\
 \texttt{GET} & \path{/api/admin/communications/promotions/:id} & Admin & Parámetro \texttt{id}. Respuesta \texttt{200}: promoción.\\
 \texttt{PATCH} & \path{/api/admin/communications/promotions/:id} & Admin & JSON de promoción, incluyendo \texttt{deliveryChannels} opcional. Respuesta \texttt{200}: promoción actualizada y notificaciones emitidas si pasa a estar activa.\\
 \texttt{DELETE} & \path{/api/admin/communications/promotions/:id} & Admin & Sin cuerpo. Respuesta \texttt{200}: promoción eliminada.\\
 \texttt{GET} & \path{/api/admin/communications/trainings} & Admin & Query opcional \texttt{search}. Respuesta \texttt{200}: formaciones administrativas.\\
-\texttt{POST} & \path{/api/admin/communications/trainings} & Admin & JSON con titulo, descripción, fecha, ubicacion, modalidad, contenido, estado, capacidad y \texttt{deliveryChannels}. Respuesta \texttt{201}: formación creada y notificaciones generadas por los canales seleccionados cuando queda publicada.\\
+\texttt{POST} & \path{/api/admin/communications/trainings} & Admin & JSON con título, descripción, fecha, ubicación, modalidad, contenido, estado, capacidad y \texttt{deliveryChannels}. Respuesta \texttt{201}: formación creada y notificaciones generadas por los canales seleccionados cuando queda publicada.\\
 \texttt{GET} & \path{/api/admin/communications/trainings/:id} & Admin & Parámetro \texttt{id}. Respuesta \texttt{200}: formación.\\
 \texttt{PATCH} & \path{/api/admin/communications/trainings/:id} & Admin & JSON de formación, incluyendo \texttt{deliveryChannels} opcional. Respuesta \texttt{200}: formación actualizada y notificaciones emitidas si pasa a estar publicada.\\
 \texttt{DELETE} & \path{/api/admin/communications/trainings/:id} & Admin & Sin cuerpo. Respuesta \texttt{200}: formación eliminada.\\

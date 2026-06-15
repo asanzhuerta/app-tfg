@@ -50,7 +50,7 @@ const modules = [
 		w: 390,
 		h: 310,
 		code: "M3",
-		title: "Catalogo y coloracion",
+		title: "Catálogo y coloración",
 		lines: [
 			"products",
 			"product_categories, product_lines",
@@ -89,7 +89,7 @@ const modules = [
 		w: 390,
 		h: 330,
 		code: "M5",
-		title: "Salon tecnico",
+		title: "Salón técnico",
 		lines: [
 			"salon_clients",
 			"salon_services",
@@ -122,7 +122,7 @@ const modules = [
 		w: 390,
 		h: 330,
 		code: "M7",
-		title: "Configuracion e integraciones",
+		title: "Configuración e integraciones",
 		lines: [
 			"system_configurations",
 			"- agency_delivery_fee",
@@ -209,7 +209,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
 </style>
 <rect width="${width}" height="${height}" class="bg"/>
 <text x="60" y="58" class="title">MODELO FISICO POSTGRESQL</text>
-<text x="60" y="94" class="subtitle">Resumen verificable de entidades persistentes por modulo y relaciones clave del flujo de pedidos.</text>
+<text x="60" y="94" class="subtitle">Resumen verificable de entidades persistentes por módulo y relaciones clave del flujo de pedidos.</text>
 ${relations.map(renderRelation).join("\n")}
 ${modules.map(renderModule).join("\n")}
 </svg>`;
