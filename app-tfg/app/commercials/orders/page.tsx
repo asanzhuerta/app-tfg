@@ -18,17 +18,20 @@ type CommercialOrdersPageProps = {
 export default async function CommercialOrdersPage({
 	searchParams,
 }: CommercialOrdersPageProps) {
-	const session = await requireCommercialSession();
+	const [session, resolvedSearchParams, orderSettings] = await Promise.all([
+		requireCommercialSession(),
+		searchParams,
+		getOrderBusinessSettings(),
+	]);
 	const commercial = await requireCommercialByUserId(session.user.id);
 	const clients = await listClientsByCommercialId(commercial.id);
-	const resolvedSearchParams = await searchParams;
 	const requestedClientId = String(resolvedSearchParams?.clientId ?? "").trim();
 	const requestedClient = clients.find(
 		(client) => client.id === requestedClientId,
 	);
 	const initialSelectedClientId =
 		requestedClient?.id ?? clients[0]?.id ?? null;
-	const [productOptions, orders, initialDraftOrder, orderSettings] = await Promise.all([
+	const [productOptions, orders, initialDraftOrder] = await Promise.all([
 		listOrderProductOptionsForCommercialUser(session.user.id, {
 			clientId: initialSelectedClientId,
 		}),
@@ -36,7 +39,6 @@ export default async function CommercialOrdersPage({
 		getDraftOrderForCommercialUser(session.user.id, {
 			clientId: initialSelectedClientId,
 		}),
-		getOrderBusinessSettings(),
 	]);
 
 	return (

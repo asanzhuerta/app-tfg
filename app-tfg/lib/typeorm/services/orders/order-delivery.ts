@@ -545,7 +545,7 @@ export async function prepareOrderDeliveryForCommercialUser(
 
 		if (!canAccessClient) {
 			throw new OrderDeliveryServiceError(
-				"El cliente de este pedido no esta asignado a este comercial",
+				"El cliente de este pedido no está asignado a este comercial",
 				403,
 				"ORDER_DELIVERY_CLIENT_NOT_ASSIGNED",
 			);
@@ -585,7 +585,7 @@ export async function prepareOrderDeliveryForCommercialUser(
 
 			if (requestedLine.quantity > remainingQuantity) {
 				throw new OrderDeliveryServiceError(
-					"No puedes preparar mas unidades de las que quedan pendientes en el pedido",
+					"No puedes preparar más unidades de las que quedan pendientes en el pedido",
 					409,
 					"ORDER_DELIVERY_QUANTITY_EXCEEDS_REMAINING",
 				);

@@ -373,7 +373,7 @@ export default function QrCameraScanner({
 					<div className="mt-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-slate-200">
 						{statusMessage ||
 							(isSupported
-								? "Buscando QR. Manten el telefono estable y evita reflejos."
+								? "Buscando QR. Mantén el teléfono estable y evita reflejos."
 								: "Este navegador no permite leer QR en directo.")}
 					</div>
 				</div>

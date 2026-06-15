@@ -1073,7 +1073,7 @@ async function registerOrderPaymentRecord(
 
 	if (paymentTotals.pendingCents <= 0) {
 		throw new OrderServiceError(
-			"Este pedido ya esta cobrado por completo",
+			"Este pedido ya está cobrado por completo",
 			409,
 			"ORDER_ALREADY_PAID",
 		);
@@ -1323,7 +1323,7 @@ async function prepareOrderLineRecords(
 
 	if (products.length !== productIds.length) {
 		throw new OrderServiceError(
-			"Uno o varios productos del pedido ya no estan disponibles",
+			"Uno o varios productos del pedido ya no están disponibles",
 			400,
 			"ORDER_PRODUCTS_NOT_AVAILABLE",
 		);
@@ -1357,7 +1357,7 @@ async function prepareOrderLineRecords(
 
 		if (line.colorReferenceId && !selectedColorReference) {
 			throw new OrderServiceError(
-				"La referencia de color indicada ya no esta disponible",
+				"La referencia de color indicada ya no está disponible",
 				400,
 				"ORDER_COLOR_REFERENCE_NOT_AVAILABLE",
 			);
@@ -1551,7 +1551,7 @@ async function ensureClientCanRegisterOrder(
 
 	if (openUnpaidOrdersCount >= MAX_OPEN_UNPAID_ORDERS_PER_CLIENT) {
 		throw new OrderServiceError(
-			`Este cliente ya tiene ${MAX_OPEN_UNPAID_ORDERS_PER_CLIENT} pedidos registrados pendientes de cobro. No se pueden registrar mas pedidos hasta cerrar al menos uno.`,
+			`Este cliente ya tiene ${MAX_OPEN_UNPAID_ORDERS_PER_CLIENT} pedidos registrados pendientes de cobro. No se pueden registrar más pedidos hasta cerrar al menos uno.`,
 			409,
 			"ORDER_OPEN_LIMIT_REACHED",
 		);
@@ -1922,7 +1922,7 @@ export async function listOrderProductOptionsForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente indicado no esta asignado a este comercial",
+			"El cliente indicado no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
@@ -1989,7 +1989,7 @@ export async function getDraftOrderForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente indicado no esta asignado a este comercial",
+			"El cliente indicado no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
@@ -2136,7 +2136,7 @@ export async function getOrderDetailForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente de este pedido no esta asignado a este comercial",
+			"El cliente de este pedido no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
@@ -2165,7 +2165,7 @@ export async function updateOrderStatusForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente de este pedido no esta asignado a este comercial",
+			"El cliente de este pedido no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
@@ -2194,7 +2194,7 @@ export async function registerOrderPaymentForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente de este pedido no esta asignado a este comercial",
+			"El cliente de este pedido no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
@@ -2269,7 +2269,7 @@ export async function saveDraftForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente indicado no esta asignado a este comercial",
+			"El cliente indicado no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
@@ -2316,7 +2316,7 @@ export async function clearDraftForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente indicado no esta asignado a este comercial",
+			"El cliente indicado no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
@@ -2364,7 +2364,7 @@ export async function addLineToDraftForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente indicado no esta asignado a este comercial",
+			"El cliente indicado no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
@@ -2414,7 +2414,7 @@ export async function createOrderForCommercialUser(
 
 	if (!canAccessClient) {
 		throw new OrderServiceError(
-			"El cliente indicado no esta asignado a este comercial",
+			"El cliente indicado no está asignado a este comercial",
 			403,
 			"ORDER_CLIENT_NOT_ASSIGNED",
 		);
