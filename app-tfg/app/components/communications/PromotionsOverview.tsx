@@ -1,5 +1,10 @@
 import H1Title from "@/app/components/H1Title";
 import Image from "next/image";
+import {
+	getCloudinaryAttachmentDownloadUrl,
+	isPdfResourceUrl,
+	sanitizeDownloadFileName,
+} from "@/lib/cloudinary-url";
 import type { PromotionView } from "./communication-view-types";
 
 type Props = {
@@ -10,12 +15,35 @@ type Props = {
 	showIntro?: boolean;
 };
 
+const promotionDateFormatter = new Intl.DateTimeFormat("es-ES", {
+	day: "2-digit",
+	month: "short",
+	year: "numeric",
+});
+
 function formatDate(value: string) {
-	return new Intl.DateTimeFormat("es-ES", {
-		day: "2-digit",
-		month: "short",
-		year: "numeric",
-	}).format(new Date(`${value}T00:00:00`));
+	return promotionDateFormatter.format(new Date(`${value}T00:00:00`));
+}
+
+function getPromotionAttachmentHref(promotion: PromotionView) {
+	if (!promotion.attachmentUrl) {
+		return "";
+	}
+
+	if (
+		isPdfResourceUrl(
+			promotion.attachmentUrl,
+			promotion.attachmentMimeType,
+			promotion.attachmentName,
+		)
+	) {
+		return getCloudinaryAttachmentDownloadUrl(
+			promotion.attachmentUrl,
+			promotion.attachmentName,
+		);
+	}
+
+	return promotion.attachmentUrl;
 }
 
 export default function PromotionsOverview({
@@ -81,9 +109,12 @@ export default function PromotionsOverview({
 							</p>
 							{promotion.attachmentUrl ? (
 								<a
-									href={promotion.attachmentUrl}
-									target="_blank"
-									rel="noreferrer"
+									href={getPromotionAttachmentHref(promotion)}
+									download={sanitizeDownloadFileName(
+										promotion.attachmentName || `${promotion.title}.pdf`,
+										"promocion.pdf",
+										{ ensurePdfExtension: true },
+									)}
 									className="mt-3 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
 								>
 									{promotion.attachmentName || "Ver PDF adjunto"}

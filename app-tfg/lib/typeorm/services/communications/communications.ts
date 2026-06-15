@@ -87,12 +87,12 @@ const CONSTRAINT_ERRORS: Record<
 		status: 409,
 	},
 	training_enrollments_event_user_unique: {
-		message: "El usuario ya esta inscrito en esta formación",
+		message: "El usuario ya está inscrito en esta formación",
 		code: "DUPLICATE_TRAINING_ENROLLMENT",
 		status: 409,
 	},
 	UQ_training_enrollments_event_user: {
-		message: "El usuario ya esta inscrito en esta formación",
+		message: "El usuario ya está inscrito en esta formación",
 		code: "DUPLICATE_TRAINING_ENROLLMENT",
 		status: 409,
 	},
@@ -150,7 +150,7 @@ function rethrowCommunicationsPersistenceError(
 
 	if (driverError?.code === "23503") {
 		throw new CommunicationsServiceError(
-			"Alguna de las relaciones indicadas no es valida",
+			"Alguna de las relaciones indicadas no es válida",
 			400,
 			"INVALID_COMMUNICATIONS_RELATION",
 		);
@@ -284,7 +284,7 @@ function normalizeDateOnly(
 
 	if (Number.isNaN(parsed.getTime())) {
 		throw new CommunicationsServiceError(
-			`${fieldName} no es una fecha valida`,
+			`${fieldName} no es una fecha válida`,
 			400,
 			"INVALID_DATE",
 		);
@@ -320,7 +320,7 @@ function normalizeDateTime(
 
 	if (Number.isNaN(parsed.getTime())) {
 		throw new CommunicationsServiceError(
-			`${fieldName} no es una fecha valida`,
+			`${fieldName} no es una fecha válida`,
 			400,
 			"INVALID_DATETIME",
 		);
@@ -538,7 +538,7 @@ function normalizeTrainingEventModality(
 
 	if (!TRAINING_MODALITIES.includes(value)) {
 		throw new CommunicationsServiceError(
-			"La modalidad de la formación no es valida",
+			"La modalidad de la formación no es válida",
 			400,
 			"INVALID_TRAINING_MODALITY",
 		);
@@ -711,7 +711,7 @@ async function resolvePromotionDiscountType(
 
 	if (!discountType.is_active) {
 		throw new CommunicationsServiceError(
-			"El tipo de descuento no esta activo",
+			"El tipo de descuento no está activo",
 			400,
 			"PROMOTION_DISCOUNT_TYPE_INACTIVE",
 		);
@@ -787,7 +787,7 @@ function normalizePromotionSpecificValues(input: {
 
 		if (!giftProductId && !giftDescription) {
 			throw new CommunicationsServiceError(
-				"Indica un producto de regalo o una descripcion del regalo",
+				"Indica un producto de regalo o una descripción del regalo",
 				400,
 				"PROMOTION_GIFT_REQUIRED",
 			);
@@ -1243,7 +1243,7 @@ export async function createPromotion(
 	input: AdminUpsertPromotionBody & { createdByUserId?: string | null },
 ) {
 	const ds = await getDataSource();
-	const title = normalizeText(input.title, "El titulo", { required: true });
+	const title = normalizeText(input.title, "El título", { required: true });
 	const description = normalizeText(input.description, "La descripción", {
 		required: true,
 	});
@@ -1362,7 +1362,7 @@ export async function updatePromotion(
 ) {
 	const ds = await getDataSource();
 	const normalized = {
-		title: normalizeText(input.title, "El titulo"),
+		title: normalizeText(input.title, "El título"),
 		description: normalizeText(input.description, "La descripción"),
 		promotionType: normalizeText(input.promotionType, "El tipo"),
 		benefit: normalizeText(input.benefit, "El beneficio"),
@@ -1653,14 +1653,14 @@ export async function createTrainingEvent(
 	input: AdminUpsertTrainingEventBody & { createdByUserId?: string | null },
 ) {
 	const ds = await getDataSource();
-	const title = normalizeText(input.title, "El titulo", { required: true });
+	const title = normalizeText(input.title, "El título", { required: true });
 	const description = normalizeText(input.description, "La descripción", {
 		required: true,
 	});
 	const startsAt = normalizeDateTime(input.startsAt, "La fecha de inicio", {
 		required: true,
 	});
-	const location = normalizeText(input.location, "La ubicacion");
+	const location = normalizeText(input.location, "La ubicación");
 	const modality = normalizeTrainingEventModality(input.modality) ?? "in_person";
 	const content = normalizeText(input.content, "El contenido");
 	const status = normalizeTrainingEventStatus(input.status) ?? "draft";
@@ -1708,10 +1708,10 @@ export async function updateTrainingEvent(
 ) {
 	const ds = await getDataSource();
 	const normalized = {
-		title: normalizeText(input.title, "El titulo"),
+		title: normalizeText(input.title, "El título"),
 		description: normalizeText(input.description, "La descripción"),
 		startsAt: normalizeDateTime(input.startsAt, "La fecha de inicio"),
-		location: normalizeText(input.location, "La ubicacion"),
+		location: normalizeText(input.location, "La ubicación"),
 		modality: normalizeTrainingEventModality(input.modality),
 		content: normalizeText(input.content, "El contenido"),
 		status: normalizeTrainingEventStatus(input.status),
@@ -2007,7 +2007,7 @@ export async function createReminderForUser(
 	input: UpsertAppReminderBody,
 ) {
 	const ds = await getDataSource();
-	const title = normalizeText(input.title, "El titulo", { required: true });
+	const title = normalizeText(input.title, "El título", { required: true });
 	const body = normalizeText(input.body, "El cuerpo", { required: true });
 	const scheduledAt = normalizeDateTime(input.scheduledAt, "La fecha programada", {
 		required: true,

@@ -27,14 +27,16 @@ const emptyReminderForm = {
 
 const NOTIFICATIONS_PER_PAGE = 5;
 
+const notificationDateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
+	day: "2-digit",
+	month: "short",
+	year: "numeric",
+	hour: "2-digit",
+	minute: "2-digit",
+});
+
 function formatDateTime(value: string) {
-	return new Intl.DateTimeFormat("es-ES", {
-		day: "2-digit",
-		month: "short",
-		year: "numeric",
-		hour: "2-digit",
-		minute: "2-digit",
-	}).format(new Date(value));
+	return notificationDateTimeFormatter.format(new Date(value));
 }
 
 function getErrorMessage(error: unknown, fallback: string) {
@@ -295,7 +297,7 @@ export default function NotificationsWorkspace({
 							{totalNotificationPages > 1 ? (
 								<div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
 									<span>
-										Pagina {normalizedNotificationPage} de{" "}
+										Página {normalizedNotificationPage} de{" "}
 										{totalNotificationPages}
 									</span>
 									<div className="flex gap-2">
@@ -349,7 +351,7 @@ export default function NotificationsWorkspace({
 					<form onSubmit={createReminder} className="space-y-3">
 						<input
 							required
-							placeholder="Titulo"
+							placeholder="Título"
 							value={reminderForm.title}
 							onChange={(event) =>
 								setReminderForm((current) => ({

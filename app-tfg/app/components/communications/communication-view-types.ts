@@ -86,6 +86,10 @@ export type PromotionView = {
 export type TrainingEnrollmentView = {
 	id: string;
 	status: TrainingEnrollmentStatus;
+	userId: string;
+	userName: string;
+	userEmail: string;
+	enrolledAt: string;
 };
 
 export type TrainingEventView = {
@@ -99,6 +103,7 @@ export type TrainingEventView = {
 	status: TrainingEventStatus;
 	capacity: number | null;
 	activeEnrollmentsCount: number;
+	enrollments: TrainingEnrollmentView[];
 	currentUserEnrollment: TrainingEnrollmentView | null;
 };
 

@@ -151,6 +151,14 @@ export function serializeTrainingEvent(
 ): TrainingEventView {
 	const enrollments = trainingEvent.enrollments ?? [];
 	const currentUserEnrollment = enrollments[0] ?? null;
+	const serializedEnrollments = enrollments.map((enrollment) => ({
+		id: enrollment.id,
+		status: enrollment.status,
+		userId: enrollment.user_id,
+		userName: enrollment.user?.name ?? "Usuario",
+		userEmail: enrollment.user?.email ?? "",
+		enrolledAt: toIsoString(enrollment.enrolled_at),
+	}));
 
 	return {
 		id: trainingEvent.id,
@@ -165,10 +173,15 @@ export function serializeTrainingEvent(
 		activeEnrollmentsCount: enrollments.filter((enrollment) =>
 			ACTIVE_ENROLLMENTS.has(enrollment.status),
 		).length,
+		enrollments: serializedEnrollments,
 		currentUserEnrollment: currentUserEnrollment
 			? {
 					id: currentUserEnrollment.id,
 					status: currentUserEnrollment.status,
+					userId: currentUserEnrollment.user_id,
+					userName: currentUserEnrollment.user?.name ?? "Usuario",
+					userEmail: currentUserEnrollment.user?.email ?? "",
+					enrolledAt: toIsoString(currentUserEnrollment.enrolled_at),
 			  }
 			: null,
 	};

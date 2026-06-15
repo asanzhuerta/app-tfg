@@ -1,10 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
+import {
+	type ChangeEvent,
+	type FormEvent,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import { useRouter } from "next/navigation";
 import { ApiClientError, requestJson } from "@/lib/api/client";
 import type { NotificationDeliveryChannel } from "@/lib/contracts/communications";
+import {
+	getCloudinaryAttachmentDownloadUrl,
+	isPdfResourceUrl,
+	sanitizeDownloadFileName,
+} from "@/lib/cloudinary-url";
 import type {
 	ClientOptionView,
 	ClientSegmentAssignmentView,
@@ -23,6 +35,7 @@ type DeliveryFormState = {
 
 type PromotionAttachmentUploadResponse = {
 	url: string;
+	downloadUrl?: string;
 	name: string;
 	mimeType: string;
 	kind: "image" | "pdf";
@@ -46,6 +59,7 @@ const tabs: Array<{ key: AdminTab; label: string }> = [
 	{ key: "assignments", label: "Asignaciones" },
 ];
 const defaultDeliveryChannels: NotificationDeliveryChannel[] = ["in_app"];
+const activeTrainingEnrollmentStatuses = new Set(["registered", "attended"]);
 
 const emptyPromotionForm = {
 	title: "",
@@ -96,6 +110,20 @@ const emptyAssignmentForm = {
 	notes: "",
 };
 
+const communicationDateFormatter = new Intl.DateTimeFormat("es-ES", {
+	day: "2-digit",
+	month: "short",
+	year: "numeric",
+});
+
+const communicationDateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
+	day: "2-digit",
+	month: "short",
+	year: "numeric",
+	hour: "2-digit",
+	minute: "2-digit",
+});
+
 function getErrorMessage(error: unknown, fallback: string) {
 	return error instanceof ApiClientError ? error.message : fallback;
 }
@@ -107,11 +135,7 @@ function formatDate(value: string) {
 		return value;
 	}
 
-	return new Intl.DateTimeFormat("es-ES", {
-		day: "2-digit",
-		month: "short",
-		year: "numeric",
-	}).format(parsed);
+	return communicationDateFormatter.format(parsed);
 }
 
 function formatDateTime(value: string) {
@@ -121,13 +145,7 @@ function formatDateTime(value: string) {
 		return value;
 	}
 
-	return new Intl.DateTimeFormat("es-ES", {
-		day: "2-digit",
-		month: "short",
-		year: "numeric",
-		hour: "2-digit",
-		minute: "2-digit",
-	}).format(parsed);
+	return communicationDateTimeFormatter.format(parsed);
 }
 
 function toDateTimeLocal(value: string) {
@@ -182,6 +200,173 @@ function updateDeliveryChannels(
 	return [...nextChannels];
 }
 
+function getPromotionAttachmentHref(promotion: {
+	attachmentUrl: string | null;
+	attachmentName: string | null;
+	attachmentMimeType: string | null;
+}) {
+	if (!promotion.attachmentUrl) {
+		return "";
+	}
+
+	if (
+		isPdfResourceUrl(
+			promotion.attachmentUrl,
+			promotion.attachmentMimeType,
+			promotion.attachmentName,
+		)
+	) {
+		return getCloudinaryAttachmentDownloadUrl(
+			promotion.attachmentUrl,
+			promotion.attachmentName,
+		);
+	}
+
+	return promotion.attachmentUrl;
+}
+
+function normalizeSearchValue(value: string) {
+	return value
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toLowerCase()
+		.trim();
+}
+
+function formatProductOption(product: ProductOptionView) {
+	return product.reference
+		? `${product.reference} - ${product.name}`
+		: product.name;
+}
+
+function findProductOptionLabel(products: ProductOptionView[], productId: string) {
+	const product = products.find((item) => item.id === productId);
+
+	return product ? formatProductOption(product) : "";
+}
+
+type ProductSearchFieldProps = {
+	id: string;
+	placeholder: string;
+	value: string;
+	query: string;
+	products: ProductOptionView[];
+	onChange: (value: string) => void;
+	onQueryChange: (value: string) => void;
+};
+
+function ProductSearchField({
+	id,
+	placeholder,
+	value,
+	query,
+	products,
+	onChange,
+	onQueryChange,
+}: ProductSearchFieldProps) {
+	const [isOpen, setIsOpen] = useState(false);
+
+	const selectedProduct = useMemo(
+		() => products.find((product) => product.id === value) ?? null,
+		[products, value],
+	);
+
+	const filteredProducts = useMemo(() => {
+		const normalizedQuery = normalizeSearchValue(query);
+
+		if (!normalizedQuery) {
+			return products.slice(0, 8);
+		}
+
+		return products
+			.filter((product) =>
+				normalizeSearchValue(formatProductOption(product)).includes(
+					normalizedQuery,
+				),
+			)
+			.slice(0, 8);
+	}, [products, query]);
+
+	return (
+		<div className="relative min-w-0">
+			<input
+				id={id}
+				type="search"
+				autoComplete="off"
+				placeholder={placeholder}
+				value={query}
+				onFocus={() => setIsOpen(true)}
+				onBlur={() => setIsOpen(false)}
+				onChange={(event) => {
+					const nextQuery = event.target.value;
+					onQueryChange(nextQuery);
+					setIsOpen(true);
+
+					if (
+						selectedProduct &&
+						normalizeSearchValue(nextQuery) !==
+							normalizeSearchValue(formatProductOption(selectedProduct))
+					) {
+						onChange("");
+					}
+
+					if (!nextQuery.trim()) {
+						onChange("");
+					}
+				}}
+				className={`w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none transition focus:border-slate-400 ${
+					value ? "pr-16" : ""
+				}`}
+			/>
+			{value ? (
+				<button
+					type="button"
+					onClick={() => {
+						onChange("");
+						onQueryChange("");
+						setIsOpen(false);
+					}}
+					className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 transition hover:text-slate-700"
+				>
+					Quitar
+				</button>
+			) : null}
+			{isOpen ? (
+				<div className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[100] max-h-64 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-1 shadow-xl">
+					{filteredProducts.length > 0 ? (
+						filteredProducts.map((product) => (
+							<button
+								key={product.id}
+								type="button"
+								onMouseDown={(event) => event.preventDefault()}
+								onClick={() => {
+									onChange(product.id);
+									onQueryChange(formatProductOption(product));
+									setIsOpen(false);
+								}}
+								className="block w-full rounded-xl px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
+							>
+								<span className="font-semibold text-slate-900">
+									{product.name}
+								</span>
+								{product.reference ? (
+									<span className="ml-2 text-xs text-slate-500">
+										{product.reference}
+									</span>
+								) : null}
+							</button>
+						))
+					) : (
+						<p className="px-3 py-2 text-sm text-slate-500">
+							No hay productos con ese texto.
+						</p>
+					)}
+				</div>
+			) : null}
+		</div>
+	);
+}
+
 export default function AdminCommunicationsWorkspace({
 	segments: initialSegments,
 	assignments: initialAssignments,
@@ -200,6 +385,9 @@ export default function AdminCommunicationsWorkspace({
 	const [promotions, setPromotions] = useState(initialPromotions);
 	const [trainings, setTrainings] = useState(initialTrainings);
 	const [promotionForm, setPromotionForm] = useState(emptyPromotionForm);
+	const [promotionGiftProductQuery, setPromotionGiftProductQuery] =
+		useState("");
+	const [promotionProductQuery, setPromotionProductQuery] = useState("");
 	const [trainingForm, setTrainingForm] = useState(emptyTrainingForm);
 	const [segmentForm, setSegmentForm] = useState(emptySegmentForm);
 	const [assignmentForm, setAssignmentForm] = useState(emptyAssignmentForm);
@@ -214,6 +402,9 @@ export default function AdminCommunicationsWorkspace({
 	const [error, setError] = useState("");
 	const [pendingAction, setPendingAction] = useState<string | null>(null);
 	const [confirmDeleteAction, setConfirmDeleteAction] = useState<string | null>(
+		null,
+	);
+	const [expandedTrainingId, setExpandedTrainingId] = useState<string | null>(
 		null,
 	);
 
@@ -249,6 +440,8 @@ export default function AdminCommunicationsWorkspace({
 
 	function resetPromotionForm() {
 		setPromotionForm(emptyPromotionForm);
+		setPromotionGiftProductQuery("");
+		setPromotionProductQuery("");
 		setEditingPromotionId(null);
 	}
 
@@ -307,8 +500,8 @@ export default function AdminCommunicationsWorkspace({
 	function getFormDialogClass(tab: AdminTab) {
 		return [
 			"space-y-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl",
-			"max-h-[calc(100svh-2rem)] w-[min(44rem,calc(100vw-2rem))] overflow-y-auto",
-			"[&_input]:min-w-0 [&_input]:w-full [&_select]:min-w-0 [&_select]:w-full [&_textarea]:min-w-0 [&_textarea]:w-full",
+			"max-h-[calc(100svh-2rem)] w-[min(44rem,calc(100dvw-2rem))] overflow-y-auto overflow-x-hidden",
+			"[&_input]:min-w-0 [&_input]:w-full [&_select]:min-w-0 [&_select]:w-full [&_textarea]:min-w-0 [&_textarea]:w-full [&_textarea]:resize-y [&_textarea]:overflow-x-hidden",
 			openForm === tab
 				? "app-modal-dialog-centered z-[90]"
 				: "hidden",
@@ -375,6 +568,12 @@ export default function AdminCommunicationsWorkspace({
 			customerSegmentId: promotion.customerSegmentId ?? "",
 			deliveryChannels: [...defaultDeliveryChannels],
 		});
+		setPromotionGiftProductQuery(
+			findProductOptionLabel(products, promotion.giftProductId ?? ""),
+		);
+		setPromotionProductQuery(
+			findProductOptionLabel(products, promotion.productId ?? ""),
+		);
 	}
 
 	function startEditingTraining(training: TrainingEventView) {
@@ -814,7 +1013,7 @@ export default function AdminCommunicationsWorkspace({
 					: "formaciones publicadas"
 			}`,
 			description:
-				"Gestiona convocatorias presenciales, online o mixtas para clientes profesionales.",
+				"Gestiona convocatorias presenciales, en línea o mixtas para clientes profesionales.",
 			actionLabel: "Crear nueva formación",
 		},
 		segments: {
@@ -954,33 +1153,39 @@ export default function AdminCommunicationsWorkspace({
 						<div className="grid gap-3 md:grid-cols-2">
 							<select
 								value={promotionForm.promotionDiscountTypeCode}
-								onChange={(event) =>
+								onChange={(event) => {
+									const nextDiscountTypeCode = event.target.value;
+
+									if (nextDiscountTypeCode !== "gift_product") {
+										setPromotionGiftProductQuery("");
+									}
+
 									setPromotionForm((current) => ({
 										...current,
-										promotionDiscountTypeCode: event.target.value,
+										promotionDiscountTypeCode: nextDiscountTypeCode,
 										promotionType:
 											promotionDiscountTypes.find(
 												(discountType) =>
-													discountType.code === event.target.value,
+													discountType.code === nextDiscountTypeCode,
 											)?.name ?? "",
 										discountPercentage:
-											event.target.value === "gift_product"
+											nextDiscountTypeCode === "gift_product"
 												? ""
 												: current.discountPercentage,
 										minimumOrderAmount:
-											event.target.value === "volume_percentage_discount"
+											nextDiscountTypeCode === "volume_percentage_discount"
 												? current.minimumOrderAmount
 												: "",
 										giftProductId:
-											event.target.value === "gift_product"
+											nextDiscountTypeCode === "gift_product"
 												? current.giftProductId
 												: "",
 										giftDescription:
-											event.target.value === "gift_product"
+											nextDiscountTypeCode === "gift_product"
 												? current.giftDescription
 												: "",
 									}))
-								}
+								}}
 								className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
 							>
 								{promotionDiscountTypes.map((discountType) => (
@@ -1038,24 +1243,20 @@ export default function AdminCommunicationsWorkspace({
 							) : null}
 							{promotionForm.promotionDiscountTypeCode === "gift_product" ? (
 								<>
-									<select
+									<ProductSearchField
+										id="promotion-gift-product"
+										placeholder="Producto de regalo opcional"
 										value={promotionForm.giftProductId}
-										onChange={(event) =>
+										query={promotionGiftProductQuery}
+										products={products}
+										onChange={(nextProductId) =>
 											setPromotionForm((current) => ({
 												...current,
-												giftProductId: event.target.value,
+												giftProductId: nextProductId,
 											}))
 										}
-										className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
-									>
-										<option value="">Producto de regalo opcional</option>
-										{products.map((product) => (
-											<option key={product.id} value={product.id}>
-												{product.reference ? `${product.reference} - ` : ""}
-												{product.name}
-											</option>
-										))}
-									</select>
+										onQueryChange={setPromotionGiftProductQuery}
+									/>
 									<input
 										placeholder="Regalo externo o merchandising"
 										value={promotionForm.giftDescription}
@@ -1124,24 +1325,20 @@ export default function AdminCommunicationsWorkspace({
 									</option>
 								))}
 							</select>
-							<select
+							<ProductSearchField
+								id="promotion-target-product"
+								placeholder="Producto opcional"
 								value={promotionForm.productId}
-								onChange={(event) =>
+								query={promotionProductQuery}
+								products={products}
+								onChange={(nextProductId) =>
 									setPromotionForm((current) => ({
 										...current,
-										productId: event.target.value,
+										productId: nextProductId,
 									}))
 								}
-								className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
-							>
-								<option value="">Producto opcional</option>
-								{products.map((product) => (
-									<option key={product.id} value={product.id}>
-										{product.reference ? `${product.reference} - ` : ""}
-										{product.name}
-									</option>
-								))}
-							</select>
+								onQueryChange={setPromotionProductQuery}
+							/>
 							<select
 								value={promotionForm.clientId}
 								onChange={(event) =>
@@ -1255,12 +1452,16 @@ export default function AdminCommunicationsWorkspace({
 									{promotionForm.attachmentUrl ? (
 										<>
 											<a
-												href={promotionForm.attachmentUrl}
-												target="_blank"
-												rel="noreferrer"
+												href={getPromotionAttachmentHref(promotionForm)}
+												download={sanitizeDownloadFileName(
+													promotionForm.attachmentName ||
+														`${promotionForm.title}.pdf`,
+													"promocion.pdf",
+													{ ensurePdfExtension: true },
+												)}
 												className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600"
 											>
-												Ver PDF
+												Descargar PDF
 											</a>
 											<button
 												type="button"
@@ -1334,7 +1535,7 @@ export default function AdminCommunicationsWorkspace({
 										}
 										className="h-4 w-4 rounded border-slate-300"
 									/>
-									Push PWA
+									Notificación PWA
 								</label>
 							</div>
 						</div>
@@ -1360,7 +1561,10 @@ export default function AdminCommunicationsWorkspace({
 
 					<div className="space-y-3">
 						{promotions.length ? (
-							promotions.map((promotion) => (
+							promotions.map((promotion) => {
+								const isActivePromotion = promotion.status === "active";
+
+								return (
 								<article
 									key={promotion.id}
 									className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-sm"
@@ -1394,9 +1598,13 @@ export default function AdminCommunicationsWorkspace({
 									</p>
 									{promotion.attachmentUrl ? (
 										<a
-											href={promotion.attachmentUrl}
-											target="_blank"
-											rel="noreferrer"
+											href={getPromotionAttachmentHref(promotion)}
+											download={sanitizeDownloadFileName(
+												promotion.attachmentName ||
+													`${promotion.title}.pdf`,
+												"promocion.pdf",
+												{ ensurePdfExtension: true },
+											)}
 											className="mt-2 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700"
 										>
 											{promotion.attachmentName || "Ver PDF adjunto"}
@@ -1419,26 +1627,29 @@ export default function AdminCommunicationsWorkspace({
 											: ""}
 									</p>
 									<div className="mt-3 flex flex-wrap gap-2">
-										<button
-											type="button"
-											onClick={() =>
-												patchPromotionStatus(promotion.id, "active")
-											}
-											disabled={pendingAction === `promotion-${promotion.id}`}
-											className="rounded-lg border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700"
-										>
-											Activar
-										</button>
-										<button
-											type="button"
-											onClick={() =>
-												patchPromotionStatus(promotion.id, "archived")
-											}
-											disabled={pendingAction === `promotion-${promotion.id}`}
-											className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600"
-										>
-											Archivar
-										</button>
+										{isActivePromotion ? (
+											<button
+												type="button"
+												onClick={() =>
+													patchPromotionStatus(promotion.id, "archived")
+												}
+												disabled={pendingAction === `promotion-${promotion.id}`}
+												className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600"
+											>
+												Archivar
+											</button>
+										) : (
+											<button
+												type="button"
+												onClick={() =>
+													patchPromotionStatus(promotion.id, "active")
+												}
+												disabled={pendingAction === `promotion-${promotion.id}`}
+												className="rounded-lg border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700"
+											>
+												Activar
+											</button>
+										)}
 										<button
 											type="button"
 											onClick={() => startEditingPromotion(promotion)}
@@ -1446,22 +1657,25 @@ export default function AdminCommunicationsWorkspace({
 										>
 											Editar
 										</button>
-										<button
-											type="button"
-											onClick={() => deletePromotion(promotion.id)}
-											disabled={
-												pendingAction === `promotion-delete-${promotion.id}`
-											}
-											className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-medium text-rose-700"
-										>
-											{confirmDeleteAction ===
-											`promotion-delete-${promotion.id}`
-												? "Confirmar eliminar"
-												: "Eliminar"}
-										</button>
+										{!isActivePromotion ? (
+											<button
+												type="button"
+												onClick={() => deletePromotion(promotion.id)}
+												disabled={
+													pendingAction === `promotion-delete-${promotion.id}`
+												}
+												className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-medium text-rose-700"
+											>
+												{confirmDeleteAction ===
+												`promotion-delete-${promotion.id}`
+													? "Confirmar eliminar"
+													: "Eliminar"}
+											</button>
+										) : null}
 									</div>
 								</article>
-							))
+								);
+							})
 						) : (
 							<p className="rounded-2xl border border-dashed border-slate-200 bg-white/75 p-4 text-sm text-slate-500">
 								Sin promociones registradas.
@@ -1485,7 +1699,7 @@ export default function AdminCommunicationsWorkspace({
 									{editingTrainingId ? "Editar formación" : "Nueva formación"}
 								</h2>
 								<p className="text-sm text-slate-500">
-									Pública sesiones presenciales, online o mixtas.
+									Publica sesiones presenciales, en línea o mixtas.
 								</p>
 							</div>
 							<button
@@ -1555,7 +1769,7 @@ export default function AdminCommunicationsWorkspace({
 								className="rounded-xl border border-slate-200 px-3 py-2 text-sm"
 							>
 								<option value="in_person">Presencial</option>
-								<option value="online">Online</option>
+								<option value="online">En línea</option>
 								<option value="hybrid">Mixta</option>
 							</select>
 							<select
@@ -1646,7 +1860,7 @@ export default function AdminCommunicationsWorkspace({
 										}
 										className="h-4 w-4 rounded border-slate-300"
 									/>
-									Push PWA
+									Notificación PWA
 								</label>
 							</div>
 						</div>
@@ -1672,81 +1886,158 @@ export default function AdminCommunicationsWorkspace({
 
 					<div className="space-y-3">
 						{trainings.length ? (
-							trainings.map((training) => (
-								<article
-									key={training.id}
-									className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-sm"
-								>
-									<div className="flex flex-wrap items-start justify-between gap-3">
-										<div>
-											<h3 className="font-semibold text-slate-900">
-												{training.title}
-											</h3>
-											<p className="mt-1 text-sm text-slate-600">
-												{training.description}
-											</p>
+							trainings.map((training) => {
+								const isDraftTraining = training.status === "draft";
+								const isPublishedTraining = training.status === "published";
+								const isClosedTraining =
+									training.status === "completed" ||
+									training.status === "cancelled";
+								const activeEnrollments = training.enrollments.filter(
+									(enrollment) =>
+										activeTrainingEnrollmentStatuses.has(enrollment.status),
+								);
+								const isExpanded = expandedTrainingId === training.id;
+
+								return (
+									<article
+										key={training.id}
+										className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-sm"
+									>
+										<div className="flex flex-wrap items-start justify-between gap-3">
+											<div>
+												<h3 className="font-semibold text-slate-900">
+													{training.title}
+												</h3>
+												<p className="mt-1 text-sm text-slate-600">
+													{training.description}
+												</p>
+											</div>
+											<StatusBadge status={training.status} />
 										</div>
-										<StatusBadge status={training.status} />
-									</div>
-									<p className="mt-3 text-xs text-slate-500">
-										{formatDateTime(training.startsAt)} - {training.modality}
-										{training.location ? ` - ${training.location}` : ""}
-									</p>
-									<p className="mt-2 text-xs text-slate-500">
-										Inscripciones activas: {training.activeEnrollmentsCount}
-										{training.capacity ? ` / ${training.capacity}` : ""}
-									</p>
-									<div className="mt-3 flex flex-wrap gap-2">
+										<p className="mt-3 text-xs text-slate-500">
+											{formatDateTime(training.startsAt)} - {training.modality}
+											{training.location ? ` - ${training.location}` : ""}
+										</p>
+										<p className="mt-2 text-xs text-slate-500">
+											Inscripciones activas: {training.activeEnrollmentsCount}
+											{training.capacity ? ` / ${training.capacity}` : ""}
+										</p>
 										<button
 											type="button"
 											onClick={() =>
-												patchTrainingStatus(training.id, "published")
+												setExpandedTrainingId((current) =>
+													current === training.id ? null : training.id,
+												)
 											}
-											disabled={pendingAction === `training-${training.id}`}
-											className="rounded-lg border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700"
+											className="mt-3 rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
+											aria-expanded={isExpanded}
 										>
-											Publicar
+											{isExpanded ? "Ocultar inscritos" : "Ver inscritos"} (
+											{activeEnrollments.length})
 										</button>
-										<button
-											type="button"
-											onClick={() =>
-												patchTrainingStatus(training.id, "completed")
-											}
-											disabled={pendingAction === `training-${training.id}`}
-											className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600"
-										>
-											Completar
-										</button>
-										<button
-											type="button"
-											onClick={() =>
-												patchTrainingStatus(training.id, "cancelled")
-											}
-											disabled={pendingAction === `training-${training.id}`}
-											className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-medium text-rose-700"
-										>
-											Cancelar
-										</button>
-										<button
-											type="button"
-											onClick={() => startEditingTraining(training)}
-											className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600"
-										>
-											Editar
-										</button>
-										<button
-											type="button"
-											onClick={() => deleteTraining(training.id)}
-											disabled={pendingAction === `training-delete-${training.id}`}
-											className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-medium text-rose-700"
-										>
-											{confirmDeleteAction === `training-delete-${training.id}`
-												? "Confirmar eliminar"
-												: "Eliminar"}
-										</button>
-									</div>
-								</article>
-							))
+										{isExpanded ? (
+											<div className="mt-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-3">
+												{activeEnrollments.length ? (
+													<ul className="grid gap-2">
+														{activeEnrollments.map((enrollment) => (
+															<li
+																key={enrollment.id}
+																className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 text-sm"
+															>
+																<div>
+																	<p className="font-semibold text-slate-900">
+																		{enrollment.userName}
+																	</p>
+																	<p className="text-xs text-slate-500">
+																		{enrollment.userEmail || "Sin correo"} -{" "}
+																		{enrollment.status}
+																	</p>
+																</div>
+																<Link
+																	href={`/admin/users/list/${enrollment.userId}`}
+																	className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
+																>
+																	Ver perfil
+																</Link>
+															</li>
+														))}
+													</ul>
+												) : (
+													<p className="text-sm text-slate-500">
+														Todavia no hay usuarios inscritos.
+													</p>
+												)}
+											</div>
+										) : null}
+										<div className="mt-3 flex flex-wrap gap-2">
+											{isDraftTraining ? (
+												<button
+													type="button"
+													onClick={() =>
+														patchTrainingStatus(training.id, "published")
+													}
+													disabled={pendingAction === `training-${training.id}`}
+													className="rounded-lg border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700"
+												>
+													Publicar
+												</button>
+											) : null}
+											{isPublishedTraining ? (
+												<>
+													<button
+														type="button"
+														onClick={() =>
+															patchTrainingStatus(training.id, "completed")
+														}
+														disabled={
+															pendingAction === `training-${training.id}`
+														}
+														className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600"
+													>
+														Completar
+													</button>
+													<button
+														type="button"
+														onClick={() =>
+															patchTrainingStatus(training.id, "cancelled")
+														}
+														disabled={
+															pendingAction === `training-${training.id}`
+														}
+														className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-medium text-rose-700"
+													>
+														Cancelar
+													</button>
+												</>
+											) : null}
+											{!isClosedTraining ? (
+												<button
+													type="button"
+													onClick={() => startEditingTraining(training)}
+													className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600"
+												>
+													Editar
+												</button>
+											) : null}
+											{!isPublishedTraining ? (
+												<button
+													type="button"
+													onClick={() => deleteTraining(training.id)}
+													disabled={
+														pendingAction === `training-delete-${training.id}`
+													}
+													className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-medium text-rose-700"
+												>
+													{confirmDeleteAction ===
+													`training-delete-${training.id}`
+														? "Confirmar eliminar"
+														: "Eliminar"}
+												</button>
+											) : null}
+										</div>
+									</article>
+								);
+							})
 						) : (
 							<p className="rounded-2xl border border-dashed border-slate-200 bg-white/75 p-4 text-sm text-slate-500">
 								Sin formaciones registradas.
@@ -1993,7 +2284,7 @@ export default function AdminCommunicationsWorkspace({
 												{assignment.clientName}
 											</h3>
 											<p className="text-sm text-slate-500">
-												{assignment.clientEmail ?? "Sin email"} -{" "}
+												{assignment.clientEmail ?? "Sin correo"} -{" "}
 												{assignment.segmentName}
 											</p>
 										</div>
