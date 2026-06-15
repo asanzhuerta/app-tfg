@@ -9,6 +9,9 @@
 
 \raggedbottom
 \setlength{\emergencystretch}{3em}
+% Las tablas técnicas incluyen rutas y entidades largas; estos ajustes evitan ruido de Underfull inocuo.
+\hbadness=10000
+\vbadness=10000
 \newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
 \newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
 \makeatletter

@@ -4,7 +4,7 @@
 > Módulo cubierto: `M4 - Pedidos, repartos, entregas y cobros`
 > Referencia base: `TFG_STATUS_MASTER_PLAN.md`
 
-## Como usar esta checklist
+## Cómo usar esta checklist
 
 - Marca cada casilla solo cuando la comprobación se haya ejecutado de verdad.
 - Anade notas cortas cuando detectes un bug, una duda o una limitacion conocida.
@@ -174,7 +174,7 @@ Notas:
 - [x] Si se cancela un pedido ya vinculado, el sistema responde de forma coherente y sin enlaces huerfanos.
 - [x] Si falla autenticación o sesión, la UI no entra en bucles de carga.
 - [x] Si falla la base de datos o un endpoint, la UI muestra error entendible y no deja acciones a medias.
-- [x] Si no hay coordenadas o ruta valida, el sistema degrada bien y no muestra ETA ficticia.
+- [x] Si no hay coordenadas o ruta válida, el sistema degrada bien y no muestra ETA ficticia.
 
 Notas:
 
@@ -206,15 +206,15 @@ Notas:
 - `node -r ./scripts/load-env.cjs -r ts-node/register -r tsconfig-paths/register ./scripts/m4-closeout-smoke.ts` OK (`12/12` comprobaciones y limpieza final).
 - Script reusable disponible en [scripts/m4-closeout-smoke.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/scripts/m4-closeout-smoke.ts) y comando `npm run m4:closeout`.
 - Eliminado un warning deprecado de `pg` al quitar `Promise.all` sobre el mismo `manager` transaccional en [order.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/lib/typeorm/services/orders/order.ts) y [commercial-visit.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/lib/typeorm/services/commercial/commercial-visit.ts).
-- Se elimino la dependencia de `next/font/google` en [layout.tsx](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/app/layout.tsx) para que el `build` no dependa de descargar `Geist` y `Geist Mono`.
+- Se eliminó la dependencia de `next/font/google` en [layout.tsx](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/app/layout.tsx) para que el `build` no dependa de descargar `Geist` y `Geist Mono`.
 - `.\node_modules\.bin\next.cmd build --webpack` OK tras el ajuste del layout raíz.
 - Smoke test de servicios `M4`: `19/19` OK con limpieza final de datos temporales.
 - Corregido el leak de conexiones en desarrollo en [data-source.ts](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/lib/typeorm/data-source.ts), que estaba disparando `53300 too many clients already`.
-- Comprobacion autenticada de rutas comerciales por HTTP: `/commercials/orders`, `/commercials/visits` y el detalle de pedido comercial responden `200` con sesión valida de comercial.
-- Comprobacion autenticada de rutas cliente y admin por HTTP: `/clients/orders`, `/clients/orders/[id]`, `/admin/orders` y `/admin/orders/[id]` responden `200` con sesiones validas.
+- Comprobación autenticada de rutas comerciales por HTTP: `/commercials/orders`, `/commercials/visits` y el detalle de pedido comercial responden `200` con sesión válida de comercial.
+- Comprobación autenticada de rutas cliente y admin por HTTP: `/clients/orders`, `/clients/orders/[id]`, `/admin/orders` y `/admin/orders/[id]` responden `200` con sesiones válidas.
 - Verificación de UI hidratada reusable disponible en [m4-ui-headless-check.mjs](/C:/Users/MADAO/Desktop/TFG-AlejandroSanzHuerta/app-tfg/scripts/m4-ui-headless-check.mjs) y comando `npm run m4:ui-check`, con capturas generadas en `.codex-artifacts/m4-ui-evidence/`.
-- La pasada hidratada completa sobre cliente, comercial y admin finalizo sin reproducir los antiguos errores `Maximum update depth exceeded` ni `JWTSessionError`.
-- Tras la pasada de UI se reejecuto el smoke de cierre `M4` y volvio a terminar `12/12` OK, confirmando que la base de datos quedo consistente.
+- La pasada hidratada completa sobre cliente, comercial y admin finalizó sin reproducir los antiguos errores `Maximum update depth exceeded` ni `JWTSessionError`.
+- Tras la pasada de UI se reejecutó el smoke de cierre `M4` y volvió a terminar `12/12` OK, confirmando que la base de datos quedó consistente.
 
 ## Evidencias para memoria y cierre
 
@@ -230,7 +230,7 @@ Notas:
 
 ## Criterio final de cierre
 
-Marca una sola opcion:
+Marca una sola opción:
 
 - [x] `M4 cerrado`: no quedan pendientes en `Bloqueantes`, el QA por rol está hecho, el build pasa y la evidencia funcional queda trazada.
 - [ ] `M4 casi cerrado`: funciona el flujo principal, pero quedan bugs o validaciones pendientes antes de darlo por terminado.
@@ -245,4 +245,4 @@ Marca una sola opcion:
 
 - Veredicto: `M4 cerrado`
 - Riesgo principal: `no hay bloqueantes funcionales abiertos; el siguiente riesgo es de desalineación documental si la memoria no se actualiza`
-- Siguiente accion recomendada: `trasladar ahora el alcance real, el modelo de datos final y la evidencia de verificación a la memoria en LaTeX`
+- Siguiente acción recomendada: `trasladar ahora el alcance real, el modelo de datos final y la evidencia de verificación a la memoria en LaTeX`

@@ -15,7 +15,7 @@
 </style>
 <rect width="1800" height="1180" class="bg"/>
 <text x="60" y="58" class="title">MODELO FISICO POSTGRESQL</text>
-<text x="60" y="94" class="subtitle">Resumen verificable de entidades persistentes por modulo y relaciones clave del flujo de pedidos.</text>
+<text x="60" y="94" class="subtitle">Resumen verificable de entidades persistentes por módulo y relaciones clave del flujo de pedidos.</text>
 
 <path d="M 255 440 C 905 440, 905 130, 1555 130" class="connector"/>
 <text x="857" y="273" class="connector-label">cliente/comercial</text>
@@ -61,7 +61,7 @@
 	<rect x="940" y="130" width="390" height="310" rx="18" class="module-box"/>
 	<rect x="962" y="152" width="56" height="40" rx="12" class="module-code-box"/>
 	<text x="990" y="179" text-anchor="middle" class="module-code">M3</text>
-	<text x="1032" y="178" class="module-title">Catalogo y coloracion</text>
+	<text x="1032" y="178" class="module-title">Catálogo y coloración</text>
 	<text x="968" y="222" class="module-line">products</text>
 <text x="968" y="248" class="module-line">product_categories, product_lines</text>
 <text x="968" y="274" class="module-line">product_subcategories</text>
@@ -94,7 +94,7 @@
 	<rect x="60" y="520" width="390" height="330" rx="18" class="module-box"/>
 	<rect x="82" y="542" width="56" height="40" rx="12" class="module-code-box"/>
 	<text x="110" y="569" text-anchor="middle" class="module-code">M5</text>
-	<text x="152" y="568" class="module-title">Salon tecnico</text>
+	<text x="152" y="568" class="module-title">Salón técnico</text>
 	<text x="88" y="612" class="module-line">salon_clients</text>
 <text x="88" y="638" class="module-line">salon_services</text>
 <text x="88" y="664" class="module-line">salon_service_products</text>
@@ -121,7 +121,7 @@
 	<rect x="940" y="520" width="390" height="330" rx="18" class="module-box"/>
 	<rect x="962" y="542" width="56" height="40" rx="12" class="module-code-box"/>
 	<text x="990" y="569" text-anchor="middle" class="module-code">M7</text>
-	<text x="1032" y="568" class="module-title">Configuracion e integraciones</text>
+	<text x="1032" y="568" class="module-title">Configuración e integraciones</text>
 	<text x="968" y="612" class="module-line">system_configurations</text>
 <text x="984" y="638" class="nested-line">- agency_delivery_fee</text>
 <text x="968" y="664" class="module-line">rate_limit_policies</text>

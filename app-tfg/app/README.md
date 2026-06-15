@@ -5,7 +5,7 @@ Carpeta principal de Next.js App Router.
 ## Qué contiene
 
 - Rutas de página por rol.
-- Layouts y pantallas publicas.
+- Layouts y pantallas públicas.
 - Route Handlers bajo `api/`.
 - Componentes compartidos bajo `components/`.
 

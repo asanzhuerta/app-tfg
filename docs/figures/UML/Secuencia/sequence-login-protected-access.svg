@@ -2,7 +2,7 @@
 <defs><marker id='arrow' markerWidth='12' markerHeight='12' refX='10' refY='6' orient='auto' markerUnits='strokeWidth'><path d='M2,2 L10,6 L2,10 Z' fill='#8ba3ba'/></marker>
 <filter id='softShadow' x='-10%' y='-10%' width='120%' height='120%'><feDropShadow dx='0' dy='2' stdDeviation='3' flood-color='#19324d' flood-opacity='0.12'/></filter></defs>
 <rect width='100%' height='100%' fill='#fbfcfe'/>
-<text x='850.0' y='44' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='28' font-weight='700' fill='#203040'>Secuencia: inicio de sesion y acceso protegido</text>
+<text x='850.0' y='44' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='28' font-weight='700' fill='#203040'>Secuencia: inicio de sesión y acceso protegido</text>
 <rect x='70' y='120' width='190' height='75' rx='16' fill='#e6f0ff' stroke='#8ba3ba' stroke-width='2' filter='url(#softShadow)'/>
 <text text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='17' fill='#203040'><tspan x='165.0' y='164.5' font-weight='500'>Usuario</tspan></text>
 <line x1='165.0' y1='195.0' x2='165.0' y2='920.0' stroke='#8ba3ba' stroke-width='2' stroke-dasharray='8 7'/>
@@ -41,7 +41,7 @@
 <text x='572.5' y='620.0' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='15' fill='#203040'>6. Ruta protegida</text>
 <line x1='710.0' y1='715.0' x2='980.0' y2='715.0' stroke='#8ba3ba' stroke-width='2.2' marker-end='url(#arrow)'/>
 <rect x='722.0' y='673.0' width='246.0' height='34' rx='10' fill='#ffffff' opacity='0.94'/>
-<text x='845.0' y='695.0' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='15' fill='#203040'>7. Verifica sesion/rol</text>
+<text x='845.0' y='695.0' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='15' fill='#203040'>7. Verifica sesión/rol</text>
 <line x1='710.0' y1='790.0' x2='1250.0' y2='790.0' stroke='#8ba3ba' stroke-width='2.2' marker-end='url(#arrow)'/>
 <rect x='770.0' y='748.0' width='420.0' height='34' rx='10' fill='#ffffff' opacity='0.94'/>
 <text x='980.0' y='770.0' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='15' fill='#203040'>8. Autoriza acceso</text>

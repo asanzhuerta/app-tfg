@@ -9,13 +9,13 @@ En esta sección se documenta la arquitectura lógica actual del sistema, centra
 
 \subsection{Diseño de alto nivel}
 
-KinEstilistas se implementa como una aplicación web monolitica full-stack. La misma base de código contiene tanto la interfaz de usuario como la lógica de servidor y el acceso a datos, lo que simplifica la trazabilidad entre requisitos, código y despliegue.
+KinEstilistas se implementa como una aplicación web monolítica full-stack. La misma base de código contiene tanto la interfaz de usuario como la lógica de servidor y el acceso a datos, lo que simplifica la trazabilidad entre requisitos, código y despliegue.
 
-Los contenedores logicos que forman la solución se sintetizan en la Figura~\ref{fig:system-containers} y son los siguientes:
+Los contenedores lógicos que forman la solución se sintetizan en la Figura~\ref{fig:system-containers} y son los siguientes:
 
 \begin{itemize}
     \item \textbf{Cliente web}: interfaz renderizada con \texttt{Next.js} y \texttt{React}, diferenciada por rol.
-    \item \textbf{Servidor de aplicación}: \texttt{Route Handlers}, autenticación, protección de rutas, validación y orquestacion de servicios.
+    \item \textbf{Servidor de aplicación}: \texttt{Route Handlers}, autenticación, protección de rutas, validación y orquestación de servicios.
     \item \textbf{Base de datos relacional}: \texttt{PostgreSQL}, persistida y versionada mediante migraciones.
     \item \textbf{Servicios externos}: \texttt{Cloudinary} para imágenes, \texttt{Nominatim} para geocodificación, \texttt{OSRM} para rutas y \texttt{QuickChart} para la representación del QR operativo de pedido.
     \item \textbf{Capa PWA básica}: manifiesto web, iconos y \textit{service worker} ligero para soporte instalable y cache mínima.
@@ -64,7 +64,7 @@ La estructura del código combina una organización por capas técnicas con subd
     \label{fig:next-components}
 \end{figure}
 
-\paragraph{Flujo tipico de una operación protegida}
+\paragraph{Flujo típico de una operación protegida}
 
 El flujo interno de una operación sensible sigue de forma general los siguientes pasos:
 
@@ -78,11 +78,11 @@ El flujo interno de una operación sensible sigue de forma general los siguiente
 
 \paragraph{Relaciones entre módulos}
 
-La arquitectura actual no separa los módulos como aplicaciones distintas, pero si mantiene responsabilidades de dominio claras:
+La arquitectura actual no separa los módulos como aplicaciones distintas, pero sí mantiene responsabilidades de dominio claras:
 
 \begin{itemize}
     \item \texttt{M1} aporta autenticación, roles, sesión y trazabilidad, y se reutiliza en todo el sistema.
-    \item \texttt{M2} centraliza clientes, comerciales, visitas y rutas, y presta soporte logico directo a \texttt{M4}.
+    \item \texttt{M2} centraliza clientes, comerciales, visitas y rutas, y presta soporte lógico directo a \texttt{M4}.
     \item \texttt{M3} expone el catálogo y la coloración consumidos por cliente, comercial y administrador.
     \item \texttt{M4} reutiliza visitas de \texttt{M2} para reparto y referencias de \texttt{M3} para las líneas de pedido.
     \item \texttt{M5} se apoya en el catálogo de \texttt{M3} para registrar productos y tonalidades usadas en servicios técnicos del salón.

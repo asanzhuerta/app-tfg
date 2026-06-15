@@ -50,7 +50,7 @@ Visitas utiles:
 3. `531f20a0-6bf2-455e-b4e6-424bceb04a14`
    Tipo: `delivery`
    Estado: `postponed`
-   Cliente: `Peluqueria Jose`
+   Cliente: `Peluquería José`
    Pedidos vinculados: `0`
    Nota: `QA visit A cancellation path`
 

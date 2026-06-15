@@ -99,7 +99,7 @@ También registra en `external_integrations` las integraciones `SMTP transaccion
 
 Las visitas comerciales generan avisos automaticos en tres casos:
 
-- Al crear una visita, el cliente recibe un aviso interno y, si estan configurados, email y push.
+- Al crear una visita, el cliente recibe un aviso interno y, si están configurados, email y push.
 - Si una visita planificada se aplaza automáticamente porque ya pasó su día o se ha superado la
   ventana horaria del cliente, el comercial recibe un aviso operativo para reubicarla.
 - Al consultar la bandeja de avisos, los clientes reciben un recordatorio interno de las visitas

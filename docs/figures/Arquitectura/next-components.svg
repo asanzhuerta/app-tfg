@@ -29,7 +29,7 @@
 <text x='1260.0' y='562.0' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='14' fill='#65758b'>servicios externos</text>
 <line x1='755.0' y1='250.0' x2='755.0' y2='330.0' stroke='#8ba3ba' stroke-width='2.2' marker-end='url(#arrow)'/>
 <rect x='665.0' y='264.0' width='180' height='24' rx='8' fill='#ffffff' opacity='0.9'/>
-<text x='755.0' y='282.0' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='14' fill='#65758b'>sesion</text>
+<text x='755.0' y='282.0' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='14' fill='#65758b'>sesión</text>
 <rect x='70' y='160' width='360' height='140' rx='16' fill='#e6f0ff' stroke='#8ba3ba' stroke-width='2' filter='url(#softShadow)'/>
 <text text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='18' fill='#203040'><tspan x='250.0' y='216.1' font-weight='700'>app/admin, app/commercials,</tspan><tspan x='250.0' y='237.4' font-weight='500'>app/clients</tspan><tspan x='250.0' y='258.6' font-weight='500'>Paginas por rol y rutas dinamicas</tspan></text>
 <rect x='70' y='380' width='360' height='150' rx='16' fill='#efe9ff' stroke='#8ba3ba' stroke-width='2' filter='url(#softShadow)'/>

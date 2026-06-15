@@ -54,14 +54,14 @@ Las piezas más relevantes son las siguientes:
     \item registro de solicitudes de alta y gestión administrativa de estados de cuenta;
     \item registro de eventos de acceso y trazabilidad de sesiones exitosas o fallidas;
     \item gestión y edición del perfil propio, incluyendo cambio de contraseña, subida de imagen a \texttt{Cloudinary} y reflejo de la foto real en la navegación lateral;
-    \item limitacion de intentos de autenticación y diferenciacion explicita entre credenciales incorrectas y bloqueo temporal por rate limiting.
+    \item limitación de intentos de autenticación y diferenciación explícita entre credenciales incorrectas y bloqueo temporal por rate limiting.
 \end{itemize}
 
 \subsection{Implementación del módulo M2}
 
 El módulo \texttt{M2} se reparte entre las rutas de administración de clientes, la zona comercial, la zona cliente y la lógica de planificación diaria ubicada en \texttt{lib/commercial/}.
 
-Actualmente ya estan implementados:
+Actualmente ya están implementados:
 
 \begin{itemize}
     \item gestión de clientes profesionales y de sus datos de ficha;
@@ -79,9 +79,9 @@ La lógica temporal de rutas y estimaciones no reside en la capa visual, sino qu
 
 \subsection{Implementación del módulo M3}
 
-El módulo \texttt{M3} se apoya en las rutas de administración bajo \texttt{/admin/catalog}, en las vistas publicas de consulta distribuidas entre las zonas cliente y comercial, y en la lógica de dominio ubicada en \texttt{lib/typeorm/services/catalog/}.
+El módulo \texttt{M3} se apoya en las rutas de administración bajo \texttt{/admin/catalog}, en las vistas públicas de consulta distribuidas entre las zonas cliente y comercial, y en la lógica de dominio ubicada en \texttt{lib/typeorm/services/catalog/}.
 
-Actualmente ya estan implementados:
+Actualmente ya están implementados:
 
 \begin{itemize}
     \item gestión administrativa de categorías, líneas comerciales, subcategorías jerárquicas y productos;
@@ -98,7 +98,7 @@ Desde el punto de vista interno, \texttt{M3} reutiliza la misma aproximación de
 
 El módulo \texttt{M4} se construye sobre las rutas de pedidos, preparación de repartos y cobros para cliente, comercial y administrador, los servicios de dominio ubicados en \path{lib/typeorm/services/orders/} y la extensión del subsistema de visitas comerciales para soportar repartos reales.
 
-Actualmente ya estan implementados:
+Actualmente ya están implementados:
 
 \begin{itemize}
     \item creación, recuperación y confirmación de borradores de pedido tanto desde cliente como desde comercial, con buscador por producto, selector de referencia, imagen de producto en cada línea y elección entre entrega por comercial o agencia;
@@ -110,7 +110,7 @@ Actualmente ya estan implementados:
     \item vinculación de repartos comerciales a visitas de tipo \texttt{delivery}, con cierre mediante escáner continuo de cámara en un modal de pantalla completa, fallback manual y transición del pedido a \texttt{delivered} solo cuando todos sus repartos están completados;
     \item configuración administrativa del cargo de agencia, aplicada al total del pedido cuando el cliente o el comercial seleccionan esa modalidad de entrega;
     \item flujo de cobro mediante historial de pagos parciales o totales, con registro de importe, método, fecha, notas y usuario que realiza la acción, y cálculo de saldo pendiente;
-    \item consulta de ETA para cliente solo cuando existe una visita de reparto valida y alineada con un reparto comercial pendiente.
+    \item consulta de ETA para cliente solo cuando existe una visita de reparto válida y alineada con un reparto comercial pendiente.
 \end{itemize}
 
 La lógica de negocio del módulo se concentra principalmente en \path{order.ts}, \path{order-delivery.ts}, \path{order-settings.ts} y \path{commercial-visit.ts}. El helper \path{lib/orders/qr.ts} encapsula la generación y normalización del QR de cada reparto, mientras que \path{lib/orders/qr-pdf.ts} genera la etiqueta logística imprimible. \path{lib/clients/delivery-estimate.ts} resuelve la lectura reutilizable de la información de reparto que consume la zona cliente. Para la verificación del módulo se han incorporado además los scripts \path{m4-closeout-smoke.ts} y \path{m4-ui-headless-check.mjs}.
@@ -119,7 +119,7 @@ La lógica de negocio del módulo se concentra principalmente en \path{order.ts}
 
 El bloque actual de \texttt{M5} se apoya en las rutas \texttt{/clients/salon-clients}, \texttt{/api/clients/salon-clients/*}, \texttt{/api/clients/salon-service-templates/*} y \texttt{/api/clients/salon-service-result-images}, y en los servicios de dominio ubicados en \path{lib/typeorm/services/salon/}. A nivel persistente, este incremento cubre tanto las tablas del historial técnico del salón como el subsistema de plantillas reutilizables, la referencia cromática concreta utilizada en cada producto de coloración y la galería visual final asociada a cada servicio.
 
-Actualmente ya estan implementados:
+Actualmente ya están implementados:
 
 \begin{itemize}
     \item alta y actualización de fichas de clientes finales del salón desde el área \texttt{client};
