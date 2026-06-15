@@ -161,7 +161,6 @@ async function main() {
 			`-- Generado: ${new Date().toISOString()}`,
 			"",
 			"BEGIN;",
-			"SET session_replication_role = replica;",
 			"",
 		];
 
@@ -199,7 +198,7 @@ async function main() {
 			lines.push("");
 		}
 
-		lines.push("SET session_replication_role = DEFAULT;", "COMMIT;", "");
+		lines.push("COMMIT;", "");
 
 		await fs.writeFile(outputPath, lines.join("\n"), "utf8");
 

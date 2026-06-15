@@ -55,6 +55,13 @@ function ensureRestoreConfirmed() {
 	}
 }
 
+function sanitizeManagedPostgresSql(sql) {
+	return sql
+		.split(/\r?\n/)
+		.filter((line) => !/^\s*SET\s+session_replication_role\s*=/i.test(line))
+		.join("\n");
+}
+
 async function main() {
 	if (!process.env.DATABASE_URL) {
 		throw new Error("DATABASE_URL no esta definido.");
@@ -63,7 +70,8 @@ async function main() {
 	ensureRestoreConfirmed();
 
 	const backupPath = await resolveBackupPath();
-	const sql = await fs.readFile(backupPath, "utf8");
+	const rawSql = await fs.readFile(backupPath, "utf8");
+	const sql = sanitizeManagedPostgresSql(rawSql);
 	const client = new Client({
 		connectionString: process.env.DATABASE_URL,
 	});
