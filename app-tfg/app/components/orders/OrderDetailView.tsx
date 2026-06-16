@@ -754,7 +754,7 @@ export default function OrderDetailView({
 								aria-modal="true"
 								aria-labelledby="order-lines-modal-title"
 							>
-								<div className="max-h-[86vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+								<div className="flex max-h-[calc(100svh-2rem)] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
 									<div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4">
 										<div>
 											<p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
@@ -776,7 +776,7 @@ export default function OrderDetailView({
 										</button>
 									</div>
 
-									<div className="max-h-[68vh] overflow-y-auto p-5">
+									<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5">
 										<div className="grid gap-3 md:grid-cols-2">
 											{order.lines.map((line) => (
 												<div

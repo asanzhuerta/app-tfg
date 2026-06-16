@@ -822,7 +822,7 @@ export default function CommercialVisitDetail({ visitId }: Props) {
 			{isMounted && visit && isEditModalOpen
 				? createPortal(
 						<div className="app-modal-overlay z-[90] px-4 py-6">
-					<div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[28px] border border-slate-200 bg-white p-6 shadow-2xl">
+					<div className="app-modal-scroll-panel w-full max-w-3xl rounded-[28px] border border-slate-200 bg-white p-5 shadow-2xl sm:p-6">
 						<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 							<div>
 								<h2 className="text-xl font-semibold text-slate-900">

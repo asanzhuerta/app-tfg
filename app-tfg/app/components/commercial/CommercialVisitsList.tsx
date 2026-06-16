@@ -941,7 +941,7 @@ export default function CommercialVisitsList() {
 			{isMounted && isCreateModalOpen
 				? createPortal(
 						<div className="app-modal-overlay z-[120] p-4">
-							<div className="w-full max-w-2xl rounded-[28px] border border-white/30 bg-white p-6 shadow-2xl">
+							<div className="app-modal-scroll-panel w-full max-w-2xl rounded-[28px] border border-white/30 bg-white p-5 shadow-2xl sm:p-6">
 								<div className="mb-5 flex items-start justify-between gap-4">
 									<div>
 										<h2 className="text-xl font-semibold text-slate-900">

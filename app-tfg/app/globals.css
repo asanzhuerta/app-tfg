@@ -122,16 +122,31 @@ body {
 	position: fixed;
 	inset: 0;
 	height: 100dvh;
-	width: auto;
+	width: 100%;
 	max-width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 	overscroll-behavior: contain;
 	background: rgba(2, 6, 23, 0.82);
 	backdrop-filter: blur(2px);
 	-webkit-backdrop-filter: blur(2px);
+	-webkit-overflow-scrolling: touch;
+}
+
+.app-modal-scroll-panel {
+	max-height: calc(100svh - 2rem);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	-webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px), (max-height: 720px) {
+	.app-modal-overlay {
+		align-items: flex-start;
+	}
 }
 
 .app-modal-dialog-centered {
