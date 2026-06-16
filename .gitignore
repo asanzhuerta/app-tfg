@@ -14,3 +14,6 @@ app-tfg/TFG_STATUS_MASTER_PLAN.md
 
 # Logs locales de Next.js.
 /app-tfg/next-*.log
+
+# Artefactos locales de Netlify CLI.
+/.netlify/
