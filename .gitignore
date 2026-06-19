@@ -17,3 +17,52 @@ app-tfg/TFG_STATUS_MASTER_PLAN.md
 
 # Artefactos locales de Netlify CLI.
 /.netlify/
+
+# Figuras generadas/intermedias de la memoria.
+# Se conservan en Git los PDF incluidos en LaTeX y los .drawio editables.
+docs/figures/*.svg
+docs/figures/Arquitectura/*.svg
+docs/figures/UML/CasosDeUso/*.svg
+docs/figures/UML/Estados/*.svg
+docs/figures/UML/MCD/*.svg
+docs/figures/UML/MCO/*.svg
+docs/figures/UML/Secuencia/*.svg
+docs/figures/UML/CasosDeUso/*.png
+docs/figures/UML/MCD/*.png
+
+# Recursos graficos no incluidos actualmente en la memoria.
+docs/figures/imagenFreepik*.jpg
+docs/figures/logouca.jpg
+docs/figures/UML/Estados/*.pdf
+docs/figures/UML/Secuencia/*.pdf
+
+# Fuentes LaTeX de plantilla, borradores o copias de apoyo no incluidas en main.tex.
+docs/sections/backmatter/sampleannex.tex
+docs/sections/backmatter/demoguide.tex
+docs/sections/preface/projectplan/technologies.tex
+docs/sections/**/OLD_*.tex
+
+# Notas internas y documentos auxiliares de revision no incluidos en la entrega final.
+docs/revision-pendientes-6-9.md
+docs/notificaciones-multicanal.md
+app-tfg/M4_CLOSURE_CHECKLIST.md
+app-tfg/M4_DEMO_SCRIPT.md
+app-tfg/RECENT_CHANGES.md
+
+# Diagramas antiguos sustituidos por las versiones actuales incluidas en LaTeX.
+docs/figures/UML/Secuencia/*.drawio
+docs/figures/UML/MCD/*_BD.drawio
+docs/figures/UML/MCD/*_DB.drawio
+docs/figures/UML/MCD/DB_GENERAL.drawio
+docs/figures/UML/MCD/M1_MCD.drawio
+
+# Capturas antiguas no incluidas actualmente en la memoria.
+docs/figures/Capturas/*.png
+!docs/figures/Capturas/pruebas.png
+
+# Assets por defecto de Next.js no utilizados por la aplicacion.
+app-tfg/public/file.svg
+app-tfg/public/globe.svg
+app-tfg/public/next.svg
+app-tfg/public/vercel.svg
+app-tfg/public/window.svg

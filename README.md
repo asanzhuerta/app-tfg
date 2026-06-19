@@ -4,6 +4,8 @@ Aplicación web B2B desarrollada como Trabajo Fin de Grado para centralizar la o
 
 El repositorio agrupa la aplicación principal, la documentación académica, la configuración de despliegue local y los recursos versionados necesarios para revisar el proyecto.
 
+Repositorio público: <https://github.com/asanzhuerta/kinestilistas/>
+
 ## Qué contiene este repositorio
 
 - `app-tfg/`: aplicación principal en Next.js, con frontend por roles, API interna, autenticación, migraciones y scripts de validación.
@@ -100,8 +102,6 @@ Cada carpeta versionada relevante incluye un `README.md` propio para explicar su
 La aplicación mantiene además una capa de utilidades compartidas para reducir duplicidades: `app-tfg/lib/utils/` concentra formato de fechas, dinero, CSV, búsqueda y validaciones base; `app-tfg/lib/api/client.ts` centraliza las llamadas JSON desde cliente; y `app-tfg/app/components/ui/` agrupa piezas visuales transversales como mensajes de feedback y estilos comunes de formulario.
 
 En despliegues Netlify, el proxy global de Next.js se conserva como `app-tfg/proxy.hosting.ts` pero no se activa como `proxy.ts` por incompatibilidad del runtime Edge con Next.js 16. El rate limiting queda aplicado dentro de los Route Handlers mediante `app-tfg/lib/api/server.ts`, y en un hosting compatible puede reactivarse el proxy renombrando `proxy.hosting.ts` a `proxy.ts`.
-
-El resumen transversal de los ultimos cambios de consolidacion queda recogido en `app-tfg/RECENT_CHANGES.md`. Ese documento resume limpieza estructural, decisiones de despliegue, ajustes de seguridad, correcciones de rutas comerciales y mejoras de experiencia movil.
 
 ## Autor
 
