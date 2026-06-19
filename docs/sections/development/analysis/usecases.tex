@@ -1,19 +1,30 @@
-Se asume que los casos de uso en los que interviene el rol de comercial pueden ser igualmente realizados por el rol de administrador, al disponer este de permisos equivalentes o superiores dentro del sistema. Por este motivo, y con el objetivo de mejorar la claridad del modelo, se ha optado por representar únicamente el rol de comercial en los casos de uso compartidos, evitando redundancias innecesarias en los diagramas. No obstante, en aquellos casos en los que existen funcionalidades exclusivas del rol de administrador, este se ha representado explícitamente.
+Se asume que los casos de uso en los que interviene el \textbf{rol de comercial} pueden ser igualmente realizados por el \textbf{rol de administrador}, al disponer este de permisos equivalentes o superiores dentro del sistema. Por este motivo, y con el objetivo de mejorar la \textbf{claridad del modelo}, se ha optado por representar únicamente el rol de comercial en algunos casos de uso compartidos, evitando redundancias innecesarias en los diagramas. No obstante, en aquellos casos en los que existen \textbf{funcionalidades exclusivas del rol de administrador}, este se ha representado explícitamente.
 
-Este enfoque es coherente con el modelado de casos de uso, en el que los actores representan roles que interactuan con el sistema \citep[Ch.~4]{sommerville}.
+Este enfoque es coherente con el \textbf{modelado de casos de uso}, en el que los actores representan roles que interactúan con el sistema \citep[Ch.~4]{sommerville}.
 
 \bigskip
 
-En la versión actual del proyecto, los diagramas asociados a \texttt{M1}, \texttt{M2}, \texttt{M3} y \texttt{M4} deben interpretarse como módulos ya implementados y operativos. En \texttt{M3}, la consulta de coloración incluye vista por filas de tono principal, vista por cartas y detalle de tono asociado a producto. En \texttt{M4}, el modelo se ha actualizado para diferenciar pedido, preparación de repartos, etiqueta logística, entrega por comercial o agencia y pagos parciales. El caso de \texttt{M5} pasa a una situación intermedia: existe ya una implementación funcional de fichas del salón, alta, edición y borrado de servicios, ficha técnica, plantillas reutilizables, sugerencias derivadas y borradores técnicos editables por servicio, pero \textcolor{red}{el diagrama sigue recogiendo además capacidades aún no construidas, como el envío real del correo a cliente final}. En \texttt{M6} ya existe un núcleo de promociones, segmentación, formaciones, notificaciones, recordatorios, descuentos promocionales aplicados al pedido y distribución multicanal opcional mediante correo SMTP y Web Push/PWA. \texttt{M2} incorpora además avisos automáticos asociados a visitas comerciales: notificación al cliente al crear o reubicar una visita, aviso operativo al comercial cuando una visita se aplaza por horario y recordatorio interno para el cliente cuando la visita corresponde al día actual. \textcolor{red}{El diagrama de \texttt{M8} conserva valor de análisis y planificación}, mientras que \texttt{M7} dispone ya de auditoría administrativa, configuración visible de canales de avisos, ajuste operativo del cargo de agencia, protección técnica mediante rate limiting no expuesta al administrador y un primer subsistema persistente para integraciones empresariales, operaciones de intercambio y propuestas de pedido a proveedor.
+Los diagramas se han organizado siguiendo la \textbf{división modular} definida en la Sección~\ref{sec:ModularRequirements}:
+
+\begin{itemize}
+    \item \texttt{M1}: recoge los casos de uso de \textbf{acceso, sesiones, perfil y administración de cuentas}.
+    \item \texttt{M2}: agrupa la \textbf{gestión comercial}, la planificación de visitas, rutas, estimaciones de llegada y avisos asociados.
+    \item \texttt{M3}: representa las operaciones sobre \textbf{catálogo, productos, información técnica y coloración}.
+    \item \texttt{M4}: diferencia \textbf{pedido, método de entrega, preparación de repartos, etiquetas, validación de entrega y cobros}.
+    \item \texttt{M5}: recoge la \textbf{gestión técnica del salón}, incluyendo fichas, servicios, historial, plantillas, imágenes, sugerencias y borradores técnicos.
+    \item \texttt{M6}: concentra \textbf{promociones, rangos, notificaciones, canales externos y formaciones}.
+    \item \texttt{M7}: se reserva para la \textbf{administración transversal del sistema}.
+    \item \texttt{M8}: se mantiene como módulo de \textbf{funcionalidades adicionales} y \textbf{trabajo futuro}.
+\end{itemize}
 
 \newpage{\ }
 \subsection{Casos de Uso M1.}
 
-La Figura~\ref{fig:M1_CasosDeUso} representa los casos de uso relacionados con la gestión de acceso, alta y autorización de usuarios.
+La Figura~\ref{fig:M1_CasosDeUso} representa los casos de uso relacionados con la \textbf{gestión de acceso, alta y autorización de usuarios}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./figures/UML/CasosDeUso/M1_CasosDeUso.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{./figures/UML/CasosDeUso/M1_CasosDeUso.pdf}
     \caption{Casos de Uso M1. Gestión de acceso, alta y autorización de usuarios}
     \label{fig:M1_CasosDeUso}
 \end{figure}
@@ -21,11 +32,11 @@ La Figura~\ref{fig:M1_CasosDeUso} representa los casos de uso relacionados con l
 \newpage{\ }
 \subsection{Casos de Uso M2.}
 
-La Figura~\ref{fig:M2_CasosDeUso} representa los casos de uso relacionados con la gestión comercial y clientes.
+La Figura~\ref{fig:M2_CasosDeUso} representa los casos de uso relacionados con la \textbf{gestión comercial}, los \textbf{clientes profesionales}, la planificación de visitas y el soporte a rutas.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./figures/UML/CasosDeUso/M2_CasosDeUso.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{./figures/UML/CasosDeUso/M2_CasosDeUso.pdf}
     \caption{Casos de Uso M2. Gestión comercial y clientes}
     \label{fig:M2_CasosDeUso}
 \end{figure}
@@ -33,11 +44,11 @@ La Figura~\ref{fig:M2_CasosDeUso} representa los casos de uso relacionados con l
 \newpage{\ }
 \subsection{Casos de Uso M3.}
 
-La Figura~\ref{fig:M3_CasosDeUso} representa los casos de uso relacionados con el catálogo, productos y coloración.
+La Figura~\ref{fig:M3_CasosDeUso} representa los casos de uso relacionados con el \textbf{catálogo}, los \textbf{productos} y la \textbf{coloración}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./figures/UML/CasosDeUso/M3_CasosDeUso.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{./figures/UML/CasosDeUso/M3_CasosDeUso.pdf}
     \caption{Casos de Uso M3. Catálogo, productos y coloración}
     \label{fig:M3_CasosDeUso}
 \end{figure}
@@ -45,11 +56,11 @@ La Figura~\ref{fig:M3_CasosDeUso} representa los casos de uso relacionados con e
 \newpage{\ }
 \subsection{Casos de Uso M4.}
 
-La Figura~\ref{fig:M4_CasosDeUso} representa los casos de uso relacionados con los pedidos, la preparación de repartos, las entregas por comercial o agencia y los cobros parciales.
+La Figura~\ref{fig:M4_CasosDeUso} representa los casos de uso relacionados con los \textbf{pedidos}, la \textbf{preparación de repartos}, las entregas por comercial o agencia, la \textbf{trazabilidad} y los cobros parciales o totales.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./figures/UML/CasosDeUso/M4_CasosDeUso.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{./figures/UML/CasosDeUso/M4_CasosDeUso.pdf}
     \caption{Casos de Uso M4. Pedidos, entregas y cobros}
     \label{fig:M4_CasosDeUso}
 \end{figure}
@@ -57,23 +68,23 @@ La Figura~\ref{fig:M4_CasosDeUso} representa los casos de uso relacionados con l
 \newpage{\ }
 \subsection{Casos de Uso M5.}
 
-La Figura~\ref{fig:M5_CasosDeUso} representa los casos de uso relacionados con la gestión interna de peluquerías. En la implementación actual ya existe un subconjunto operativo de estos casos de uso, centrado en fichas técnicas internas, historial de servicios con mantenimiento posterior, plantillas reutilizables, uso de productos con tonalidad concreta cuando procede, galería visual del resultado final, sugerencias derivadas y preparación asistida de borradores de correo técnico.
+La Figura~\ref{fig:M5_CasosDeUso} representa los casos de uso relacionados con la \textbf{gestión técnica interna de los salones}: fichas de clientes, servicios realizados, fichas técnicas, historial, productos utilizados, plantillas reutilizables, imágenes de resultado, sugerencias derivadas y preparación de borradores técnicos.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./figures/UML/CasosDeUso/M5_CasosDeUso.pdf}
-    \caption{Casos de Uso M5. Gestión interna de peluquerías}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{./figures/UML/CasosDeUso/M5_CasosDeUso.pdf}
+    \caption{Casos de Uso M5. Gestión técnica del salón}
     \label{fig:M5_CasosDeUso}
 \end{figure}
 
 \newpage{\ }
 \subsection{Casos de Uso M6.}
 
-La Figura~\ref{fig:M6_CasosDeUso} representa los casos de uso relacionados con promociones, notificaciones y formaciones. La implementación actual cubre ya el flujo interno principal: administración de promociones, segmentación manual, publicación de formaciones, notificaciones dentro de la aplicación, recordatorios personales y aplicación de descuentos promocionales sobre pedidos. Las promociones pueden definirse como descuento porcentual, descuento por volumen de compra o regalo promocional, con imagen y PDF adjunto cuando administración necesita aportar material comercial. Además, las comunicaciones administrativas de promociones y formaciones pueden seleccionar canales de entrega adicionales: correo electrónico mediante SMTP y notificación Web Push para usuarios que hayan activado la PWA en su dispositivo.
+La Figura~\ref{fig:M6_CasosDeUso} representa los casos de uso relacionados con \textbf{promociones}, \textbf{rangos comerciales}, notificaciones, comunicaciones por canales externos y formaciones. Las promociones se conectan con la consulta por parte de clientes y comerciales, con la aplicación de descuentos en pedidos y con la gestión administrativa de segmentos, adjuntos, recordatorios e inscripciones.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./figures/UML/CasosDeUso/M6_CasosDeUso.pdf}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{./figures/UML/CasosDeUso/M6_CasosDeUso.pdf}
     \caption{Casos de Uso M6. Promociones, notificaciones y formaciones}
     \label{fig:M6_CasosDeUso}
 \end{figure}
@@ -81,23 +92,23 @@ La Figura~\ref{fig:M6_CasosDeUso} representa los casos de uso relacionados con p
 \newpage{\ }
 \subsection{Casos de Uso M7.}
 
-La Figura~\ref{fig:M7_CasosDeUso} representa los casos de uso relacionados con administración e integraciones. El diagrama conserva el alcance objetivo del bloque: administración del sistema, integración de servicios externos, sincronización con sistemas de gestión comercial, generación de pedidos a proveedor y propuesta automática de reposición. En la implementación real, la parte hoy desplegada cubre auditoría, configuración de canales de avisos, protección técnica mediante rate limiting, registro persistente de integraciones empresariales, operaciones de exportación o sincronización y generación de propuestas de pedido a proveedor. También se registran como integraciones externas operativas los canales SMTP transaccional y Web Push usados por \texttt{M6}. Las vistas que solo servían para consultar inventarios internos de soporte u operación se han dejado fuera de la navegación final para no confundirlas con tareas propias del administrador. \textcolor{red}{La automatización completa mediante \texttt{n8n}, Factusol, albaranes definitivos, facturación y reposición automática basada en rotación real queda documentada como evolución posterior del mismo alcance.}
+La Figura~\ref{fig:M7_CasosDeUso} representa los casos de uso relacionados con la \textbf{administración transversal del sistema}: configuración común, canales de aviso, cargo por agencia, umbrales de rangos, auditoría, propuestas internas de pedido a proveedor, servicios auxiliares, diagnóstico técnico de \textit{rate limiting} y soporte de compatibilidad o instalación \textit{PWA} \citep{webdev-pwa}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./figures/UML/CasosDeUso/M7_CasosDeUso.pdf}
-    \caption{Casos de Uso M7. Administración e integraciones}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{./figures/UML/CasosDeUso/M7_CasosDeUso.pdf}
+    \caption{Casos de Uso M7. Administración transversal}
     \label{fig:M7_CasosDeUso}
 \end{figure}
 
 \newpage{\ }
-\subsection{\textcolor{red}{Casos de Uso M8.}}
+\subsection{Casos de Uso M8.}
 
-\textcolor{red}{La Figura~\ref{fig:M8_CasosDeUso} representa los casos de uso relacionados con funcionalidades adicionales. Dado que las funcionalidades recogidas en este módulo no forman parte del alcance principal de la versión actualmente implementada del sistema, el diagrama asociado debe interpretarse como una representación conceptual de posibles extensiones futuras de la plataforma.}
+La Figura~\ref{fig:M8_CasosDeUso} representa los casos de uso relacionados con \textbf{funcionalidades adicionales} y \textbf{trabajo futuro}. Este módulo agrupa capacidades avanzadas que no forman parte del alcance principal de la versión actualmente implementada: \textbf{diagnóstico capilar con capilógrafo} e inteligencia artificial, simulación de estilos o coloración mediante cámara móvil, reconocimiento de productos, reserva \textit{online}, asistente virtual tipo \textit{chatbot} y automatización de servicios externos como Factusol mediante flujos con \textit{n8n} o \textit{APIs} equivalentes \citep{sdelsol-factusol,n8n-webhook,n8n-http-request}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{./figures/UML/CasosDeUso/M8_CasosDeUso.pdf}
-    \caption{\textcolor{red}{Casos de Uso M8. Funcionalidades adicionales}}
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{./figures/UML/CasosDeUso/M8_CasosDeUso.pdf}
+    \caption{Casos de Uso M8. Funcionalidades adicionales}
     \label{fig:M8_CasosDeUso}
 \end{figure}
