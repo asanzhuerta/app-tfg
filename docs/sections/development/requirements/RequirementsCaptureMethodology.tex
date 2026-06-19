@@ -1,6 +1,7 @@
-\subsection{Reunión de toma de requisitos}
+\section{Metodología de captura de requisitos}
+\label{sec:RequirementsCaptureMethodology}
 
-Con el objetivo de identificar de forma precisa las necesidades del cliente y establecer una base sólida para el análisis y diseño del sistema, se llevó a cabo una reunión inicial de toma de requisitos el día 03/03/2026.
+Con el objetivo de identificar de forma precisa las necesidades del cliente y establecer una base documentada para el análisis y diseño del sistema, se llevó a cabo una reunión inicial de toma de requisitos el día 03/03/2026.
 
 La obtención de requisitos se realizó mediante una entrevista con el interesado principal del sistema, una técnica habitual dentro del proceso de \textit{requirements elicitation} descrito en el estándar IEEE 29148 \citep{ieee29148}. En este caso se utilizó una entrevista semiestructurada, apoyada en un guion previo que permitió mantener cierta flexibilidad durante la conversación y profundizar en aquellos aspectos que surgían durante la sesión \citep[pp.~104--106]{sommerville}.
 
@@ -15,14 +16,8 @@ Durante la entrevista se abordaron de manera sistemática distintos aspectos rel
     \item Necesidades de gestión comercial, seguimiento de tratamientos y fidelización de clientes.
 \end{itemize}
 
-Con el fin de garantizar la fidelidad de la información recogida, la entrevista fue grabada en audio mediante un dispositivo Plaud Note \citep{plaudnote}, que permitió generar una transcripción automática posterior. Dicha transcripción fue revisada manualmente para asegurar la correcta interpretación de los requisitos expresados.
+Con el fin de garantizar la fidelidad de la información recogida, la entrevista fue grabada en audio mediante un dispositivo \textit{Plaud Note} \citep{plaudnote}, que permitió generar una transcripción automática posterior. Dicha transcripción fue revisada manualmente para asegurar la correcta interpretación de los requisitos expresados.
 
-La información obtenida durante esta sesión ha servido como base para la elaboración de los modelos conceptuales, la definición de casos de uso y la especificación de los requisitos funcionales y no funcionales que se detallan en los apartados siguientes.
+Además de la entrevista, se revisaron las herramientas y aplicaciones utilizadas actualmente por el distribuidor en su actividad diaria. Esta revisión permitió comprender qué información se gestionaba en hojas de cálculo, bases de datos locales, software de facturación y canales digitales de la marca, así como detectar qué procesos quedaban fragmentados o dependían de trabajo manual. El detalle de las tecnologías conocidas por el distribuidor y de las soluciones alternativas existentes se recoge en el estado del arte, concretamente en la Sección~\ref{sec:stateoftheart}.
 
-\subsection{Análisis de tecnologías existentes}
-
-Como parte del proceso de análisis del sistema, se ha realizado una revisión de las herramientas y aplicaciones utilizadas actualmente por el distribuidor en su actividad diaria. Se han extraído gran parte de los campos de información necesarios para el diseño del nuevo sistema, facilitando así la definición del modelo de datos y garantizando la viabilidad de la migración de la información existente.
-
-Entre las herramientas analizadas se encuentran aplicaciones de gestión de bases de datos y hojas de cálculo, como \textit{Microsoft Access} y \textit{Microsoft Excel}, así como el software de facturación \textit{Factusol}, ampliamente utilizado en la operativa actual del distribuidor.
-
-El estudio de estas tecnologías ha permitido identificar tanto buenas prácticas reutilizables como carencias funcionales, que han sido tenidas en cuenta en la definición de los requisitos del nuevo sistema.
+La información obtenida durante esta fase ha servido como base para la elaboración de los modelos conceptuales, la definición de casos de uso y la especificación de los requisitos funcionales, no funcionales y de información que se detallan en los apartados siguientes.

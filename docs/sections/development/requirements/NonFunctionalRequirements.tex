@@ -1,26 +1,30 @@
+\section{Requisitos no funcionales}
+\label{sec:NonFunctionalRequirements}
+
 Los requisitos no funcionales describen las propiedades de calidad y restricciones que debe cumplir el sistema más allá de las funcionalidades que proporciona. Para su clasificación se ha tomado como referencia el modelo de calidad definido en el estándar ISO/IEC 25010 \cite{iso25010}.
 
 La \autoref{tab:non-functional-requirements-executive} resume los requisitos no funcionales en formato ejecutivo, agrupados por característica de calidad para facilitar su lectura y trazabilidad.
 
 {\scriptsize
+\setlength{\parskip}{0pt}
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.14}
+\renewcommand{\arraystretch}{1.10}
 \newcommand{\RNFCategoryHeader}[1]{%
-\hline\hline
-\multicolumn{3}{|>{\RaggedRight\arraybackslash}p{0.91\linewidth}|}{\textbf{#1}}\\
-\hline\hline
+\hline
+\rowcolor{black!8}
+\multicolumn{3}{|>{\raggedright\arraybackslash}p{0.91\linewidth}|}{\textbf{#1}}\\
+\hline
 }
-\begin{longtable}{|>{\RaggedRight\arraybackslash}p{0.18\linewidth}|>{\RaggedRight\arraybackslash}p{0.15\linewidth}|>{\RaggedRight\arraybackslash}p{0.58\linewidth}|}
-\caption{Catálogo ejecutivo de requisitos no funcionales agrupado por características de calidad}
-\label{tab:non-functional-requirements-executive}\\
+\tablecaption{Catálogo ejecutivo de requisitos no funcionales agrupado por características de calidad\label{tab:non-functional-requirements-executive}}
+\tablefirsthead{%
 \hline
 \textbf{Característica} & \textbf{ID} & \textbf{Requisito no funcional sintetizado} \\
-\hline
-\endfirsthead
+\hline}
+\tablehead{%
 \hline
 \textbf{Característica} & \textbf{ID} & \textbf{Requisito no funcional sintetizado} \\
-\hline
-\endhead
+\hline}
+\begin{supertabular}{|>{\raggedright\arraybackslash}p{0.17\linewidth}|>{\raggedright\arraybackslash}p{0.12\linewidth}|>{\raggedright\arraybackslash}p{0.62\linewidth}|}
 \RNFCategoryHeader{RNF1. Usabilidad}
 Usabilidad & \texttt{RNF-U-01} & Proporcionar una interfaz intuitiva que permita realizar las tareas principales con un número reducido de interacciones. \\
 \hline
@@ -66,5 +70,5 @@ Portabilidad & \texttt{RNF-PO-02} & Permitir instalación como aplicación web m
 \hline
 Portabilidad & \texttt{RNF-PO-03} & Ofrecer soporte mínimo ante fallos puntuales de conectividad mediante \textit{service worker} y caché del \textit{app shell}. \\
 \hline
-\end{longtable}
+\end{supertabular}
 }

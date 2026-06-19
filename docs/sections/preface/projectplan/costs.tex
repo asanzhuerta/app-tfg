@@ -2,7 +2,7 @@
 
 La estimación económica del desarrollo parte de las fases principales del ciclo de vida del \textit{software}, siguiendo la división habitual entre análisis, diseño, construcción, pruebas y documentación \cite[Chap.~2, pp.~27--37]{sommerville}. Para evitar duplicar la planificación ya descrita, la Tabla~\ref{tabla_coste_desarrollo} utiliza únicamente el esfuerzo aproximado por fase y la tarifa horaria considerada.
 
-Como referencia salarial se ha tomado el salario medio de un desarrollador web en España publicado por Talent.com, que sitúa la media en 32.500~\euro{} anuales o 16,67~\euro/hora \citep{talent2026desarrolladorweb}. Con esta tarifa y un esfuerzo total de 400 horas, el coste de desarrollo asciende a 6.668,00~\euro.
+Como referencia salarial se toma el salario medio de un desarrollador web en España publicado por \textit{Talent.com}, que sitúa la media en 32.500~\euro{} anuales o 16,67~\euro/hora \citep{talent2026desarrolladorweb}. Con esta tarifa y un esfuerzo total de 400 horas, el coste de desarrollo asciende a 6.668,00~\euro.
 
 \begin{table}[H]
 \centering
@@ -13,6 +13,7 @@ Como referencia salarial se ha tomado el salario medio de un desarrollador web e
 \label{tabla_coste_desarrollo}
 \begin{tabularx}{\textwidth}{|Y|>{\centering\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{2.1cm}|>{\centering\arraybackslash}p{2.2cm}|}
 \hline
+\rowcolor{black!8}
 \textbf{Fase del proyecto} & \textbf{Horas} & \textbf{Tarifa (\euro/h)} & \textbf{Coste (\euro)} \\ \hline
 Análisis de requisitos & 32 & 16,67 & 533,44 \\ \hline
 Diseño de arquitectura & 27 & 16,67 & 450,09 \\ \hline
@@ -29,7 +30,7 @@ Documentación del proyecto & 48 & 16,67 & 800,16 \\ \hline
 
 \subsection{Costes de infraestructura}
 
-La infraestructura de operación se ha estimado a partir de los servicios necesarios para desplegar la aplicación y de las integraciones externas contempladas en la arquitectura. Los precios en dólares se han convertido a euros usando el tipo de referencia del Banco Central Europeo publicado el 16 de junio de 2026, donde 1~\euro{} equivale a 1,1594~USD \citep{ecb2026usdeur}. Los importes se redondean a dos decimales y no incluyen impuestos indirectos ni variaciones futuras de tarifa.
+La infraestructura de operación se estima a partir de los servicios necesarios para desplegar la aplicación y de las integraciones externas contempladas en la arquitectura. Los precios en dólares se convierten a euros usando el tipo de referencia del Banco Central Europeo publicado el 16 de junio de 2026, donde 1~\euro{} equivale a 1,1594~USD \citep{ecb2026usdeur}. Los importes se redondean a dos decimales y no incluyen impuestos indirectos ni variaciones futuras de tarifa.
 
 La Tabla~\ref{tabla_coste_infraestructura} diferencia entre servicios con coste anual directo y servicios con plan gratuito suficiente para una primera puesta en producción. En estos últimos casos el coste se considera nulo en la estimación base, aunque se documenta el posible salto a planes de pago si el volumen de uso crece.
 
@@ -42,6 +43,7 @@ La Tabla~\ref{tabla_coste_infraestructura} diferencia entre servicios con coste 
 \label{tabla_coste_infraestructura}
 \begin{tabularx}{\textwidth}{|L{3.2cm}|Y|>{\centering\arraybackslash}p{2.3cm}|}
 \hline
+\rowcolor{black!8}
 \textbf{Concepto} & \textbf{Plan o criterio considerado} & \textbf{Coste anual (\euro)} \\ \hline
 Alojamiento web & \textit{Netlify Pro}, con coste de 20~USD/mes. Se toma como referencia para una operación inicial con despliegue productivo, variables compartidas, mayor margen de créditos y soporte de equipo \citep{netlifypricing2026,ecb2026usdeur}. & 207,00 \\ \hline
 Base de datos & \textit{Neon Launch}, con gasto típico oficial de 15~USD/mes para carga intermitente y 1~GB de almacenamiento. Encaja como hipótesis de \textit{PostgreSQL} gestionado para una producción inicial de baja carga \citep{neonpricing2026,ecb2026usdeur}. & 155,25 \\ \hline
@@ -57,9 +59,9 @@ Notificaciones \textit{Web Push} & Uso de claves VAPID y servicios \textit{push}
 
 \subsection{Costes de mantenimiento}
 
-Una vez desplegado el sistema, es necesario considerar tareas de mantenimiento correctivo, actualizaciones de seguridad, adaptación a cambios de servicios externos y pequeñas mejoras funcionales. En ingeniería del \textit{software} es habitual estimar el mantenimiento como un porcentaje del coste inicial de desarrollo; Pressman y Maxim señalan que el mantenimiento puede representar una parte relevante del coste total del ciclo de vida del sistema \citep{pressman2014software}.
+Una vez desplegado el sistema, será necesario considerar tareas de mantenimiento correctivo, actualizaciones de seguridad, adaptación a cambios de servicios externos y pequeñas mejoras funcionales. En ingeniería del \textit{software} es habitual estimar el mantenimiento como un porcentaje del coste inicial de desarrollo; Pressman y Maxim señalan que el mantenimiento puede representar una parte relevante del coste total del ciclo de vida del sistema \citep{pressman2014software}.
 
-Para este proyecto se mantiene una estimación del 15\% del coste de desarrollo. Este porcentaje proporciona una hipótesis prudente para un sistema académico que puede seguir evolucionando, pero que todavía no opera con un equipo dedicado de soporte.
+Para este proyecto se mantiene una estimación del 15\% del coste de desarrollo. Este porcentaje proporciona una hipótesis prudente para un sistema académico que podrá seguir evolucionando, pero que todavía no operará con un equipo dedicado de soporte.
 
 \begin{table}[H]
 \centering
@@ -70,6 +72,7 @@ Para este proyecto se mantiene una estimación del 15\% del coste de desarrollo.
 \label{tabla_coste_mantenimiento}
 \begin{tabularx}{\textwidth}{|Y|>{\centering\arraybackslash}p{2.8cm}|}
 \hline
+\rowcolor{black!8}
 \textbf{Concepto} & \textbf{Coste anual (\euro)} \\ \hline
 Mantenimiento del sistema & 1.000,20 \\ \hline
 Infraestructura y servicios externos & 378,19 \\ \hline
@@ -90,6 +93,7 @@ El coste estimado del primer año incluye el desarrollo inicial, la infraestruct
 \label{tabla_coste_total}
 \begin{tabularx}{\textwidth}{|Y|>{\centering\arraybackslash}p{2.8cm}|}
 \hline
+\rowcolor{black!8}
 \textbf{Concepto} & \textbf{Coste (\euro)} \\ \hline
 Desarrollo inicial del sistema & 6.668,00 \\ \hline
 Infraestructura primer año & 378,19 \\ \hline

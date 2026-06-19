@@ -1,24 +1,28 @@
+\section{Requisitos de información}
+\label{sec:InformationRequirements}
+
 En esta sección se resumen los requisitos de información que el sistema debe almacenar, consultar y mantener. Para evitar duplicidad con el modelo conceptual de la \autoref{sec:conceptualmodel}, la Tabla~\ref{tab:information-requirements-executive} presenta el detalle como diccionario compacto: entidad, atributos clave y relaciones principales.
 
 {\scriptsize
+\setlength{\parskip}{0pt}
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.12}
+\renewcommand{\arraystretch}{1.10}
 \newcommand{\RIModuleHeader}[1]{%
-\hline\hline
-\multicolumn{4}{|>{\RaggedRight\arraybackslash}p{0.93\linewidth}|}{\textbf{#1}}\\
-\hline\hline
+\hline
+\rowcolor{black!8}
+\multicolumn{4}{|>{\raggedright\arraybackslash}p{0.93\linewidth}|}{\textbf{#1}}\\
+\hline
 }
-\begin{longtable}{|>{\RaggedRight\arraybackslash}p{0.08\linewidth}|>{\RaggedRight\arraybackslash}p{0.22\linewidth}|>{\RaggedRight\arraybackslash}p{0.40\linewidth}|>{\RaggedRight\arraybackslash}p{0.23\linewidth}|}
-\caption{Diccionario ejecutivo de requisitos de información agrupado por módulos}
-\label{tab:information-requirements-executive}\\
+\tablecaption{Diccionario ejecutivo de requisitos de información agrupado por módulos\label{tab:information-requirements-executive}}
+\tablefirsthead{%
 \hline
 \textbf{Módulo} & \textbf{Entidad} & \textbf{Atributos clave} & \textbf{Relaciones principales} \\
-\hline
-\endfirsthead
+\hline}
+\tablehead{%
 \hline
 \textbf{Módulo} & \textbf{Entidad} & \textbf{Atributos clave} & \textbf{Relaciones principales} \\
-\hline
-\endhead
+\hline}
+\begin{supertabular}{|>{\raggedright\arraybackslash}p{0.08\linewidth}|>{\raggedright\arraybackslash}p{0.22\linewidth}|>{\raggedright\arraybackslash}p{0.40\linewidth}|>{\raggedright\arraybackslash}p{0.23\linewidth}|}
 \RIModuleHeader{M1. Acceso, usuarios y auditoría}
 \texttt{RI-M1} & Usuario & Identificador, email, contraseña cifrada, nombre, teléfono, empresa, imagen, último acceso, fechas de creación y actualización. & Rol, estado de usuario, cliente profesional o comercial cuando aplique. \\
 \hline
@@ -117,29 +121,33 @@ En esta sección se resumen los requisitos de información que el sistema debe a
 \hline
 \texttt{RI-M6} & Formación e inscripción & Datos de formación, fecha, modalidad, aforo, estado, usuario inscrito y estado de inscripción. & Formación, usuario e integración externa si aplica. \\
 \hline
-\RIModuleHeader{M7. Administración técnica e integraciones}
+\RIModuleHeader{M7. Administración transversal}
 \texttt{RI-M7} & Configuración del sistema & Clave, valor, tipo, ámbito, descripción y fecha de actualización, incluyendo cargo por agencia y política de umbrales/recálculo de rangos. & Usuario administrador y servicios transversales. \\
 \hline
 \texttt{RI-M7} & Política de rate limiting & Ámbito, límite, ventana temporal, estado y descripción. & Sobrescritura técnica y endpoints protegidos. \\
 \hline
-\texttt{RI-M7} & Integración externa & Nombre, tipo, estado, configuración, último chequeo y observaciones. & Operaciones de integración, comunicaciones y propuestas a proveedor. \\
+\texttt{RI-M7} & Servicio auxiliar transversal & Nombre, tipo, estado, configuración básica, último chequeo y observaciones. & Comunicaciones, configuración del sistema y servicios de soporte. \\
 \hline
-\texttt{RI-M7} & Operación de integración & Integración, tipo de operación, tipo de dato, estado, payload, resultado y fechas. & Integración externa y datos intercambiados. \\
+\texttt{RI-M7} & Registro técnico transversal & Servicio, tipo de operación, estado, resultado, error si existe y fechas. & Servicio auxiliar y eventos técnicos asociados. \\
 \hline
-\texttt{RI-M7} & Propuesta de pedido a proveedor & Proveedor, estado, criterio de generación, importe estimado, fecha y observaciones. & Integración externa y líneas de propuesta. \\
+\texttt{RI-M7} & Propuesta de pedido a proveedor & Proveedor, estado, criterio de generación, importe estimado, fecha y observaciones. & Productos activos y líneas de propuesta. \\
 \hline
 \texttt{RI-M7} & Línea de propuesta a proveedor & Propuesta, producto, cantidad, motivo y datos de reposición. & Propuesta y producto. \\
 \hline
-\RIModuleHeader{\textcolor{red}{M8. Funcionalidades inteligentes previstas}}
-\textcolor{red}{\texttt{RI-M8}} & \textcolor{red}{Consulta de recomendación} & \textcolor{red}{Usuario, cliente del salón, tipo y estado del cabello, tratamientos previos y observaciones.} & \textcolor{red}{Usuario, cliente del salón y recomendaciones generadas.} \\
+\RIModuleHeader{M8. Funcionalidades inteligentes previstas}
+\texttt{RI-M8} & Diagnóstico con capilógrafo & Usuario, cliente del salón, mediciones o capturas del capilógrafo, tipo y estado del cabello, cuero cabelludo, tratamientos previos, observaciones y validación profesional. & Usuario, cliente del salón y recomendaciones generadas. \\
 \hline
-\textcolor{red}{\texttt{RI-M8}} & \textcolor{red}{Recomendación de tratamiento} & \textcolor{red}{Consulta, producto sugerido, descripción, prioridad y motivo.} & \textcolor{red}{Consulta de recomendación y producto.} \\
+\texttt{RI-M8} & Recomendación de tratamiento & Diagnóstico, producto sugerido, descripción, prioridad, motivo, fuente de la recomendación y revisión del profesional. & Diagnóstico capilar y producto. \\
 \hline
-\textcolor{red}{\texttt{RI-M8}} & \textcolor{red}{Simulación de coloración} & \textcolor{red}{Usuario, imagen origen, cambio solicitado, resultado y fecha.} & \textcolor{red}{Usuario y posible referencia de producto.} \\
+\texttt{RI-M8} & Simulación de estilo o coloración & Usuario, captura de cámara móvil o imagen origen, cambio solicitado, resultado, producto o tono asociado y fecha. & Usuario y posible referencia de producto. \\
 \hline
-\textcolor{red}{\texttt{RI-M8}} & \textcolor{red}{Reconocimiento de producto} & \textcolor{red}{Usuario, imagen, código detectado, producto, propósito y fecha.} & \textcolor{red}{Usuario, producto y propósito de reconocimiento.} \\
+\texttt{RI-M8} & Reconocimiento de producto & Usuario, imagen, código detectado, producto, propósito y fecha. & Usuario, producto y propósito de reconocimiento. \\
 \hline
-\textcolor{red}{\texttt{RI-M8}} & \textcolor{red}{Reserva online} & \textcolor{red}{Cliente profesional, cliente del salón, contacto, servicio, fecha y estado.} & \textcolor{red}{Cliente profesional, cliente del salón y estado de reserva.} \\
+\texttt{RI-M8} & Reserva online & Cliente profesional, cliente del salón, contacto, servicio, fecha y estado. & Cliente profesional, cliente del salón y estado de reserva. \\
 \hline
-\end{longtable}
+\texttt{RI-M8} & Conversación con asistente virtual & Usuario, rol, tema, pregunta, respuesta, contexto utilizado, fecha y valoración opcional. & Usuario, catálogo, tratamientos, pedidos o documentación de ayuda según la consulta. \\
+\hline
+\texttt{RI-M8} & Automatización de servicio externo & Servicio externo, tipo de operación, entidad afectada, payload, resultado, estado, error, reintentos y fecha. & Factusol, n8n, pedidos, clientes, productos y documentos comerciales futuros. \\
+\hline
+\end{supertabular}
 }

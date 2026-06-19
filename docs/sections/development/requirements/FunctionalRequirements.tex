@@ -1,24 +1,28 @@
+\section{Requisitos funcionales}
+\label{sec:FunctionalRequirements}
+
 A continuación, la Tabla~\ref{tab:functional-requirements-executive} presenta el catálogo de requisitos funcionales en formato ejecutivo. Los requisitos mantienen identificadores únicos para facilitar su trazabilidad, siguiendo las recomendaciones de identificación y seguimiento propuestas por ISO/IEC/IEEE 29148 \cite{ieee29148}. La versión extensa empleada durante el desarrollo se conserva en el repositorio como copia de apoyo.
 
 {\scriptsize
+\setlength{\parskip}{0pt}
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.13}
+\renewcommand{\arraystretch}{1.10}
 \newcommand{\RFModuleHeader}[1]{%
-\hline\hline
-\multicolumn{4}{|>{\RaggedRight\arraybackslash}p{0.94\linewidth}|}{\textbf{#1}}\\
-\hline\hline
+\hline
+\rowcolor{black!8}
+\multicolumn{4}{|>{\raggedright\arraybackslash}p{0.94\linewidth}|}{\textbf{#1}}\\
+\hline
 }
-\begin{longtable}{|>{\RaggedRight\arraybackslash}p{0.11\linewidth}|>{\RaggedRight\arraybackslash}p{0.18\linewidth}|>{\RaggedRight\arraybackslash}p{0.18\linewidth}|>{\RaggedRight\arraybackslash}p{0.43\linewidth}|}
-\caption{Catálogo ejecutivo de requisitos funcionales agrupado por módulos}
-\label{tab:functional-requirements-executive}\\
+\tablecaption{Catálogo ejecutivo de requisitos funcionales agrupado por módulos\label{tab:functional-requirements-executive}}
+\tablefirsthead{%
 \hline
 \textbf{ID} & \textbf{Módulo} & \textbf{Actores} & \textbf{Requisito funcional sintetizado} \\
-\hline
-\endfirsthead
+ \hline}
+\tablehead{%
 \hline
 \textbf{ID} & \textbf{Módulo} & \textbf{Actores} & \textbf{Requisito funcional sintetizado} \\
-\hline
-\endhead
+\hline}
+\begin{supertabular}{|>{\raggedright\arraybackslash}p{0.085\linewidth}|>{\raggedright\arraybackslash}p{0.205\linewidth}|>{\raggedright\arraybackslash}p{0.18\linewidth}|>{\raggedright\arraybackslash}p{0.43\linewidth}|}
 \RFModuleHeader{M1. Acceso, alta y seguridad de cuentas}
 \texttt{RF-M1-01} & Acceso y alta & Cliente, administrador & Registrar solicitudes de alta y permitir la creación directa de cuentas, manteniendo revisión administrativa, aprobación, rechazo, activación, desactivación y trazabilidad de la gestión. \\
 \hline
@@ -91,16 +95,16 @@ A continuación, la Tabla~\ref{tab:functional-requirements-executive} presenta e
 \hline
 \texttt{RF-M6-04} & Comunicaciones & Administrador, cliente, comercial & Publicar formaciones, mostrar su disponibilidad y permitir la inscripción o cancelación por parte de usuarios autorizados. \\
 \hline
-\RFModuleHeader{M7. Administración técnica e integraciones}
+\RFModuleHeader{M7. Administración transversal}
 \texttt{RF-M7-01} & Administración técnica & Administrador & Agrupar las funciones administrativas reales: usuarios, clientes, catálogo, comunicaciones, pedidos, auditoría, ajustes de avisos automáticos, cargo por agencia y política de umbrales de rangos. \\
 \hline
 \texttt{RF-M7-02} & Administración técnica & Administrador & Consultar información útil para la gestión diaria sin convertir los diagnósticos técnicos internos en pantallas de uso ordinario. \\
 \hline
-\texttt{RF-M7-03} & Administración técnica & Administrador & Mantener una base técnica de integraciones externas y servicios auxiliares que pueda ser reutilizada por scripts, validación e integraciones futuras. \\
+\texttt{RF-M7-03} & Administración técnica & Administrador & Mantener configuraciones y servicios auxiliares transversales reutilizables por otros módulos. \\
 \hline
-\texttt{RF-M7-04} & Administración técnica & Administrador & Preparar la base de integración con sistemas de gestión comercial o ERP, especialmente para intercambios futuros con Factusol mediante automatización intermedia con n8n. \\
+\texttt{RF-M7-04} & Administración técnica & Administrador & Gestionar parámetros comunes del sistema, incluyendo canales de aviso, importes configurables, umbrales comerciales, estados auxiliares y criterios operativos compartidos. \\
 \hline
-\texttt{RF-M7-05} & Administración técnica & Administrador & Generar propuestas de pedido a proveedor a partir de productos activos, criterios de reposición y datos persistentes de integración. \\
+\texttt{RF-M7-05} & Administración técnica & Administrador & Generar propuestas internas de pedido a proveedor a partir de productos activos, criterios de reposición y datos operativos disponibles en la aplicación. \\
 \hline
 \texttt{RF-M7-06} & Administración técnica & Administrador & Consultar y exportar auditoría de accesos, acciones administrativas y eventos relevantes en formato trazable. \\
 \hline
@@ -108,14 +112,18 @@ A continuación, la Tabla~\ref{tab:functional-requirements-executive} presenta e
 \hline
 \texttt{RF-M7-08} & Administración técnica & Administrador, cliente & Ofrecer soporte transversal de compatibilidad, PWA, navegador no soportado e instalación, manteniendo la comprobación detallada de servicios auxiliares como infraestructura interna. \\
 \hline
-\RFModuleHeader{\textcolor{red}{M8. Funcionalidades futuras}}
-\textcolor{red}{\texttt{RF-M8-01}} & \textcolor{red}{Funcionalidades futuras} & \textcolor{red}{Cliente profesional} & \textcolor{red}{Proponer tratamientos mediante un asistente inteligente a partir de información técnica, historial y contexto del cliente del salón.} \\
+\RFModuleHeader{M8. Funcionalidades futuras}
+\texttt{RF-M8-01} & Funcionalidades futuras & Cliente profesional & Proponer tratamientos mediante un asistente inteligente basado en diagnóstico con capilógrafo, información técnica, historial y contexto del cliente del salón. \\
 \hline
-\textcolor{red}{\texttt{RF-M8-02}} & \textcolor{red}{Funcionalidades futuras} & \textcolor{red}{Cliente profesional} & \textcolor{red}{Simular estilos o coloraciones sobre imágenes para apoyar decisiones técnicas futuras.} \\
+\texttt{RF-M8-02} & Funcionalidades futuras & Cliente profesional & Simular estilos o coloraciones mediante la cámara del móvil o imágenes capturadas para apoyar decisiones técnicas futuras. \\
 \hline
-\textcolor{red}{\texttt{RF-M8-03}} & \textcolor{red}{Funcionalidades futuras} & \textcolor{red}{Cliente profesional, comercial} & \textcolor{red}{Reconocer productos mediante cámara o imagen para consulta, pedido o soporte operativo.} \\
+\texttt{RF-M8-03} & Funcionalidades futuras & Cliente profesional, comercial & Reconocer productos mediante cámara o imagen para consulta, pedido o soporte operativo. \\
 \hline
-\textcolor{red}{\texttt{RF-M8-04}} & \textcolor{red}{Funcionalidades futuras} & \textcolor{red}{Cliente final, cliente profesional} & \textcolor{red}{Gestionar reservas online de clientes finales vinculadas a salones profesionales.} \\
+\texttt{RF-M8-04} & Funcionalidades futuras & Cliente final, cliente profesional & Gestionar reservas online de clientes finales vinculadas a salones profesionales. \\
 \hline
-\end{longtable}
+\texttt{RF-M8-05} & Funcionalidades futuras & Todos los roles & Ofrecer un asistente virtual tipo chatbot para resolver dudas sobre la aplicación, el catálogo, los tratamientos capilares y los procesos comerciales. \\
+\hline
+\texttt{RF-M8-06} & Funcionalidades futuras & Administrador & Automatizar servicios externos como Factusol mediante flujos con n8n o APIs equivalentes para sincronizar datos y generar documentación comercial futura. \\
+\hline
+\end{supertabular}
 }
